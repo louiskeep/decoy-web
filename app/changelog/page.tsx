@@ -3,8 +3,8 @@ import { Footer } from "@/components/marketing/footer"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Changelog - Forge",
-  description: "Release notes and updates for Forge. See what's new in each version.",
+  title: "Changelog - Decoy",
+  description: "Release notes and updates for Decoy. See what's new in each version.",
 }
 
 const releases = [
@@ -21,7 +21,7 @@ const releases = [
       { type: "feature", text: "Format-preserving encryption" },
       { type: "feature", text: "YAML-based pipeline configuration" },
       { type: "feature", text: "Referential integrity preservation" },
-      { type: "feature", text: "forge init, forge run, forge demo commands" },
+      { type: "feature", text: "decoy init, decoy run, decoy demo commands" },
       { type: "feature", text: "Business tier with web UI and scheduling" },
     ],
   },
@@ -42,7 +42,7 @@ const releases = [
     title: "Beta 3",
     changes: [
       { type: "feature", text: "Added Snowflake connector" },
-      { type: "feature", text: "Added forge generate schema command for auto-config" },
+      { type: "feature", text: "Added decoy generate schema command for auto-config" },
       { type: "improvement", text: "Progress bars for long-running operations" },
       { type: "fix", text: "Fixed Unicode handling in faker transforms" },
     ],
@@ -73,7 +73,7 @@ export default function ChangelogPage() {
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Changelog</h1>
               <p className="text-lg text-muted-foreground">
-                All notable changes to Forge are documented here.
+                All notable changes to Decoy are documented here.
               </p>
             </div>
 

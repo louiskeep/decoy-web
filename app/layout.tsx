@@ -7,20 +7,20 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Forge - Data Masking & Synthetic Data Generation',
+  title: 'Decoy - Data Masking & Synthetic Data Generation',
   description: 'Free CLI plus paid Business platform for data masking and synthetic data generation. Self-hosted, sanely priced. Start in 5 minutes from the command line.',
   generator: 'v0.app',
   keywords: ['data masking', 'synthetic data', 'test data', 'data privacy', 'GDPR', 'PII masking', 'dev test data', 'CLI tool'],
-  authors: [{ name: 'Forge' }],
+  authors: [{ name: 'Decoy' }],
   openGraph: {
-    title: 'Forge - Data Masking & Synthetic Data Generation',
+    title: 'Decoy - Data Masking & Synthetic Data Generation',
     description: 'We got quoted $40K to mask 3 tables. So we built this.',
     type: 'website',
-    siteName: 'Forge',
+    siteName: 'Decoy',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Forge - Data Masking & Synthetic Data Generation',
+    title: 'Decoy - Data Masking & Synthetic Data Generation',
     description: 'We got quoted $40K to mask 3 tables. So we built this.',
   },
   icons: {

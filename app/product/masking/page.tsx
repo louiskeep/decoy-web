@@ -7,7 +7,7 @@ import { Shield, Check, Zap, Lock, Database } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Data Masking - Forge",
+  title: "Data Masking - Decoy",
   description: "Create PII-safe copies of production data for dev and test environments. Format-preserving encryption, faker-based transforms, and referential integrity.",
 }
 
@@ -101,7 +101,7 @@ export default function MaskingPage() {
               {/* Code example */}
               <div className="rounded-lg border border-border bg-card overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-                  <span className="text-xs text-muted-foreground font-mono">forge.yaml</span>
+                  <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
                   <code className="text-muted-foreground">{`source:

@@ -48,8 +48,8 @@ export default function TrialPage() {
                 <div className="text-sm font-medium mb-2">Next steps:</div>
                 <ol className="text-sm text-muted-foreground space-y-2">
                   <li>1. Check your email for the login link</li>
-                  <li>2. Access the Business dashboard at app.forge.dev</li>
-                  <li>3. Run <code className="bg-muted px-1 rounded font-mono">forge login</code> to connect your CLI</li>
+                  <li>2. Access the Business dashboard at app.decoy.dev</li>
+                  <li>3. Run <code className="bg-muted px-1 rounded font-mono">decoy login</code> to connect your CLI</li>
                 </ol>
               </div>
             </div>

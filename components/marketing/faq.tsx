@@ -14,7 +14,7 @@ const faqs = [
   {
     question: "Does my data leave my network?",
     answer:
-      "No. Forge runs entirely on your infrastructure. The CLI runs on your machine, and the Business platform runs in your cloud. The only external call is optional license validation, which sends zero data about your pipelines or datasets. For air-gapped environments, we provide offline license keys.",
+      "No. Decoy runs entirely on your infrastructure. The CLI runs on your machine, and the Business platform runs in your cloud. The only external call is optional license validation, which sends zero data about your pipelines or datasets. For air-gapped environments, we provide offline license keys.",
   },
   {
     question: "How does format-preserving encryption work?",
@@ -24,7 +24,7 @@ const faqs = [
   {
     question: "Can I mask data across related tables?",
     answer:
-      "Yes. Forge understands foreign key relationships and preserves referential integrity automatically. When you mask a user's email in the users table, their orders still link correctly. You define relationships once in your YAML config, and Forge handles the rest.",
+      "Yes. Decoy understands foreign key relationships and preserves referential integrity automatically. When you mask a user's email in the users table, their orders still link correctly. You define relationships once in your YAML config, and Decoy handles the rest.",
   },
   {
     question: "What databases and file formats are supported?",
@@ -32,14 +32,14 @@ const faqs = [
       "PostgreSQL, MySQL, Snowflake, S3 (CSV, Parquet, JSON), and local files are fully supported today. BigQuery, Databricks, MongoDB, Redshift, and DynamoDB are on the roadmap. You can also request connectors via GitHub issues—we prioritize based on demand.",
   },
   {
-    question: "Is Forge open source?",
+    question: "Is Decoy open source?",
     answer:
-      "The CLI is source-available under the Business Source License (BUSL). You can read, modify, and use the code freely for non-commercial purposes. The license converts to Apache 2.0 after 4 years. This protects us from competitors offering a managed Forge while keeping the code transparent for security-conscious buyers.",
+      "The CLI is source-available under the Business Source License (BUSL). You can read, modify, and use the code freely for non-commercial purposes. The license converts to Apache 2.0 after 4 years. This protects us from competitors offering a managed Decoy while keeping the code transparent for security-conscious buyers.",
   },
   {
     question: "How long does implementation take?",
     answer:
-      "Most teams run their first masked dataset within 30 minutes of installing Forge. The `forge init` command scaffolds a starter config, and `forge generate schema` auto-detects your tables and suggests transforms. No consultants, no multi-week projects. Just install and run.",
+      "Most teams run their first masked dataset within 30 minutes of installing Decoy. The `decoy init` command scaffolds a starter config, and `decoy generate schema` auto-detects your tables and suggests transforms. No consultants, no multi-week projects. Just install and run.",
   },
   {
     question: "What compliance certifications do you have?",
@@ -58,7 +58,7 @@ export function FAQ() {
             Frequently asked questions
           </h2>
           <p className="text-muted-foreground text-lg">
-            Everything you need to know about Forge.
+            Everything you need to know about Decoy.
           </p>
         </div>
 

@@ -4,8 +4,8 @@ import { CTA } from "@/components/marketing/cta"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About - Forge",
-  description: "We got quoted $40K to mask 3 tables. So we built this. The story behind Forge.",
+  title: "About - Decoy",
+  description: "We got quoted $40K to mask 3 tables. So we built this. The story behind Decoy.",
 }
 
 export default function AboutPage() {
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 </p>
 
                 <p>
-                  Forge is what we wished existed: a free CLI for engineers who just need to 
+                  Decoy is what we wished existed: a free CLI for engineers who just need to 
                   mask data, and a paid Business tier for teams who need scheduling, audit logs, 
                   and collaboration. No consultants. No six-month implementations. No per-row pricing 
                   that punishes you for having customers.
@@ -100,7 +100,7 @@ export default function AboutPage() {
                   <div className="rounded-lg border border-border bg-card p-4">
                     <div className="font-medium text-foreground mb-1">Your data never leaves your network</div>
                     <p className="text-sm">
-                      Forge runs on your infrastructure. We never see your data. The only external call 
+                      Decoy runs on your infrastructure. We never see your data. The only external call 
                       is optional license validation, which sends zero payload data.
                     </p>
                   </div>
@@ -127,7 +127,7 @@ export default function AboutPage() {
                 <p>
                   We&apos;re building the tool we wish we&apos;d had. If you&apos;ve ever been quoted five figures 
                   for basic data masking, or spent weeks configuring an enterprise tool that should 
-                  have taken hours, Forge is for you.
+                  have taken hours, Decoy is for you.
                 </p>
 
                 <p>

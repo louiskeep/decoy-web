@@ -7,7 +7,7 @@ import { Check, Copy } from "lucide-react"
 
 export function CTA() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "pip install forge"
+  const installCommand = "pip install decoy"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)

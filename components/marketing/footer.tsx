@@ -41,9 +41,9 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                <span className="text-lg font-bold text-primary-foreground">F</span>
+                <span className="text-lg font-bold text-primary-foreground">D</span>
               </div>
-              <span className="text-xl font-semibold">Forge</span>
+              <span className="text-xl font-semibold">Decoy</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
               Data masking and synthetic data generation. Self-hosted, sanely priced.
@@ -138,7 +138,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Forge. All rights reserved.
+            © {new Date().getFullYear()} Decoy. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Built with frustration, shipped with love.

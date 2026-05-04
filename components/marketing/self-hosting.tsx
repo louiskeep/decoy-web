@@ -4,7 +4,7 @@ const benefits = [
   {
     icon: Lock,
     title: "Your data never leaves your network",
-    description: "Run Forge entirely on your infrastructure. No data sent to external servers.",
+    description: "Run Decoy entirely on your infrastructure. No data sent to external servers.",
   },
   {
     icon: Server,
@@ -38,7 +38,7 @@ export function SelfHosting() {
               Runs where your data lives
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              For regulated industries, self-hosting isn&apos;t optional. Forge is designed from day one to run on your infrastructure, with zero external dependencies.
+              For regulated industries, self-hosting isn&apos;t optional. Decoy is designed from day one to run on your infrastructure, with zero external dependencies.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">
@@ -79,7 +79,7 @@ export function SelfHosting() {
                     </div>
                     <div className="flex items-center text-muted-foreground">→</div>
                     <div className="flex-1 rounded-md border border-primary bg-primary/10 p-3 text-center">
-                      <div className="text-xs font-medium text-primary">Forge</div>
+                      <div className="text-xs font-medium text-primary">Decoy</div>
                       <div className="text-[10px] text-muted-foreground">CLI / Platform</div>
                     </div>
                     <div className="flex items-center text-muted-foreground">→</div>
