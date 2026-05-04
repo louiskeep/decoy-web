@@ -34,12 +34,6 @@ const productItems = [
     description: "50+ built-in masking transforms",
     icon: Sparkles,
   },
-  {
-    title: "Analytics",
-    href: "/product/analytics",
-    description: "Pipeline runs, audit logs, insights",
-    icon: BarChart3,
-  },
 ]
 
 export function Navigation() {
@@ -51,9 +45,9 @@ export function Navigation() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">F</span>
+            <span className="text-lg font-bold text-primary-foreground">D</span>
           </div>
-          <span className="text-xl font-semibold">Forge</span>
+          <span className="text-xl font-semibold">Decoy</span>
         </Link>
 
         {/* Desktop Navigation */}

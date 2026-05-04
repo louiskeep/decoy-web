@@ -7,7 +7,7 @@ import { Database, Check, BarChart3, GitBranch, Gauge } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Synthetic Data Generation - Forge",
+  title: "Synthetic Data Generation - Decoy",
   description: "Generate realistic test datasets that preserve statistical properties and relationships. Scale from thousands to billions of rows.",
 }
 
@@ -30,7 +30,7 @@ const features = [
   {
     icon: Database,
     title: "Schema Introspection",
-    description: "Point Forge at your database and it auto-generates a YAML config with sensible defaults for each column type.",
+    description: "Point Decoy at your database and it auto-generates a YAML config with sensible defaults for each column type.",
   },
 ]
 
@@ -87,7 +87,7 @@ export default function SyntheticDataPage() {
               {/* Code example */}
               <div className="rounded-lg border border-border bg-card overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-                  <span className="text-xs text-muted-foreground font-mono">forge.yaml</span>
+                  <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
                   <code className="text-muted-foreground">{`# Generate synthetic data from schema

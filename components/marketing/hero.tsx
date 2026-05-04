@@ -7,7 +7,7 @@ import { Check, Copy, Github } from "lucide-react"
 
 export function Hero() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "pip install forge"
+  const installCommand = "pip install decoy"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)
@@ -38,11 +38,12 @@ export function Hero() {
           {/* Headline */}
           <div className="max-w-4xl space-y-4">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
-              Safe test data in{" "}
-              <span className="text-primary">5 minutes</span>
+              Your prod data,{" "}
+              <span className="text-primary">unrecognizable.</span>{" "}
+              Instantly.
             </h1>
             <p className="mx-auto max-w-2xl text-lg md:text-xl text-muted-foreground text-balance">
-              Mask production data or generate synthetic datasets. Free CLI for engineers, Business tier for teams. Your data never leaves your network.
+              Mask real data or generate synthetic datasets with compliance-ready Disguises for HIPAA, PCI, GDPR, and more.
             </p>
           </div>
 

@@ -4,10 +4,10 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ forge init" },
-  { type: "output", content: "✓ Created forge.yaml with sample configuration" },
+  { type: "command", content: "$ decoy init" },
+  { type: "output", content: "✓ Created decoy.yaml with sample configuration" },
   { type: "output", content: "" },
-  { type: "command", content: "$ forge run forge.yaml" },
+  { type: "command", content: "$ decoy run decoy.yaml" },
   { type: "output", content: "► Connecting to PostgreSQL..." },
   { type: "output", content: "✓ Connected to prod-db.internal:5432" },
   { type: "output", content: "" },

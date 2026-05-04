@@ -6,27 +6,27 @@ import { Book, Terminal, FileCode, Database, Sparkles, Layers } from "lucide-rea
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Documentation - Forge",
-  description: "Learn how to use Forge for data masking and synthetic data generation. Guides, API reference, and recipes.",
+  title: "Documentation - Decoy",
+  description: "Learn how to use Decoy for data masking and synthetic data generation. Guides, API reference, and recipes.",
 }
 
 const sections = [
   {
     icon: Book,
     title: "Getting Started",
-    description: "Install Forge and run your first masking pipeline in 5 minutes.",
+    description: "Install Decoy and run your first masking pipeline in 5 minutes.",
     href: "/docs/getting-started",
   },
   {
     icon: Terminal,
     title: "CLI Reference",
-    description: "Complete reference for all Forge CLI commands and flags.",
+    description: "Complete reference for all Decoy CLI commands and flags.",
     href: "/docs/cli-reference",
   },
   {
     icon: FileCode,
     title: "YAML Reference",
-    description: "Full schema documentation for forge.yaml pipeline files.",
+    description: "Full schema documentation for decoy.yaml pipeline files.",
     href: "/docs/yaml-reference",
   },
   {
@@ -59,7 +59,7 @@ export default function DocsPage() {
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Documentation</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Everything you need to know about Forge. From installation to advanced transforms.
+                Everything you need to know about Decoy. From installation to advanced transforms.
               </p>
             </div>
 

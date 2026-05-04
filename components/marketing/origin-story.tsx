@@ -21,7 +21,7 @@ export function OriginStory() {
                 The enterprise vendors wanted six-figure contracts and 12-week implementations. The open-source tools were abandoned or required a PhD in data engineering to configure.
               </p>
               <p>
-                So we built Forge: a CLI that does one thing well, and a Business tier when your team is ready. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install forge</code> and you&apos;re masking data in 5 minutes.
+                So we built Decoy: a CLI that does one thing well, and a Business tier when your team is ready. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in 5 minutes.
               </p>
             </div>
           </div>

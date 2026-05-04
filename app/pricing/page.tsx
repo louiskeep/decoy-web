@@ -7,7 +7,7 @@ import { Footer } from "@/components/marketing/footer"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Pricing - Forge",
+  title: "Pricing - Decoy",
   description: "Simple, predictable pricing for data masking and synthetic data generation. Free CLI forever, Business tier starting at $499/month.",
 }
 

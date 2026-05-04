@@ -5,15 +5,15 @@ import { Shield, Lock, Eye, Server, FileCheck, Users } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Security - Forge",
-  description: "How Forge keeps your data safe. Self-hosted architecture, encryption, and compliance certifications.",
+  title: "Security - Decoy",
+  description: "How Decoy keeps your data safe. Self-hosted architecture, encryption, and compliance certifications.",
 }
 
 const principles = [
   {
     icon: Server,
     title: "Self-Hosted by Design",
-    description: "Forge runs entirely on your infrastructure. Your data never leaves your network. We couldn't see your data even if we wanted to.",
+    description: "Decoy runs entirely on your infrastructure. Your data never leaves your network. We couldn't see your data even if we wanted to.",
   },
   {
     icon: Lock,
@@ -38,7 +38,7 @@ const principles = [
   {
     icon: Shield,
     title: "Security Disclosures",
-    description: "Report vulnerabilities to security@forge.dev. We follow responsible disclosure and credit researchers in our changelog.",
+    description: "Report vulnerabilities to security@decoy.dev. We follow responsible disclosure and credit researchers in our changelog.",
   },
 ]
 
@@ -58,7 +58,7 @@ export default function SecurityPage() {
                 Built for regulated industries
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Forge was designed from day one for teams that take data security seriously. 
+                Decoy was designed from day one for teams that take data security seriously. 
                 Self-hosted architecture means your compliance requirements are met by default.
               </p>
             </div>
@@ -126,7 +126,7 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">GDPR</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Compliant by architecture. Since Forge runs on your infrastructure in your jurisdiction, 
+                      Compliant by architecture. Since Decoy runs on your infrastructure in your jurisdiction, 
                       no data is transferred to third parties. DPA available on request.
                     </p>
                     <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Compliant by Architecture</span>

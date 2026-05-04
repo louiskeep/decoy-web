@@ -4,17 +4,17 @@ import Link from "next/link"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Blog - Forge",
+  title: "Blog - Decoy",
   description: "Updates, tutorials, and insights about data masking, synthetic data, and privacy engineering.",
 }
 
 const posts = [
   {
-    title: "Introducing Forge: Data masking that doesn't cost $40K",
+    title: "Introducing Decoy: Data masking that doesn't cost $40K",
     excerpt: "We got quoted $40K to mask 3 tables. So we built an open-source alternative that does it in 5 minutes.",
     date: "2026-04-15",
     category: "Announcement",
-    slug: "introducing-forge",
+    slug: "introducing-decoy",
   },
   {
     title: "Format-Preserving Encryption Explained",
@@ -42,7 +42,7 @@ export default function BlogPage() {
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Blog</h1>
               <p className="text-lg text-muted-foreground">
-                Updates, tutorials, and insights from the Forge team.
+                Updates, tutorials, and insights from the Decoy team.
               </p>
             </div>
 
