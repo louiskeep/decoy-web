@@ -3,12 +3,12 @@
 Public marketing site and documentation for Forge.
 
 **Deploys to:** `forge.dev` (Vercel)
-**Docs:** `forge.dev/docs` (Mintlify, sourced from `docs/`)
+**Docs:** `forge.dev/docs` (Mintlify, sourced from `docs/` — added in Phase 2)
 
 ## What lives here
 
 - Next.js marketing site (home, pricing, product pages, blog, security, changelog)
-- Mintlify docs source (`docs/`)
+- Mintlify docs source (`docs/`) — _not yet added; coming in Phase 2 of migration_
 - No Python. No backend. No secrets.
 
 ## What does NOT live here
