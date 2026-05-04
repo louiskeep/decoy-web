@@ -87,7 +87,7 @@ export default function DocsPage() {
               </p>
               <div className="flex justify-center gap-4">
                 <Button asChild variant="outline">
-                  <Link href="https://github.com/forgeio/forge/discussions" target="_blank">
+                  <Link href="https://github.com/louiskeep/decoy/discussions" target="_blank">
                     Ask on GitHub
                   </Link>
                 </Button>

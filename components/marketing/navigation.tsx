@@ -109,7 +109,7 @@ export function Navigation() {
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3">
           <Link
-            href="https://github.com/forgeio/forge"
+            href="https://github.com/louiskeep/decoy"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
@@ -171,7 +171,7 @@ export function Navigation() {
               </div>
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Link
-                  href="https://github.com/forgeio/forge"
+                  href="https://github.com/louiskeep/decoy"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
