@@ -79,7 +79,7 @@ export function Hero() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="gap-2">
-              <Link href="https://github.com/forgeio/forge" target="_blank" rel="noopener noreferrer">
+              <Link href="https://github.com/louiskeep/decoy" target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4" />
                 Star on GitHub
               </Link>

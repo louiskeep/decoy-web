@@ -13,7 +13,7 @@ const footerLinks = {
     { label: "Documentation", href: "/docs" },
     { label: "Blog", href: "/blog" },
     { label: "Changelog", href: "/changelog" },
-    { label: "GitHub", href: "https://github.com/forgeio/forge" },
+    { label: "GitHub", href: "https://github.com/louiskeep/decoy" },
   ],
   company: [
     { label: "About", href: "/about" },
@@ -27,7 +27,7 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com/forgeio/forge", label: "GitHub" },
+  { icon: Github, href: "https://github.com/louiskeep/decoy", label: "GitHub" },
   { icon: Twitter, href: "https://twitter.com/forgedata", label: "Twitter" },
   { icon: Linkedin, href: "https://linkedin.com/company/forgedata", label: "LinkedIn" },
 ]

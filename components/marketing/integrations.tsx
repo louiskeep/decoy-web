@@ -107,7 +107,7 @@ export function Integrations() {
           <p className="text-sm text-muted-foreground">
             Need a connector we don&apos;t have?{" "}
             <a
-              href="https://github.com/forgeio/forge/issues/new?template=connector_request.md"
+              href="https://github.com/louiskeep/decoy/issues/new?template=connector_request.md"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
