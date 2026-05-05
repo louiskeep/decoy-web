@@ -1,4 +1,7 @@
-# Marketing site overhaul — `forge-web`
+# Marketing site brand guide — `decoy-web`
+
+> **Status:** partial — Priority 1 (rename + hero rewrite + cross-site brand strings) shipped 2026-05-04. Priorities 2–4 (Disguises page, STORM page, pricing/comparison rebuild, /security HIPAA Safe Harbor section, FAQ additions, About origin extension) remain pending; STORM/FORECAST engine landed but the in-product UX overhaul that the marketing copy will lean on is still upcoming.
+> **Last reviewed:** 2026-05-04
 
 Scope: the Next.js 16 marketing site at decoy.dev (or wherever marketing registers). Adopts the May 2026 brand reference: rename Forge → Decoy, lead with Disguises as the wedge, surface STORM/FORECAST/Report as Business-tier value, and clean up forbidden language.
 

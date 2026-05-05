@@ -1,6 +1,19 @@
-# forge-web — Claude Context
+# decoy-web — Claude Context
 
 Public marketing site and documentation. Next.js + shadcn/ui + Tailwind. **No Python. No backend. No secrets.**
+
+## Docs in this repo
+
+We use two doc types. Distinguishing them keeps long-term plans aligned and short-term plans from rotting.
+
+- **Guides** are durable specs describing target state. Filename: `*_GUIDE.md`, repo root. Header carries `Status:` (`target` / `partial` / `superseded`) and `Last reviewed:`. When a feature ships, the implementer updates the relevant guide in the same PR.
+- **Plans** are transient, scoped to a PR or sprint. Live in `plans/`, dated. Header carries `Status:` (`planning` / `in-progress` / `shipped` / `abandoned`), `Branch:`, and `References:` (the guides being implemented). Once a plan ships, it can be deleted — git history is the archive.
+
+Orientation files (this `CLAUDE.md`, `dev-help.md`, `README.md`) are conventional contributor entry points and stay outside the guide/plan taxonomy.
+
+### Active guides
+
+- [BRAND_GUIDE.md](BRAND_GUIDE.md) — marketing-site brand standards: hero copy, Disguises wedge, STORM page, pricing/comparison rules, /security depth, FAQ. *(partial)*
 
 ## Repo structure
 
