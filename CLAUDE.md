@@ -11,6 +11,16 @@ We use two doc types. Distinguishing them keeps long-term plans aligned and shor
 
 Orientation files (this `CLAUDE.md`, `dev-help.md`, `README.md`) are conventional contributor entry points and stay outside the guide/plan taxonomy.
 
+## Comment style
+
+Comments explain what a section / code block does in good detail, in **1–2 sentences**. Reach for more only when the block is genuinely complex — a state machine, a non-obvious algorithm, security-sensitive math, a workaround for a specific bug. Default mode: terse and to the point.
+
+- **Yes:** `// Hero copy varies by referrer — preserve UTM during the redirect.`
+- **No:** silent code with no context.
+- **No:** restating what the next ten lines obviously do.
+
+Comments live next to the surprise, not at the top of the file. If the non-obvious thing is the *why*, write that, not the *what*.
+
 ### Active guides
 
 - [BRAND_GUIDE.md](BRAND_GUIDE.md) — marketing-site brand standards: hero copy, Disguises wedge, STORM page, pricing/comparison rules, /security depth, FAQ. *(partial)*
