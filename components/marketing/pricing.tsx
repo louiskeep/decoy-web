@@ -10,11 +10,11 @@ const plans = [
     period: "forever",
     description: "For individual engineers building and testing locally.",
     features: [
-      "All masking transforms",
+      "8 compliance Disguises (HIPAA, PCI, GDPR…)",
+      "All masking transforms (Faker, FPE, hash, date-shift)",
       "All synthetic generators",
-      "All connectors",
-      "YAML pipelines",
-      "Unlimited local runs",
+      "All connectors (Postgres, MySQL, S3, Snowflake)",
+      "YAML pipelines & unlimited local runs",
       "Community support",
     ],
     cta: "Install free",
@@ -25,14 +25,15 @@ const plans = [
     name: "Business",
     price: "$499",
     period: "/month",
-    description: "For teams who need scheduling, audit logs, and collaboration.",
+    description: "For teams that need STORM analysis, audit trails, and shared pipelines.",
     features: [
       "Everything in CLI",
-      "Web UI & visual builder",
+      "STORM dataset analysis",
+      "FORECAST recommendations",
+      "Reports (in-app + PDF export)",
+      "Audit history",
       "Scheduled runs",
-      "Team access (up to 25 users)",
-      "Audit logs",
-      "RBAC",
+      "Team access (up to 25, RBAC)",
       "Priority support",
     ],
     cta: "Start free trial",
@@ -44,15 +45,15 @@ const plans = [
     name: "Enterprise",
     price: "Custom",
     period: "",
-    description: "For organizations with advanced security and compliance needs.",
+    description: "For regulated organizations that need BAAs, SSO, and air-gapped deploys.",
     features: [
       "Everything in Business",
+      "Custom Disguises",
       "Unlimited users",
       "SSO / SAML",
-      "Air-gapped deployments",
       "HIPAA BAA",
-      "Dedicated support",
-      "SLA guarantees",
+      "Air-gapped deployments",
+      "Dedicated support & SLA",
     ],
     cta: "Contact sales",
     ctaLink: "/contact",
@@ -67,10 +68,10 @@ export function Pricing() {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Simple, predictable pricing
+            Flat pricing. No per-row fees.
           </h2>
           <p className="text-muted-foreground text-lg">
-            No per-row fees. No surprise bills. No six-figure quotes.
+            No surprise bills. No six-figure quotes.
           </p>
         </div>
 
@@ -128,7 +129,7 @@ export function Pricing() {
         {/* Additional info */}
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
-            All plans include unlimited data volume. Business tier includes 14-day free trial, no credit card required.
+            All plans include unlimited data volume. Business tier includes a 14-day free trial — no credit card required.
             <br />
             <span className="text-foreground">20% off annual billing.</span>
           </p>
