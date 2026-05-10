@@ -1,4 +1,3 @@
-import Link from "next/link"
 import {
   HeartPulse,
   CreditCard,
@@ -8,7 +7,6 @@ import {
   GraduationCap,
   FileSpreadsheet,
   Lock,
-  ArrowRight,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
