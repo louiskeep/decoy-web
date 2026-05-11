@@ -1,6 +1,6 @@
-# forge-web
+# decoy-web
 
-Public marketing site and documentation for Forge.
+Public marketing site and documentation for Decoy.
 
 **Deploys to:** `forge.dev` (Vercel)
 **Docs:** `forge.dev/docs` (Mintlify, sourced from `docs/` — added in Phase 2)
@@ -13,9 +13,9 @@ Public marketing site and documentation for Forge.
 
 ## What does NOT live here
 
-- CLI code → `forge`
-- Platform/SaaS code → `forge-platform`
-- Masking engine → `forge-engine`
+- CLI code → `decoy`
+- Platform/SaaS code → `decoy-platform`
+- Masking engine → `decoy-engine`
 
 ## Dev setup
 
