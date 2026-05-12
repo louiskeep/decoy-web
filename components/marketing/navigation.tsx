@@ -78,7 +78,7 @@ export function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               {/* Disguises is the wedge — top-level placement per BRAND_GUIDE. */}
-              <Link href="/#disguises" legacyBehavior passHref>
+              <Link href="/disguises" legacyBehavior passHref>
                 <NavigationMenuLink className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
@@ -159,7 +159,7 @@ export function Navigation() {
               </div>
               <div className="flex flex-col gap-3">
                 <Link
-                  href="/#disguises"
+                  href="/disguises"
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-2 py-2 text-foreground hover:text-primary transition-colors"
                 >
