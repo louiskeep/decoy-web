@@ -3,10 +3,10 @@ import { Github, Twitter, Linkedin } from "lucide-react"
 
 const footerLinks = {
   product: [
+    { label: "Disguises", href: "/#disguises" },
     { label: "Data Masking", href: "/product/masking" },
     { label: "Synthetic Data", href: "/product/synthetic-data" },
-    { label: "Transforms", href: "/product/transforms" },
-    { label: "Analytics", href: "/product/analytics" },
+    { label: "STORM + FORECAST", href: "/#storm" },
     { label: "Pricing", href: "/pricing" },
   ],
   resources: [
@@ -28,8 +28,8 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/louiskeep/decoy", label: "GitHub" },
-  { icon: Twitter, href: "https://twitter.com/forgedata", label: "Twitter" },
-  { icon: Linkedin, href: "https://linkedin.com/company/forgedata", label: "LinkedIn" },
+  { icon: Twitter, href: "https://twitter.com/decoydata", label: "Twitter" },
+  { icon: Linkedin, href: "https://linkedin.com/company/decoydata", label: "LinkedIn" },
 ]
 
 export function Footer() {
@@ -46,7 +46,7 @@ export function Footer() {
               <span className="text-xl font-semibold">Decoy</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Data masking and synthetic data generation. Self-hosted, sanely priced.
+              Compliance-ready data masking and synthetic data — self-hosted, flat-priced.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (

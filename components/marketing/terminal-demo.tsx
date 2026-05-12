@@ -4,26 +4,31 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ decoy init" },
-  { type: "output", content: "✓ Created decoy.yaml with sample configuration" },
+  { type: "command", content: "$ decoy init --disguise hipaa" },
+  { type: "output", content: "✓ Wrote decoy.yaml — HIPAA Disguise applied" },
+  { type: "output", content: "  18 Safe Harbor identifiers covered out of the box" },
   { type: "output", content: "" },
   { type: "command", content: "$ decoy run decoy.yaml" },
-  { type: "output", content: "► Connecting to PostgreSQL..." },
-  { type: "output", content: "✓ Connected to prod-db.internal:5432" },
+  { type: "output", content: "► Connecting to prod-db.internal:5432..." },
+  { type: "output", content: "✓ Connected · STORM scan starting" },
   { type: "output", content: "" },
-  { type: "output", content: "► Masking users table (1,247 rows)" },
-  { type: "output", content: "  email        → faker.email (preserving uniqueness)" },
-  { type: "output", content: "  ssn          → format_preserving_encryption" },
+  { type: "output", content: "► Masking patients table (1,247 rows)" },
+  { type: "output", content: "  mrn          → fpe (format-preserving)" },
+  { type: "output", content: "  ssn          → fpe + tokenize" },
+  { type: "output", content: "  email        → faker.email (unique-preserving)" },
+  { type: "output", content: "  dob          → date_shift (±15 days)" },
   { type: "output", content: "  phone        → faker.phone" },
-  { type: "output", content: "  dob          → date_shift (±30 days)" },
+  { type: "output", content: "  address      → faker.address (geo-aware)" },
   { type: "output", content: "" },
-  { type: "output", content: "► Masking orders table (8,429 rows)" },
-  { type: "output", content: "  shipping_addr → faker.address" },
+  { type: "output", content: "► Masking encounters table (8,429 rows)" },
+  { type: "output", content: "  patient_id   → linked via referential integrity" },
   { type: "output", content: "" },
-  { type: "output", content: "✓ Referential integrity preserved (users.id → orders.user_id)" },
+  { type: "output", content: "✓ HIPAA Safe Harbor identifiers neutralized" },
+  { type: "output", content: "✓ Referential integrity preserved across 2 tables" },
   { type: "output", content: "" },
-  { type: "success", content: "✓ Complete. 9,676 rows masked in 2.3s" },
-  { type: "success", content: "  Output: staging-db.internal:5432" },
+  { type: "success", content: "✓ Complete · 9,676 rows masked in 2.3s" },
+  { type: "success", content: "  Output → staging-db.internal:5432" },
+  { type: "success", content: "  Report → reports/2026-05-10-hipaa-run.pdf" },
 ]
 
 export function TerminalDemo() {
@@ -45,10 +50,10 @@ export function TerminalDemo() {
           {/* Section header */}
           <div className="text-center max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              From install to masked data in minutes
+              From install to filed Report in minutes
             </h2>
             <p className="text-muted-foreground text-lg">
-              No configuration files to puzzle over. No consultants required. Just run the CLI.
+              No configuration files to puzzle over. Pick a Disguise, run the CLI, get a masked dataset and a Report you can hand a compliance officer.
             </p>
           </div>
 
@@ -68,7 +73,7 @@ export function TerminalDemo() {
               </div>
 
               {/* Terminal content */}
-              <div className="p-4 font-mono text-sm min-h-[400px] overflow-x-auto code-block">
+              <div className="p-4 font-mono text-sm min-h-[460px] overflow-x-auto code-block">
                 {terminalLines.slice(0, visibleLines).map((line, index) => (
                   <div
                     key={index}
@@ -79,7 +84,7 @@ export function TerminalDemo() {
                       line.type === "success" && "text-primary"
                     )}
                   >
-                    {line.content || "\u00A0"}
+                    {line.content || " "}
                   </div>
                 ))}
                 {visibleLines < terminalLines.length && (

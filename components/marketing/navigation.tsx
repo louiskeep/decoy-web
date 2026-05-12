@@ -12,7 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Github, X, Shield, Database, Sparkles, BarChart3 } from "lucide-react"
+import { Menu, Github, Shield, Database, Radar, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const productItems = [
@@ -29,10 +29,10 @@ const productItems = [
     icon: Database,
   },
   {
-    title: "Transforms",
-    href: "/product/transforms",
-    description: "50+ built-in masking transforms",
-    icon: Sparkles,
+    title: "STORM + FORECAST",
+    href: "/#storm",
+    description: "Scan, recommend, file a Report",
+    icon: Radar,
   },
 ]
 
@@ -75,6 +75,17 @@ export function Navigation() {
                   ))}
                 </ul>
               </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              {/* Disguises is the wedge — top-level placement per BRAND_GUIDE. */}
+              <Link href="/#disguises" legacyBehavior passHref>
+                <NavigationMenuLink className={cn(
+                  "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
+                )}>
+                  <ShieldCheck className="h-4 w-4 mr-1.5 text-primary" />
+                  Disguises
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/pricing" legacyBehavior passHref>
@@ -147,6 +158,14 @@ export function Navigation() {
                 ))}
               </div>
               <div className="flex flex-col gap-3">
+                <Link
+                  href="/#disguises"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  Disguises
+                </Link>
                 <Link
                   href="/pricing"
                   onClick={() => setMobileOpen(false)}
