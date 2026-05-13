@@ -76,3 +76,5 @@ Edit `app/changelog/page.tsx` — entries are ordered newest-first.
 **Component looks broken in dev:** check that the shadcn component was added via `pnpm dlx shadcn@latest add` and not hand-written.
 
 **Styles not applying:** Tailwind classes are purged at build time — make sure class names are complete strings, not dynamically concatenated.
+
+**`pnpm` fails in PowerShell with "cannot be loaded… not digitally signed":** machine-level Group Policy forces `AllSigned`, which blocks the unsigned `pnpm.ps1` shim, and `Set-ExecutionPolicy -Scope CurrentUser` can't override it. Workaround: call the `.cmd` shim explicitly — `pnpm.cmd install`, `pnpm.cmd dev`, etc. `.cmd` batch files don't go through PowerShell's execution policy.
