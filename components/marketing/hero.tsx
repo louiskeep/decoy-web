@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Check, Copy, Github } from "lucide-react"
+import { Check, Copy, Github, ShieldCheck } from "lucide-react"
 
 export function Hero() {
   const [copied, setCopied] = useState(false)
@@ -30,7 +30,7 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
             </span>
-            <span>Open Source</span>
+            <span>Built for regulated teams</span>
             <span className="text-muted-foreground">·</span>
             <span className="text-muted-foreground">Self-hosted</span>
           </div>
@@ -86,7 +86,26 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Social proof hint */}
+          {/* Compliance trust strip — the buyer signal for healthcare and fintech */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              HIPAA Safe Harbor ready
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              PCI tokenization
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              Air-gapped deploy
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              BAA on Enterprise
+            </span>
+          </div>
+
           <p className="text-sm text-muted-foreground">
             No credit card required · 14 day trial · Self-hosted
           </p>

@@ -1,11 +1,12 @@
-import { Shield, Database, Sparkles, BarChart3 } from "lucide-react"
+import { Shield, Database, Sparkles, Link2 } from "lucide-react"
 
 const features = [
   {
     icon: Shield,
     title: "Data Masking",
     description: "Create PII-safe copies of production data for dev and test environments.",
-    code: `masks:
+    code: `# decoy.yaml
+masks:
   - table: users
     column: email
     transform: faker.email
@@ -20,7 +21,8 @@ const features = [
     icon: Database,
     title: "Synthetic Data",
     description: "Generate realistic test datasets that preserve statistical properties and relationships.",
-    code: `generate:
+    code: `# decoy.yaml
+generate:
   table: orders
   rows: 100000
   preserve:
@@ -32,9 +34,10 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "50+ Transforms",
-    description: "Faker-based, FPE, hashing, date shifting, conditional masking, and custom Python functions.",
-    code: `transforms:
+    title: "Field-level Masks",
+    description: "Faker, FPE, deterministic hashing, date shifting, conditional logic, and custom Python — the primitives every Disguise is built from.",
+    code: `# masks composed inside a Disguise
+transforms:
   - faker.email      # realistic emails
   - faker.phone      # locale-aware phones
   - fpe              # format-preserving encryption
@@ -43,18 +46,17 @@ const features = [
   - categorical_shuffle  # preserve distribution`,
   },
   {
-    icon: BarChart3,
-    title: "Pipeline Analytics",
-    description: "Track runs, audit who masked what, and debug pipeline issues from one dashboard.",
-    code: `# Business tier only
-options:
-  audit_log: true
-  retention_days: 90
-  
-schedule:
-  cron: "0 2 * * *"
-  notify:
-    - slack: #data-team`,
+    icon: Link2,
+    title: "Referential integrity",
+    description: "Foreign keys, composite keys, and cross-database joins stay consistent. Mask once, join everywhere.",
+    code: `# referential integrity is automatic
+relationships:
+  - parent: users.id
+    children:
+      - orders.user_id
+      - sessions.user_id
+      - audit_log.actor_id
+# the same masked id flows through every child table`,
   },
 ]
 
@@ -65,10 +67,10 @@ export function Features() {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything you need, nothing you don&apos;t
+            The engine under every Disguise
           </h2>
           <p className="text-muted-foreground text-lg">
-            A focused toolset for data masking and synthetic generation. No bloat.
+            Disguises are templates. These are the engine primitives they&apos;re built from — and the reason joins, formats, and re-id risk all stay sane after you mask.
           </p>
         </div>
 

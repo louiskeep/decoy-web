@@ -1,9 +1,9 @@
-# forge-web
+# decoy-web
 
-Public marketing site and documentation for Forge.
+Public marketing site and documentation for Decoy.
 
-**Deploys to:** `forge.dev` (Vercel)
-**Docs:** `forge.dev/docs` (Mintlify, sourced from `docs/` — added in Phase 2)
+**Deploys to:** `decoy.dev` (Vercel)
+**Docs:** `decoy.dev/docs` (Mintlify, sourced from `docs/` — added in Phase 2)
 
 ## What lives here
 
@@ -13,9 +13,9 @@ Public marketing site and documentation for Forge.
 
 ## What does NOT live here
 
-- CLI code → `forge`
-- Platform/SaaS code → `forge-platform`
-- Masking engine → `forge-engine`
+- CLI code → `decoy`
+- Platform/SaaS code → `decoy-platform`
+- Masking engine → `decoy-engine`
 
 ## Dev setup
 
@@ -27,3 +27,7 @@ pnpm dev
 ## Deployment
 
 Vercel auto-deploys from `main`. Every PR gets a preview URL.
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE).

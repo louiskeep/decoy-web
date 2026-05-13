@@ -1,83 +1,64 @@
 import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const comparisonItems = [
-  {
-    feature: "All masking transforms",
-    cli: true,
-    business: true,
-  },
-  {
-    feature: "All synthetic generators",
-    cli: true,
-    business: true,
-  },
-  {
-    feature: "All connectors (Postgres, MySQL, S3, Snowflake...)",
-    cli: true,
-    business: true,
-  },
-  {
-    feature: "YAML pipelines & local runs",
-    cli: true,
-    business: true,
-  },
-  {
-    feature: "Web UI & visual pipeline builder",
-    cli: false,
-    business: true,
-  },
-  {
-    feature: "Scheduled runs & orchestration",
-    cli: false,
-    business: true,
-  },
-  {
-    feature: "Team access & RBAC",
-    cli: false,
-    business: true,
-  },
-  {
-    feature: "Audit logs & compliance reports",
-    cli: false,
-    business: true,
-  },
+type CellValue = boolean | string
+
+const comparisonItems: {
+  feature: string
+  cli: CellValue
+  business: CellValue
+  enterprise: CellValue
+}[] = [
+  { feature: "8 compliance Disguises (HIPAA, PCI, GDPR…)", cli: true, business: true, enterprise: "+ custom" },
+  { feature: "All masking transforms (Faker, FPE, hash, date-shift)", cli: true, business: true, enterprise: true },
+  { feature: "All synthetic generators", cli: true, business: true, enterprise: true },
+  { feature: "All connectors (Postgres, MySQL, S3, Snowflake)", cli: true, business: true, enterprise: true },
+  { feature: "YAML pipelines & local runs", cli: true, business: true, enterprise: true },
+  { feature: "STORM dataset analysis", cli: false, business: true, enterprise: true },
+  { feature: "FORECAST recommendations", cli: false, business: true, enterprise: true },
+  { feature: "Reports (in-app + PDF export)", cli: false, business: true, enterprise: true },
+  { feature: "Audit history", cli: false, business: true, enterprise: true },
+  { feature: "Scheduled runs", cli: false, business: true, enterprise: true },
+  { feature: "Team access (RBAC)", cli: false, business: "up to 25", enterprise: "unlimited" },
+  { feature: "SSO/SAML, HIPAA BAA, air-gapped", cli: false, business: false, enterprise: true },
 ]
 
-function FeatureCheck({ available }: { available: boolean }) {
-  return available ? (
-    <Check className="h-5 w-5 text-primary" />
-  ) : (
-    <X className="h-5 w-5 text-muted-foreground/50" />
-  )
+function Cell({ value }: { value: CellValue }) {
+  if (value === true) return <Check className="h-5 w-5 text-primary" />
+  if (value === false) return <X className="h-5 w-5 text-muted-foreground/40" />
+  return <span className="text-xs font-medium text-primary">{value}</span>
 }
 
 export function Comparison() {
   return (
     <section className="py-20 md:py-28 border-t border-border">
-      <div className="container mx-auto max-w-4xl px-4">
+      <div className="container mx-auto max-w-5xl px-4">
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            CLI vs Business
+            Pick the tier that matches the team
           </h2>
           <p className="text-muted-foreground text-lg">
-            The CLI is free forever. Upgrade when your team needs collaboration, scheduling, and audit trails.
+            The CLI is free forever. Upgrade when your team needs STORM analysis, audit-ready Reports, or BAA-backed deployments.
           </p>
         </div>
 
         {/* Comparison table */}
         <div className="rounded-xl border border-border overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-4 p-4 bg-muted/50 border-b border-border">
+          <div className="grid grid-cols-[1.5fr_80px_80px_80px] md:grid-cols-[1.5fr_120px_120px_120px] gap-2 p-4 bg-muted/50 border-b border-border">
             <div className="text-sm font-medium text-muted-foreground">Feature</div>
             <div className="text-center">
               <div className="text-sm font-semibold">CLI</div>
-              <div className="text-xs text-muted-foreground">Free forever</div>
+              <div className="text-xs text-muted-foreground">Free</div>
             </div>
             <div className="text-center">
               <div className="text-sm font-semibold text-primary">Business</div>
               <div className="text-xs text-muted-foreground">$499/mo</div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm font-semibold">Enterprise</div>
+              <div className="text-xs text-muted-foreground">Custom</div>
             </div>
           </div>
 
@@ -86,17 +67,14 @@ export function Comparison() {
             <div
               key={item.feature}
               className={cn(
-                "grid grid-cols-[1fr_100px_100px] md:grid-cols-[1fr_120px_120px] gap-4 p-4 items-center",
+                "grid grid-cols-[1.5fr_80px_80px_80px] md:grid-cols-[1.5fr_120px_120px_120px] gap-2 p-4 items-center",
                 index !== comparisonItems.length - 1 && "border-b border-border"
               )}
             >
               <div className="text-sm">{item.feature}</div>
-              <div className="flex justify-center">
-                <FeatureCheck available={item.cli} />
-              </div>
-              <div className="flex justify-center">
-                <FeatureCheck available={item.business} />
-              </div>
+              <div className="flex justify-center"><Cell value={item.cli} /></div>
+              <div className="flex justify-center"><Cell value={item.business} /></div>
+              <div className="flex justify-center"><Cell value={item.enterprise} /></div>
             </div>
           ))}
         </div>

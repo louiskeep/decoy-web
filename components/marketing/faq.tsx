@@ -7,44 +7,54 @@ import {
 
 const faqs = [
   {
-    question: "What's the difference between the CLI and Business tier?",
+    question: "What's a Disguise?",
     answer:
-      "The CLI is a free, open-source tool for individual engineers. It includes all masking transforms, synthetic generators, and connectors. The Business tier adds a web UI, scheduled runs, team collaboration, audit logs, and RBAC. Think of it as: CLI for building pipelines, Business for running them in production with your team.",
+      "A Disguise is a pre-built compliance template (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, plus a sensible default) that masks the right fields the right way. Apply with one flag instead of configuring transforms from scratch — and stay aligned with the regulation as it evolves.",
+  },
+  {
+    question: "What is STORM?",
+    answer:
+      "STORM is Decoy's dataset analysis event. It scans your data, identifies fields, detects formats, and computes statistical and re-identification risk profiles. STORM finds it; FORECAST explains it; Report files it.",
+  },
+  {
+    question: "Does FORECAST replace a data engineer?",
+    answer:
+      "No. FORECAST recommends a Disguise and per-field Masks based on STORM's profile. Your engineers approve, edit, and ship the pipeline. Think of it as the senior reviewer who's read every compliance regulation — not the engineer who writes the pipeline.",
+  },
+  {
+    question: "Can I export Reports for compliance audits?",
+    answer:
+      "Yes. Every Report can be exported as a PDF and shared with a compliance officer via signed link. Reports are immutable once filed, with the original STORM scan, the FORECAST recommendation, and the masked-run hash preserved end-to-end.",
   },
   {
     question: "Does my data leave my network?",
     answer:
-      "No. Decoy runs entirely on your infrastructure. The CLI runs on your machine, and the Business platform runs in your cloud. The only external call is optional license validation, which sends zero data about your pipelines or datasets. For air-gapped environments, we provide offline license keys.",
+      "No. Decoy runs entirely on your infrastructure — CLI on your machine, Business platform in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
   },
   {
-    question: "How does format-preserving encryption work?",
+    question: "How does format-preserving encryption (FPE) work?",
     answer:
-      "FPE encrypts data while keeping its format intact. A 16-digit credit card number stays a 16-digit number. An email stays an email. This is useful when downstream systems validate formats. FPE is deterministic with a seed, so the same input always produces the same output—critical for maintaining referential integrity across tables.",
+      "FPE encrypts a value while keeping its format intact — a 16-digit card stays a 16-digit number, an email stays an email. It's deterministic with a seed, so the same input always produces the same output. That's how foreign keys and joins keep working after you mask.",
   },
   {
-    question: "Can I mask data across related tables?",
+    question: "Can Decoy mask data across related tables?",
     answer:
-      "Yes. Decoy understands foreign key relationships and preserves referential integrity automatically. When you mask a user's email in the users table, their orders still link correctly. You define relationships once in your YAML config, and Decoy handles the rest.",
+      "Yes. Decoy understands foreign and composite keys and preserves referential integrity automatically. When you mask a user's email in users, their rows in orders, sessions, and audit_log still join correctly with no extra config.",
   },
   {
     question: "What databases and file formats are supported?",
     answer:
-      "PostgreSQL, MySQL, Snowflake, S3 (CSV, Parquet, JSON), and local files are fully supported today. BigQuery, Databricks, MongoDB, Redshift, and DynamoDB are on the roadmap. You can also request connectors via GitHub issues—we prioritize based on demand.",
+      "PostgreSQL, MySQL, Snowflake, S3 (CSV, Parquet, JSON), and local files are fully supported today. BigQuery, Databricks, MongoDB, Redshift, and DynamoDB are on the roadmap. Need a connector we don't have? Open a GitHub issue — we prioritize by demand.",
   },
   {
     question: "Is Decoy open source?",
     answer:
-      "The CLI is source-available under the Business Source License (BUSL). You can read, modify, and use the code freely for non-commercial purposes. The license converts to Apache 2.0 after 4 years. This protects us from competitors offering a managed Decoy while keeping the code transparent for security-conscious buyers.",
-  },
-  {
-    question: "How long does implementation take?",
-    answer:
-      "Most teams run their first masked dataset within 30 minutes of installing Decoy. The `decoy init` command scaffolds a starter config, and `decoy generate schema` auto-detects your tables and suggests transforms. No consultants, no multi-week projects. Just install and run.",
+      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The Business platform is also self-hosted — you run it, we don't see your data.",
   },
   {
     question: "What compliance certifications do you have?",
     answer:
-      "SOC 2 Type 2 certification is in progress (expected Q2 2026). We provide HIPAA BAAs for healthcare customers on Enterprise plans. Our self-hosted architecture means your data governance policies apply—we're just tooling that runs inside your security perimeter.",
+      "SOC 2 Type 2 is in progress (expected Q2 2026). HIPAA BAAs are available on Enterprise. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply — we ship tooling that runs inside your security perimeter, not a SaaS that sees your data.",
   },
 ]
 

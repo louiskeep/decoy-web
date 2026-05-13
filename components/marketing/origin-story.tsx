@@ -15,13 +15,16 @@ export function OriginStory() {
             
             <div className="flex flex-col gap-4 text-muted-foreground">
               <p>
-                It started with a compliance audit. We needed to give our contractors access to realistic test data without exposing customer PII. Simple enough, right?
+                It started with a compliance audit. We needed contractors to have realistic test data without exposing customer PII. Simple enough, right?
               </p>
               <p>
                 The enterprise vendors wanted six-figure contracts and 12-week implementations. The open-source tools were abandoned or required a PhD in data engineering to configure.
               </p>
               <p>
-                So we built Decoy: a CLI that does one thing well, and a Business tier when your team is ready. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in 5 minutes.
+                Then a pattern showed up: every healthcare team was rebuilding the same HIPAA Safe Harbor logic. Every fintech team was rebuilding the same PCI tokenization. The answer wasn&apos;t another configuration UI — it was prebuilt Disguises.
+              </p>
+              <p>
+                So we built Decoy: a CLI that ships with eight compliance Disguises, and a Business tier when your team is ready for STORM analysis, audit-ready Reports, and scheduled runs. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in five minutes.
               </p>
             </div>
           </div>
