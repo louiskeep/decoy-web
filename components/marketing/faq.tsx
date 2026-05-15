@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "What's a Disguise?",
     answer:
-      "A Disguise is a pre-built compliance template (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, plus a sensible default) that masks the right fields the right way. Apply with one flag instead of configuring transforms from scratch — and stay aligned with the regulation as it evolves.",
+      "A Disguise is a pre-built compliance template (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, plus a sensible default) that masks the right fields the right way. Apply with one flag instead of configuring transforms from scratch -- and stay aligned with the regulation as it evolves.",
   },
   {
     question: "What is STORM?",
@@ -19,22 +19,22 @@ const faqs = [
   {
     question: "Does FORECAST replace a data engineer?",
     answer:
-      "No. FORECAST recommends a Disguise and per-field Masks based on STORM's profile. Your engineers approve, edit, and ship the pipeline. Think of it as the senior reviewer who's read every compliance regulation — not the engineer who writes the pipeline.",
+      "No. FORECAST recommends a Disguise and per-field Masks based on STORM's profile. Your engineers approve, edit, and ship the pipeline. Think of it as the senior reviewer who's read every compliance regulation -- not the engineer who writes the pipeline.",
   },
   {
     question: "Can I export Reports for compliance audits?",
     answer:
-      "Yes. Every Report can be exported as a PDF and shared with a compliance officer via signed link. Reports are immutable once filed, with the original STORM scan, the FORECAST recommendation, and the masked-run hash preserved end-to-end.",
+      "Yes. Every Report can be exported and shared with a compliance officer. Reports include the original STORM scan, the FORECAST recommendation, and a hash of the masked run.",
   },
   {
     question: "Does my data leave my network?",
     answer:
-      "No. Decoy runs entirely on your infrastructure — CLI on your machine, Business platform in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
+      "No. Decoy runs entirely on your infrastructure -- CLI on your machine, Business platform in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
   },
   {
     question: "How does format-preserving encryption (FPE) work?",
     answer:
-      "FPE encrypts a value while keeping its format intact — a 16-digit card stays a 16-digit number, an email stays an email. It's deterministic with a seed, so the same input always produces the same output. That's how foreign keys and joins keep working after you mask.",
+      "FPE encrypts a value while keeping its format intact -- a 16-digit card stays a 16-digit number, an email stays an email. It's deterministic with a seed, so the same input always produces the same output. That's how foreign keys and joins keep working after you mask.",
   },
   {
     question: "Can Decoy mask data across related tables?",
@@ -42,19 +42,19 @@ const faqs = [
       "Yes. Decoy understands foreign and composite keys and preserves referential integrity automatically. When you mask a user's email in users, their rows in orders, sessions, and audit_log still join correctly with no extra config.",
   },
   {
-    question: "What databases and file formats are supported?",
+    question: "What data sources are supported today?",
     answer:
-      "PostgreSQL, MySQL, Snowflake, S3 (CSV, Parquet, JSON), and local files are fully supported today. BigQuery, Databricks, MongoDB, Redshift, and DynamoDB are on the roadmap. Need a connector we don't have? Open a GitHub issue — we prioritize by demand.",
+      "File upload (CSV and Parquet), Amazon S3, Google Cloud Storage, and SFTP work today. Direct database connections -- PostgreSQL, MySQL, Snowflake, and others -- are coming in a future release. BigQuery, Databricks, Redshift, and MongoDB are also on the roadmap. Need a connector we don't have? Open a GitHub issue -- we prioritize by demand.",
   },
   {
     question: "Is Decoy open source?",
     answer:
-      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The Business platform is also self-hosted — you run it, we don't see your data.",
+      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The Business platform is also self-hosted -- you run it, we don't see your data.",
   },
   {
     question: "What compliance certifications do you have?",
     answer:
-      "SOC 2 Type 2 is in progress (expected Q2 2026). HIPAA BAAs are available on Enterprise. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply — we ship tooling that runs inside your security perimeter, not a SaaS that sees your data.",
+      "SOC 2 Type 2 is in progress (expected Q2 2026). HIPAA BAAs are available on Enterprise. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply -- we ship tooling that runs inside your security perimeter, not a SaaS that sees your data.",
   },
 ]
 

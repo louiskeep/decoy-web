@@ -107,7 +107,7 @@ export function Storm() {
             <div className="flex-1">
               <h3 className="text-base font-semibold mb-1">FORECAST never touches raw data.</h3>
               <p className="text-sm text-muted-foreground">
-                It only reads STORM&apos;s statistical profile, so your PHI, PCI, or customer PII stays where it lives. No row-level egress, no model training on your data, no exceptions.
+                It only reads STORM&apos;s statistical profile, so your PHI, PCI, or customer PII stays where it lives. No row-level egress, no model training on your data. FORECAST reads statistical profiles only.
               </p>
             </div>
             <Link

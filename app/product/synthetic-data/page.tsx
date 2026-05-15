@@ -8,7 +8,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Synthetic Data Generation - Decoy",
-  description: "Generate realistic test datasets that preserve statistical properties and relationships. Scale from thousands to billions of rows.",
+  description: "Generate realistic test datasets that preserve statistical properties and relationships. Scale from thousands to millions of rows.",
 }
 
 const features = [
@@ -25,12 +25,12 @@ const features = [
   {
     icon: Gauge,
     title: "Scale Control",
-    description: "Generate exactly the volume you need. 10x production, 1000 rows for unit tests, or billions for load testing.",
+    description: "Generate exactly the volume you need. 10x production, 1000 rows for unit tests, or millions for load testing.",
   },
   {
     icon: Database,
-    title: "Schema Introspection",
-    description: "Point Decoy at your database and it auto-generates a YAML config with sensible defaults for each column type.",
+    title: "STORM-Backed Profiling",
+    description: "Profile your source files with STORM to capture column distributions and data shapes. Use the profile as a seed for realistic synthetic generation.",
   },
 ]
 
@@ -71,8 +71,8 @@ export default function SyntheticDataPage() {
                   Generate data that looks real
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Create test datasets from scratch that preserve the statistical properties of your production data. 
-                  No PII, no compliance risk, unlimited scale.
+                  Create test datasets from scratch that preserve the statistical properties of your production data.
+                  No PII, no compliance risk.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button asChild size="lg">
@@ -90,32 +90,35 @@ export default function SyntheticDataPage() {
                   <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
-                  <code className="text-muted-foreground">{`# Generate synthetic data from schema
-generate:
-  - table: users
-    rows: 100000
+                  <code className="text-muted-foreground">{`generator_settings:
+  seed: 42
+  output_directory: 'data/generated'
+tables:
+  - name: users
+    rows: 50000
     columns:
-      id: sequence
-      email: faker.email
-      name: faker.name
-      created_at: timestamp_range
-        start: 2023-01-01
-        end: 2024-12-31
-      plan: categorical
-        values: [free, pro, enterprise]
+      - name: user_id
+        type: sequence
+        start: 1
+      - name: email
+        type: faker
+        faker_type: email
+      - name: first_name
+        type: faker
+        faker_type: first_name
+      - name: plan
+        type: categorical
+        categories: ['free', 'pro', 'enterprise']
         weights: [0.7, 0.25, 0.05]
-
-  - table: orders
-    rows: 500000
+  - name: orders
+    rows: 200000
     columns:
-      id: sequence
-      user_id: foreign_key -> users.id
-      amount: normal
-        mean: 99.0
-        std: 45.0
-        min: 9.99
-      status: categorical
-        values: [pending, shipped, delivered]`}</code>
+      - name: order_id
+        type: sequence
+        start: 1
+      - name: status
+        type: categorical
+        categories: ['pending', 'shipped', 'delivered']`}</code>
                 </pre>
               </div>
             </div>

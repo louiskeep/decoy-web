@@ -6,14 +6,14 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Security - Decoy",
-  description: "How Decoy keeps your data safe. Self-hosted architecture, encryption, and compliance certifications.",
+  description: "How Decoy keeps your data safe. Self-hosted architecture, encryption, and compliance posture.",
 }
 
 const principles = [
   {
     icon: Server,
     title: "Self-Hosted by Design",
-    description: "Decoy runs entirely on your infrastructure. Your data never leaves your network. We couldn't see your data even if we wanted to.",
+    description: "Decoy runs entirely on your infrastructure. Your data never leaves your network. We have no access to your data.",
   },
   {
     icon: Lock,
@@ -27,13 +27,13 @@ const principles = [
   },
   {
     icon: FileCheck,
-    title: "Compliance Ready",
-    description: "SOC 2 Type 2 in progress. HIPAA BAA available for healthcare. GDPR-compliant by architecture (your data, your jurisdiction).",
+    title: "Compliance Templates",
+    description: "HIPAA, PCI, GDPR, SOX, and other built-in Disguise templates give your team a starting point for policy review. SOC 2 Type 2 in progress.",
   },
   {
     icon: Users,
     title: "RBAC & Audit Logs",
-    description: "Business tier includes role-based access control and immutable audit logs. Know who ran what pipeline, when, and on which data.",
+    description: "Business tier includes role-based access control and audit logs. Know who ran what pipeline, when, and on which data.",
   },
   {
     icon: Shield,
@@ -58,7 +58,7 @@ export default function SecurityPage() {
                 Built for regulated industries
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Decoy was designed from day one for teams that take data security seriously. 
+                Decoy was designed from day one for teams that take data security seriously.
                 Self-hosted architecture means your compliance requirements are met by default.
               </p>
             </div>
@@ -83,8 +83,8 @@ export default function SecurityPage() {
         {/* Compliance section */}
         <section className="py-20 border-t border-border">
           <div className="container mx-auto max-w-4xl px-4">
-            <h2 className="text-3xl font-bold mb-8 text-center">Compliance & Certifications</h2>
-            
+            <h2 className="text-3xl font-bold mb-8 text-center">Compliance Status</h2>
+
             <div className="space-y-6">
               <div className="rounded-xl border border-border bg-card p-6">
                 <div className="flex items-start gap-4">
@@ -94,7 +94,7 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">SOC 2 Type 2</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      In progress. Expected completion: Q2 2026. Covers the Business tier platform 
+                      In progress. Expected completion: Q2 2026. Covers the Business tier platform
                       (the self-hosted CLI doesn&apos;t require SOC 2 since it runs on your infrastructure).
                     </p>
                     <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">In Progress</span>
@@ -110,8 +110,8 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">HIPAA</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Business Associate Agreements (BAAs) available for Enterprise customers. 
-                      Self-hosted architecture means PHI never leaves your HIPAA-compliant infrastructure.
+                      Business Associate Agreements (BAAs) available for Enterprise customers.
+                      Self-hosted architecture means PHI never leaves your infrastructure.
                     </p>
                     <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Available on Enterprise</span>
                   </div>
@@ -126,10 +126,10 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">GDPR</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Compliant by architecture. Since Decoy runs on your infrastructure in your jurisdiction, 
+                      Because Decoy runs on your infrastructure in your jurisdiction,
                       no data is transferred to third parties. DPA available on request.
                     </p>
-                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Compliant by Architecture</span>
+                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Self-Hosted by Design</span>
                   </div>
                 </div>
               </div>

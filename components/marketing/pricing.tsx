@@ -13,7 +13,7 @@ const plans = [
       "8 compliance Disguises (HIPAA, PCI, GDPR…)",
       "All masking transforms (Faker, FPE, hash, date-shift)",
       "All synthetic generators",
-      "All connectors (Postgres, MySQL, S3, Snowflake)",
+      "File and cloud object connectors (CSV, Parquet, S3, GCS, SFTP)",
       "YAML pipelines & unlimited local runs",
       "Community support",
     ],
@@ -129,7 +129,7 @@ export function Pricing() {
         {/* Additional info */}
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
-            All plans include unlimited data volume. Business tier includes a 14-day free trial — no credit card required.
+            No per-row fees on any plan. Business tier includes a 14-day free trial — no credit card required.
             <br />
             <span className="text-foreground">20% off annual billing.</span>
           </p>

@@ -13,17 +13,17 @@ export const metadata: Metadata = {
 
 const transforms = [
   {
-    name: "faker.email",
-    description: "Realistic email addresses",
+    name: "faker",
+    description: "Realistic fake values (names, emails, phones)",
     example: "john.doe@acme.com → sarah.miller@example.net",
   },
   {
-    name: "format_preserving_encryption",
-    description: "Encrypted but same format",
+    name: "fpe",
+    description: "Format-preserving encryption",
     example: "4111-1111-1111-1111 → 8923-4567-2345-9012",
   },
   {
-    name: "hash.sha256",
+    name: "hash",
     description: "Deterministic one-way hash",
     example: "123-45-6789 → a7f3b2c9d8...",
   },
@@ -33,13 +33,13 @@ const transforms = [
     example: "1990-05-15 → 1990-06-02",
   },
   {
-    name: "faker.address",
-    description: "Realistic street addresses",
-    example: "123 Main St → 456 Oak Ave",
+    name: "redact",
+    description: "Replace with static placeholder",
+    example: "John Smith → [REDACTED]",
   },
   {
-    name: "categorical_shuffle",
-    description: "Shuffle within column",
+    name: "shuffle",
+    description: "Shuffle values within column",
     example: "Preserves value distribution",
   },
 ]
@@ -63,7 +63,7 @@ const benefits = [
   {
     icon: Database,
     title: "Multiple Destinations",
-    description: "Write masked data to staging DBs, S3, local files, or Snowflake. Same pipeline, many outputs.",
+    description: "Write masked data to S3, GCS, SFTP, or local files. Same pipeline, many outputs.",
   },
 ]
 
@@ -104,33 +104,27 @@ export default function MaskingPage() {
                   <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
-                  <code className="text-muted-foreground">{`source:
-  type: postgres
-  connection: \${PROD_DB_URL}
-  tables: [users, orders]
-
-destination:
-  type: postgres
-  connection: \${STAGING_DB_URL}
-
-masks:
-  - table: users
-    column: email
-    transform: faker.email
-    preserve_uniqueness: true
-
-  - table: users
-    column: ssn
-    transform: format_preserving_encryption
-    seed: \${MASK_SEED}
-
-  - table: orders
-    column: shipping_address
-    transform: faker.address
-
-referential_integrity:
-  - parent: users.id
-    children: [orders.user_id]`}</code>
+                  <code className="text-muted-foreground">{`input:
+  type: csv
+  path: 'data/patients.csv'
+output:
+  type: csv
+  path: 'data/patients_masked.csv'
+masking_rules:
+  - column: email
+    type: faker
+    faker_type: email
+  - column: ssn
+    type: hash
+    algorithm: sha256
+  - column: dob
+    type: date_shift
+    jitter_days: 30
+  - column: phone
+    type: redact
+  - column: name
+    type: faker
+    faker_type: name`}</code>
                 </pre>
               </div>
             </div>
@@ -162,7 +156,7 @@ referential_integrity:
                 Built-in masking transforms
               </h2>
               <p className="text-muted-foreground text-lg">
-                50+ transforms out of the box. Or write your own in Python.
+                12 built-in masking strategies. Or write your own in Python.
               </p>
             </div>
 

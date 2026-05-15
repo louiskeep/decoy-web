@@ -9,14 +9,14 @@ const comparisonItems: {
   business: CellValue
   enterprise: CellValue
 }[] = [
-  { feature: "8 compliance Disguises (HIPAA, PCI, GDPR…)", cli: true, business: true, enterprise: "+ custom" },
+  { feature: "8 compliance Disguises (HIPAA, PCI, GDPR...)", cli: true, business: true, enterprise: "+ custom" },
   { feature: "All masking transforms (Faker, FPE, hash, date-shift)", cli: true, business: true, enterprise: true },
   { feature: "All synthetic generators", cli: true, business: true, enterprise: true },
-  { feature: "All connectors (Postgres, MySQL, S3, Snowflake)", cli: true, business: true, enterprise: true },
+  { feature: "File and cloud object connectors (CSV, Parquet, S3, GCS, SFTP)", cli: true, business: true, enterprise: true },
   { feature: "YAML pipelines & local runs", cli: true, business: true, enterprise: true },
   { feature: "STORM dataset analysis", cli: false, business: true, enterprise: true },
   { feature: "FORECAST recommendations", cli: false, business: true, enterprise: true },
-  { feature: "Reports (in-app + PDF export)", cli: false, business: true, enterprise: true },
+  { feature: "Reports (in-app + export)", cli: false, business: true, enterprise: true },
   { feature: "Audit history", cli: false, business: true, enterprise: true },
   { feature: "Scheduled runs", cli: false, business: true, enterprise: true },
   { feature: "Team access (RBAC)", cli: false, business: "up to 25", enterprise: "unlimited" },

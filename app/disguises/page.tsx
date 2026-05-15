@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Compliance Disguises - Decoy",
     description:
-      "8 pre-built masking policies for HIPAA, PCI, GLBA, GDPR, CCPA, FERPA, SOX. Apply a Disguise and get a downloadable compliance report.",
+      "8 pre-built masking policies for HIPAA, PCI, GLBA, GDPR, CCPA, FERPA, SOX. Apply a Disguise and get a masking run report.",
   },
 }
 
@@ -102,7 +102,7 @@ export default function DisguisesPage() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">3</div>
                 <h3 className="font-semibold mb-2">Apply and report</h3>
                 <p className="text-sm text-muted-foreground">
-                  Apply the Disguise with one YAML line. Each run produces a downloadable compliance report
+                  Apply the Disguise with one YAML line. Each run produces a masking run report
                   showing what was masked, with which strategy, under which regulation.
                 </p>
               </div>

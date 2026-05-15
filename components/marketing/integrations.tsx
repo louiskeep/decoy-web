@@ -2,24 +2,6 @@ import { Database, Cloud, FileJson, Snowflake } from "lucide-react"
 
 const integrations = [
   {
-    name: "PostgreSQL",
-    icon: Database,
-    category: "Database",
-    available: true,
-  },
-  {
-    name: "MySQL",
-    icon: Database,
-    category: "Database",
-    available: true,
-  },
-  {
-    name: "Snowflake",
-    icon: Snowflake,
-    category: "Data Warehouse",
-    available: true,
-  },
-  {
     name: "Amazon S3",
     icon: Cloud,
     category: "Storage",
@@ -30,6 +12,36 @@ const integrations = [
     icon: FileJson,
     category: "Files",
     available: true,
+  },
+  {
+    name: "GCS",
+    icon: Cloud,
+    category: "Storage",
+    available: true,
+  },
+  {
+    name: "SFTP",
+    icon: Cloud,
+    category: "Storage",
+    available: true,
+  },
+  {
+    name: "PostgreSQL",
+    icon: Database,
+    category: "Database",
+    available: "soon",
+  },
+  {
+    name: "MySQL",
+    icon: Database,
+    category: "Database",
+    available: "soon",
+  },
+  {
+    name: "Snowflake",
+    icon: Snowflake,
+    category: "Data Warehouse",
+    available: "soon",
   },
   {
     name: "BigQuery",
@@ -44,21 +56,9 @@ const integrations = [
     available: "soon",
   },
   {
-    name: "MongoDB",
-    icon: Database,
-    category: "NoSQL",
-    available: "soon",
-  },
-  {
     name: "Redshift",
     icon: Database,
     category: "Data Warehouse",
-    available: "soon",
-  },
-  {
-    name: "DynamoDB",
-    icon: Database,
-    category: "NoSQL",
     available: "soon",
   },
 ]
@@ -73,7 +73,7 @@ export function Integrations() {
             Connect to your data, wherever it lives
           </h2>
           <p className="text-muted-foreground text-lg">
-            First-class support for PostgreSQL, MySQL, S3, and Snowflake. More connectors shipping monthly.
+            File upload, Amazon S3, GCS, and SFTP work today. Database connectors coming in a future release.
           </p>
         </div>
 
