@@ -1,33 +1,10 @@
 # decoy-web
 
-Public marketing site and documentation for Decoy.
+Public marketing and docs site for Decoy.
 
-**Deploys to:** `decoy.dev` (Vercel)
-**Docs:** `decoy.dev/docs` (Mintlify, sourced from `docs/` — added in Phase 2)
+Start with the central documentation hub:
 
-## What lives here
-
-- Next.js marketing site (home, pricing, product pages, blog, security, changelog)
-- Mintlify docs source (`docs/`) — _not yet added; coming in Phase 2 of migration_
-- No Python. No backend. No secrets.
-
-## What does NOT live here
-
-- CLI code → `decoy`
-- Platform/SaaS code → `decoy-platform`
-- Masking engine → `decoy-engine`
-
-## Dev setup
-
-```bash
-pnpm install
-pnpm dev
-```
-
-## Deployment
-
-Vercel auto-deploys from `main`. Every PR gets a preview URL.
-
-## License
-
-Apache License 2.0 — see [LICENSE](LICENSE).
+- [Documentation Hub](../decoy-platform/docs/README.md)
+- [Master Roadmap](../decoy-platform/docs/ROADMAP.md)
+- [Brand Guide](../decoy-platform/docs/guides/brand.md)
+- [Motion Guide](../decoy-platform/docs/guides/motion.md)
