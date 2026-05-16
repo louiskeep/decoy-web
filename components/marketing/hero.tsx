@@ -75,7 +75,7 @@ export function Hero() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button asChild size="lg" className="gap-2">
               <Link href="/trial">
-                Start free Business trial
+                Start free Web UI trial
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="gap-2">
@@ -102,7 +102,7 @@ export function Hero() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              BAA on Enterprise
+              BAA by contract
             </span>
           </div>
 

@@ -29,7 +29,7 @@ const faqs = [
   {
     question: "Does my data leave my network?",
     answer:
-      "No. Decoy runs entirely on your infrastructure -- CLI on your machine, Business platform in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
+      "No. Decoy runs entirely on your infrastructure -- CLI on your machine, paid Web UI in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
   },
   {
     question: "How does format-preserving encryption (FPE) work?",
@@ -49,12 +49,12 @@ const faqs = [
   {
     question: "Is Decoy open source?",
     answer:
-      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The Business platform is also self-hosted -- you run it, we don't see your data.",
+      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The paid platform is also self-hosted -- you run it, we don't see your data.",
   },
   {
     question: "What compliance certifications do you have?",
     answer:
-      "SOC 2 Type 2 is in progress (expected Q2 2026). HIPAA BAAs are available on Enterprise. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply -- we ship tooling that runs inside your security perimeter, not a SaaS that sees your data.",
+      "SOC 2 Type 2 is in progress (expected Q2 2026). HIPAA BAAs are available by contract. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply -- we ship tooling that runs inside your security perimeter, not a SaaS that sees your data.",
   },
 ]
 

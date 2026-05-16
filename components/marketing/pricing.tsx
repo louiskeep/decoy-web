@@ -8,33 +8,32 @@ const plans = [
     name: "CLI",
     price: "$0",
     period: "forever",
-    description: "For individual engineers building and testing locally.",
+    description: "For engineers validating and running pipelines locally or in CI.",
     features: [
-      "8 compliance Disguises (HIPAA, PCI, GDPR…)",
-      "All masking transforms (Faker, FPE, hash, date-shift)",
-      "All synthetic generators",
-      "File and cloud object connectors (CSV, Parquet, S3, GCS, SFTP)",
-      "YAML pipelines & unlimited local runs",
-      "Community support",
+      "8 compliance Disguises (HIPAA, PCI, GDPR...)",
+      "Local YAML validation and file runs",
+      "Local CSV STORM scans",
+      "Local FORECAST from saved scan JSON",
+      "Templates, demos, and JSON output for scripts",
+      "Docs and community-style support",
     ],
     cta: "Install free",
     ctaLink: "#install",
     highlighted: false,
   },
   {
-    name: "Business",
+    name: "Web UI",
     price: "$499",
     period: "/month",
-    description: "For teams that need STORM analysis, audit trails, and shared pipelines.",
+    description: "For teams that need the self-hosted platform workflow and governance.",
     features: [
       "Everything in CLI",
-      "STORM dataset analysis",
-      "FORECAST recommendations",
-      "Reports (in-app + PDF export)",
-      "Audit history",
-      "Scheduled runs",
-      "Team access (up to 25, RBAC)",
-      "Priority support",
+      "Files, STORM, FORECAST, and visual pipeline builder",
+      "Shared pipelines, versions, jobs, and outputs",
+      "Runtime secrets, API keys, and admin controls",
+      "Schedules, triggers, and review gates",
+      "Reporting, evidence, and audit history",
+      "Team users and RBAC",
     ],
     cta: "Start free trial",
     ctaLink: "/trial",
@@ -42,18 +41,18 @@ const plans = [
     badge: "Most Popular",
   },
   {
-    name: "Enterprise",
+    name: "Enterprise add-on",
     price: "Custom",
     period: "",
-    description: "For regulated organizations that need BAAs, SSO, and air-gapped deploys.",
+    description: "For regulated organizations that need custom deployment and support terms.",
     features: [
-      "Everything in Business",
+      "Everything in Web UI",
       "Custom Disguises",
-      "Unlimited users",
-      "SSO / SAML",
-      "HIPAA BAA",
-      "Air-gapped deployments",
-      "Dedicated support & SLA",
+      "SSO / SAML by contract",
+      "HIPAA BAA by contract",
+      "Air-gapped deployment support",
+      "SLA and dedicated support terms",
+      "Security review and onboarding support",
     ],
     cta: "Contact sales",
     ctaLink: "/contact",
@@ -65,7 +64,6 @@ export function Pricing() {
   return (
     <section className="py-20 md:py-28 border-t border-border" id="pricing">
       <div className="container mx-auto max-w-6xl px-4">
-        {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Flat pricing. No per-row fees.
@@ -75,7 +73,6 @@ export function Pricing() {
           </p>
         </div>
 
-        {/* Pricing cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {plans.map((plan) => (
             <div
@@ -126,10 +123,9 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* Additional info */}
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
-            No per-row fees on any plan. Business tier includes a 14-day free trial — no credit card required.
+            No per-row fees on any plan. Web UI includes a 14-day free trial; no credit card required.
             <br />
             <span className="text-foreground">20% off annual billing.</span>
           </p>

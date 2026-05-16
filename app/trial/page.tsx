@@ -9,7 +9,7 @@ import { Check } from "lucide-react"
 import { useState } from "react"
 
 const trialFeatures = [
-  "Full Business tier access",
+  "Full Web UI access",
   "14 days, no credit card required",
   "Web UI & visual pipeline builder",
   "Scheduled runs & orchestration",
@@ -42,14 +42,14 @@ export default function TrialPage() {
               <h1 className="text-3xl font-bold mb-4">Check your email</h1>
               <p className="text-muted-foreground mb-8">
                 We&apos;ve sent login instructions to <strong className="text-foreground">{email}</strong>. 
-                Your 14-day Business trial starts now.
+                Your 14-day Web UI trial starts now.
               </p>
               <div className="rounded-lg border border-border bg-card p-4 text-left">
                 <div className="text-sm font-medium mb-2">Next steps:</div>
                 <ol className="text-sm text-muted-foreground space-y-2">
                   <li>1. Check your email for the login link</li>
-                  <li>2. Access the Business dashboard at app.decoy.dev</li>
-                  <li>3. Run <code className="bg-muted px-1 rounded font-mono">decoy login</code> to connect your CLI</li>
+                  <li>2. Access the Web UI dashboard at app.decoy.dev</li>
+                  <li>3. Use the CLI separately for local validation, demos, and CI checks</li>
                 </ol>
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function TrialPage() {
                   Start your free trial
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  14 days of full Business tier access. No credit card required.
+                  14 days of full Web UI access. No credit card required.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -135,8 +135,8 @@ export default function TrialPage() {
                         <strong className="text-foreground">After your trial:</strong>
                       </p>
                       <p>
-                        Continue with Business ($499/mo) or downgrade to the free CLI with no data loss. 
-                        Your pipelines work either way.
+                        Continue with Web UI ($499/mo) or keep using the free CLI locally.
+                        YAML pipelines remain portable either way.
                       </p>
                     </div>
                   </div>

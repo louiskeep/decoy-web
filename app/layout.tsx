@@ -8,7 +8,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'Decoy - Data Masking & Synthetic Data Generation',
-  description: 'Free CLI plus paid Business platform for data masking and synthetic data generation. Self-hosted, sanely priced. Start in 5 minutes from the command line.',
+  description: 'Free CLI plus paid self-hosted Web UI for data masking and synthetic data generation. Sanely priced. Start in 5 minutes from the command line.',
   generator: 'v0.app',
   keywords: ['data masking', 'synthetic data', 'test data', 'data privacy', 'GDPR', 'PII masking', 'dev test data', 'CLI tool'],
   authors: [{ name: 'Decoy' }],

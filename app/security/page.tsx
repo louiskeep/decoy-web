@@ -18,7 +18,7 @@ const principles = [
   {
     icon: Lock,
     title: "Encryption at Rest",
-    description: "All sensitive configuration (connection strings, seeds, API keys) are encrypted. Business tier adds encrypted audit logs.",
+    description: "All sensitive configuration (connection strings, seeds, API keys) are encrypted. The paid Web UI adds encrypted audit logs.",
   },
   {
     icon: Eye,
@@ -33,7 +33,7 @@ const principles = [
   {
     icon: Users,
     title: "RBAC & Audit Logs",
-    description: "Business tier includes role-based access control and audit logs. Know who ran what pipeline, when, and on which data.",
+    description: "The paid Web UI includes role-based access control and audit logs. Know who ran what pipeline, when, and on which data.",
   },
   {
     icon: Shield,
@@ -94,7 +94,7 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">SOC 2 Type 2</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      In progress. Expected completion: Q2 2026. Covers the Business tier platform
+                      In progress. Expected completion: Q2 2026. Covers the paid Web UI platform
                       (the self-hosted CLI doesn&apos;t require SOC 2 since it runs on your infrastructure).
                     </p>
                     <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">In Progress</span>
@@ -110,10 +110,10 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">HIPAA</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Business Associate Agreements (BAAs) available for Enterprise customers.
+                      Business Associate Agreements (BAAs) are available by contract.
                       Self-hosted architecture means PHI never leaves your infrastructure.
                     </p>
-                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Available on Enterprise</span>
+                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Available by contract</span>
                   </div>
                 </div>
               </div>
