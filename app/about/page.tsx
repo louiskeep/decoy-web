@@ -80,8 +80,8 @@ export default function AboutPage() {
                 </p>
 
                 <p>
-                  Decoy is what we wished existed: a free CLI for engineers who just need to 
-                  mask data, and a paid Business tier for teams who need scheduling, audit logs, 
+                  Decoy is what we wished existed: a free CLI for engineers who need local
+                  masking workflows, and a paid Web UI for teams who need scheduling, audit logs,
                   and collaboration. No consultants. No six-month implementations. No per-row pricing 
                   that punishes you for having customers.
                 </p>
@@ -92,8 +92,8 @@ export default function AboutPage() {
                   <div className="rounded-lg border border-border bg-card p-4">
                     <div className="font-medium text-foreground mb-1">The CLI is free forever</div>
                     <p className="text-sm">
-                      Single engineers should never pay for test data tooling. The CLI does everything 
-                      you need for local development and CI pipelines.
+                      Single engineers should never pay for local test-data tooling. The CLI handles
+                      local development, YAML validation, STORM/FORECAST, and CI pipeline checks.
                     </p>
                   </div>
 

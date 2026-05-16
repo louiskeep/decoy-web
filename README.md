@@ -8,3 +8,4 @@ Start with the central documentation hub:
 - [Master Roadmap](../decoy-platform/docs/ROADMAP.md)
 - [Brand Guide](../decoy-platform/docs/guides/brand.md)
 - [Motion Guide](../decoy-platform/docs/guides/motion.md)
+- [Web Server Startup Helper](../decoy-platform/docs/guides/web-server-startup.md)

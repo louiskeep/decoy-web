@@ -8,7 +8,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Pricing - Decoy",
-  description: "Simple, predictable pricing for data masking and synthetic data generation. Free CLI forever, Business tier starting at $499/month.",
+  description: "Simple, predictable pricing for data masking and synthetic data generation. Free CLI forever, paid self-hosted Web UI starting at $499/month.",
 }
 
 export default function PricingPage() {
