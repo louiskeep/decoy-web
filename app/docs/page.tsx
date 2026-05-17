@@ -2,51 +2,77 @@ import { Navigation } from "@/components/marketing/navigation"
 import { Footer } from "@/components/marketing/footer"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Book, Terminal, FileCode, Database, Sparkles, Layers } from "lucide-react"
+import { Book, Database, ExternalLink, FileCode, GitBranch, Shield, Terminal } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Documentation - Decoy",
-  description: "Learn how to use Decoy for data masking and synthetic data generation. Guides, API reference, and recipes.",
+  description:
+    "Decoy documentation for CLI YAML workflows, platform capabilities, release status, and public docs planning.",
 }
 
-const sections = [
+const docsLinks = [
   {
     icon: Book,
-    title: "Getting Started",
-    description: "Install Decoy and run your first masking pipeline in 5 minutes.",
-    href: "/docs/getting-started",
-  },
-  {
-    icon: Terminal,
-    title: "CLI Reference",
-    description: "Complete reference for all Decoy CLI commands and flags.",
-    href: "/docs/cli-reference",
-  },
-  {
-    icon: FileCode,
-    title: "YAML Reference",
-    description: "Full schema documentation for decoy.yaml pipeline files.",
-    href: "/docs/yaml-reference",
+    title: "How Decoy Works",
+    description: "Plain-language map of engine, platform, CLI, website, and the V1 workflow.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/how-decoy-works.md",
   },
   {
     icon: Database,
-    title: "Connectors",
-    description: "Configure PostgreSQL, MySQL, S3, Snowflake, and more.",
-    href: "/docs/connectors",
+    title: "Engine Under The Hood",
+    description: "How graph runs, masking, generation, STORM, FORECAST, and ExecutionContext fit together.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/engine-under-the-hood.md",
   },
   {
-    icon: Sparkles,
-    title: "Transforms",
-    description: "50+ built-in transforms for masking and generating data.",
-    href: "/docs/transforms",
+    icon: FileCode,
+    title: "Platform App Under The Hood",
+    description: "How the FastAPI and React app wrap the engine for files, scans, jobs, reporting, and admin.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/platform-app-under-the-hood.md",
   },
   {
-    icon: Layers,
-    title: "Recipes",
-    description: "Copy-paste examples for common masking and generation tasks.",
-    href: "/docs/recipes",
+    icon: Terminal,
+    title: "CLI YAML Workflows",
+    description: "How to author YAML, run local files, use STORM/FORECAST, and understand CLI boundaries.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/cli-yaml-workflows.md",
   },
+  {
+    icon: Book,
+    title: "Documentation Hub",
+    description: "The canonical cross-repo docs index for roadmap, product truth, audits, and guides.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/README.md",
+  },
+  {
+    icon: FileCode,
+    title: "API Surface Map",
+    description: "What lives in Web UI, API, CLI, and engine/direct YAML for Release 1.0.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/api-surface.md",
+  },
+  {
+    icon: Database,
+    title: "Product Capabilities",
+    description: "Current shipped behavior, release boundaries, and known capability limits.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/product/capabilities.md",
+  },
+  {
+    icon: Shield,
+    title: "CLI V1 Audit",
+    description: "What the CLI can do, what it should not claim, and the release support gaps.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/audit/cli-v1-audit.md",
+  },
+  {
+    icon: GitBranch,
+    title: "Release Roadmap",
+    description: "Sprint-by-sprint V1 release work, gates, blockers, and implementation standards.",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/release/release-roadmap.md",
+  },
+]
+
+const docsStandards = [
+  "Git-reviewed Markdown or MDX source",
+  "Runnable examples and generated references",
+  "Search, stable URLs, redirects, and broken-link checks",
+  "Tutorials, how-to guides, reference, and concept docs",
 ]
 
 export default function DocsPage() {
@@ -54,47 +80,65 @@ export default function DocsPage() {
     <div className="min-h-screen">
       <Navigation />
       <main>
-        <section className="py-20 md:py-28">
+        <section className="py-16 md:py-24">
           <div className="container mx-auto max-w-6xl px-4">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Documentation</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Everything you need to know about Decoy. From installation to advanced transforms.
+            <div className="mb-12 max-w-3xl">
+              <p className="mb-3 text-sm font-medium text-primary">Documentation</p>
+              <h1 className="mb-5 text-4xl font-bold md:text-5xl">Build, run, and review Decoy workflows.</h1>
+              <p className="text-lg text-muted-foreground">
+                The public docs site is being shaped around the same release truth as the product. For now,
+                canonical docs live in GitHub; the long-term home should be a dedicated docs domain such as
+                docs.decoy.dev, with docs.decoy.com redirecting if available.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sections.map((section) => (
-                <Link
-                  key={section.title}
-                  href={section.href}
-                  className="group rounded-xl border border-border bg-card p-6 hover:border-primary/50 transition-colors"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4">
-                    <section.icon className="h-5 w-5" />
-                  </div>
-                  <h2 className="font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {section.title}
-                  </h2>
-                  <p className="text-sm text-muted-foreground">{section.description}</p>
-                </Link>
-              ))}
-            </div>
+            <div className="grid gap-6 md:grid-cols-[1.5fr_1fr]">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {docsLinks.map((section) => (
+                  <Link
+                    key={section.title}
+                    href={section.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group rounded-md border border-border bg-card p-5 transition-colors hover:border-primary/60"
+                  >
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <section.icon className="h-5 w-5" />
+                    </div>
+                    <div className="mb-2 flex items-center gap-2">
+                      <h2 className="font-semibold transition-colors group-hover:text-primary">{section.title}</h2>
+                      <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm leading-6 text-muted-foreground">{section.description}</p>
+                  </Link>
+                ))}
+              </div>
 
-            <div className="text-center mt-12">
-              <p className="text-muted-foreground mb-4">
-                Can&apos;t find what you&apos;re looking for?
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button asChild variant="outline">
-                  <Link href="https://github.com/louiskeep/decoy/discussions" target="_blank">
-                    Ask on GitHub
+              <aside className="rounded-md border border-border bg-muted/30 p-6">
+                <h2 className="mb-3 text-lg font-semibold">Docs site direction</h2>
+                <p className="mb-5 text-sm leading-6 text-muted-foreground">
+                  V1 docs should move to a dedicated Git-backed docs site with generated references for CLI,
+                  YAML, API, connectors, and product limits. Mintlify is the fastest polished path; Starlight,
+                  Nextra, or Material for MkDocs are strong owned-stack alternatives.
+                </p>
+                <ul className="space-y-3">
+                  {docsStandards.map((item) => (
+                    <li key={item} className="flex gap-3 text-sm text-muted-foreground">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild className="mt-6 w-full">
+                  <Link
+                    href="https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/public-docs-site-strategy.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Read docs strategy
                   </Link>
                 </Button>
-                <Button asChild variant="outline">
-                  <Link href="/discord">Join Discord</Link>
-                </Button>
-              </div>
+              </aside>
             </div>
           </div>
         </section>

@@ -78,41 +78,41 @@ export function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               {/* Disguises is the wedge — top-level placement per BRAND_GUIDE. */}
-              <Link href="/disguises" legacyBehavior passHref>
-                <NavigationMenuLink className={cn(
+              <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
+                <Link href="/disguises">
                   <ShieldCheck className="h-4 w-4 mr-1.5 text-primary" />
                   Disguises
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/pricing" legacyBehavior passHref>
-                <NavigationMenuLink className={cn(
+              <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
+                <Link href="/pricing">
                   Pricing
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={cn(
+              <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
+                <Link href="/docs">
                   Docs
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/blog" legacyBehavior passHref>
-                <NavigationMenuLink className={cn(
+              <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
+                <Link href="/blog">
                   Blog
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
