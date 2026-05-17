@@ -129,7 +129,7 @@ export function Navigation() {
             <span className="sr-only">GitHub</span>
           </Link>
           <Button asChild>
-            <Link href="/trial">Start free trial</Link>
+            <Link href="/trial">Request a demo</Link>
           </Button>
         </div>
 
@@ -201,7 +201,7 @@ export function Navigation() {
                 </Link>
                 <Button asChild className="mt-2">
                   <Link href="/trial" onClick={() => setMobileOpen(false)}>
-                    Start free trial
+                    Request a demo
                   </Link>
                 </Button>
               </div>

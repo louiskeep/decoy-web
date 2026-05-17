@@ -15,3 +15,8 @@ node_modules
 .next/
 .DS_Store
 package-lock.json
+
+# Dev log files written when pnpm dev runs unattached
+next-dev.err.log
+next-dev.out.log
+next-env.d.ts

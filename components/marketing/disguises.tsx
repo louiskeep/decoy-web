@@ -101,10 +101,10 @@ export function Disguises() {
             Disguises
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            One template. The whole regulation. No configuration from scratch.
+            One template. The known field list. No configuration from scratch.
           </h2>
           <p className="text-muted-foreground text-lg">
-            A Disguise is a pre-built compliance template that masks the right fields the right way for HIPAA, PCI, GDPR, and more — engineered with compliance counsel, shipped with the CLI.
+            A Disguise is a pre-built field-list template that masks the right fields the right way for HIPAA, PCI, GDPR, and more — a starting point for your team's policy review, shipped with the CLI.
           </p>
         </div>
 
