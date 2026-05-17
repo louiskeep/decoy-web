@@ -18,7 +18,6 @@ const footerLinks = {
   company: [
     { label: "About", href: "/about" },
     { label: "Security", href: "/security" },
-    { label: "Self-Hosting", href: "/self-hosting" },
   ],
   legal: [
     { label: "Privacy", href: "/privacy" },
@@ -46,7 +45,7 @@ export function Footer() {
               <span className="text-xl font-semibold">Decoy</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Compliance-ready data masking and synthetic data — self-hosted, flat-priced.
+              Data masking and synthetic data tooling — self-hosted, flat-priced.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
