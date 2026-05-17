@@ -8,24 +8,22 @@ import { Label } from "@/components/ui/label"
 import { Check } from "lucide-react"
 import { useState } from "react"
 
-const trialFeatures = [
-  "Full Web UI access",
-  "14 days, no credit card required",
-  "Web UI & visual pipeline builder",
-  "Scheduled runs & orchestration",
-  "Team access for up to 5 users",
-  "Audit logs & compliance reports",
-  "Priority email support",
+const demoIncludes = [
+  "30-minute live walkthrough of the canonical Web UI workflow",
+  "Upload → STORM scan → FORECAST → masked output → Evidence report",
+  "Q&A on V1 packaging, deployment, security model, and limits",
+  "Pricing + pilot scoping conversation",
+  "Free CLI install you can keep experimenting with afterward",
 ]
 
-export default function TrialPage() {
+export default function RequestDemoPage() {
   const [email, setEmail] = useState("")
   const [company, setCompany] = useState("")
   const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In production, this would create the trial account
+    // In production, this routes to sales.
     setSubmitted(true)
   }
 
@@ -39,17 +37,16 @@ export default function TrialPage() {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-6">
                 <Check className="h-8 w-8 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold mb-4">Check your email</h1>
+              <h1 className="text-3xl font-bold mb-4">Thanks — we&apos;ll be in touch.</h1>
               <p className="text-muted-foreground mb-8">
-                We&apos;ve sent login instructions to <strong className="text-foreground">{email}</strong>. 
-                Your 14-day Web UI trial starts now.
+                Sales will reach out to <strong className="text-foreground">{email}</strong> within one business day to schedule the demo.
               </p>
               <div className="rounded-lg border border-border bg-card p-4 text-left">
-                <div className="text-sm font-medium mb-2">Next steps:</div>
+                <div className="text-sm font-medium mb-2">While you wait:</div>
                 <ol className="text-sm text-muted-foreground space-y-2">
-                  <li>1. Check your email for the login link</li>
-                  <li>2. Access the Web UI dashboard at app.decoy.dev</li>
-                  <li>3. Use the CLI separately for local validation, demos, and CI checks</li>
+                  <li>1. Install the free CLI: <code className="font-mono">pip install decoy</code></li>
+                  <li>2. Try <code className="font-mono">decoy demo</code> for a self-contained walkthrough</li>
+                  <li>3. Read the docs at <a href="/docs" className="text-primary hover:underline">/docs</a></li>
                 </ol>
               </div>
             </div>
@@ -70,10 +67,10 @@ export default function TrialPage() {
               {/* Left side - form */}
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                  Start your free trial
+                  Request a demo
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  14 days of full Web UI access. No credit card required.
+                  Self-hosted Web UI for teams. We&apos;ll walk you through the V1 workflow, deployment, and pricing.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -102,11 +99,11 @@ export default function TrialPage() {
                   </div>
 
                   <Button type="submit" size="lg" className="w-full">
-                    Start free trial
+                    Request demo
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center">
-                    By signing up, you agree to our{" "}
+                    By submitting, you agree to our{" "}
                     <a href="/terms" className="text-primary hover:underline">Terms</a>
                     {" "}and{" "}
                     <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>.
@@ -114,14 +111,14 @@ export default function TrialPage() {
                 </form>
               </div>
 
-              {/* Right side - features */}
+              {/* Right side - what's in the demo */}
               <div className="lg:pl-8">
                 <div className="rounded-xl border border-border bg-card p-8">
                   <h2 className="text-xl font-semibold mb-6">
-                    What&apos;s included in your trial
+                    What the demo covers
                   </h2>
                   <ul className="space-y-4">
-                    {trialFeatures.map((feature) => (
+                    {demoIncludes.map((feature) => (
                       <li key={feature} className="flex items-start gap-3">
                         <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                         <span>{feature}</span>
@@ -132,11 +129,11 @@ export default function TrialPage() {
                   <div className="mt-8 pt-6 border-t border-border">
                     <div className="text-sm text-muted-foreground">
                       <p className="mb-2">
-                        <strong className="text-foreground">After your trial:</strong>
+                        <strong className="text-foreground">Pricing:</strong>
                       </p>
                       <p>
-                        Continue with Web UI ($499/mo) or keep using the free CLI locally.
-                        YAML pipelines remain portable either way.
+                        $499/month per Web UI instance, billed annually. The free CLI is yours
+                        forever, no signup needed.
                       </p>
                     </div>
                   </div>

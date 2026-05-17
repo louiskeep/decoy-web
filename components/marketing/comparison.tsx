@@ -16,8 +16,8 @@ const comparisonItems: {
   { feature: "Reports, evidence, and audit history", cli: false, platform: true, enterprise: true },
   { feature: "Scheduled runs, triggers, and reviews", cli: false, platform: true, enterprise: true },
   { feature: "Team access and RBAC", cli: false, platform: true, enterprise: true },
-  { feature: "SSO/SAML, HIPAA BAA, air-gapped, SLA", cli: false, platform: "add-on", enterprise: "contract" },
-  { feature: "Support model", cli: "docs", platform: "included", enterprise: "dedicated" },
+  { feature: "SSO / SAML, air-gapped deploy, custom support", cli: false, platform: "add-on", enterprise: "contract" },
+  { feature: "Support model", cli: "docs", platform: "email", enterprise: "contract" },
 ]
 
 function Cell({ value }: { value: CellValue }) {

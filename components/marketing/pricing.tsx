@@ -10,7 +10,7 @@ const plans = [
     period: "forever",
     description: "For engineers validating and running pipelines locally or in CI.",
     features: [
-      "8 compliance Disguises (HIPAA, PCI, GDPR...)",
+      "8 field-list Disguises (HIPAA, PCI, GDPR...)",
       "Local YAML validation and file runs",
       "Local CSV STORM scans",
       "Local FORECAST from saved scan JSON",
@@ -25,7 +25,7 @@ const plans = [
     name: "Web UI",
     price: "$499",
     period: "/month",
-    description: "For teams that need the self-hosted platform workflow and governance.",
+    description: "For teams that need the self-hosted platform workflow and governance. Billed annually per instance.",
     features: [
       "Everything in CLI",
       "Files, STORM, FORECAST, and visual pipeline builder",
@@ -34,8 +34,9 @@ const plans = [
       "Schedules, triggers, and review gates",
       "Reporting, evidence, and audit history",
       "Team users and RBAC",
+      "Email + business-hours support",
     ],
-    cta: "Start free trial",
+    cta: "Request a demo",
     ctaLink: "/trial",
     highlighted: true,
     badge: "Most Popular",
@@ -44,18 +45,18 @@ const plans = [
     name: "Enterprise add-on",
     price: "Custom",
     period: "",
-    description: "For regulated organizations that need custom deployment and support terms.",
+    description: "Custom deployment and support terms. Negotiated per contract.",
     features: [
       "Everything in Web UI",
       "Custom Disguises",
       "SSO / SAML by contract",
-      "HIPAA BAA by contract",
       "Air-gapped deployment support",
-      "SLA and dedicated support terms",
+      "Custom support terms by contract",
       "Security review and onboarding support",
+      "Additional environments at negotiated rate",
     ],
     cta: "Contact sales",
-    ctaLink: "/contact",
+    ctaLink: "/trial",
     highlighted: false,
   },
 ]
@@ -125,9 +126,9 @@ export function Pricing() {
 
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
-            No per-row fees on any plan. Web UI includes a 14-day free trial; no credit card required.
+            No per-row fees. No per-seat counting. $499/month per Web UI instance, billed annually.
             <br />
-            <span className="text-foreground">20% off annual billing.</span>
+            <span className="text-foreground">Multi-environment customers (dev + staging + prod) are quoted per environment.</span>
           </p>
         </div>
       </div>

@@ -32,12 +32,12 @@ const steps = [
     name: "Report",
     title: "Report files it.",
     description:
-      "Immutable Report capturing the scan, the recommendation, and the masked-run hash — the artifact your compliance officer asks for.",
+      "A Report capturing the scan, the recommendation, and the masked-run hash — the artifact your internal audit team asks for.",
     detail: [
-      "In-app + PDF export",
+      "In-app + HTML export",
       "Signed-link sharing",
-      "Immutable once filed",
-      "Audit-ready by default",
+      "Manifest hash per run",
+      "Useful input to your audit reviews",
     ],
     icon: FileCheck,
   },
@@ -60,7 +60,7 @@ export function Storm() {
             Storm finds it. Forecast explains it. Report files it.
           </h2>
           <p className="text-muted-foreground text-lg">
-            Decoy&apos;s analysis loop turns an unfamiliar dataset into a filed compliance Report — without your raw PHI or PCI ever leaving where it lives.
+            Decoy&apos;s analysis loop turns an unfamiliar dataset into a filed audit Report — without your raw PHI or PCI ever leaving where it lives.
           </p>
         </div>
 

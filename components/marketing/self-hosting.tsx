@@ -13,8 +13,8 @@ const benefits = [
   },
   {
     icon: Shield,
-    title: "Compliance-ready",
-    description: "SOC 2 Type 2 in progress. HIPAA BAA available. Air-gapped deployments supported.",
+    title: "Tooling for regulated workflows",
+    description: "Air-gapped deployments supported. Tooling-only: not SOC 2 certified, no BAA in V1. Your team retains compliance ownership.",
   },
   {
     icon: Zap,

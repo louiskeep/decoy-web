@@ -76,7 +76,7 @@ export default function SyntheticDataPage() {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button asChild size="lg">
-                    <Link href="/trial">Start free trial</Link>
+                    <Link href="/trial">Request a demo</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
                     <Link href="/docs/concepts/synthetic-data">Read the docs</Link>

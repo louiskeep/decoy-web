@@ -32,7 +32,7 @@ export default function DisguisesPage() {
               Compliance Disguises
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              Each Disguise is a named, regulation-aware masking policy. STORM scans your tables;
+              Each Disguise is a named, regulation-aware field-list template. STORM scans your data;
               FORECAST recommends the right one. Apply it with one line of YAML.
             </p>
             <div className="flex items-center justify-center gap-3 font-mono text-sm text-muted-foreground bg-muted/30 border border-border rounded-lg px-4 py-3 max-w-xs mx-auto">

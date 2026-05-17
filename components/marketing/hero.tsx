@@ -43,7 +43,7 @@ export function Hero() {
               Instantly.
             </h1>
             <p className="mx-auto max-w-2xl text-lg md:text-xl text-muted-foreground text-balance">
-              Mask real data or generate synthetic datasets with compliance-ready Disguises for HIPAA, PCI, GDPR, and more.
+              Mask real data or generate synthetic datasets with policy templates for HIPAA, PCI, GDPR, and more.
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export function Hero() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button asChild size="lg" className="gap-2">
               <Link href="/trial">
-                Start free Web UI trial
+                Request a demo
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="gap-2">
@@ -86,15 +86,15 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Compliance trust strip — the buyer signal for healthcare and fintech */}
+          {/* Trust strip — factual capabilities, not certification claims. */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              HIPAA Safe Harbor ready
+              HIPAA Safe Harbor field templates
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              PCI tokenization
+              PCI field templates
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
@@ -102,12 +102,12 @@ export function Hero() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              BAA by contract
+              Evidence manifest per run
             </span>
           </div>
 
           <p className="text-sm text-muted-foreground">
-            No credit card required · 14 day trial · Self-hosted
+            Self-hosted · Annual licensing
           </p>
         </div>
       </div>

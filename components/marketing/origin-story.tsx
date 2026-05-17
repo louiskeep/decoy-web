@@ -24,7 +24,7 @@ export function OriginStory() {
                 Then a pattern showed up: every healthcare team was rebuilding the same HIPAA Safe Harbor logic. Every fintech team was rebuilding the same PCI tokenization. The answer wasn&apos;t another configuration UI — it was prebuilt Disguises.
               </p>
               <p>
-                So we built Decoy: a CLI that ships with eight compliance Disguises, and a paid Web UI when your team is ready for shared pipelines, evidence, audit history, and scheduled runs. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in five minutes.
+                So we built Decoy: a CLI that ships with eight field-list Disguises, and a paid Web UI when your team is ready for shared pipelines, evidence, audit history, and scheduled runs. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in five minutes.
               </p>
             </div>
           </div>

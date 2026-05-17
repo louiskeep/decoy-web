@@ -48,7 +48,7 @@ export function CTA() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button asChild size="lg">
-              <Link href="/trial">Start free Web UI trial</Link>
+              <Link href="/trial">Request a demo</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
               <Link href="/docs">Read the docs</Link>

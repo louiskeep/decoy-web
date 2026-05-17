@@ -1,0 +1,41 @@
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+[browser] `legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components 
+    at errorOnce (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_124quts._.js:460:21)
+    at LinkComponent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_124quts._.js:839:38)
+    at Object.react_stack_bottom_frame (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:15037:24)
+    at renderWithHooks (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:4620:24)
+    at updateFunctionComponent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:6081:21)
+    at beginWork (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:6691:24)
+    at runWithFiberInDEV (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:965:74)
+    at performUnitOfWork (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_0p97jjd._.js:2647:64) (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_124quts._.js:460:21)
+[browser] `legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components 
+    at errorOnce (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_0l4d-v2._.js:460:21)
+    at LinkComponent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_0l4d-v2._.js:839:38)
+    at Object.react_stack_bottom_frame (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:15037:24)
+    at renderWithHooks (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:4620:24)
+    at updateFunctionComponent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:6081:21)
+    at beginWork (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:6691:24)
+    at runWithFiberInDEV (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:965:74)
+    at performUnitOfWork (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_react-dom_0z7y-dy._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/0tk4_next_dist_compiled_0p97jjd._.js:2647:64) (file://C:/Users/ckeeperman/vscode/Decoy Repos/decoy-web/.next/dev/static/chunks/node_modules__pnpm_0l4d-v2._.js:460:21)

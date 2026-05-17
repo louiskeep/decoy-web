@@ -184,8 +184,8 @@ export default async function DisguisePage({
           <section className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-transparent p-8 text-center">
             <h2 className="text-2xl font-bold mb-3">Try it now</h2>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Install the CLI, run a scan on your tables, and apply this Disguise.
-              The compliance report downloads automatically after each run.
+              Install the CLI, scan a CSV, and apply this Disguise.
+              An evidence report is generated automatically with each run.
             </p>
             <div className="space-y-3 max-w-sm mx-auto text-left font-mono text-sm mb-6">
               <div className="flex gap-2">
@@ -194,7 +194,7 @@ export default async function DisguisePage({
               </div>
               <div className="flex gap-2">
                 <span className="text-primary select-none">$</span>
-                <span>decoy scan --db postgresql://...</span>
+                <span>decoy scan customers.csv</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-primary select-none">$</span>

@@ -4,31 +4,28 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ decoy init --disguise hipaa" },
+  { type: "command", content: "$ decoy init --disguise hipaa patients.csv" },
   { type: "output", content: "✓ Wrote decoy.yaml — HIPAA Disguise applied" },
   { type: "output", content: "  18 Safe Harbor identifiers covered out of the box" },
   { type: "output", content: "" },
   { type: "command", content: "$ decoy run decoy.yaml" },
-  { type: "output", content: "► Connecting to prod-db.internal:5432..." },
-  { type: "output", content: "✓ Connected · STORM scan starting" },
+  { type: "output", content: "► Reading patients.csv (1,247 rows)" },
+  { type: "output", content: "✓ Source loaded · STORM scan starting" },
   { type: "output", content: "" },
-  { type: "output", content: "► Masking patients table (1,247 rows)" },
+  { type: "output", content: "► Masking patients (1,247 rows)" },
   { type: "output", content: "  mrn          → fpe (format-preserving)" },
-  { type: "output", content: "  ssn          → fpe + tokenize" },
+  { type: "output", content: "  ssn          → fpe" },
   { type: "output", content: "  email        → faker.email (unique-preserving)" },
   { type: "output", content: "  dob          → date_shift (±15 days)" },
   { type: "output", content: "  phone        → faker.phone" },
   { type: "output", content: "  address      → faker.address (geo-aware)" },
   { type: "output", content: "" },
-  { type: "output", content: "► Masking encounters table (8,429 rows)" },
-  { type: "output", content: "  patient_id   → linked via referential integrity" },
-  { type: "output", content: "" },
   { type: "output", content: "✓ HIPAA Safe Harbor identifiers neutralized" },
-  { type: "output", content: "✓ Referential integrity preserved across 2 tables" },
+  { type: "output", content: "✓ Deterministic seed preserves cross-file joins" },
   { type: "output", content: "" },
-  { type: "success", content: "✓ Complete · 9,676 rows masked in 2.3s" },
-  { type: "success", content: "  Output → staging-db.internal:5432" },
-  { type: "success", content: "  Report → reports/2026-05-10-hipaa-run.pdf" },
+  { type: "success", content: "✓ Complete · 1,247 rows masked in 0.4s" },
+  { type: "success", content: "  Output → patients_masked.csv" },
+  { type: "success", content: "  Report → reports/2026-05-10-hipaa-run.html" },
 ]
 
 export function TerminalDemo() {
@@ -53,7 +50,7 @@ export function TerminalDemo() {
               From install to filed Report in minutes
             </h2>
             <p className="text-muted-foreground text-lg">
-              No configuration files to puzzle over. Pick a Disguise, run the CLI, get a masked dataset and a Report you can hand a compliance officer.
+              No configuration files to puzzle over. Pick a Disguise, run the CLI, get a masked dataset and a Report you can hand to your internal audit team.
             </p>
           </div>
 

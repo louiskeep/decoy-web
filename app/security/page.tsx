@@ -17,8 +17,8 @@ const principles = [
   },
   {
     icon: Lock,
-    title: "Encryption at Rest",
-    description: "All sensitive configuration (connection strings, seeds, API keys) are encrypted. The paid Web UI adds encrypted audit logs.",
+    title: "Encrypted Configuration",
+    description: "Sensitive configuration (connector credentials, SSO secrets, API keys) is encrypted at rest with a customer-managed key.",
   },
   {
     icon: Eye,
@@ -27,8 +27,8 @@ const principles = [
   },
   {
     icon: FileCheck,
-    title: "Compliance Templates",
-    description: "HIPAA, PCI, GDPR, SOX, and other built-in Disguise templates give your team a starting point for policy review. SOC 2 Type 2 in progress.",
+    title: "Disguise Templates",
+    description: "HIPAA, PCI, GDPR, SOX, and other built-in Disguise templates give your team a starting point for policy review. The customer owns the policy decision; Decoy ships the field list.",
   },
   {
     icon: Users,
@@ -38,7 +38,7 @@ const principles = [
   {
     icon: Shield,
     title: "Security Disclosures",
-    description: "Report vulnerabilities to security@decoy.dev. We follow responsible disclosure and credit researchers in our changelog.",
+    description: "Report vulnerabilities to the security inbox (address being finalized for V1). We follow responsible disclosure and credit researchers in our changelog.",
   },
 ]
 
@@ -80,40 +80,48 @@ export default function SecurityPage() {
           </div>
         </section>
 
-        {/* Compliance section */}
+        {/* Compliance posture */}
         <section className="py-20 border-t border-border">
           <div className="container mx-auto max-w-4xl px-4">
-            <h2 className="text-3xl font-bold mb-8 text-center">Compliance Status</h2>
+            <h2 className="text-3xl font-bold mb-4 text-center">Compliance Posture</h2>
+            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Decoy V1 is audit-evidence and masking tooling. Customers retain full responsibility
+              for their own compliance posture. The Reports and audit logs Decoy generates can be
+              useful inputs to a customer&apos;s compliance audit but do not themselves constitute
+              certification.
+            </p>
 
             <div className="space-y-6">
               <div className="rounded-xl border border-border bg-card p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                     <FileCheck className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2">SOC 2 Type 2</h3>
+                    <h3 className="font-semibold mb-2">SOC 2</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      In progress. Expected completion: Q2 2026. Covers the paid Web UI platform
-                      (the self-hosted CLI doesn&apos;t require SOC 2 since it runs on your infrastructure).
+                      Not certified in V1. Customers maintain their own SOC 2 controls; Decoy&apos;s
+                      audit logs and evidence Reports may be useful inputs to their auditor.
                     </p>
-                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">In Progress</span>
+                    <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded">Not certified</span>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-xl border border-border bg-card p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                     <Shield className="h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">HIPAA</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Business Associate Agreements (BAAs) are available by contract.
-                      Self-hosted architecture means PHI never leaves your infrastructure.
+                      No Business Associate Agreement (BAA) offered in V1. The self-hosted architecture
+                      keeps PHI on your infrastructure regardless. HIPAA-aware Disguise field lists
+                      (Safe Harbor identifiers) ship with the CLI as a starting point for your team&apos;s
+                      policy review.
                     </p>
-                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Available by contract</span>
+                    <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded">No BAA in V1</span>
                   </div>
                 </div>
               </div>
@@ -126,8 +134,9 @@ export default function SecurityPage() {
                   <div>
                     <h3 className="font-semibold mb-2">GDPR</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Because Decoy runs on your infrastructure in your jurisdiction,
-                      no data is transferred to third parties. DPA available on request.
+                      Decoy runs on your infrastructure in your jurisdiction; no data is transferred to
+                      third parties. GDPR-aware Disguise field lists ship with the CLI. Decoy itself is
+                      not GDPR-certified; customers retain controller / processor responsibilities.
                     </p>
                     <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">Self-Hosted by Design</span>
                   </div>
