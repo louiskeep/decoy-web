@@ -19,7 +19,7 @@ const releases = [
       { type: "feature", text: "Synthetic data generation: faker, sequence, categorical, formula column types" },
       { type: "feature", text: "Cloud connectors: S3, Google Cloud Storage, and SFTP for CSV and Parquet files" },
       { type: "feature", text: "Graph pipeline builder with source, target, mask, generate, filter, sort, limit, derive, dedupe, unite, if-router, flag-gate, sub-pipeline, and sql_run nodes" },
-      { type: "feature", text: "STORM dataset profiling: detects 22+ PII types, quasi-identifier groups, k-anonymity, re-identification risk" },
+      { type: "feature", text: "STORM dataset profiling: detects 25 PII types, quasi-identifier groups, k-anonymity, re-identification risk" },
       { type: "feature", text: "FORECAST masking recommendations from STORM profiles with 8 built-in disguise templates (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, default)" },
       { type: "feature", text: "Self-hosted Web UI with RBAC (admin, release_manager, developer, user roles), API keys, and audit logs" },
       { type: "feature", text: "Job scheduling, webhook and API triggers, review gates, and pipeline versioning" },
