@@ -59,7 +59,8 @@ export default function SecurityPage() {
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Decoy was designed from day one for teams that take data security seriously.
-                Self-hosted architecture means your compliance requirements are met by default.
+                Self-hosted architecture means your data stays within your own infrastructure.
+                Your compliance team retains full control over data residency.
               </p>
             </div>
 
