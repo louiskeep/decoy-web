@@ -104,7 +104,7 @@ export function Disguises() {
             One template. The known field list. No configuration from scratch.
           </h2>
           <p className="text-muted-foreground text-lg">
-            A Disguise is a pre-built field-list template that masks the right fields the right way for HIPAA, PCI, GDPR, and more — a starting point for your team's policy review, shipped with the CLI.
+            A Disguise is a pre-built field-list template that masks the right fields the right way for HIPAA, PCI, GDPR, and more &mdash; a starting point for your team&apos;s policy review, shipped with the CLI.
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export function Disguises() {
           </div>
           <div className="rounded-lg border border-border bg-card p-4 overflow-x-auto code-block">
             <pre className="text-xs font-mono text-muted-foreground leading-relaxed">
-              <code>{`$ decoy init --disguise hipaa
+              <code>{`$ decoy init --preset hipaa
 ✓ Wrote decoy.yaml — HIPAA Disguise applied
   · 18 Safe Harbor identifiers covered
   · referential integrity preserved

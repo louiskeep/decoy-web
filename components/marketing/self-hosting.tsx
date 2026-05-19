@@ -74,18 +74,18 @@ export function SelfHosting() {
                   {/* Data sources */}
                   <div className="flex gap-3">
                     <div className="flex-1 rounded-md border border-border bg-muted/50 p-3 text-center">
-                      <div className="text-xs font-medium">Production DB</div>
-                      <div className="text-[10px] text-muted-foreground">PostgreSQL</div>
+                      <div className="text-xs font-medium">Source files</div>
+                      <div className="text-[10px] text-muted-foreground">CSV &middot; Parquet</div>
                     </div>
-                    <div className="flex items-center text-muted-foreground">→</div>
+                    <div className="flex items-center text-muted-foreground">&rarr;</div>
                     <div className="flex-1 rounded-md border border-primary bg-primary/10 p-3 text-center">
                       <div className="text-xs font-medium text-primary">Decoy</div>
                       <div className="text-[10px] text-muted-foreground">CLI / Platform</div>
                     </div>
-                    <div className="flex items-center text-muted-foreground">→</div>
+                    <div className="flex items-center text-muted-foreground">&rarr;</div>
                     <div className="flex-1 rounded-md border border-border bg-muted/50 p-3 text-center">
-                      <div className="text-xs font-medium">Staging DB</div>
-                      <div className="text-[10px] text-muted-foreground">Masked data</div>
+                      <div className="text-xs font-medium">Masked files</div>
+                      <div className="text-[10px] text-muted-foreground">Masked output</div>
                     </div>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ export function SelfHosting() {
                 <div className="rounded-md border border-border bg-muted/30 p-3 text-center">
                   <div className="text-xs font-medium text-muted-foreground">External Access</div>
                   <div className="text-[10px] text-muted-foreground">
-                    None required · Optional license validation only
+                    None required &middot; Optional license validation only
                   </div>
                 </div>
               </div>
