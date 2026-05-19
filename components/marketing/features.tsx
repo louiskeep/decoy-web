@@ -7,30 +7,33 @@ const features = [
     description: "Create PII-safe copies of production data for dev and test environments.",
     code: `# decoy.yaml
 masks:
-  - table: users
-    column: email
+  - column: email
     transform: faker.email
     preserve_uniqueness: true
 
-  - table: users
-    column: ssn
+  - column: ssn
     transform: format_preserving_encryption
     seed: \${MASK_SEED}`,
   },
   {
     icon: Database,
     title: "Synthetic Data",
-    description: "Generate realistic test datasets that preserve statistical properties and relationships.",
+    description: "Generate realistic test datasets that preserve statistical properties.",
     code: `# decoy.yaml
-generate:
-  table: orders
-  rows: 100000
-  preserve:
-    - distributions
-    - correlations
-  constraints:
-    - foreign_key: user_id -> users.id
-    - check: total > 0`,
+mode: generate
+generator_settings:
+  seed: 42
+  output_directory: data/generated
+tables:
+  - name: orders
+    rows: 100000
+    columns:
+      - name: order_id
+        type: sequence
+        start: 1
+      - name: status
+        type: categorical
+        categories: [pending, shipped, delivered]`,
   },
   {
     icon: Sparkles,
@@ -48,15 +51,17 @@ transforms:
   {
     icon: Link2,
     title: "Referential integrity",
-    description: "Foreign keys, composite keys, and cross-database joins stay consistent. Mask once, join everywhere.",
-    code: `# referential integrity is automatic
-relationships:
-  - parent: users.id
-    children:
-      - orders.user_id
-      - sessions.user_id
-      - audit_log.actor_id
-# the same masked id flows through every child table`,
+    description: "Foreign keys stay consistent across masked files. Mask the same column in any file — deterministic keying ensures the same input always produces the same masked output.",
+    code: `# keyed determinism — same input, same output, every run
+key_label: q4-release   # shared key links all masked files
+
+masks:
+  - column: user_id
+    transform: hash.sha256  # user_id 42 → 7f3a...
+
+# mask customers.csv and orders.csv with the same
+# key_label: masked_orders.user_id matches
+# masked_customers.user_id automatically`,
   },
 ]
 
