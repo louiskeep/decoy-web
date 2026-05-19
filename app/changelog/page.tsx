@@ -13,16 +13,17 @@ const releases = [
     date: "2026-04-15",
     title: "Initial Release",
     changes: [
-      { type: "feature", text: "Core CLI with masking and synthetic data generation" },
-      { type: "feature", text: "PostgreSQL and MySQL connectors" },
-      { type: "feature", text: "S3 connector for CSV and Parquet files" },
-      { type: "feature", text: "Snowflake connector (read and write)" },
-      { type: "feature", text: "50+ built-in masking transforms" },
-      { type: "feature", text: "Format-preserving encryption" },
-      { type: "feature", text: "YAML-based pipeline configuration" },
-      { type: "feature", text: "Referential integrity preservation" },
-      { type: "feature", text: "decoy init, decoy run, decoy demo commands" },
-      { type: "feature", text: "Business tier with web UI and scheduling" },
+      { type: "feature", text: "Core CLI: decoy run, validate, demo, storm, forecast, init, explain, info, templates" },
+      { type: "feature", text: "Masking: 15+ strategies including hash, faker, redact, date_shift, categorical, shuffle, bucketize, fpe, formula, reference" },
+      { type: "feature", text: "Format-preserving encryption over configurable character sets (HMAC-keyed Feistel construction)" },
+      { type: "feature", text: "Synthetic data generation: faker, sequence, categorical, formula column types" },
+      { type: "feature", text: "Cloud connectors: S3, Google Cloud Storage, and SFTP for CSV and Parquet files" },
+      { type: "feature", text: "Graph pipeline builder with source, target, mask, generate, filter, sort, limit, derive, dedupe, unite, if-router, flag-gate, sub-pipeline, and sql_run nodes" },
+      { type: "feature", text: "STORM dataset profiling: detects 22+ PII types, quasi-identifier groups, k-anonymity, re-identification risk" },
+      { type: "feature", text: "FORECAST masking recommendations from STORM profiles with 8 built-in disguise templates (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, default)" },
+      { type: "feature", text: "Self-hosted Web UI with RBAC (admin, release_manager, developer, user roles), API keys, and audit logs" },
+      { type: "feature", text: "Job scheduling, webhook and API triggers, review gates, and pipeline versioning" },
+      { type: "feature", text: "YAML-based pipeline configuration with variable substitution, iteration, and sub-pipeline support" },
     ],
   },
   {
@@ -30,10 +31,11 @@ const releases = [
     date: "2026-04-01",
     title: "Release Candidate",
     changes: [
-      { type: "improvement", text: "Performance improvements for large tables (10x faster)" },
-      { type: "improvement", text: "Better error messages with YAML line numbers" },
-      { type: "fix", text: "Fixed memory leak when streaming large datasets" },
-      { type: "fix", text: "Fixed edge case in date_shift transform" },
+      { type: "improvement", text: "Performance improvements for large files using Arrow and DuckDB native paths" },
+      { type: "improvement", text: "Better error messages with YAML line numbers and field-level validation context" },
+      { type: "fix", text: "Fixed memory handling when streaming large datasets" },
+      { type: "fix", text: "Fixed edge case in date_shift transform for leap-year boundaries" },
+      { type: "fix", text: "Fixed Unicode handling in faker transforms for non-ASCII locales" },
     ],
   },
   {
@@ -41,10 +43,10 @@ const releases = [
     date: "2026-03-15",
     title: "Beta 3",
     changes: [
-      { type: "feature", text: "Added Snowflake connector" },
-      { type: "feature", text: "Added decoy generate schema command for auto-config" },
-      { type: "improvement", text: "Progress bars for long-running operations" },
-      { type: "fix", text: "Fixed Unicode handling in faker transforms" },
+      { type: "feature", text: "STORM scan diff: detect added/removed columns, type changes, and new PII signals across scan runs" },
+      { type: "feature", text: "FORECAST multi-table pipelines from a STORM run group" },
+      { type: "improvement", text: "Progress bars and Rich-formatted output for long-running CLI operations" },
+      { type: "improvement", text: "Graph pipeline canvas: node cards, sample previews, and live run logs in the bottom pane" },
     ],
   },
 ]
@@ -112,14 +114,14 @@ export default function ChangelogPage() {
 
             <div className="mt-16 text-center">
               <p className="text-sm text-muted-foreground">
-                Subscribe to our{" "}
+                Subscribe to our{"\ "}
                 <a
                   href="/blog"
                   className="text-primary hover:underline"
                 >
                   blog
                 </a>
-                {" "}for detailed release notes and migration guides.
+                {"\ "}for detailed release notes and migration guides.
               </p>
             </div>
           </div>
