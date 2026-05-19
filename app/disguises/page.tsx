@@ -86,7 +86,7 @@ export default function DisguisesPage() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">1</div>
                 <h3 className="font-semibold mb-2">STORM scans</h3>
                 <p className="text-sm text-muted-foreground">
-                  Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy scan</code> on your tables.
+                  Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy storm</code> on your tables.
                   STORM profiles every column and detects SSNs, emails, PANs, IBANs, and 18 more PII types.
                 </p>
               </div>
