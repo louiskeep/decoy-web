@@ -13,6 +13,7 @@ const footerLinks = {
     { label: "Documentation", href: "/docs" },
     { label: "Blog", href: "/blog" },
     { label: "Changelog", href: "/changelog" },
+    { label: "Performance", href: "/performance" },
     { label: "GitHub", href: "https://github.com/louiskeep/decoy" },
   ],
   company: [
