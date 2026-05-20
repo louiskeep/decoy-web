@@ -18,6 +18,7 @@ const footerLinks = {
   company: [
     { label: "About", href: "/about" },
     { label: "Security", href: "/security" },
+    { label: "Limits", href: "/limits" },
   ],
   legal: [
     { label: "Privacy", href: "/privacy" },
@@ -45,7 +46,7 @@ export function Footer() {
               <span className="text-xl font-semibold">Decoy</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Data masking and synthetic data tooling — self-hosted, flat-priced.
+              Data masking and synthetic data tooling &mdash; self-hosted, flat-priced.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
@@ -137,7 +138,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Decoy. All rights reserved.
+            &copy; {new Date().getFullYear()} Decoy. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Built with frustration, shipped with love.
