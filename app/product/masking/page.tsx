@@ -58,7 +58,7 @@ const benefits = [
   {
     icon: Zap,
     title: "Fast Processing",
-    description: "Stream large tables without loading everything into memory. Mask millions of rows in minutes.",
+    description: "Stream large files without loading everything into memory. Mask millions of rows in minutes.",
   },
   {
     icon: Database,
@@ -156,7 +156,7 @@ masking_rules:
                 Built-in masking transforms
               </h2>
               <p className="text-muted-foreground text-lg">
-                12 built-in masking strategies. Or write your own in Python.
+                Multiple masking strategies, from format-preserving encryption to randomization. Or extend with a custom Faker provider.
               </p>
             </div>
 

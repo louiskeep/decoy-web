@@ -4,13 +4,19 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ decoy init --disguise hipaa patients.csv" },
-  { type: "output", content: "✓ Wrote decoy.yaml — HIPAA Disguise applied" },
+  { type: "command", content: "$ decoy storm scan patients.csv" },
+  { type: "output", content: "✓ Scanned patients.csv — 1,247 rows, 11 columns" },
+  { type: "output", content: "  Detected: SSN, email, DOB, phone, address" },
+  { type: "output", content: "  Saved: scan.json" },
+  { type: "output", content: "" },
+  { type: "command", content: "$ decoy forecast scan.json" },
+  { type: "output", content: "► Top match: HIPAA Safe Harbor (score 0.96)" },
   { type: "output", content: "  18 Safe Harbor identifiers covered out of the box" },
+  { type: "output", content: "  Wrote: decoy.yaml" },
   { type: "output", content: "" },
   { type: "command", content: "$ decoy run decoy.yaml" },
   { type: "output", content: "► Reading patients.csv (1,247 rows)" },
-  { type: "output", content: "✓ Source loaded · STORM scan starting" },
+  { type: "output", content: "✓ Source loaded · masking starting" },
   { type: "output", content: "" },
   { type: "output", content: "► Masking patients (1,247 rows)" },
   { type: "output", content: "  mrn          → fpe (format-preserving)" },
@@ -25,7 +31,6 @@ const terminalLines = [
   { type: "output", content: "" },
   { type: "success", content: "✓ Complete · 1,247 rows masked in 0.4s" },
   { type: "success", content: "  Output → patients_masked.csv" },
-  { type: "success", content: "  Report → reports/2026-05-10-hipaa-run.html" },
 ]
 
 export function TerminalDemo() {
@@ -47,10 +52,10 @@ export function TerminalDemo() {
           {/* Section header */}
           <div className="text-center max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              From install to filed Report in minutes
+              From install to masked output in minutes
             </h2>
             <p className="text-muted-foreground text-lg">
-              No configuration files to puzzle over. Pick a Disguise, run the CLI, get a masked dataset and a Report you can hand to your internal audit team.
+              No configuration files to puzzle over. STORM finds the sensitive fields, FORECAST recommends the right Disguise, and you run it.
             </p>
           </div>
 
@@ -81,7 +86,7 @@ export function TerminalDemo() {
                       line.type === "success" && "text-primary"
                     )}
                   >
-                    {line.content || " "}
+                    {line.content || " "}
                   </div>
                 ))}
                 {visibleLines < terminalLines.length && (
