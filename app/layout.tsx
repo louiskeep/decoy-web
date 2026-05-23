@@ -8,20 +8,20 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'Decoy - Data Masking & Synthetic Data Generation',
-  description: 'Free CLI plus paid self-hosted Web UI for data masking and synthetic data generation. Sanely priced. Start in 5 minutes from the command line.',
+  description: 'Developer-focused data masking and synthetic data tooling for local files, YAML pipelines, STORM profiles, and self-hosted team workflows.',
   generator: 'v0.app',
   keywords: ['data masking', 'synthetic data', 'test data', 'data privacy', 'GDPR', 'PII masking', 'dev test data', 'CLI tool'],
   authors: [{ name: 'Decoy' }],
   openGraph: {
     title: 'Decoy - Data Masking & Synthetic Data Generation',
-    description: 'We got quoted $40K to mask 3 tables. So we built this.',
+    description: 'Profile data, review masking recommendations, and build safer test datasets with explicit YAML and self-hosted workflows.',
     type: 'website',
     siteName: 'Decoy',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Decoy - Data Masking & Synthetic Data Generation',
-    description: 'We got quoted $40K to mask 3 tables. So we built this.',
+    description: 'Data masking and synthetic generation tooling for teams that need realistic test data without broad compliance promises.',
   },
   icons: {
     icon: [

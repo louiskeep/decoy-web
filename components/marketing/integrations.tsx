@@ -70,10 +70,10 @@ export function Integrations() {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Connect to your data, wherever it lives
+            File and object-storage workflows first
           </h2>
           <p className="text-muted-foreground text-lg">
-            File upload, Amazon S3, GCS, and SFTP work today. Database connectors coming in a future release.
+            Decoy V1 focuses on local files, uploaded files, and cloud object storage. Database connectors exist in engine/direct-YAML paths, but the platform UI keeps them out of the release workflow for now.
           </p>
         </div>
 

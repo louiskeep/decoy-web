@@ -3,67 +3,67 @@ import { Footer } from "@/components/marketing/footer"
 import { CTA } from "@/components/marketing/cta"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Shield, Check, Zap, Lock, Database } from "lucide-react"
+import { Shield, Zap, Lock, Database } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Data Masking - Decoy",
-  description: "Create PII-safe copies of production data for dev and test environments. Format-preserving encryption, faker-based transforms, and referential integrity.",
+  description: "Reviewable data masking workflows with deterministic strategies, faker-based replacements, and relationship-aware configuration.",
 }
 
 const transforms = [
   {
     name: "faker",
-    description: "Realistic fake values (names, emails, phones)",
-    example: "john.doe@acme.com → sarah.miller@example.net",
+    description: "Realistic replacement values such as names, emails, phones, and addresses",
+    example: "john.doe@acme.com -> sarah.miller@example.net",
   },
   {
     name: "fpe",
-    description: "Format-preserving encryption",
-    example: "4111-1111-1111-1111 → 8923-4567-2345-9012",
+    description: "Format-preserving encryption for values that must keep shape",
+    example: "4111-1111-1111-1111 -> 8923-4567-2345-9012",
   },
   {
     name: "hash",
-    description: "Deterministic one-way hash",
-    example: "123-45-6789 → a7f3b2c9d8...",
+    description: "Deterministic one-way hash for stable joins and compact IDs",
+    example: "123-45-6789 -> a7f3b2c9d8...",
   },
   {
     name: "date_shift",
-    description: "Shift dates by random offset",
-    example: "1990-05-15 → 1990-06-02",
+    description: "Shift dates within a configured range",
+    example: "1990-05-15 -> 1990-06-02",
   },
   {
     name: "redact",
-    description: "Replace with static placeholder",
-    example: "John Smith → [REDACTED]",
+    description: "Replace values with a fixed marker",
+    example: "John Smith -> [REDACTED]",
   },
   {
-    name: "shuffle",
-    description: "Shuffle values within column",
-    example: "Preserves value distribution",
+    name: "bucketize / truncate / shuffle",
+    description: "Generalize values, keep prefixes, or preserve distributions with known tradeoffs",
+    example: "97401 -> 974",
   },
 ]
 
 const benefits = [
   {
     icon: Shield,
-    title: "PII Protection",
-    description: "Automatically detect and mask sensitive data including emails, SSNs, phone numbers, and addresses.",
+    title: "Field-level control",
+    description: "Choose explicit strategies for emails, SSNs, phone numbers, addresses, dates, IDs, and other sensitive fields.",
   },
   {
     icon: Lock,
-    title: "Referential Integrity",
-    description: "Foreign keys stay valid. User IDs in orders still match users. No broken joins.",
+    title: "Relationship-aware masking",
+    description: "Model lock chains and FK relationships when related columns need to stay joinable.",
   },
   {
     icon: Zap,
-    title: "Fast Processing",
-    description: "Stream large files without loading everything into memory. Mask millions of rows in minutes.",
+    title: "Local and platform runs",
+    description: "Run YAML from the CLI, or use the self-hosted platform for team workflows and run history.",
   },
   {
     icon: Database,
-    title: "Multiple Destinations",
-    description: "Write masked data to S3, GCS, SFTP, or local files. Same pipeline, many outputs.",
+    title: "File-first targets",
+    description: "Write CSV or Parquet outputs locally or through supported S3, GCS, and SFTP paths.",
   },
 ]
 
@@ -82,18 +82,17 @@ export default function MaskingPage() {
                   Data Masking
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                  Production data, without the risk
+                  Mask sensitive fields without hiding the decisions
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Create realistic dev and test datasets by masking PII in your production data. 
-                  Preserve data relationships, statistical properties, and format integrity.
+                  Decoy masks existing files using explicit, reviewable strategies. Use deterministic hashing, faker replacements, date shifts, redaction, FPE, and relationship rules where joins need to survive.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button asChild size="lg">
                     <Link href="/trial">Request a demo</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <Link href="/docs/concepts/masking">Read the docs</Link>
+                    <Link href="/docs">Read the docs</Link>
                   </Button>
                 </div>
               </div>
@@ -101,15 +100,17 @@ export default function MaskingPage() {
               {/* Code example */}
               <div className="rounded-lg border border-border bg-card overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-                  <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
+                  <span className="text-xs text-muted-foreground font-mono">pipeline.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
-                  <code className="text-muted-foreground">{`input:
+                  <code className="text-muted-foreground">{`version: "1.0"
+mode: mask
+input:
   type: csv
-  path: 'data/patients.csv'
+  path: data/patients.csv
 output:
   type: csv
-  path: 'data/patients_masked.csv'
+  path: data/patients_masked.csv
 masking_rules:
   - column: email
     type: faker
@@ -120,11 +121,8 @@ masking_rules:
   - column: dob
     type: date_shift
     jitter_days: 30
-  - column: phone
-    type: redact
-  - column: name
-    type: faker
-    faker_type: name`}</code>
+  - column: notes
+    type: redact`}</code>
                 </pre>
               </div>
             </div>
@@ -153,10 +151,10 @@ masking_rules:
           <div className="container mx-auto max-w-6xl px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Built-in masking transforms
+                Built-in masking strategies
               </h2>
               <p className="text-muted-foreground text-lg">
-                Multiple masking strategies, from format-preserving encryption to randomization. Or extend with a custom Faker provider.
+                Each strategy has different privacy, utility, and relationship tradeoffs. Decoy makes those choices explicit in YAML and in the platform UI.
               </p>
             </div>
 
@@ -173,8 +171,8 @@ masking_rules:
             </div>
 
             <div className="text-center mt-8">
-              <Link href="/docs/transforms" className="text-sm text-primary hover:underline">
-                View all transforms →
+              <Link href="/docs" className="text-sm text-primary hover:underline">
+                View docs
               </Link>
             </div>
           </div>

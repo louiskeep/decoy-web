@@ -7,7 +7,7 @@ import { Check, Copy } from "lucide-react"
 
 export function CTA() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "pip install decoy"
+  const installCommand = "decoy demo --ref"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)
@@ -20,10 +20,10 @@ export function CTA() {
       <div className="container mx-auto max-w-4xl px-4">
         <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-transparent p-8 md:p-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Start masking data in 5 minutes
+            Try the local workflow, then adapt the YAML.
           </h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-            Install the CLI, run the demo, and see masked output. No signup required.
+            The demo shows the CLI shape, including relationship-preserving masking. Real pipelines should be reviewed against your data and policy before use.
           </p>
 
           {/* Install command */}
@@ -48,10 +48,10 @@ export function CTA() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button asChild size="lg">
-              <Link href="/trial">Request a demo</Link>
+              <Link href="/docs">Read the docs</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/docs">Read the docs</Link>
+              <Link href="/trial">Request a demo</Link>
             </Button>
           </div>
         </div>

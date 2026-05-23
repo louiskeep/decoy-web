@@ -4,25 +4,25 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Blog - Decoy",
-  description: "Updates, tutorials, and insights about data masking, synthetic data, and privacy engineering.",
+  description: "Updates, tutorials, and notes about data masking, synthetic data, and privacy engineering.",
 }
 
 const posts = [
   {
-    title: "Introducing Decoy: Data masking that doesn’t cost $40K",
-    excerpt: "We got quoted $40K to mask 3 tables. So we built an open-source alternative that does it in 5 minutes.",
+    title: "Introducing Decoy: Reviewable masking and synthetic data workflows",
+    excerpt: "Why Decoy focuses on explicit YAML, local CLI runs, relationship rules, and self-hosted team workflows.",
     date: "2026-04-15",
     category: "Announcement",
   },
   {
     title: "Format-Preserving Encryption Explained",
-    excerpt: "How FPE lets you encrypt sensitive data while keeping the same format—and why that matters for downstream systems.",
+    excerpt: "How FPE keeps sensitive values in a compatible shape, and why that matters for downstream systems.",
     date: "2026-04-10",
     category: "Technical",
   },
   {
     title: "Masking vs. Synthetic Data: When to Use Each",
-    excerpt: "A practical guide to choosing between masked production data and fully synthetic datasets for your test environments.",
+    excerpt: "A practical guide to choosing between masked source data and generated datasets for test environments.",
     date: "2026-04-05",
     category: "Guide",
   },
@@ -38,7 +38,7 @@ export default function BlogPage() {
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Blog</h1>
               <p className="text-lg text-muted-foreground">
-                Updates, tutorials, and insights from the Decoy team.
+                Updates, tutorials, and practical notes from the Decoy team.
               </p>
             </div>
 

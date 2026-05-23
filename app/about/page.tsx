@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "About - Decoy",
-  description: "We got quoted $40K to mask 3 tables. So we built this. The story behind Decoy.",
+  description: "Why Decoy focuses on reviewable masking, generation, and self-hosted test-data workflows.",
 }
 
 export default function AboutPage() {
@@ -17,10 +17,10 @@ export default function AboutPage() {
         <section className="py-20 md:py-28">
           <div className="container mx-auto max-w-3xl px-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">
-              We got quoted $40K to mask 3 tables
+              Practical test-data tooling for teams that need to see the decisions
             </h1>
             <p className="text-xl text-muted-foreground text-center mb-12">
-              So we built this.
+              Decoy is built around explicit YAML, deterministic strategies, relationship rules, and self-hosted workflows.
             </p>
           </div>
         </section>
@@ -31,108 +31,69 @@ export default function AboutPage() {
             <div className="prose prose-invert max-w-none">
               <div className="space-y-6 text-muted-foreground">
                 <p className="text-lg">
-                  It was 2023. We were a 30-person fintech startup preparing for a SOC 2 audit. 
-                  The auditor asked a simple question: &quot;How do you ensure developers don&apos;t have access to production PII?&quot;
+                  Most teams do not need a slogan about instant privacy. They need a workflow that lets engineers and reviewers understand what will happen to each field before data is copied into development, QA, demos, or CI.
                 </p>
 
                 <p>
-                  We didn&apos;t have a great answer. Our staging database was a copy of production, 
-                  with real customer data. Every engineer could see real Social Security numbers, 
-                  real bank accounts, real addresses. We&apos;d just... never thought about it.
+                  Decoy started from that need. Existing tools often felt either too heavy for local development or too implicit for policy review. We wanted something that could run from the command line, produce reviewable YAML, and still grow into a shared platform when a team needs schedules, reports, users, and run history.
+                </p>
+
+                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">What Decoy focuses on</h2>
+
+                <p>
+                  Decoy is a masking and synthetic-generation toolkit. It profiles files with STORM, drafts recommendations with FORECAST, runs explicit masking/generation pipelines, and supports relationship intent where joins matter.
                 </p>
 
                 <p>
-                  So we went shopping for solutions.
+                  That means the product talks about concrete capabilities: hash, faker, redaction, date shifting, FPE, bucketization, reference values, formulas, generated rows, lock chains, foreign keys, self references, many-to-many relationships, and primary-key checks.
                 </p>
 
-                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">The enterprise tax</h2>
+                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">What Decoy does not pretend</h2>
 
                 <p>
-                  Tonic quoted us $35,000/year. Delphix wanted a six-figure contract and a 12-week 
-                  implementation. Informatica&apos;s sales team couldn&apos;t even give us a number without 
-                  a &quot;discovery call&quot; and a &quot;solution architect engagement.&quot;
+                  Decoy does not make a dataset automatically compliant. It is not a legal attestation, a certified compliance program, or a substitute for a privacy review. Disguises are starting templates, and FORECAST is a recommendation engine.
                 </p>
 
                 <p>
-                  We had three tables we needed to mask. Three. And we were looking at $40K minimum 
-                  just to make our staging database safe.
+                  The point is to make the work more repeatable and easier to review, not to remove the need for judgment.
                 </p>
 
-                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">The open source wasteland</h2>
-
-                <p>
-                  Surely there was an open-source tool? We found a few. Most were abandoned 
-                  (last commit: 3 years ago). The active ones required a PhD in data engineering 
-                  to configure. One literally required you to write Java to define transforms.
-                </p>
-
-                <p>
-                  We wanted something that worked like modern dev tools: install with pip, 
-                  configure with YAML, run from the command line. It didn&apos;t exist.
-                </p>
-
-                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">So we built it</h2>
-
-                <p>
-                  We wrote a Python CLI that could mask our three tables in 5 minutes. 
-                  Then we added more transforms. Then more connectors. Then we realized 
-                  other teams had the same problem.
-                </p>
-
-                <p>
-                  Decoy is what we wished existed: a free CLI for engineers who need local
-                  masking workflows, and a paid Web UI for teams who need scheduling, audit logs,
-                  and collaboration. No consultants. No six-month implementations. No per-row pricing 
-                  that punishes you for having customers.
-                </p>
-
-                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">Our principles</h2>
+                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">Principles</h2>
 
                 <div className="space-y-4">
                   <div className="rounded-lg border border-border bg-card p-4">
-                    <div className="font-medium text-foreground mb-1">The CLI is free forever</div>
+                    <div className="font-medium text-foreground mb-1">Local first where possible</div>
                     <p className="text-sm">
-                      Single engineers should never pay for local test-data tooling. The CLI handles
-                      local development, YAML validation, STORM/FORECAST, and CI pipeline checks.
+                      The CLI handles local development, YAML validation, STORM/FORECAST, demos, templates, and CI checks.
                     </p>
                   </div>
 
                   <div className="rounded-lg border border-border bg-card p-4">
-                    <div className="font-medium text-foreground mb-1">Your data never leaves your network</div>
+                    <div className="font-medium text-foreground mb-1">Self-hosted for team workflows</div>
                     <p className="text-sm">
-                      Decoy runs on your infrastructure. We never see your data. The only external call 
-                      is optional license validation, which sends zero payload data.
+                      The paid platform is deployed by the customer. It is meant for shared files, pipelines, jobs, reports, users, runtime secrets, and governance workflows.
                     </p>
                   </div>
 
                   <div className="rounded-lg border border-border bg-card p-4">
-                    <div className="font-medium text-foreground mb-1">Flat, predictable pricing</div>
+                    <div className="font-medium text-foreground mb-1">Explicit over magical</div>
                     <p className="text-sm">
-                      No per-row fees. No metered billing. No surprises. You know what you&apos;ll pay 
-                      before you sign up.
+                      Strategies, relationships, keys, and known limits should be visible. Teams should be able to explain why each field was masked or generated the way it was.
                     </p>
                   </div>
 
                   <div className="rounded-lg border border-border bg-card p-4">
-                    <div className="font-medium text-foreground mb-1">Source-available code</div>
+                    <div className="font-medium text-foreground mb-1">Clear boundaries</div>
                     <p className="text-sm">
-                      The CLI is published under the Business Source License. You can read every line 
-                      of code that touches your data. Security teams love this.
+                      Decoy V1 is tooling. Customers retain compliance ownership, and release-limited surfaces are documented rather than hidden behind vague claims.
                     </p>
                   </div>
                 </div>
 
-                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">The future</h2>
+                <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">Where it is going</h2>
 
                 <p>
-                  We&apos;re building the tool we wish we&apos;d had. If you&apos;ve ever been quoted five figures 
-                  for basic data masking, or spent weeks configuring an enterprise tool that should 
-                  have taken hours, Decoy is for you.
-                </p>
-
-                <p>
-                  Install it. Run the demo. If it doesn&apos;t work for you, tell us why on GitHub. 
-                  We&apos;re listening.
+                  The near-term direction is straightforward: better docs, more runnable examples, clearer screenshots and demos, generated references, and tighter public claims that stay connected to shipped behavior.
                 </p>
               </div>
             </div>

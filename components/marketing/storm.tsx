@@ -4,40 +4,40 @@ import { Radar, Sparkles, FileCheck, Lock, ArrowRight } from "lucide-react"
 const steps = [
   {
     name: "STORM",
-    title: "Storm finds it.",
+    title: "Profile the file.",
     description:
-      "Scans the dataset to identify fields, detect formats, profile distributions, and score re-identification risk.",
+      "Reads a dataset, detects known field patterns, and records column-level statistics for review.",
     detail: [
-      "PII / PHI / PCI detection",
+      "PII / PHI / PCI detector signals",
       "Format and pattern inference",
-      "Statistical fingerprint",
-      "Re-identification risk score",
+      "Column distributions and top values",
+      "Quasi-identifier and re-id indicators",
     ],
     icon: Radar,
   },
   {
     name: "FORECAST",
-    title: "Forecast explains it.",
+    title: "Draft a plan.",
     description:
-      "Reads STORM's profile — never raw data — and recommends a Disguise plus per-field Masks, with rationale and risk flags.",
+      "Uses the STORM profile to recommend a Disguise and per-field masking strategies.",
     detail: [
-      "Disguise auto-pick",
+      "Ranked Disguise recommendations",
       "Field-level Mask suggestions",
-      "Risk flags & exceptions",
-      "Ready-to-edit pipeline",
+      "Risk flags and exceptions",
+      "Editable pipeline draft",
     ],
     icon: Sparkles,
   },
   {
     name: "Report",
-    title: "Report files it.",
+    title: "Record what ran.",
     description:
-      "A Report capturing the scan, the recommendation, and the masked-run hash — the artifact your internal audit team asks for.",
+      "Captures the scan, recommendation, run metadata, and outputs as useful evidence for internal review.",
     detail: [
-      "In-app + HTML export",
-      "Signed-link sharing",
-      "Manifest hash per run",
-      "Useful input to your audit reviews",
+      "Run history in the platform",
+      "HTML report export",
+      "Manifest details where available",
+      "Useful input to audit reviews",
     ],
     icon: FileCheck,
   },
@@ -57,10 +57,10 @@ export function Storm() {
             STORM + FORECAST
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Storm finds it. Forecast explains it. Report files it.
+            Profile first. Recommend second. Review before running.
           </h2>
           <p className="text-muted-foreground text-lg">
-            Decoy&apos;s analysis loop turns an unfamiliar dataset into a filed audit Report — without your raw PHI or PCI ever leaving where it lives.
+            Decoy's analysis loop turns an unfamiliar file into a concrete masking plan. It is designed to reduce manual setup, not replace engineering or compliance review.
           </p>
         </div>
 
@@ -98,23 +98,23 @@ export function Storm() {
           ))}
         </div>
 
-        {/* Security anchor — closes healthcare and fintech buyers. */}
+        {/* Security anchor */}
         <div className="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6 md:p-8">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Lock className="h-5 w-5" />
             </div>
             <div className="flex-1">
-              <h3 className="text-base font-semibold mb-1">FORECAST never touches raw data.</h3>
+              <h3 className="text-base font-semibold mb-1">FORECAST works from the STORM profile.</h3>
               <p className="text-sm text-muted-foreground">
-                It only reads STORM&apos;s statistical profile, so your PHI, PCI, or customer PII stays where it lives. No row-level egress, no model training on your data. FORECAST reads statistical profiles only.
+                FORECAST reads detector matches, field statistics, and profile metadata. It does not need row-level source data to produce a recommendation, and the CLI/platform runs where your data lives.
               </p>
             </div>
             <Link
               href="/security"
               className="inline-flex items-center gap-2 text-sm text-primary hover:underline whitespace-nowrap"
             >
-              How it stays private
+              Security notes
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

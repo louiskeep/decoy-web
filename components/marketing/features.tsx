@@ -3,65 +3,78 @@ import { Shield, Database, Sparkles, Link2 } from "lucide-react"
 const features = [
   {
     icon: Shield,
-    title: "Data Masking",
-    description: "Create PII-safe copies of production data for dev and test environments.",
-    code: `# decoy.yaml
-masks:
+    title: "Mask existing files",
+    description: "Read CSV or fixed-width inputs locally, apply explicit masking rules, and write masked output files.",
+    code: `# pipeline.yaml
+version: "1.0"
+mode: mask
+input:
+  type: csv
+  path: data/patients.csv
+output:
+  type: csv
+  path: data/patients_masked.csv
+masking_rules:
   - column: email
-    transform: faker.email
-    preserve_uniqueness: true
-
+    type: faker
+    faker_type: email
   - column: ssn
-    transform: format_preserving_encryption
-    seed: \${MASK_SEED}`,
+    type: hash
+    algorithm: sha256`,
   },
   {
     icon: Database,
-    title: "Synthetic Data",
-    description: "Generate realistic test datasets that preserve statistical properties.",
-    code: `# decoy.yaml
+    title: "Generate synthetic rows",
+    description: "Build from scratch or generate replacement columns with faker, sequence, categorical, reference, and formula strategies.",
+    code: `# generation pipeline
+version: "1.0"
 mode: generate
 generator_settings:
   seed: 42
-  output_directory: data/generated
 tables:
-  - name: orders
-    rows: 100000
+  - name: users
+    rows: 1000
     columns:
-      - name: order_id
+      - name: user_id
         type: sequence
         start: 1
-      - name: status
+      - name: plan
         type: categorical
-        categories: [pending, shipped, delivered]`,
+        categories: [free, pro, team]`,
   },
   {
     icon: Sparkles,
-    title: "Field-level Masks",
-    description: "Faker, FPE, deterministic hashing, date shifting, conditional logic, and custom Python — the primitives every Disguise is built from.",
-    code: `# masks composed inside a Disguise
-transforms:
-  - faker.email      # realistic emails
-  - faker.phone      # locale-aware phones
-  - fpe              # format-preserving encryption
-  - hash.sha256      # deterministic hashing
-  - date_shift       # shift within range
-  - categorical_shuffle  # preserve distribution`,
+    title: "Choose the strategy per field",
+    description: "Hash, faker, redact, date_shift, truncate, bucketize, shuffle, FPE, formula, reference, categorical, or passthrough.",
+    code: `# strategy examples
+masking_rules:
+  - column: customer_id
+    type: hash
+    truncate: 16
+  - column: dob
+    type: date_shift
+    jitter_days: 30
+  - column: postal_code
+    type: truncate
+    length: 3
+  - column: notes
+    type: redact`,
   },
   {
     icon: Link2,
-    title: "Referential integrity",
-    description: "Foreign keys stay consistent across masked files. Mask the same column in any file — deterministic keying ensures the same input always produces the same masked output.",
-    code: `# keyed determinism — same input, same output, every run
-key_label: q4-release   # shared key links all masked files
+    title: "Model relationships deliberately",
+    description: "Use lock chains, FK rules, self references, many-to-many junctions, composite keys, and PK checks when joins matter.",
+    code: `# relationship intent
+references:
+  - id: customer_identity
+    primary:
+      table: customers_mask
+      column: customer_id
+    members:
+      - table: orders_mask
+        column: customer_id
 
-masks:
-  - column: user_id
-    transform: hash.sha256  # user_id 42 → 7f3a...
-
-# mask customers.csv and orders.csv with the same
-# key_label: masked_orders.user_id matches
-# masked_customers.user_id automatically`,
+# Same input + same key maps consistently.`,
   },
 ]
 
@@ -72,10 +85,10 @@ export function Features() {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            The engine under every Disguise
+            Specific tools for specific data problems.
           </h2>
           <p className="text-muted-foreground text-lg">
-            Disguises are templates. These are the engine primitives they&apos;re built from — and the reason joins, formats, and re-id risk all stay sane after you mask.
+            Decoy is built around inspectable strategies and relationship intent. The goal is not to hide complexity; it is to make the important choices visible before data leaves the pipeline.
           </p>
         </div>
 

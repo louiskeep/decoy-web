@@ -10,10 +10,10 @@ import { useState } from "react"
 
 const demoIncludes = [
   "30-minute live walkthrough of the canonical Web UI workflow",
-  "Upload → STORM scan → FORECAST → masked output → Evidence report",
+  "Upload -> STORM scan -> FORECAST -> reviewed pipeline -> masked output",
   "Q&A on V1 packaging, deployment, security model, and limits",
   "Pricing + pilot scoping conversation",
-  "Free CLI install you can keep experimenting with afterward",
+  "CLI workflow you can keep experimenting with afterward",
 ]
 
 export default function RequestDemoPage() {
@@ -37,15 +37,15 @@ export default function RequestDemoPage() {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-6">
                 <Check className="h-8 w-8 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold mb-4">Thanks — we&apos;ll be in touch.</h1>
+              <h1 className="text-3xl font-bold mb-4">Thanks - we&apos;ll be in touch.</h1>
               <p className="text-muted-foreground mb-8">
                 Sales will reach out to <strong className="text-foreground">{email}</strong> within one business day to schedule the demo.
               </p>
               <div className="rounded-lg border border-border bg-card p-4 text-left">
                 <div className="text-sm font-medium mb-2">While you wait:</div>
                 <ol className="text-sm text-muted-foreground space-y-2">
-                  <li>1. Install the free CLI: <code className="font-mono">pip install decoy</code></li>
-                  <li>2. Try <code className="font-mono">decoy demo</code> for a self-contained walkthrough</li>
+                  <li>1. Install the CLI from the current release channel.</li>
+                  <li>2. Try <code className="font-mono">decoy demo --ref</code> for a relationship walkthrough</li>
                   <li>3. Read the docs at <a href="/docs" className="text-primary hover:underline">/docs</a></li>
                 </ol>
               </div>
@@ -132,8 +132,8 @@ export default function RequestDemoPage() {
                         <strong className="text-foreground">Pricing:</strong>
                       </p>
                       <p>
-                        $499/month per Web UI instance, billed annually. The free CLI is yours
-                        forever, no signup needed.
+                        $499/month per Web UI instance, billed annually. The CLI is available
+                        separately for local workflows.
                       </p>
                     </div>
                   </div>

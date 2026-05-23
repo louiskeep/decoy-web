@@ -9,52 +9,47 @@ const faqs = [
   {
     question: "What's a Disguise?",
     answer:
-      "A Disguise is a pre-built field-list template (HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, plus a sensible default) that masks the right fields the right way. Apply with one flag instead of configuring transforms from scratch -- it's a starting point that your team reviews against the regulation.",
+      "A Disguise is a bundled field-list template for a common masking context, such as HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, or general PII. It is a starting point: your team still reviews field mappings, edits strategies, validates YAML, and owns the policy decision.",
   },
   {
     question: "What is STORM?",
     answer:
-      "STORM is Decoy's dataset analysis event. It scans your data, identifies fields, detects formats, and computes statistical and re-identification risk profiles. STORM finds it; FORECAST explains it; the Report files it.",
+      "STORM is Decoy's dataset profiling flow. It scans a file, identifies supported detector patterns, records field statistics, and produces a profile that can be explored directly or passed to FORECAST.",
   },
   {
     question: "Does FORECAST replace a data engineer?",
     answer:
-      "No. FORECAST recommends a Disguise and per-field Masks based on STORM's profile. Your engineers approve, edit, and ship the pipeline. Think of it as a senior reviewer that's familiar with common regulation field lists -- not the engineer who writes the pipeline.",
+      "No. FORECAST recommends a Disguise and field-level Masks based on a STORM profile. Engineers still approve, edit, validate, and run the pipeline. It is a drafting aid, not an automatic compliance decision.",
   },
   {
-    question: "Can I export Reports for internal audit reviews?",
+    question: "Can I keep relationships intact after masking?",
     answer:
-      "Yes. Every Report can be exported and shared with your internal audit or compliance team. Reports include the original STORM scan, the FORECAST recommendation, and a hash of the masked run.",
+      "Yes, when the relevant fields use deterministic strategies and the relationship is modeled. Decoy supports lock chains for existing related fields, FK generation, self references, many-to-many junctions, composite-key relationships, and primary-key uniqueness checks.",
+  },
+  {
+    question: "What generation strategies are supported?",
+    answer:
+      "Generation supports faker, sequence, categorical, reference, and formula-based values in the full engine. Graph-mode generation focuses on faker, sequence, categorical, and formula today; some reference and relationship features are engine/direct-YAML capabilities before they are fully exposed in the graph UI.",
   },
   {
     question: "Does my data leave my network?",
     answer:
-      "No. Decoy runs entirely on your infrastructure -- CLI on your machine, paid Web UI in your VPC. FORECAST never touches raw data: it only reads STORM's statistical profile, so your PHI, PCI, or customer PII stays where it lives. The only optional external call is license validation, which carries zero pipeline or dataset content.",
-  },
-  {
-    question: "How does format-preserving encryption (FPE) work?",
-    answer:
-      "FPE encrypts a value while keeping its format intact -- a 16-digit card stays a 16-digit number, an email stays an email. It's deterministic with a seed, so the same input always produces the same output. That's how foreign keys and joins keep working after you mask.",
-  },
-  {
-    question: "Can Decoy mask the same field consistently across files?",
-    answer:
-      "Yes. Decoy's deterministic masking (FPE, hashes, keyed seeds) gives you the same output for the same input across runs. Mask a user's email in customers.csv and the same email in orders.csv ends up as the same masked value, so cross-file joins still work after masking.",
+      "The CLI runs locally. The paid Web UI is self-hosted by the customer. FORECAST works from STORM profile data rather than row-level source data. Decoy V1 is not offered as a hosted SaaS product.",
   },
   {
     question: "What data sources are supported today?",
     answer:
-      "V1 is file-first: file upload (CSV, Parquet, fixed-width), Amazon S3, Google Cloud Storage, and SFTP. Direct database connections (PostgreSQL, MySQL, Snowflake, BigQuery, Databricks, Redshift, MongoDB) are deferred to a future release. Need a connector we don't have? Open a GitHub issue -- we prioritize by demand.",
+      "V1 is file-first. The platform supports uploaded files and file/cloud object workflows for CSV and Parquet through local files, S3, Google Cloud Storage, and SFTP. Database source/target operations exist in engine/direct-YAML paths, but database connector UI workflows are deferred beyond V1.",
   },
   {
     question: "Is Decoy open source?",
     answer:
-      "The CLI and engine are source-available under the Business Source License (BUSL-1.1). You can read, modify, and run the code freely for non-commercial use. The license converts to Apache 2.0 after 4 years. The paid platform is also self-hosted -- you run it, we don't see your data.",
+      "The CLI is source-available under the Business Source License (BUSL-1.1). The shared engine is Apache-2.0. The paid platform is self-hosted and commercially licensed.",
   },
   {
     question: "What's Decoy's compliance posture?",
     answer:
-      "Decoy is audit-evidence and masking tooling. We are not SOC 2 certified, not HIPAA certified, do not offer a BAA, and are not FedRAMP authorized. Because Decoy is self-hosted, your existing data governance, encryption, and access controls apply -- we ship tooling that runs inside your security perimeter, not a SaaS that sees your data. Customers maintain their own compliance posture; the Reports and audit logs Decoy generates can be useful inputs to a customer's compliance audit.",
+      "Decoy V1 is masking, generation, recommendation, and reporting tooling. It is not SOC 2 certified, not HIPAA certified, does not offer a BAA in V1, and is not FedRAMP authorized. Customers retain responsibility for their own compliance posture.",
   },
 ]
 
@@ -68,7 +63,7 @@ export function FAQ() {
             Frequently asked questions
           </h2>
           <p className="text-muted-foreground text-lg">
-            Everything you need to know about Decoy.
+            Practical boundaries for the CLI, platform, Disguises, and release scope.
           </p>
         </div>
 

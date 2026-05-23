@@ -7,7 +7,7 @@ const plans = [
   {
     name: "CLI",
     price: "$0",
-    period: "forever",
+    period: "local use",
     description: "For engineers validating and running pipelines locally or in CI.",
     features: [
       "8 field-list Disguises (HIPAA, PCI, GDPR...)",
@@ -17,8 +17,8 @@ const plans = [
       "Templates, demos, and JSON output for scripts",
       "Docs and community-style support",
     ],
-    cta: "Install free",
-    ctaLink: "#install",
+    cta: "Read CLI docs",
+    ctaLink: "/docs",
     highlighted: false,
   },
   {
@@ -39,7 +39,7 @@ const plans = [
     cta: "Request a demo",
     ctaLink: "/trial",
     highlighted: true,
-    badge: "Most Popular",
+    badge: "Self-hosted",
   },
   {
     name: "Enterprise add-on",
@@ -67,10 +67,10 @@ export function Pricing() {
       <div className="container mx-auto max-w-6xl px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Flat pricing. No per-row fees.
+            V1 packaging without usage meters.
           </h2>
           <p className="text-muted-foreground text-lg">
-            No surprise bills. No six-figure quotes.
+            The CLI is free for local workflows. The paid Web UI is priced per self-hosted instance, billed annually.
           </p>
         </div>
 
