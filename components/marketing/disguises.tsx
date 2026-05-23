@@ -16,7 +16,7 @@ const disguises = [
     regulation: "45 CFR 164.514(b)",
     title: "Healthcare PHI",
     description:
-      "Neutralizes all 18 Safe Harbor identifiers across patients, encounters, claims, and notes.",
+      "Starts from Safe Harbor identifier categories, then leaves field mapping and policy review in your team's hands.",
     icon: HeartPulse,
     buyer: "Healthcare data teams",
     featured: true,
@@ -26,7 +26,7 @@ const disguises = [
     regulation: "PCI DSS 4.0",
     title: "Payment card data",
     description:
-      "Format-preserving tokenization for PAN, plus network and expiry constraints that keep downstream validators happy.",
+      "Provides starter handling for PAN, CVV, account numbers, and contact fields using explicit masking strategies.",
     icon: CreditCard,
     buyer: "Fintech & payments",
     featured: true,
@@ -36,54 +36,54 @@ const disguises = [
     regulation: "Reg. (EU) 2016/679",
     title: "EU personal data",
     description:
-      "Pseudonymizes identifiers and special-category data; supports right-to-erasure flows.",
+      "A pseudonymisation-oriented starter template. It reduces exposure, but it is not anonymisation or legal compliance by itself.",
     icon: Globe,
-    buyer: "Anyone serving the EU",
+    buyer: "Teams serving EU users",
   },
   {
     name: "GLBA",
-    regulation: "15 U.S.C. §6801–§6809",
+    regulation: "15 U.S.C. 6801-6809",
     title: "Financial customer info",
     description:
-      "Masks NPI across accounts, transactions, and applicant records — without breaking joins.",
+      "Groups common account, SSN, contact, date, and balance fields for financial test-data workflows.",
     icon: Landmark,
     buyer: "Banks & lenders",
   },
   {
     name: "CCPA",
-    regulation: "Cal. Civ. Code §1798.100",
+    regulation: "Cal. Civ. Code 1798.100",
     title: "California consumer data",
     description:
-      "Covers the categories enumerated in CCPA/CPRA, with opt-out trails preserved end-to-end.",
+      "A broad consumer-data starting point for names, contact data, IPs, device IDs, ZIP codes, SSNs, and dates.",
     icon: ShieldCheck,
     buyer: "Consumer apps",
   },
   {
     name: "FERPA",
-    regulation: "20 U.S.C. §1232g",
+    regulation: "20 U.S.C. 1232g",
     title: "Education records",
     description:
-      "Masks PII across student records, grades, and disciplinary data while keeping cohort analytics intact.",
+      "Includes common student-record fields such as names, IDs, dates of birth, emails, and grade bands.",
     icon: GraduationCap,
     buyer: "EdTech & universities",
   },
   {
     name: "SOX",
-    regulation: "Sarbanes-Oxley §404",
+    regulation: "Sarbanes-Oxley 404",
     title: "Financial reporting",
     description:
-      "Protects internal-controls-relevant fields with deterministic, audit-traceable Masks.",
+      "A starter field list for sensitive finance and employee data used in internal reporting test sets.",
     icon: FileSpreadsheet,
     buyer: "Public-company finance",
   },
   {
     name: "Default",
-    regulation: "Sensible baseline",
-    title: "General PII",
+    regulation: "General PII",
+    title: "Baseline masking",
     description:
-      "When no single regulation applies, the Default Disguise covers the common PII surface.",
+      "A practical default for datasets with common PII but no single regulation-specific template.",
     icon: Lock,
-    buyer: "Everyone else",
+    buyer: "General engineering teams",
   },
 ]
 
@@ -101,10 +101,10 @@ export function Disguises() {
             Disguises
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            One template. The known field list. No configuration from scratch.
+            Starter templates for common masking policies.
           </h2>
           <p className="text-muted-foreground text-lg">
-            A Disguise is a pre-built field-list template that masks the right fields the right way for HIPAA, PCI, GDPR, and more &mdash; a starting point for your team&apos;s policy review, shipped with the CLI.
+            A Disguise is a reviewable field-list template. It gives you a starting YAML plan for common regulatory contexts, then your team confirms field mappings, edits strategies, and validates the pipeline before running it.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export function Disguises() {
             >
               {d.featured && (
                 <span className="absolute top-3 right-3 text-[10px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                  Top buyer
+                  Common
                 </span>
               )}
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -148,18 +148,20 @@ export function Disguises() {
         {/* Apply-it-like-this code preview */}
         <div className="mt-12 grid md:grid-cols-2 gap-6 items-center">
           <div>
-            <h3 className="text-xl md:text-2xl font-semibold mb-3">Apply with one flag.</h3>
+            <h3 className="text-xl md:text-2xl font-semibold mb-3">Start from YAML, then review it.</h3>
             <p className="text-muted-foreground">
-              Decoy ships with every Disguise baked in. Pick yours at <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">decoy init</code>, edit the generated YAML if you need to, and ship. No consultants. No 12-week implementations.
+              Use <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">decoy init --preset</code> or <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">decoy templates show</code> to inspect what ships. The template is meant to be edited, validated, and checked against your own policy.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-4 overflow-x-auto code-block">
             <pre className="text-xs font-mono text-muted-foreground leading-relaxed">
-              <code>{`$ decoy init --preset hipaa
-✓ Wrote decoy.yaml — HIPAA Disguise applied
-  · 18 Safe Harbor identifiers covered
-  · referential integrity preserved
-  · run with: decoy run decoy.yaml`}</code>
+              <code>{`$ decoy init --preset hipaa --out hipaa_pipeline.yaml
+OK wrote hipaa_pipeline.yaml
+
+$ decoy validate hipaa_pipeline.yaml
+OK config valid
+
+$ decoy run hipaa_pipeline.yaml`}</code>
             </pre>
           </div>
         </div>

@@ -19,19 +19,19 @@ const productItems = [
   {
     title: "Data Masking",
     href: "/product/masking",
-    description: "PII-safe copies of production data",
+    description: "Reviewable field-level masking",
     icon: Shield,
   },
   {
     title: "Synthetic Data",
     href: "/product/synthetic-data",
-    description: "Generate realistic test datasets",
+    description: "Generate rows and replacement columns",
     icon: Database,
   },
   {
     title: "STORM + FORECAST",
     href: "/#storm",
-    description: "Scan, recommend, file a Report",
+    description: "Profile, recommend, then review",
     icon: Radar,
   },
 ]
@@ -77,7 +77,7 @@ export function Navigation() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              {/* Disguises is the wedge — top-level placement per BRAND_GUIDE. */}
+              {/* Disguises is the wedge: top-level placement per BRAND_GUIDE. */}
               <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>

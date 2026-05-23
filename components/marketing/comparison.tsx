@@ -16,7 +16,7 @@ const comparisonItems: {
   { feature: "Reports, evidence, and audit history", cli: false, platform: true, enterprise: true },
   { feature: "Scheduled runs, triggers, and reviews", cli: false, platform: true, enterprise: true },
   { feature: "Team access and RBAC", cli: false, platform: true, enterprise: true },
-  { feature: "SSO / SAML, air-gapped deploy, custom support", cli: false, platform: "add-on", enterprise: "contract" },
+  { feature: "SSO / SAML, BAA, SLA, custom deployment", cli: false, platform: false, enterprise: "contract" },
   { feature: "Support model", cli: "docs", platform: "email", enterprise: "contract" },
 ]
 
@@ -35,7 +35,7 @@ export function Comparison() {
             Pick the surface that matches the workflow
           </h2>
           <p className="text-muted-foreground text-lg">
-            The CLI is free forever for local and CI workflows. Upgrade when your team needs the self-hosted Web UI, governance, evidence, scheduling, and support.
+            The CLI is the local/dev/CI surface. The Web UI is for teams that need shared files, governed runs, schedules, reviews, reporting, users, and support.
           </p>
         </div>
 

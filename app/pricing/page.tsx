@@ -8,7 +8,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Pricing - Decoy",
-  description: "Simple, predictable pricing for data masking and synthetic data generation. Free CLI forever, paid self-hosted Web UI at $499/month per instance, billed annually.",
+  description: "Decoy pricing for the local CLI and paid self-hosted Web UI. V1 platform pricing is annual per instance.",
 }
 
 export default function PricingPage() {
@@ -22,7 +22,7 @@ export default function PricingPage() {
               Simple, predictable pricing
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              No per-row fees. No surprise bills. No six-figure quotes from consultants.
+              The CLI is the local workflow. The paid Web UI is a self-hosted platform priced per instance, billed annually.
             </p>
           </div>
         </section>

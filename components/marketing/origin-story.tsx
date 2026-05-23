@@ -6,25 +6,25 @@ export function OriginStory() {
           <div className="flex flex-col gap-6">
             <div className="inline-flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-primary"></span>
-              <span className="text-sm font-medium text-primary">Origin Story</span>
+              <span className="text-sm font-medium text-primary">Why Decoy Exists</span>
             </div>
-            
+
             <blockquote className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight text-balance">
-              {'"'}We got quoted $40K to mask 3 tables. So we built this.{'"'}
+              Data masking should be inspectable enough for engineers and clear enough for policy review.
             </blockquote>
-            
+
             <div className="flex flex-col gap-4 text-muted-foreground">
               <p>
-                It started with a compliance audit. We needed contractors to have realistic test data without exposing customer PII. Simple enough, right?
+                Teams usually arrive at test-data masking after a practical problem: developers, QA, contractors, or demo environments need useful data without handing everyone a full copy of production.
               </p>
               <p>
-                The enterprise vendors wanted six-figure contracts and 12-week implementations. The open-source tools were abandoned or required a PhD in data engineering to configure.
+                The hard part is not only replacing values. It is choosing the right strategy per field, keeping related columns joinable, knowing what was changed, and being honest about what a tool can and cannot prove.
               </p>
               <p>
-                Then a pattern showed up: every healthcare team was rebuilding the same HIPAA Safe Harbor logic. Every fintech team was rebuilding the same PCI tokenization. The answer wasn&apos;t another configuration UI — it was prebuilt Disguises.
+                Decoy is built around that workflow. The CLI runs local YAML pipelines, STORM profiles files, FORECAST proposes a starting plan, and the self-hosted platform adds review, schedules, reports, and team controls.
               </p>
               <p>
-                So we built Decoy: a CLI that ships with eight field-list Disguises, and a paid Web UI when your team is ready for shared pipelines, evidence, audit history, and scheduled runs. No consultants. No six-month implementations. Just <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono">pip install decoy</code> and you&apos;re masking data in five minutes.
+                Disguises are part of that system, but they are not magic compliance switches. They are bundled templates for common field lists that your team can inspect, edit, validate, and run.
               </p>
             </div>
           </div>

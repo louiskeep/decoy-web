@@ -3,13 +3,13 @@ import { Lock, Server, Shield, Zap } from "lucide-react"
 const benefits = [
   {
     icon: Lock,
-    title: "Your data never leaves your network",
-    description: "Run Decoy entirely on your infrastructure. No data sent to external servers.",
+    title: "Runs in your environment",
+    description: "Use the CLI locally or run the paid platform on your infrastructure.",
   },
   {
     icon: Server,
-    title: "Deploy anywhere",
-    description: "Docker Compose for simple setups. Helm charts for Kubernetes. Your cloud, your rules.",
+    title: "Docker Compose first",
+    description: "Single-host Docker Compose is the supported V1 deployment path.",
   },
   {
     icon: Shield,
@@ -19,7 +19,7 @@ const benefits = [
   {
     icon: Zap,
     title: "No per-row fees",
-    description: "Mask a million rows or a billion. Flat monthly pricing, no surprises.",
+    description: "The paid platform is priced per Web UI instance, billed annually.",
   },
 ]
 
@@ -38,7 +38,7 @@ export function SelfHosting() {
               Runs where your data lives
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              For regulated industries, self-hosting isn&apos;t optional. Decoy is designed from day one to run on your infrastructure, with zero external dependencies.
+              Decoy is designed for teams that want the data plane inside their own environment. The CLI runs locally; the paid Web UI is deployed by the customer rather than hosted as SaaS.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">

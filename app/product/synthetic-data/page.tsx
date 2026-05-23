@@ -3,53 +3,53 @@ import { Footer } from "@/components/marketing/footer"
 import { CTA } from "@/components/marketing/cta"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Database, Check, BarChart3, GitBranch, Gauge } from "lucide-react"
+import { Database, BarChart3, GitBranch, Gauge } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Synthetic Data Generation - Decoy",
-  description: "Generate realistic test datasets that preserve statistical properties and relationships. Scale from thousands to millions of rows.",
+  description: "Generate synthetic rows and replacement columns with explicit faker, sequence, categorical, reference, and formula strategies.",
 }
 
 const features = [
   {
     icon: BarChart3,
-    title: "Statistical Fidelity",
-    description: "Preserve distributions, correlations, and patterns from your source data. Generated data looks real because it's statistically similar.",
+    title: "Multiple generation strategies",
+    description: "Use faker, sequence, categorical, formula, and reference-backed generation depending on the column.",
   },
   {
     icon: GitBranch,
-    title: "Referential Integrity",
-    description: "Foreign keys, unique constraints, and check constraints are respected. Generated orders have valid user IDs.",
+    title: "Relationship modeling",
+    description: "Generate foreign keys, self references, many-to-many junctions, composite keys, and primary-key checks when the relationship is modeled.",
   },
   {
     icon: Gauge,
-    title: "Scale Control",
-    description: "Generate exactly the volume you need. 10x production, 1000 rows for unit tests, or millions for load testing.",
+    title: "From scratch or with source context",
+    description: "Generate standalone tables, or fill/replace configured columns while preserving an upstream row count in graph workflows.",
   },
   {
     icon: Database,
-    title: "STORM-Backed Profiling",
-    description: "Profile your source files with STORM to capture column distributions and data shapes. Use the profile as a seed for realistic synthetic generation.",
+    title: "Profile-informed setup",
+    description: "Use STORM output and existing schemas as inputs to decide which columns should be generated, masked, referenced, or passed through.",
   },
 ]
 
 const useCases = [
   {
-    title: "Dev/Test Environments",
-    description: "Give developers realistic data without exposing production PII. Seed staging with millions of synthetic records.",
+    title: "Local development",
+    description: "Create repeatable fixtures without checking sensitive source data into a development workflow.",
   },
   {
-    title: "Load Testing",
-    description: "Generate 10x or 100x your production volume to stress test your infrastructure before launch.",
+    title: "Demo environments",
+    description: "Populate demos with data that looks plausible and is clearly not copied directly from customers.",
   },
   {
-    title: "AI/ML Training",
-    description: "Create large synthetic datasets for training models when production data is sensitive or insufficient.",
+    title: "Pipeline testing",
+    description: "Exercise transforms, joins, and validation rules with generated data that follows expected shapes.",
   },
   {
-    title: "Demo Environments",
-    description: "Fill demo instances with realistic-looking data that's safe to show prospects and partners.",
+    title: "Relationship-heavy fixtures",
+    description: "Model parent-child, self-reference, many-to-many, and composite-key cases explicitly instead of hand-editing CSVs.",
   },
 ]
 
@@ -68,18 +68,17 @@ export default function SyntheticDataPage() {
                   Synthetic Data
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                  Generate data that looks real
+                  Generate data with declared structure
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Create test datasets from scratch that preserve the statistical properties of your production data.
-                  No PII, no compliance risk.
+                  Decoy can generate synthetic rows from explicit strategies, or replace selected columns in an existing pipeline. The useful part is the declaration: fields, distributions, formulas, and relationships are visible before the run.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button asChild size="lg">
                     <Link href="/trial">Request a demo</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <Link href="/docs/concepts/synthetic-data">Read the docs</Link>
+                    <Link href="/docs">Read the docs</Link>
                   </Button>
                 </div>
               </div>
@@ -87,15 +86,16 @@ export default function SyntheticDataPage() {
               {/* Code example */}
               <div className="rounded-lg border border-border bg-card overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-                  <span className="text-xs text-muted-foreground font-mono">decoy.yaml</span>
+                  <span className="text-xs text-muted-foreground font-mono">generate.yaml</span>
                 </div>
                 <pre className="p-4 text-sm font-mono overflow-x-auto code-block">
-                  <code className="text-muted-foreground">{`generator_settings:
+                  <code className="text-muted-foreground">{`version: "1.0"
+mode: generate
+generator_settings:
   seed: 42
-  output_directory: 'data/generated'
 tables:
   - name: users
-    rows: 50000
+    rows: 1000
     columns:
       - name: user_id
         type: sequence
@@ -103,22 +103,13 @@ tables:
       - name: email
         type: faker
         faker_type: email
-      - name: first_name
-        type: faker
-        faker_type: first_name
       - name: plan
         type: categorical
-        categories: ['free', 'pro', 'enterprise']
-        weights: [0.7, 0.25, 0.05]
-  - name: orders
-    rows: 200000
-    columns:
-      - name: order_id
-        type: sequence
-        start: 1
-      - name: status
-        type: categorical
-        categories: ['pending', 'shipped', 'delivered']`}</code>
+        categories: [free, pro, team]
+        weights: [0.7, 0.2, 0.1]
+      - name: account_code
+        type: formula
+        formula: "'ACCT-' + str(index)"`}</code>
                 </pre>
               </div>
             </div>
@@ -147,10 +138,10 @@ tables:
           <div className="container mx-auto max-w-6xl px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Use cases
+                Where generation helps
               </h2>
               <p className="text-muted-foreground text-lg">
-                Synthetic data solves problems that masked data can&apos;t.
+                Synthetic data is useful when copying and masking a source dataset is not the right fit.
               </p>
             </div>
 

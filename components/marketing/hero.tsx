@@ -7,7 +7,7 @@ import { Check, Copy, Github, ShieldCheck } from "lucide-react"
 
 export function Hero() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "pip install decoy"
+  const installCommand = "decoy demo --ref"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)
@@ -30,24 +30,23 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
             </span>
-            <span>Built for regulated teams</span>
-            <span className="text-muted-foreground">·</span>
-            <span className="text-muted-foreground">Self-hosted</span>
+            <span>Local CLI + self-hosted platform</span>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-muted-foreground">Explicit YAML workflows</span>
           </div>
 
           {/* Headline */}
           <div className="max-w-4xl space-y-4">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
-              Your prod data,{" "}
-              <span className="text-primary">unrecognizable.</span>{" "}
-              Instantly.
+              Useful test data,
+              <span className="text-primary"> fewer raw-data risks.</span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg md:text-xl text-muted-foreground text-balance">
-              Mask real data or generate synthetic datasets with policy templates for HIPAA, PCI, GDPR, and more.
+              Decoy helps teams profile files, mask sensitive fields, and generate synthetic rows with reviewable strategies, relationship rules, and self-hosted workflows.
             </p>
           </div>
 
-          {/* Install command - the centerpiece */}
+          {/* CLI command - the centerpiece */}
           <div className="w-full max-w-md">
             <div className="group relative">
               <div className="flex items-center gap-2 rounded-lg border border-border bg-card p-3 font-mono text-sm">
@@ -66,7 +65,7 @@ export function Hero() {
                 </button>
               </div>
               <p className="mt-2 text-xs text-muted-foreground text-center">
-                Works with Python 3.10+
+                Relationship-preserving CLI walkthrough after installation
               </p>
             </div>
           </div>
@@ -74,40 +73,40 @@ export function Hero() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button asChild size="lg" className="gap-2">
-              <Link href="/trial">
-                Request a demo
+              <Link href="/docs">
+                Read the docs
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="gap-2">
               <Link href="https://github.com/louiskeep/decoy" target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4" />
-                Star on GitHub
+                View on GitHub
               </Link>
             </Button>
           </div>
 
-          {/* Trust strip — factual capabilities, not certification claims. */}
+          {/* Trust strip - factual capabilities, not certification claims. */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              HIPAA Safe Harbor field templates
+              Local YAML validation and runs
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              PCI field templates
+              STORM profile + FORECAST recommendations
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              Air-gapped deploy
+              Relationship-aware masking rules
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              Evidence manifest per run
+              Docker Compose self-hosting
             </span>
           </div>
 
           <p className="text-sm text-muted-foreground">
-            Self-hosted · Annual licensing
+            Disguise templates are starting points for review, not legal attestations.
           </p>
         </div>
       </div>

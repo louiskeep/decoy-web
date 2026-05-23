@@ -4,33 +4,27 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ decoy storm scan patients.csv" },
-  { type: "output", content: "✓ Scanned patients.csv — 1,247 rows, 11 columns" },
-  { type: "output", content: "  Detected: SSN, email, DOB, phone, address" },
-  { type: "output", content: "  Saved: scan.json" },
+  { type: "command", content: "$ decoy storm scan patients.csv --out scan.json" },
+  { type: "output", content: "OK scanned patients.csv" },
+  { type: "output", content: "  rows: 1,247  fields: 11" },
+  { type: "output", content: "  detected: ssn, email, us_date, us_phone, us_zip" },
+  { type: "output", content: "  saved: scan.json" },
   { type: "output", content: "" },
-  { type: "command", content: "$ decoy forecast scan.json" },
-  { type: "output", content: "► Top match: HIPAA Safe Harbor (score 0.96)" },
-  { type: "output", content: "  18 Safe Harbor identifiers covered out of the box" },
-  { type: "output", content: "  Wrote: decoy.yaml" },
+  { type: "command", content: "$ decoy forecast scan.json --out forecast.json" },
+  { type: "output", content: "Top recommendation: HIPAA Safe Harbor" },
+  { type: "output", content: "  wrote: forecast.json" },
+  { type: "output", content: "  pipeline draft: forecast.pipeline.yaml" },
   { type: "output", content: "" },
-  { type: "command", content: "$ decoy run decoy.yaml" },
-  { type: "output", content: "► Reading patients.csv (1,247 rows)" },
-  { type: "output", content: "✓ Source loaded · masking starting" },
+  { type: "command", content: "$ decoy validate forecast.pipeline.yaml" },
+  { type: "output", content: "OK config valid" },
   { type: "output", content: "" },
-  { type: "output", content: "► Masking patients (1,247 rows)" },
-  { type: "output", content: "  mrn          → fpe (format-preserving)" },
-  { type: "output", content: "  ssn          → fpe" },
-  { type: "output", content: "  email        → faker.email (unique-preserving)" },
-  { type: "output", content: "  dob          → date_shift (±15 days)" },
-  { type: "output", content: "  phone        → faker.phone" },
-  { type: "output", content: "  address      → faker.address (geo-aware)" },
-  { type: "output", content: "" },
-  { type: "output", content: "✓ HIPAA Safe Harbor identifiers neutralized" },
-  { type: "output", content: "✓ Deterministic seed preserves cross-file joins" },
-  { type: "output", content: "" },
-  { type: "success", content: "✓ Complete · 1,247 rows masked in 0.4s" },
-  { type: "success", content: "  Output → patients_masked.csv" },
+  { type: "command", content: "$ decoy run forecast.pipeline.yaml" },
+  { type: "output", content: "Running mask..." },
+  { type: "output", content: "  email -> faker.email" },
+  { type: "output", content: "  ssn   -> hash" },
+  { type: "output", content: "  dob   -> date_shift" },
+  { type: "output", content: "  phone -> redact" },
+  { type: "success", content: "OK wrote masked output" },
 ]
 
 export function TerminalDemo() {
@@ -52,10 +46,10 @@ export function TerminalDemo() {
           {/* Section header */}
           <div className="text-center max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              From install to masked output in minutes
+              A CLI workflow you can inspect.
             </h2>
             <p className="text-muted-foreground text-lg">
-              No configuration files to puzzle over. STORM finds the sensitive fields, FORECAST recommends the right Disguise, and you run it.
+              Scan a file, review the recommendation, validate the generated YAML, and run the pipeline when the plan matches your data.
             </p>
           </div>
 
@@ -75,7 +69,7 @@ export function TerminalDemo() {
               </div>
 
               {/* Terminal content */}
-              <div className="p-4 font-mono text-sm min-h-[460px] overflow-x-auto code-block">
+              <div className="p-4 font-mono text-sm min-h-[390px] overflow-x-auto code-block">
                 {terminalLines.slice(0, visibleLines).map((line, index) => (
                   <div
                     key={index}
@@ -101,7 +95,7 @@ export function TerminalDemo() {
                 onClick={() => setVisibleLines(0)}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                ↻ Replay demo
+                Replay demo
               </button>
             </div>
           </div>

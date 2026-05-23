@@ -48,7 +48,7 @@ export default async function DisguisePage({
               href="/disguises"
               className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
             >
-              <span>←</span> All Disguises
+              <span>&lt;-</span> All Disguises
             </Link>
             <div className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
               {disguise.regulation}
@@ -62,29 +62,29 @@ export default async function DisguisePage({
 
           {/* Who it's for */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Who this is for</h2>
+            <h2 className="text-2xl font-bold mb-4">Who this template is for</h2>
             <div className="rounded-xl border border-border bg-card p-6">
-              <div className="text-sm font-medium text-primary mb-1">Primary buyer</div>
+              <div className="text-sm font-medium text-primary mb-1">Typical user</div>
               <div className="text-lg font-semibold mb-3">{disguise.primaryBuyer}</div>
               <p className="text-muted-foreground">{disguise.summary}</p>
             </div>
           </section>
 
-          {/* What it covers */}
+          {/* What it includes */}
           <section>
             <h2 className="text-2xl font-bold mb-4">
-              What it covers
+              What the template includes
               <span className="ml-3 text-base font-normal text-muted-foreground">
-                {disguise.identifiers.length} identifier types
+                {disguise.identifiers.length} field patterns
               </span>
             </h2>
             <div className="rounded-xl border border-border overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Identifier</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Field pattern</th>
                     <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell">Detector</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Masking strategy</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Default strategy</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -107,12 +107,15 @@ export default async function DisguisePage({
 
           {/* The YAML */}
           <section>
-            <h2 className="text-2xl font-bold mb-2">The policy YAML</h2>
+            <h2 className="text-2xl font-bold mb-2">The template YAML</h2>
             <p className="text-muted-foreground mb-4">
-              Add this to your <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">policy.yaml</code> or
-              reference the built-in bundle directly with{" "}
+              Inspect the bundled template before use. In the CLI, start with{" "}
               <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">
-                decoy run --disguise {disguise.id}
+                decoy templates show {disguise.id}
+              </code>{" "}
+              or scaffold an editable file with{" "}
+              <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">
+                decoy init --preset {disguise.id}
               </code>.
             </p>
             <div className="rounded-xl border border-border bg-muted/30 overflow-x-auto">
@@ -122,16 +125,16 @@ export default async function DisguisePage({
             </div>
           </section>
 
-          {/* Sample input → output */}
+          {/* Sample input -> output */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Sample output</h2>
+            <h2 className="text-2xl font-bold mb-4">Illustrative output</h2>
             <div className="rounded-xl border border-border overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
                     <th className="text-left px-4 py-3 font-medium text-muted-foreground">Column</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Input (production)</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Output (masked)</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Input value</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Masked value</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -149,13 +152,13 @@ export default async function DisguisePage({
               </table>
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              Sample data is static and illustrative. Actual output uses your master key — same input + same key = same output across every run.
+              Sample data is static and illustrative. Deterministic strategies require consistent keying to reproduce the same output across runs.
             </p>
           </section>
 
           {/* Regulation citation */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Regulation</h2>
+            <h2 className="text-2xl font-bold mb-4">Regulation reference</h2>
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="text-lg font-semibold mb-1">{disguise.regulation}</div>
               <div className="font-mono text-sm text-primary">{disguise.citation}</div>
@@ -164,9 +167,9 @@ export default async function DisguisePage({
 
           {/* Honesty section */}
           <section>
-            <h2 className="text-2xl font-bold mb-2">What this Disguise does not do</h2>
+            <h2 className="text-2xl font-bold mb-2">What this template does not do</h2>
             <p className="text-muted-foreground mb-4">
-              Compliance officers should read this section before forwarding the URL.
+              Review these boundaries before treating a template as part of a compliance workflow.
             </p>
             <ul className="space-y-3">
               {disguise.honesty.map((item, i) => (
@@ -182,23 +185,22 @@ export default async function DisguisePage({
 
           {/* Quick start */}
           <section className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-transparent p-8 text-center">
-            <h2 className="text-2xl font-bold mb-3">Try it now</h2>
+            <h2 className="text-2xl font-bold mb-3">Try the template locally</h2>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Install the CLI, scan a CSV, and apply this Disguise.
-              An evidence report is generated automatically with each run.
+              Scaffold an editable pipeline, validate it, then run it once the input/output paths and field choices match your data.
             </p>
-            <div className="space-y-3 max-w-sm mx-auto text-left font-mono text-sm mb-6">
+            <div className="space-y-3 max-w-md mx-auto text-left font-mono text-sm mb-6">
               <div className="flex gap-2">
                 <span className="text-primary select-none">$</span>
-                <span>pip install decoy</span>
+                <span>decoy init --preset {disguise.id} --out {disguise.id}_pipeline.yaml</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-primary select-none">$</span>
-                <span>decoy scan customers.csv</span>
+                <span>decoy validate {disguise.id}_pipeline.yaml</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-primary select-none">$</span>
-                <span>decoy run --disguise {disguise.id}</span>
+                <span>decoy run {disguise.id}_pipeline.yaml</span>
               </div>
             </div>
             <div className="flex flex-wrap justify-center gap-3">

@@ -6,14 +6,13 @@ import { DISGUISES } from "@/lib/disguises"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Compliance Disguises - Decoy",
+  title: "Disguise Templates - Decoy",
   description:
-    "8 regulation-aware data masking bundles: HIPAA, PCI DSS, GLBA, GDPR, CCPA, FERPA, SOX, and a generic default. " +
-    "One YAML file per regulation. Free CLI, self-hosted.",
+    "Reviewable masking templates for HIPAA, PCI DSS, GLBA, GDPR, CCPA, FERPA, SOX, and general PII workflows.",
   openGraph: {
-    title: "Compliance Disguises - Decoy",
+    title: "Disguise Templates - Decoy",
     description:
-      "8 pre-built masking policies for HIPAA, PCI, GLBA, GDPR, CCPA, FERPA, SOX. Apply a Disguise and get a masking run report.",
+      "Disguises are starting templates for masking plans. Review the fields, edit the YAML, and validate before running.",
   },
 }
 
@@ -26,18 +25,17 @@ export default function DisguisesPage() {
         <section className="py-20 md:py-28">
           <div className="container mx-auto max-w-4xl px-4 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary mb-6">
-              8 regulation bundles shipped
+              8 reviewable templates
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Compliance Disguises
+              Disguise Templates
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              Each Disguise is a named, regulation-aware field-list template. STORM scans your data;
-              FORECAST recommends the right one. Apply it with one line of YAML.
+              A Disguise is a named field-list template for a common masking context. STORM can surface detector signals; FORECAST can recommend a template; your team reviews and edits the resulting plan.
             </p>
-            <div className="flex items-center justify-center gap-3 font-mono text-sm text-muted-foreground bg-muted/30 border border-border rounded-lg px-4 py-3 max-w-xs mx-auto">
+            <div className="flex items-center justify-center gap-3 font-mono text-sm text-muted-foreground bg-muted/30 border border-border rounded-lg px-4 py-3 max-w-md mx-auto">
               <span className="text-primary select-none">$</span>
-              <span>decoy run --disguise hipaa</span>
+              <span>decoy init --preset hipaa --out hipaa_pipeline.yaml</span>
             </div>
           </div>
         </section>
@@ -69,7 +67,7 @@ export default function DisguisesPage() {
                     {disguise.primaryBuyer}
                   </p>
                   <div className="text-xs text-muted-foreground font-mono truncate">
-                    Fires on: {disguise.triggerDescription.split('—')[0].trim()}
+                    Recommended when: {disguise.triggerDescription.split("--")[0].trim()}
                   </div>
                 </Link>
               ))}
@@ -84,26 +82,23 @@ export default function DisguisesPage() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">1</div>
-                <h3 className="font-semibold mb-2">STORM scans</h3>
+                <h3 className="font-semibold mb-2">Profile or inspect</h3>
                 <p className="text-sm text-muted-foreground">
-                  Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy storm</code> on your tables.
-                  STORM profiles every column and detects SSNs, emails, PANs, IBANs, and 18 more PII types.
+                  Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy storm scan</code> or inspect your schema directly. STORM can flag supported detector types and field statistics.
                 </p>
               </div>
               <div className="text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">2</div>
-                <h3 className="font-semibold mb-2">FORECAST recommends</h3>
+                <h3 className="font-semibold mb-2">Draft a plan</h3>
                 <p className="text-sm text-muted-foreground">
-                  FORECAST reads the scan result and recommends the most appropriate Disguise,
-                  ranked by how well the detection signals match each regulation.
+                  FORECAST can recommend a template from the scan profile. You can also start directly from <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy init --preset</code>.
                 </p>
               </div>
               <div className="text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">3</div>
-                <h3 className="font-semibold mb-2">Apply and report</h3>
+                <h3 className="font-semibold mb-2">Review and run</h3>
                 <p className="text-sm text-muted-foreground">
-                  Apply the Disguise with one YAML line. Each run produces a masking run report
-                  showing what was masked, with which strategy, under which regulation.
+                  Edit mappings and strategies, validate the YAML, then run the pipeline. The template is not a certification or legal attestation.
                 </p>
               </div>
             </div>
