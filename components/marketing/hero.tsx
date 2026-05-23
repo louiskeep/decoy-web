@@ -26,10 +26,7 @@ export function Hero() {
         <div className="flex flex-col items-center text-center gap-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
-            </span>
+            <span className="h-2 w-2 rounded-full bg-primary" />
             <span>Local CLI + self-hosted platform</span>
             <span className="text-muted-foreground">/</span>
             <span className="text-muted-foreground">Explicit YAML workflows</span>
