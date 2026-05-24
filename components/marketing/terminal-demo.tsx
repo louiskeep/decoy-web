@@ -1,6 +1,3 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
@@ -28,17 +25,6 @@ const terminalLines = [
 ]
 
 export function TerminalDemo() {
-  const [visibleLines, setVisibleLines] = useState(0)
-
-  useEffect(() => {
-    if (visibleLines < terminalLines.length) {
-      const timeout = setTimeout(() => {
-        setVisibleLines((prev) => prev + 1)
-      }, 150)
-      return () => clearTimeout(timeout)
-    }
-  }, [visibleLines])
-
   return (
     <section className="py-20 md:py-28 border-t border-border">
       <div className="container mx-auto max-w-6xl px-4">
@@ -59,9 +45,9 @@ export function TerminalDemo() {
               {/* Terminal header */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-primary/80" />
+                  <div className="w-3 h-3 rounded-full bg-accent/70" />
+                  <div className="w-3 h-3 rounded-full bg-muted-foreground/70" />
                 </div>
                 <span className="text-xs text-muted-foreground ml-2 font-mono">
                   terminal
@@ -69,8 +55,8 @@ export function TerminalDemo() {
               </div>
 
               {/* Terminal content */}
-              <div className="p-4 font-mono text-sm min-h-[390px] overflow-x-auto code-block">
-                {terminalLines.slice(0, visibleLines).map((line, index) => (
+              <div className="h-[464px] overflow-x-auto overflow-y-hidden p-4 font-mono text-sm leading-5 code-block">
+                {terminalLines.map((line, index) => (
                   <div
                     key={index}
                     className={cn(
@@ -83,20 +69,7 @@ export function TerminalDemo() {
                     {line.content || " "}
                   </div>
                 ))}
-                {visibleLines < terminalLines.length && (
-                  <span className="inline-block w-2 h-4 bg-primary animate-pulse" />
-                )}
               </div>
-            </div>
-
-            {/* Replay button */}
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={() => setVisibleLines(0)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Replay demo
-              </button>
             </div>
           </div>
         </div>

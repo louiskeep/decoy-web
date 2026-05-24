@@ -19,4 +19,11 @@ package-lock.json
 # Dev log files written when pnpm dev runs unattached
 next-dev.err.log
 next-dev.out.log
+codex-next-dev.err.log
+codex-next-dev.out.log
+codex-next-dev-*.err.log
+codex-next-dev-*.out.log
 next-env.d.ts
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
