@@ -1,4 +1,18 @@
-﻿export type DisguiseId = 'hipaa' | 'pci' | 'glba' | 'gdpr' | 'ccpa' | 'ferpa' | 'sox' | 'default'
+﻿// W1 fix: derive DisguiseId from a single const tuple so adding a new
+// regulation only requires updating DISGUISE_IDS + the DISGUISES entry.
+// Exhaustive switch statements on DisguiseId catch new entries at compile time.
+export const DISGUISE_IDS = [
+  'hipaa',
+  'pci',
+  'glba',
+  'gdpr',
+  'ccpa',
+  'ferpa',
+  'sox',
+  'default',
+] as const
+
+export type DisguiseId = (typeof DISGUISE_IDS)[number]
 
 export interface DisguiseIdentifier {
   label: string
@@ -85,6 +99,8 @@ rules:
   - match:
       detectors: ["mrn"]
     mask: hash
+    # W2 fix: truncate is measured in output CHARACTERS, not bytes.
+    # truncate: 12 means a 12-character hex output (6 bytes of hash).
     params: { algorithm: sha256, truncate: 12 }
 
   - match:
