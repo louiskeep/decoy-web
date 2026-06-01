@@ -40,7 +40,7 @@ Public Next.js marketing and documentation site for Decoy, with no backend, cust
 | Task | Start Here |
 |---|---|
 | Current product truth | `../decoy-platform/docs/product/capabilities.md` |
-| Release cutline | `../decoy-platform/docs/release/release-roadmap.md` |
+| Release cutline | `../decoy-platform/docs/v2/roadmap.md` |
 | Web role guide | `../decoy-platform/docs/guides/web-agent-guide.md` |
 | Brand guidance | `../decoy-platform/docs/guides/brand.md` |
 | Home page | `app/page.tsx` |
