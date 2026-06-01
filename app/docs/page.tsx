@@ -58,13 +58,13 @@ const docsLinks = [
     icon: Shield,
     title: "CLI V1 Audit",
     description: "What the CLI can do, what it should not claim, and the release support gaps.",
-    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/audit/cli-v1-audit.md",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/archive/audits-completed/cli-v1-audit.md",
   },
   {
     icon: GitBranch,
     title: "Release Roadmap",
     description: "Sprint-by-sprint V1 release work, gates, blockers, and implementation standards.",
-    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/release/release-roadmap.md",
+    href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/v2/roadmap.md",
   },
 ]
 
