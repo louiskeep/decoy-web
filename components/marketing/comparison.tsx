@@ -10,7 +10,8 @@ const comparisonItems: {
   enterprise: CellValue
 }[] = [
   { feature: "Local YAML validation and runs", cli: true, platform: true, enterprise: true },
-  { feature: "Local CSV STORM and FORECAST", cli: true, platform: true, enterprise: true },
+  { feature: "Local CSV STORM scans", cli: true, platform: true, enterprise: true },
+  { feature: "13 mask strategies + 5 generate column types", cli: true, platform: true, enterprise: true },
   { feature: "Visual pipeline builder", cli: false, platform: true, enterprise: true },
   { feature: "Managed files, runtime secrets, and API keys", cli: false, platform: true, enterprise: true },
   { feature: "Reports, evidence, and audit history", cli: false, platform: true, enterprise: true },

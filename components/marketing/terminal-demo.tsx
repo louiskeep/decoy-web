@@ -7,17 +7,15 @@ const terminalLines = [
   { type: "output", content: "  detected: ssn, email, us_date, us_phone, us_zip" },
   { type: "output", content: "  saved: scan.json" },
   { type: "output", content: "" },
-  { type: "command", content: "$ decoy forecast scan.json --out forecast.json" },
-  { type: "output", content: "Top recommendation: HIPAA Safe Harbor" },
-  { type: "output", content: "  wrote: forecast.json" },
-  { type: "output", content: "  pipeline draft: forecast.pipeline.yaml" },
+  { type: "command", content: "$ decoy templates show hipaa > pipeline.yaml" },
+  { type: "output", content: "OK wrote pipeline.yaml from bundled HIPAA template" },
   { type: "output", content: "" },
-  { type: "command", content: "$ decoy validate forecast.pipeline.yaml" },
+  { type: "command", content: "$ decoy validate pipeline.yaml" },
   { type: "output", content: "OK config valid" },
   { type: "output", content: "" },
-  { type: "command", content: "$ decoy run forecast.pipeline.yaml" },
+  { type: "command", content: "$ decoy run pipeline.yaml" },
   { type: "output", content: "Running mask..." },
-  { type: "output", content: "  email -> faker.email" },
+  { type: "output", content: "  email -> faker.person_email" },
   { type: "output", content: "  ssn   -> hash" },
   { type: "output", content: "  dob   -> date_shift" },
   { type: "output", content: "  phone -> redact" },
@@ -35,7 +33,7 @@ export function TerminalDemo() {
               A CLI workflow you can inspect.
             </h2>
             <p className="text-muted-foreground text-lg">
-              Scan a file, review the recommendation, validate the generated YAML, and run the pipeline when the plan matches your data.
+              Scan a file with STORM, pick a bundled Disguise template, validate the YAML, run the pipeline when the plan matches your data.
             </p>
           </div>
 

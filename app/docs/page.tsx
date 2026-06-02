@@ -21,7 +21,7 @@ const docsLinks = [
   {
     icon: Database,
     title: "Engine Under The Hood",
-    description: "How graph runs, masking, generation, STORM, FORECAST, and ExecutionContext fit together.",
+    description: "How V2 PipelineConfig validation, plan compilation, mask + generate adapters, and STORM profiling fit together.",
     href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/engine-under-the-hood.md",
   },
   {
@@ -33,7 +33,7 @@ const docsLinks = [
   {
     icon: Terminal,
     title: "CLI YAML Workflows",
-    description: "How to author YAML, run local files, use STORM/FORECAST, and understand CLI boundaries.",
+    description: "How to author YAML, run local files, use STORM, and understand CLI boundaries.",
     href: "https://github.com/louiskeep/decoy-platform/blob/main/docs/guides/cli-yaml-workflows.md",
   },
   {

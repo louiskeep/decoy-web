@@ -31,7 +31,7 @@ export default function DisguisesPage() {
               Disguise Templates
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              A Disguise is a named field-list template for a common masking context. STORM can surface detector signals; FORECAST can recommend a template; your team reviews and edits the resulting plan.
+              A Disguise is a named field-list template for a common masking context. STORM surfaces detector signals; your team picks the closest Disguise template, edits the resulting plan, runs it.
             </p>
             <div className="flex items-center justify-center gap-3 font-mono text-sm text-muted-foreground bg-muted/30 border border-border rounded-lg px-4 py-3 max-w-md mx-auto">
               <span className="text-primary select-none">$</span>
@@ -91,7 +91,7 @@ export default function DisguisesPage() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-lg mx-auto mb-4">2</div>
                 <h3 className="font-semibold mb-2">Draft a plan</h3>
                 <p className="text-sm text-muted-foreground">
-                  FORECAST can recommend a template from the scan profile. You can also start directly from <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy init --preset</code>.
+                  Start directly from <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy init --preset</code> or list the bundled templates with <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">decoy templates list</code>.
                 </p>
               </div>
               <div className="text-center">

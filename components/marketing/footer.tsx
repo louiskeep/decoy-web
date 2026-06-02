@@ -6,7 +6,7 @@ const footerLinks = {
     { label: "Disguises", href: "/#disguises" },
     { label: "Data Masking", href: "/product/masking" },
     { label: "Synthetic Data", href: "/product/synthetic-data" },
-    { label: "STORM + FORECAST", href: "/#storm" },
+    { label: "STORM + Disguises", href: "/#storm" },
     { label: "Pricing", href: "/pricing" },
   ],
   resources: [

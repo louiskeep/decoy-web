@@ -21,7 +21,7 @@ export function OriginStory() {
                 The hard part is not only replacing values. It is choosing the right strategy per field, keeping related columns joinable, knowing what was changed, and being honest about what a tool can and cannot prove.
               </p>
               <p>
-                Decoy is built around that workflow. The CLI runs local YAML pipelines, STORM profiles files, FORECAST proposes a starting plan, and the self-hosted platform adds review, schedules, reports, and team controls.
+                Decoy is built around that workflow. The CLI runs local YAML pipelines, STORM profiles files, Disguise templates give you a defensible starting point, and the self-hosted platform adds review, schedules, reports, and team controls.
               </p>
               <p>
                 Disguises are part of that system, but they are not magic compliance switches. They are bundled templates for common field lists that your team can inspect, edit, validate, and run.
