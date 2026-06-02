@@ -50,7 +50,7 @@ export const DISGUISES: Disguise[] = [
     primaryBuyer: 'Healthcare data engineers',
     summary:
       'Starts from the HIPAA Safe Harbor identifier categories, with additional healthcare-oriented detector examples such as ICD-10, MRN, and NPI. ' +
-      'FORECAST may recommend this template when STORM detects those signals or a PHI-style co-occurrence such as date + ZIP + name.',
+      'Pick this template when STORM detects those signals or a PHI-style co-occurrence such as date + ZIP + name.',
     triggerDescription:
       'SSN, MRN, NPI, or ICD-10 detected anywhere  --  or date + ZIP + name appearing together',
     metaDescription:
