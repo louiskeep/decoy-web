@@ -539,4 +539,9 @@ export function getDisguise(id: string): Disguise | undefined {
   return DISGUISES.find((d) => d.id === id)
 }
 
-export const DISGUISE_IDS: DisguiseId[] = DISGUISES.map((d) => d.id)
+// The DISGUISE_IDS const is declared at the top of the file (line 4) as the
+// single source of truth for the DisguiseId union type. A second declaration
+// here as `DISGUISES.map((d) => d.id)` is a duplicate that broke `next build`
+// with TS "name defined multiple times". Removed 2026-06-02 as part of the
+// decoy-web content-accuracy pass. The top-of-file tuple is the canonical
+// declaration; do not re-introduce the derived form.

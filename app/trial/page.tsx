@@ -10,7 +10,7 @@ import { useState } from "react"
 
 const demoIncludes = [
   "30-minute live walkthrough of the canonical Web UI workflow",
-  "Upload -> STORM scan -> FORECAST -> reviewed pipeline -> masked output",
+  "Upload -> STORM scan -> Disguise template -> reviewed pipeline -> masked output",
   "Q&A on V1 packaging, deployment, security model, and limits",
   "Pricing + pilot scoping conversation",
   "CLI workflow you can keep experimenting with afterward",
@@ -45,7 +45,7 @@ export default function RequestDemoPage() {
                 <div className="text-sm font-medium mb-2">While you wait:</div>
                 <ol className="text-sm text-muted-foreground space-y-2">
                   <li>1. Install the CLI from the current release channel.</li>
-                  <li>2. Try <code className="font-mono">decoy demo --ref</code> for a relationship walkthrough</li>
+                  <li>2. Try <code className="font-mono">decoy demo</code> for a 30-second end-to-end walkthrough</li>
                   <li>3. Read the docs at <a href="/docs" className="text-primary hover:underline">/docs</a></li>
                 </ol>
               </div>
@@ -67,10 +67,10 @@ export default function RequestDemoPage() {
               {/* Left side - form */}
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                  Request a demo
+                  Join the Web UI waitlist
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Self-hosted Web UI for teams. We&apos;ll walk you through the V1 workflow, deployment, and pricing.
+                  Self-hosted Web UI for teams. Pre-release. We&apos;ll reach out when the early-access window opens with a live walkthrough of the workflow, deployment options, and pricing.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">

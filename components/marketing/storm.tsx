@@ -16,15 +16,15 @@ const steps = [
     icon: Radar,
   },
   {
-    name: "FORECAST",
-    title: "Draft a plan.",
+    name: "Disguise",
+    title: "Pick a starting template.",
     description:
-      "Uses the STORM profile to recommend a Disguise and per-field masking strategies.",
+      "Match the STORM profile to a bundled Disguise template, then edit per-column strategies to fit your data.",
     detail: [
-      "Ranked Disguise recommendations",
-      "Field-level Mask suggestions",
-      "Risk flags and exceptions",
-      "Editable pipeline draft",
+      "5 bundled templates (HIPAA, PCI, GDPR, generate, minimal)",
+      "13 mask strategies + 5 generate column types",
+      "Reviewable YAML, not a black box",
+      "Per-column strategy overrides",
     ],
     icon: Sparkles,
   },
@@ -54,13 +54,13 @@ export function Storm() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary mb-4">
             <Radar className="h-3 w-3" />
-            STORM + FORECAST
+            STORM + Disguises
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Profile first. Recommend second. Review before running.
+            Profile first. Pick a template. Review before running.
           </h2>
           <p className="text-muted-foreground text-lg">
-            Decoy's analysis loop turns an unfamiliar file into a concrete masking plan. It is designed to reduce manual setup, not replace engineering or compliance review.
+            Decoy's analysis loop turns an unfamiliar file into a concrete masking plan. Profile the data, pick the closest Disguise template, edit the YAML to fit. It is designed to reduce manual setup, not replace engineering or compliance review.
           </p>
         </div>
 
@@ -105,9 +105,9 @@ export function Storm() {
               <Lock className="h-5 w-5" />
             </div>
             <div className="flex-1">
-              <h3 className="text-base font-semibold mb-1">FORECAST works from the STORM profile.</h3>
+              <h3 className="text-base font-semibold mb-1">Data stays where it lives.</h3>
               <p className="text-sm text-muted-foreground">
-                FORECAST reads detector matches, field statistics, and profile metadata. It does not need row-level source data to produce a recommendation, and the CLI/platform runs where your data lives.
+                STORM profiles run locally against your file; Disguise templates ship in the engine and pick by name; masking runs against the local data path your YAML declares. Nothing is uploaded to a Decoy-operated service.
               </p>
             </div>
             <Link

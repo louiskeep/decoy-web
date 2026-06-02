@@ -41,7 +41,7 @@ export default function AboutPage() {
                 <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">What Decoy focuses on</h2>
 
                 <p>
-                  Decoy is a masking and synthetic-generation toolkit. It profiles files with STORM, drafts recommendations with FORECAST, runs explicit masking/generation pipelines, and supports relationship intent where joins matter.
+                  Decoy is a masking and synthetic-generation toolkit. It profiles files with STORM, ships bundled Disguise templates as starting points, runs explicit masking/generation pipelines, and supports relationship intent where joins matter.
                 </p>
 
                 <p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 <h2 className="text-xl font-semibold text-foreground mt-12 mb-4">What Decoy does not pretend</h2>
 
                 <p>
-                  Decoy does not make a dataset automatically compliant. It is not a legal attestation, a certified compliance program, or a substitute for a privacy review. Disguises are starting templates, and FORECAST is a recommendation engine.
+                  Decoy does not make a dataset automatically compliant. It is not a legal attestation, a certified compliance program, or a substitute for a privacy review. Disguises are starting templates, not finished compliance products.
                 </p>
 
                 <p>
@@ -64,7 +64,7 @@ export default function AboutPage() {
                   <div className="rounded-lg border border-border bg-card p-4">
                     <div className="font-medium text-foreground mb-1">Local first where possible</div>
                     <p className="text-sm">
-                      The CLI handles local development, YAML validation, STORM/FORECAST, demos, templates, and CI checks.
+                      The CLI handles local development, YAML validation, STORM scans, demos, templates, and CI checks.
                     </p>
                   </div>
 

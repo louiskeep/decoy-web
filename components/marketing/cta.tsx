@@ -7,7 +7,7 @@ import { Check, Copy } from "lucide-react"
 
 export function CTA() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "decoy demo --ref"
+  const installCommand = "decoy demo"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)
@@ -23,7 +23,7 @@ export function CTA() {
             Try the local workflow, then adapt the YAML.
           </h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-            The demo shows the CLI shape, including relationship-preserving masking. Real pipelines should be reviewed against your data and policy before use.
+            The demo shows the CLI shape: a sample CSV scanned with STORM, masked through a V2 PipelineConfig, written back as masked CSV. Real pipelines should be reviewed against your data and policy before use.
           </p>
 
           {/* Install command */}

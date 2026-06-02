@@ -14,12 +14,12 @@ const faqs = [
   {
     question: "What is STORM?",
     answer:
-      "STORM is Decoy's dataset profiling flow. It scans a file, identifies supported detector patterns, records field statistics, and produces a profile that can be explored directly or passed to FORECAST.",
+      "STORM is Decoy's dataset profiling flow. It scans a file, identifies supported detector patterns, records field statistics, and produces a profile you can explore directly to inform which Disguise template and per-column strategies to apply.",
   },
   {
-    question: "Does FORECAST replace a data engineer?",
+    question: "How do I go from a STORM scan to a working pipeline?",
     answer:
-      "No. FORECAST recommends a Disguise and field-level Masks based on a STORM profile. Engineers still approve, edit, validate, and run the pipeline. It is a drafting aid, not an automatic compliance decision.",
+      "Pick a bundled Disguise template (HIPAA, PCI, GDPR, generate, minimal) as a starting point, adjust the per-column strategies based on what STORM surfaced for your data, validate the YAML with decoy validate, then run with decoy run. Engineers stay in the loop: Decoy provides templates and a profile, not an automatic compliance decision.",
   },
   {
     question: "Can I keep relationships intact after masking?",
@@ -34,7 +34,7 @@ const faqs = [
   {
     question: "Does my data leave my network?",
     answer:
-      "The CLI runs locally. The paid Web UI is self-hosted by the customer. FORECAST works from STORM profile data rather than row-level source data. Decoy V1 is not offered as a hosted SaaS product.",
+      "The CLI runs locally. The paid Web UI is self-hosted by the customer. STORM and masking both run where your data lives. Decoy V1 is not offered as a hosted SaaS product.",
   },
   {
     question: "What data sources are supported today?",

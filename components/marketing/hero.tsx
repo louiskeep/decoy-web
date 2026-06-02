@@ -7,7 +7,7 @@ import { Check, Copy, Github, ShieldCheck } from "lucide-react"
 
 export function Hero() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "decoy demo --ref"
+  const installCommand = "decoy demo"
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(installCommand)
@@ -62,7 +62,7 @@ export function Hero() {
                 </button>
               </div>
               <p className="mt-2 text-xs text-muted-foreground text-center">
-                Relationship-preserving CLI walkthrough after installation
+                30-second end-to-end CLI walkthrough after installation
               </p>
             </div>
           </div>
@@ -90,7 +90,7 @@ export function Hero() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              STORM profile + FORECAST recommendations
+              STORM profile + Disguise templates
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />

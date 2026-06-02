@@ -29,9 +29,9 @@ const productItems = [
     icon: Database,
   },
   {
-    title: "STORM + FORECAST",
+    title: "STORM + Disguises",
     href: "/#storm",
-    description: "Profile, recommend, then review",
+    description: "Profile, pick a template, then review",
     icon: Radar,
   },
 ]
