@@ -91,6 +91,15 @@ export function Navigation() {
               <NavigationMenuLink asChild className={cn(
                   "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
                 )}>
+                <Link href="/proof">
+                  Proof
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={cn(
+                  "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground focus:outline-none"
+                )}>
                 <Link href="/pricing">
                   Pricing
                 </Link>
@@ -165,6 +174,13 @@ export function Navigation() {
                 >
                   <ShieldCheck className="h-4 w-4 text-primary" />
                   Disguises
+                </Link>
+                <Link
+                  href="/proof"
+                  onClick={() => setMobileOpen(false)}
+                  className="py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Proof
                 </Link>
                 <Link
                   href="/pricing"
