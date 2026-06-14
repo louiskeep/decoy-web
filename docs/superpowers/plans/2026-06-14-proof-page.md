@@ -16,7 +16,7 @@
 
 ---
 
-## Phase 1 — Engine: proof manifest generator (`decoy-engine`)
+## Phase 1: Engine proof manifest generator (`decoy-engine`)
 
 Phase 1 ships independently: it produces and guards `docs/proof-manifest.json` with no dependency on the web repo.
 
@@ -791,7 +791,7 @@ git push -u origin feat/proof-manifest
 
 ---
 
-## Phase 2 — Web: the `/proof` page (`decoy-web`)
+## Phase 2: Web, the `/proof` page (`decoy-web`)
 
 Phase 2 consumes the artifact from Phase 1. It can start once `docs/proof-manifest.json` exists in `decoy-engine`.
 
@@ -1047,11 +1047,11 @@ export function ProofHero({ hero }: { hero: ProofHeroData }) {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <SampleTable rows={members.input} caption={`${members.name} — source`} />
-        <SampleTable rows={members.output} caption={`${members.name} — masked`} />
+        <SampleTable rows={members.input} caption={`${members.name}: source`} />
+        <SampleTable rows={members.output} caption={`${members.name}: masked`} />
       </div>
 
-      <SampleTable rows={hero.audit_log} caption="audit_log — generated" />
+      <SampleTable rows={hero.audit_log} caption="audit_log: generated" />
 
       <ul className="flex flex-col gap-2">
         {hero.invariants.map((inv) => (
