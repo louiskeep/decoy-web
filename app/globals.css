@@ -1,7 +1,26 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Fumadocs UI: the shadcn preset forwards every --color-fd-* token to this
+   file's own --background/--primary/etc custom properties (both `:root` and
+   `.dark` selectors reference the same `var(--token)`, so it tracks whichever
+   value is cascading regardless of which class toggles the theme here). This
+   is the whole "brand mapping" - no hand-written --color-fd-* block needed.
+   See docs/superpowers/specs/2026-07-17-cli-docs-nextra.md Section 3. */
+@import 'fumadocs-ui/css/shadcn.css';
+@import 'fumadocs-ui/css/preset.css';
+
 @custom-variant dark (&:is(.dark *));
+
+/* Docs pages reuse the marketing Navigation bar (h-16, sticky) instead of
+   Fumadocs' own nav (`nav={{ enabled: false }}` in app/docs/layout.tsx zeroes
+   out --fd-header-height already). DocsLayout still sizes its own container
+   to a full 100dvh via --fd-docs-height, unaware of the 4rem the marketing
+   nav already consumed above it in normal flow, so it overshoots the
+   viewport by that much; subtract it here rather than in JS. */
+#nd-docs-layout {
+  --fd-docs-height: calc(100dvh - 4rem);
+}
 
 /* Decoy - marketing surface using colors from the self-hosted web app */
 :root {

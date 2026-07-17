@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { RootProvider } from 'fumadocs-ui/provider/next'
 import { PostHogProvider } from '@/components/posthog-provider'
 import './globals.css'
 
@@ -49,12 +50,30 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en" className="bg-background" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <PostHogProvider>
-          {children}
-        </PostHogProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {/* Fumadocs' RootProvider wraps next-themes; this is the ONE theme
+            provider for the whole site (marketing + /docs). Configured to
+            match the site's existing inverted scheme (`:root` is dark by
+            default, `.light` is the override) rather than the standard
+            `.dark`-only convention, while still emitting a real `.dark`
+            class so Fumadocs' own `.dark`-keyed CSS (Shiki code themes)
+            activates correctly. See app/globals.css for the `--color-fd-*`
+            token mapping this depends on. */}
+        <RootProvider
+          theme={{
+            attribute: 'class',
+            defaultTheme: 'dark',
+            enableSystem: false,
+            value: { light: 'light', dark: 'dark' },
+            disableTransitionOnChange: true,
+          }}
+        >
+          <PostHogProvider>
+            {children}
+          </PostHogProvider>
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </RootProvider>
       </body>
     </html>
   )

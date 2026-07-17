@@ -27,3 +27,6 @@ next-env.d.ts
 
 # TypeScript incremental build cache
 tsconfig.tsbuildinfo
+
+# fumadocs-mdx codegen (rebuilt from content/docs + source.config.ts on dev/build)
+.source
