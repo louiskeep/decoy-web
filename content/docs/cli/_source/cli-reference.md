@@ -2,7 +2,7 @@
   GENERATED FILE. Do not hand-edit -- this is a vendored copy.
   Produced by scripts/sync-cli-reference.mjs from a decoy checkout.
   Source repo: decoy
-  Source commit: 7f3c38343eab369317956c2cbca20ec756ce1ef4
+  Source commit: a588f039aeb608a5f21d5a3b9e5ff575e423038c
 -->
 
 # `decoy`
@@ -351,10 +351,10 @@ Examples:
     Skip the wizard; scaffold from the HIPAA template.
 
   decoy init customers.csv --out pipeline.yaml
-    Column-aware scaffolding (OSS.4c, 2026-06-02). Runs STORM against
-    the file, picks a starter strategy per column from the inference
-    table, writes the YAML with `# REVIEW:` comments above every
-    inferred entry. The user must read + edit before running.
+    Column-aware scaffolding. Runs STORM against the file, picks a
+    starter strategy per column from the inference table, writes the
+    YAML with `# REVIEW:` comments above every inferred entry. The
+    user must read + edit before running.
 
   decoy init --yes
     Skip confirmation when overwriting an existing file.
@@ -829,13 +829,11 @@ See also: decoy run, decoy validate distribution.
 
 Recompute distribution fidelity between a source and an output CSV.
 
-Wraps `decoy_engine.quality.compute_quality_report` +
-`apply_quality_policy` (report.py:97, policy.py:142): the engine owns
-every metric and the letter grade; this command computes no fidelity
-number itself. Reads both CSVs fresh on every invocation (pure,
-repeatable) -- the CLI&#x27;s local evidence manifest records file
-fingerprints but not the raw frames, so recomputing from the two files
-is the only honest source for this number (BF1).
+The engine owns every metric and the letter grade; this command
+computes no fidelity number itself. Reads both CSVs fresh on every
+invocation (pure, repeatable) -- the CLI&#x27;s local evidence manifest
+records file fingerprints but not the raw frames, so recomputing from
+the two files is the only honest source for this number.
 
 Exit codes: 0 when the policy verdict is &#x27;pass&#x27; (or &#x27;warn&#x27; without
 --fail-on-warning); EXIT_FINDINGS (4) when the verdict is &#x27;fail&#x27;, or
@@ -1039,8 +1037,7 @@ Removal target: 0.2.0.
 
 Verify a masked file&#x27;s integrity against its pre-mask source.
 
-Wraps `decoy_engine.storm.postmask.run_storm_post_mask`. Runs the
-three post-mask check buckets (residual_pii, fk_preservation,
+Runs the three post-mask check buckets (residual_pii, fk_preservation,
 policy_validation) the platform&#x27;s mask job already runs when
 `run_storm: true` is declared in the pipeline; this verb lets the
 CLI user run the same checks standalone.
@@ -1048,8 +1045,6 @@ CLI user run the same checks standalone.
 Exit codes: 0 clean; 4 EXIT_FINDINGS on any fail-severity finding;
 1 EXIT_USAGE for missing files; 3 EXIT_RUNTIME for unexpected
 exceptions.
-
-OSS.4b (2026-06-02).
 
 **Usage**:
 
@@ -1102,9 +1097,9 @@ See also: decoy storm analyze, decoy run, decoy explain exit-codes.
 
 List fields from a saved STORM scan, with optional filters.
 
-The list view of the web FORECAST drill-down -- print the fields that
-matter, filter by PII bucket or quasi-identifier membership, pipe the
-result somewhere else. For per-field detail, see `decoy storm show`.
+Print the fields that matter, filter by PII bucket or quasi-identifier
+membership, pipe the result somewhere else. For per-field detail, see
+`decoy storm show`.
 
 **Usage**:
 
@@ -1144,8 +1139,7 @@ See also: decoy storm analyze, decoy storm show.
 Per-field detail from a saved STORM scan.
 
 The drill-down view of one field: PII score + bucket, detector matches,
-sentinel hits, top values, quasi-identifier membership. Stays read-only
--- for live exploration use the web FORECAST panel.
+sentinel hits, top values, quasi-identifier membership. Stays read-only.
 
 **Usage**:
 
@@ -1706,7 +1700,7 @@ What compare does NOT check:
   - Platform audit logs or schedule history.
 
 Scope: MANIFEST-vs-MANIFEST only. Data-level compare (source.csv vs masked.csv)
-is deferred to SP-18b/19.
+is not yet supported.
 
 See also: decoy report summarize, decoy evidence verify.
 
@@ -1988,7 +1982,7 @@ See also: decoy providers list.
 
 ## `decoy checksums`
 
-List the engine&#x27;s registered checksum schemes (SP-04).
+List the engine&#x27;s registered checksum schemes.
 
 **Usage**:
 
@@ -2006,7 +2000,7 @@ $ decoy checksums [OPTIONS] COMMAND [ARGS]...
 
 ### `decoy checksums list`
 
-List every registered checksum scheme in the engine (SP-04).
+List every registered checksum scheme in the engine.
 
 **Usage**:
 
@@ -2034,7 +2028,7 @@ See also: decoy validators list.
 
 ## `decoy validators`
 
-List the engine&#x27;s registered job-level validators (SP-05).
+List the engine&#x27;s registered job-level validators.
 
 **Usage**:
 
@@ -2052,7 +2046,7 @@ $ decoy validators [OPTIONS] COMMAND [ARGS]...
 
 ### `decoy validators list`
 
-List every registered job-level validator in the engine (SP-05).
+List every registered job-level validator in the engine.
 
 **Usage**:
 
