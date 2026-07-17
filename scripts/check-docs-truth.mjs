@@ -53,9 +53,11 @@ function rel(file) {
 // decoy-engine are public GitHub repos (BUSL-1.1 source-available; see
 // louiskeep/decoy's own pyproject.toml/CONTRIBUTING.md/release runbook,
 // which link and `git clone`/`pip install git+https://...` them directly).
-// decoy-platform and the legacy forge repo remain private -- no links to
-// those anywhere in the docs tree. Matched broadly (any github.com/<org>/
-// <repo> naming one of these repos) so a renamed link path still trips it.
+// decoy-platform is private, so no links to it anywhere in the docs tree.
+// The legacy forge repos are banned too -- not for privacy (they are
+// public) but because they are retired and must never be referenced from
+// customer docs. Matched broadly (any github.com/<org>/<repo> naming one
+// of these repos) so a renamed link path still trips it.
 const PRIVATE_REPO_PATTERNS = [
   /github\.com\/louiskeep\/decoy-platform/i,
   /github\.com\/louiskeep\/forge/i,

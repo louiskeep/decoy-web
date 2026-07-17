@@ -36,3 +36,4 @@ tsconfig.tsbuildinfo
 # the one .mdx file in this folder that stays committed.
 content/docs/cli/*.mdx
 !content/docs/cli/_index-intro.mdx
+.gstack/

@@ -3,7 +3,7 @@ title: Strategy before/after
 description: Input-to-output examples for the core masking strategies, run against the real CLI.
 ---
 
-`decoy strategies list` prints all 23 registered mask strategies. This page
+`decoy strategies list` prints all 24 registered mask strategies. This page
 covers a representative subset, the core, user-facing ones you reach for
 first, each shown with a real before/after run rather than a description
 alone. For the full registry, run:
@@ -13,7 +13,7 @@ $ decoy strategies list
 ```
 
 ```
-Registered mask strategies (23):
+Registered mask strategies (24):
 
  Name                Class
  ───────────────────────────────────────────────────
@@ -38,6 +38,7 @@ Registered mask strategies (23):
  shuffle             ShuffleStrategyHandler
  text_mask           TextMaskHandler
  text_redact         TextRedactHandler
+ top_code            TopCodeStrategyHandler
  truncate            TruncateHandler
  windowed_date       WindowedDateStrategyHandler
 
@@ -175,8 +176,8 @@ beats an opaque token.
 
 Encrypts in place while keeping the input's shape: a 16-digit account
 number stays 16 digits. `validate_luhn: true` additionally keeps the
-output Luhn-valid, all three masked values below pass a Luhn check, the
-same as the source values did. Needs a namespace. Use it when a downstream
+output Luhn-valid, all three masked values below pass a Luhn check.
+Needs a namespace. Use it when a downstream
 system validates the format of an identifier and you cannot change its
 shape.
 
