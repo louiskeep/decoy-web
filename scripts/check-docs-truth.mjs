@@ -49,17 +49,17 @@ function rel(file) {
 // ---------------------------------------------------------------------------
 // Check 1: no private-repo URL patterns under app/ or content/
 // ---------------------------------------------------------------------------
-// Hard constraint (spec Section 0): no links into decoy-platform, decoy
-// (CLI), decoy-engine, or the legacy forge repo -- none of these are public.
-// Matched broadly (any github.com/<org>/<repo> naming one of these repos, or
-// the private org name alone) so a renamed link path still trips the check.
+// Hard constraint (spec Section 0, corrected 2026-07-17): decoy and
+// decoy-engine are public GitHub repos (BUSL-1.1 source-available; see
+// louiskeep/decoy's own pyproject.toml/CONTRIBUTING.md/release runbook,
+// which link and `git clone`/`pip install git+https://...` them directly).
+// decoy-platform and the legacy forge repo remain private -- no links to
+// those anywhere in the docs tree. Matched broadly (any github.com/<org>/
+// <repo> naming one of these repos) so a renamed link path still trips it.
 const PRIVATE_REPO_PATTERNS = [
   /github\.com\/louiskeep\/decoy-platform/i,
-  /github\.com\/louiskeep\/decoy-engine/i,
-  /github\.com\/louiskeep\/decoy(?![a-zA-Z0-9_-])/i,
   /github\.com\/louiskeep\/forge/i,
   /github\.com\/[a-zA-Z0-9_-]+\/decoy-platform/i,
-  /github\.com\/[a-zA-Z0-9_-]+\/decoy-engine/i,
 ]
 
 function checkPrivateLinks() {

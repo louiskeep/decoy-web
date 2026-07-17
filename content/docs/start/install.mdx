@@ -6,9 +6,10 @@ description: Install the decoy CLI, check your environment with decoy doctor, an
 ## Requirements
 
 - Python 3.10, 3.11, or 3.12.
-- A checkout of the `decoy` and `decoy-engine` source, or access to the
-  private package index your organization has configured. `decoy` (the CLI)
-  depends on `decoy-engine` (the data-plane library); both install together.
+- Git and a source checkout of [`decoy`](https://github.com/louiskeep/decoy)
+  and [`decoy-engine`](https://github.com/louiskeep/decoy-engine). `decoy`
+  (the CLI) depends on `decoy-engine` (the data-plane library); both install
+  together.
 
 <Callout type="info" title="decoy is not on public PyPI yet">
   `pip install decoy` is the install command you will use once Decoy
@@ -18,10 +19,13 @@ description: Install the decoy CLI, check your environment with decoy doctor, an
 
 ## Install from source
 
-This is the install path that works right now. From a checkout of
-`decoy-engine`, then a checkout of `decoy`, in a virtual environment:
+This is the install path that works right now: clone both repos and install
+each in editable mode into a virtual environment.
 
 ```bash
+git clone https://github.com/louiskeep/decoy-engine
+git clone https://github.com/louiskeep/decoy
+
 python -m venv .venv
 source .venv/bin/activate    # PowerShell: .venv\Scripts\Activate.ps1
 
@@ -29,13 +33,9 @@ pip install -e ./decoy-engine
 pip install -e ./decoy
 ```
 
-If your organization instead publishes `decoy-cli` and `decoy-engine` to an
-internal package index, point `pip` (or `uv pip`) at that index and install
-`decoy-cli` directly; the console command is the same either way.
-
-The console script is `decoy`, even though the PyPI distribution name is
-`decoy-cli` (the import package and CLI stay short; `decoy-cli` on the index
-just says plainly what the package is).
+The console script is `decoy`, even though the PyPI distribution name will
+be `decoy-cli` at general availability (the import package and CLI stay
+short; `decoy-cli` on the index just says plainly what the package is).
 
 ## Check the install
 
