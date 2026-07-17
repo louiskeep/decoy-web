@@ -41,6 +41,14 @@ static-analysis tools use: a clean pass, a findings-nonzero exit, and a
 tool-error exit are three different things a script needs to react to
 differently.
 
+Exit code `2` is not part of that three-way split; it is a narrower,
+deprecated-invocation-and-warning-gate code. The legacy `forge` shim uses
+it to signal "wrong binary, no-op." `validate config --fail-on-warning` and
+`preflight --fail-on-warning` also use it, deliberately, to let CI opt into
+treating advisory warnings (like an output target that already exists) as
+build failures without conflating them with the schema/usage errors that
+own exit `1`.
+
 ## Why the values are stable
 
 The exit-code integers are a public contract: shell scripts, `Makefile`
@@ -58,7 +66,7 @@ With a stable, specific exit code, a CI step can do this without parsing any
 output:
 
 ```bash
-decoy storm integrity masked.csv --against scan.json
+decoy storm integrity masked.csv --source source.csv --config pipeline.yaml
 case $? in
   0) echo "clean" ;;
   4) echo "findings: fail the build" ; exit 1 ;;

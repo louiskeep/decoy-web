@@ -108,14 +108,13 @@ knowing:
   carries letters), those letters can leak. Widen the charset to cover the
   column's full alphabet, or use a strict orphan-value policy that rejects
   values outside the expected shape instead of passing them through.
-- A verbatim-leak check that looks for characters staying unchanged across
-  rows only has signal at character positions with enough variety in the
-  source data to distinguish "leaking" from "legitimately low-entropy and
-  correctly preserved" (for example, a checksum digit that is genuinely
-  always the same value). A leak confined entirely to a low-entropy position
-  is not caught by that check; it surfaces as an explicit skip rather than a
-  silent pass, but it is still on you to widen the charset for columns with
-  a mixed or unusual alphabet.
+- The automated verbatim-leak check has limited signal on very low-entropy
+  columns: distinguishing a real leak from a value that is legitimately
+  always the same (a checksum digit, for instance) gets harder the less
+  variety a column's source data has. It surfaces as an explicit skip
+  rather than a silent pass, but it is still on you to widen the charset,
+  or use a strict orphan-value policy, for columns with a mixed or unusual
+  alphabet.
 
 ## Correlation checks depend on the strategy
 

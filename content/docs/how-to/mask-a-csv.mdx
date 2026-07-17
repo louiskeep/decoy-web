@@ -54,16 +54,19 @@ $ decoy validate config pipeline.yaml
 OK pipeline.yaml
 ```
 
-`validate config` runs the same schema and plan-compile checks `run` does,
-without touching the source file. Catch a typo'd provider or a missing
-namespace here instead of mid-run.
+`validate config` checks the YAML's schema and well-formedness (unknown
+provider, bad strategy name, malformed YAML) without touching the source
+file. It does not run every check `run` does: a strategy that needs a
+`namespace` (like `hash`) but doesn't have one still passes `validate
+config` and only surfaces when you `decoy run` it. Catch a typo'd provider
+here; a missing namespace still needs a real run to catch.
 
 ## 3. Run it
 
 ```console
 $ decoy run pipeline.yaml
 
-╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
 │ Pipeline  pipeline.yaml                                                      │
 │ Mode      mask                                                               │
 │ Elapsed   2.18s                                                              │
@@ -112,7 +115,7 @@ of version control:
 $ export DECOY_MASK_SECRET=486d89da1b9fb10f2862483eedd1880ce5b452253de880a06a9d8cd76e4eb4c8
 $ decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET
 
-╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
 │ Pipeline  pipeline.yaml                                                      │
 │ Mode      mask                                                               │
 │ Elapsed   2.03s                                                              │
@@ -126,9 +129,11 @@ caf22a36cf65,Danielle,Johnson,lnixon@example.org,...
 ```
 
 Running it a second time against the same secret and config produces a
-byte-identical file:
+byte-identical file. Save a copy of the first run's output, then run again
+and diff:
 
 ```console
+$ cp customers_masked.csv run1.csv
 $ decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET
 $ diff run1.csv customers_masked.csv
 $ echo $?

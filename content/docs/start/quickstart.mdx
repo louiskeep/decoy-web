@@ -96,8 +96,11 @@ OK pipeline.yaml
 ```
 
 `validate config` exits `0` on a well-formed config and non-zero on a parse
-or schema error (an unknown provider, a bad strategy name, a missing
-namespace), so it is a fast pre-flight check to run in CI before `decoy run`.
+or schema error (an unknown provider, a bad strategy name, malformed YAML),
+so it is a fast pre-flight check to run in CI before `decoy run`. It checks
+config well-formedness, not every runtime constraint: a strategy that needs
+a `namespace` (like `hash`) but doesn't have one still passes `validate
+config` and is only caught when you `decoy run` it.
 
 ## 4. Run the pipeline
 

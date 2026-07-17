@@ -14,10 +14,13 @@ below is real output.
 
 `decoy validate config` and `decoy preflight` both catch problems before a
 run starts, but they check different things. `validate config` is
-schema-and-plan-only (unknown provider, missing namespace, malformed YAML);
+schema-only (unknown provider, bad strategy name, malformed YAML) - it does
+not catch every runtime constraint, such as a `hash` column missing its
+required `namespace`, which only surfaces when you `decoy run` it;
 `preflight` adds local filesystem checks (does the source file exist, is it
-readable, will a target overwrite something). Neither touches platform
-secrets, RBAC, or network state; both are local-only.
+readable, will a target overwrite something) on top of the same schema
+check. Neither touches platform secrets, RBAC, or network state; both are
+local-only.
 
 ```console
 $ decoy validate config pipeline.yaml

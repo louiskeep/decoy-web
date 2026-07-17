@@ -68,7 +68,7 @@ The vault is an encrypted file recording each vaulted column's
 source-to-masked mapping at mask time. Recover originals with:
 
 ```bash
-decoy unmask masked.csv --vault vault.bin --table customers -o recovered.csv
+decoy unmask pipeline.yaml masked.csv --vault vault.bin --table customers -o recovered.csv
 ```
 
 The vault's own encryption key derives from the same `mask_key` as the rest

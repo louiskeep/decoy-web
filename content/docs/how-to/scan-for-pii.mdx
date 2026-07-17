@@ -20,7 +20,7 @@ the YAML as an explicit `strategy:` entry. Nothing is masked until you do.
 ```console
 $ decoy storm analyze customers.csv --out scan.json
 
-╭─ v decoy storm analyze ──────────────────────────────────────────────────────╮
+╭─ decoy storm analyze ────────────────────────────────────────────────────────╮
 │ Source        customers.csv                                                  │
 │ Rows scanned  50 (head)                                                      │
 │ Columns       8                                                              │
@@ -68,7 +68,7 @@ Drill into one field for its top values and detector detail:
 ```console
 $ decoy storm show scan.json email
 
-╭─ v decoy storm show ─────────────────────────────────────────────────────────╮
+╭─ decoy storm show ───────────────────────────────────────────────────────────╮
 │ Field      email                                                             │
 │ PII score  1.00 (high)                                                       │
 │ Nulls      0                                                                 │
@@ -131,7 +131,7 @@ $ decoy validate config pipeline.yaml
 OK pipeline.yaml
 $ decoy run pipeline.yaml
 
-╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
 │ Pipeline  pipeline.yaml                                                      │
 │ Mode      mask                                                               │
 │ Elapsed   2.23s                                                              │
