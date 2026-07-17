@@ -13,6 +13,12 @@ export const docs = defineDocs({
     schema: pageSchema.extend({
       draft: z.boolean().default(false),
     }),
+    // Exclude underscore-prefixed files and folders from the page set: hand
+    // partials composed into a generated page (content/docs/cli/_index-intro.mdx)
+    // and vendored source the splitter reads but never renders directly
+    // (content/docs/cli/_source/). These have no page frontmatter and are not
+    // meant to be routable (spec Section 4.2: composed, never interleaved).
+    files: ['**/*.mdx', '**/*.md', '!**/_*/**', '!**/_*.mdx', '!**/_*.md'],
   },
 })
 

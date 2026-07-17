@@ -4,9 +4,14 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
+    "predev": "node scripts/build-cli-mdx.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/build-cli-mdx.mjs",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "sync:cli-ref": "node scripts/sync-cli-reference.mjs",
+    "build:cli-mdx": "node scripts/build-cli-mdx.mjs",
+    "check:docs": "node scripts/check-docs-truth.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

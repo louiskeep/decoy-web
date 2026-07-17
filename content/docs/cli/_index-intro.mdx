@@ -1,0 +1,26 @@
+This is the generated reference for every `decoy` command, kept in sync with the
+CLI itself. Each command group below documents its own arguments and options;
+commands that only operate on a local `.decoy/` workspace (`project`, `catalog`,
+`jobs`) say so in their own description.
+
+## Exit codes
+
+`decoy` uses its exit code to carry outcome, not just pass or fail, so scripts and
+CI pipelines can branch on it without parsing output.
+
+| Code | Meaning |
+| --- | --- |
+| `0` | OK. The command completed successfully. |
+| `1` | Usage error. Bad arguments, a malformed config, or similar. |
+| `2` | Reserved for the legacy `forge` console command only. It exits without running anything, printing a message to invoke `decoy` instead. |
+| `3` | Runtime error. The command started but failed while running. |
+| `4` | Findings. The command completed but surfaced something that needs review, for example `storm analyze` finding PII, or a distribution-fidelity check landing below policy. |
+
+Renamed subcommands, such as the old `decoy storm scan` name for `decoy
+storm analyze`, are a different thing: they still run, print a migration
+warning to stderr, and exit `0` on success like the command they alias. Exit
+code `2` is reserved for the `forge` binary itself, not for renamed
+subcommands.
+
+See [Use decoy in CI](/docs/how-to/use-decoy-in-ci) for how to branch on these
+codes in a pipeline, including why exit code `4` is not the same as a failure.

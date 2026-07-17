@@ -30,3 +30,9 @@ tsconfig.tsbuildinfo
 
 # fumadocs-mdx codegen (rebuilt from content/docs + source.config.ts on dev/build)
 .source
+
+# Generated CLI reference pages (rebuilt from content/docs/cli/_source/cli-reference.md
+# by scripts/build-cli-mdx.mjs on prebuild/predev). The hand-written intro partial is
+# the one .mdx file in this folder that stays committed.
+content/docs/cli/*.mdx
+!content/docs/cli/_index-intro.mdx
