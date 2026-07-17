@@ -1,0 +1,141 @@
+---
+title: What Decoy cannot prove
+description: The honest boundary around what Decoy guarantees, so you don't rely on a promise it doesn't make.
+---
+
+Decoy is a practical de-identification and synthetic-data tool. It applies
+recognized transformation primitives (masking, hashing, format-preserving
+encryption, generalization, suppression, synthesis) and preserves structural
+properties like foreign keys and determinism. This page is the honest
+boundary: the things Decoy does not prove, so you don't rely on a guarantee
+it doesn't make.
+
+## It provides a formal privacy guarantee in exactly one place
+
+Masked outputs carry no differential privacy, no epsilon, and no
+mathematical bound on re-identification risk. STORM's re-identification-risk
+score is a heuristic diagnostic to help you assess a dataset; it is not a
+proof.
+
+The one formal mechanism is `decoy fit --epsilon`: a distribution snapshot's
+counts are released with per-count noise under differential privacy, exact
+quantiles and means are removed, and min/max collapse to histogram-edge
+resolution. Read that scope narrowly:
+
+- The privacy budget is per column histogram. A snapshot of several columns
+  composes sequentially, so releasing k columns spends roughly `(k + 1) *
+  epsilon` of total budget.
+- Bin edges and category labels stay data-dependent: the histogram range
+  comes from the real min and max, and categorical top values can carry real
+  category strings when explicitly allowed. A fully data-independent release
+  is a known follow-up, not current behavior.
+- Joint (multi-column) distributions are not covered by `--epsilon` in the
+  current version; there is no composition accounting for releasing
+  marginals and a joint table under one budget yet.
+- Nothing downstream of the snapshot inherits the guarantee. Generation
+  samples deterministically from the noisy artifact, and masking is entirely
+  outside this mechanism.
+
+If your use case requires a formal privacy guarantee over the masked or
+generated data itself, Decoy alone does not supply it. Differential privacy
+in Decoy is scoped to the `--epsilon` snapshot path described above; it is
+not a property of masked output in general.
+
+## It does not certify legal or regulatory compliance
+
+Decoy ships configuration bundles named after regulations, such as a HIPAA
+Safe Harbor Disguise that targets the 18 identifier categories a Safe Harbor
+review commonly names. These are engineering aids that encode one reasonable
+interpretation of an identifier set. They are not a compliance
+certification, not legal advice, and not a determination that any given
+output meets a regulation as applied to your data. Whether a masked dataset
+satisfies HIPAA, GDPR, CCPA, or any other regime is a determination for you
+and your counsel, considering your data, your context, and the
+residual-risk analysis the regulation requires. Running a bundle named
+`hipaa` does not by itself make a dataset HIPAA-compliant.
+
+## It does not guarantee semantic correctness of free text
+
+Free-text redaction finds and replaces PII spans using pattern-and-hint
+detection, optionally backed by named-entity recognition. Detection is
+best-effort: it can miss an identifier the detectors don't recognize (a
+false negative), or replace a span that wasn't actually sensitive (a false
+positive). Decoy does not understand the meaning of free text and does not
+guarantee that every identifier in a notes column has been found, nor that
+the surviving text stays semantically coherent after replacement. Treat
+free-text output as reduced-risk, not proven-clean, and review it where the
+stakes warrant.
+
+## It does not validate that your configuration matches your intent
+
+Decoy validates a config against its schema and runs what the config says.
+It does not know which columns in your data are actually sensitive. If a
+config leaves a sensitive column on `passthrough`, or masks the wrong
+column, the run succeeds and the output leaks. Use STORM to find candidate
+PII and use post-mask integrity checks to look for residual identifiers, but
+the mapping from your data's actual sensitivities to a correct config is
+yours to get right; see [STORM](/docs/concepts/storm) for how that review
+step is meant to work.
+
+## The STORM classifier does not de-identify anything
+
+STORM's column classifier detects which semantic type a column is likely to
+contain (SSN, email, a diagnosis code, and so on). It does not mask, redact,
+transform, or remove any values. A column classified as `ssn` still contains
+SSNs in the clear until a masking step in your pipeline explicitly
+transforms it.
+
+The classifier is an advisory signal, not a ground truth. It can have false
+negatives (PII columns it misses) and false positives (non-PII columns it
+flags). It was trained without any real PII entering its weights, but that
+is a training-data hygiene property, not a differential-privacy guarantee
+about what the model outputs.
+
+## Format-preserving encryption has known edge cases
+
+Format-preserving encryption (`fpe`) is designed to permute in-charset
+characters and pass separators through unchanged. Two edge cases are worth
+knowing:
+
+- A value made entirely of characters outside the configured charset is
+  routed through a fallback so it isn't emitted verbatim. A value with a
+  **mix** of in-charset and out-of-charset characters is not covered by that
+  fallback: the in-charset characters are permuted, but the out-of-charset
+  characters pass through in the clear, by the same "separators pass
+  through" rule that makes FPE useful for values like formatted phone
+  numbers in the first place. If a column's real alphabet is wider than the
+  charset you configured (for example, a mostly-numeric ID that sometimes
+  carries letters), those letters can leak. Widen the charset to cover the
+  column's full alphabet, or use a strict orphan-value policy that rejects
+  values outside the expected shape instead of passing them through.
+- A verbatim-leak check that looks for characters staying unchanged across
+  rows only has signal at character positions with enough variety in the
+  source data to distinguish "leaking" from "legitimately low-entropy and
+  correctly preserved" (for example, a checksum digit that is genuinely
+  always the same value). A leak confined entirely to a low-entropy position
+  is not caught by that check; it surfaces as an explicit skip rather than a
+  silent pass, but it is still on you to widen the charset for columns with
+  a mixed or unusual alphabet.
+
+## Correlation checks depend on the strategy
+
+A value-changing mask (`fpe`, `hash`, `code_set`, and similar) relabels
+every cell, so a naive comparison of masked and source distributions can
+show near-zero similarity even when the underlying correlation structure was
+preserved perfectly, because the labels no longer overlap. A relabel-aware
+statistic (comparing contingency counts rather than value labels) is needed
+to check correlation preservation across a bijective mask correctly, and
+that is what Decoy's acceptance checks use for categorical column pairs.
+That check does not extend to high-cardinality continuous columns, or to
+strategies that merge distinct source values together (`bucketize`,
+`geo_generalize`, and similar), since those change the contingency structure
+itself rather than just relabeling it.
+
+## What it does do
+
+To be clear about the other side: Decoy does give you deterministic,
+reproducible masking; foreign-key and join preservation across tables; a
+catalog of standard de-identification transforms; PII detection and risk
+profiling; and synthetic-data generation. Those features are real and
+exercised by the project's test suite. This page exists so the strength of
+those features is not mistaken for guarantees Decoy does not make.

@@ -1,0 +1,172 @@
+---
+title: Use Decoy in CI
+description: Run decoy non-interactively, gate a build on its exit code, and keep the evidence artifact.
+---
+
+Every `decoy` command is one-shot and scriptable: no interactive prompts
+outside `decoy init`, a stable exit-code contract, and `--json`/`--quiet`
+flags for structured or silent output. This recipe covers the three things a
+CI job needs: fail fast on a bad config, run non-interactively, and gate on
+the right exit code. Run against `decoy` CLI 0.1.0; every command block
+below is real output.
+
+## 1. Fail fast: validate before you run
+
+`decoy validate config` and `decoy preflight` both catch problems before a
+run starts, but they check different things. `validate config` is
+schema-and-plan-only (unknown provider, missing namespace, malformed YAML);
+`preflight` adds local filesystem checks (does the source file exist, is it
+readable, will a target overwrite something). Neither touches platform
+secrets, RBAC, or network state; both are local-only.
+
+```console
+$ decoy validate config pipeline.yaml
+OK pipeline.yaml
+$ decoy preflight pipeline.yaml
+OK pipeline.yaml
+```
+
+For a step that needs structured output instead of a human-readable line:
+
+```console
+$ decoy preflight pipeline.yaml --json
+{"command": "preflight", "status": "ok", "config": "pipeline.yaml", "checks": [{"name": "yaml.syntax", "status": "pass", "message": "YAML syntax is valid."}, {"name": "schema.valid", "status": "pass", "message": "Pipeline schema is valid."}, {"name": "config.plan_checks", "status": "pass", "message": "Profile-free plan-compile checks passed."}, {"name": "source.customers.exists", "status": "pass", "message": "Source file exists and is readable: ./customers.csv", "location": "sources.customers.path"}], "fail_count": 0, "warn_count": 0, "pass_count": 4}
+```
+
+A broken config fails loud and specific instead of falling through to a
+confusing error mid-run:
+
+```console
+$ decoy validate config bad_pipeline.yaml
+error: Invalid config: missing: Field required
+  hint: see `decoy validate config --help` for the expected schema.
+```
+
+Loop it over every config in the repo so one bad file fails the build before
+any run starts:
+
+```yaml
+# .github/workflows/decoy.yml (excerpt)
+- run: |
+    for f in pipelines/*.yaml; do
+      decoy validate config "$f" || exit 1
+    done
+```
+
+Add `--fail-on-warning` on either command to also fail the build on an
+advisory warning (for example, a target file that already exists and would
+be silently overwritten).
+
+## 2. Run non-interactively
+
+`decoy run` needs no prompts: pass `--json` for a structured result on
+stdout (progress goes to stderr, so the two never interleave), or
+`--quiet` for silence with the result carried entirely by the exit code.
+`--json` and `--quiet` are mutually exclusive; pick one:
+
+```console
+$ decoy run pipeline.yaml --json --evidence-out evidence.json
+{"command": "run", "status": "ok", "config": "pipeline.yaml", "mode": "mask", "elapsed_s": 1.975}
+```
+
+`--evidence-out` writes a local evidence manifest alongside the run: a
+pipeline hash, input/output file fingerprints, and row counts/timings. It
+never contains raw data values, which is what makes it safe to archive as a
+CI artifact:
+
+```console
+$ head -c 400 evidence.json
+{
+  "schema_version": "cli-local-1",
+  "producer": "decoy-cli",
+  "run_id": "132f8324-a3cf-4745-91c9-a6ca9ca44a56",
+  "run_timestamp": "2026-07-17T05:32:58.658701+00:00",
+  "cli_version": "0.1.0",
+  "engine_version": "0.4.0",
+  "pipeline_path": "pipeline.yaml",
+  "pipeline_fingerprint": "sha256:8d817af7f178f3fb17de913bc39a65c7bd68f2cd99764b58456350ba628775cb",
+  "input_fingerprints": {
+    "customers": {
+      "path": "customers.csv",
+      "fingerprint": "sha256:213f3ed0dbb9b1089388c3e5d1d36b0f...
+```
+
+Upload `evidence.json` as a build artifact and a later `decoy evidence
+verify` run can confirm nothing drifted between the run and whatever
+consumed its output.
+
+## 3. Gate on the exit code, not on parsed output
+
+<Callout type="warn" title="Exit 4 means findings, not a crash">
+`decoy validate distribution` and `decoy storm integrity` both use exit code
+`4` (`EXIT_FINDINGS`) for a clean run that found a real problem in the data,
+distinct from `1` (bad input/usage) and `3` (the CLI itself broke). Treating
+4 the same as 1 or 3 in a CI script throws away that distinction.
+</Callout>
+
+`decoy validate distribution` recomputes fidelity between a pre-mask source
+and its output. In `report` mode (the default) it always exits 0, recording
+the score without failing anything:
+
+```console
+$ decoy validate distribution customers.csv customers_masked.csv --config pipeline.yaml
+PASS grade A  overall_score 0.997
+           Marginal fidelity
+                                        
+ Column         Comparable   Similarity 
+ ────────────────────────────────────── 
+ account_tier   yes          1.000
+ city           yes          1.000
+ customer_id    yes          1.000
+ email          yes          0.981
+ first_name     yes          1.000
+ last_name      yes          1.000
+ phone          no           n/a
+ state          yes          1.000
+                                        
+OK no policy violations.
+```
+
+Set `--mode fail` plus a threshold to make a real gate. Here `--min-score
+0.999` is stricter than the actual score (`0.997245`), so the check fails on
+purpose and exits `4`:
+
+```console
+$ decoy validate distribution customers.csv customers_masked.csv --config pipeline.yaml --mode fail --min-score 0.999
+FAIL grade A  overall_score 0.997
+           Policy violations
+                                        
+ Check     Column   Expected   Actual
+ ────────────────────────────────────── 
+ overall   -        0.999      0.997245
+$ echo $?
+4
+```
+
+`decoy storm integrity` uses the same convention: 0 clean, `4` on any
+fail-severity finding (residual PII, a broken FK, a policy mismatch), `1`
+for missing/unreadable files, `3` for an unexpected crash. A build step that
+wants to treat "the CLI ran fine but the data has a problem" differently
+from "the CLI blew up" branches on the exit code directly:
+
+```bash
+decoy storm integrity masked.csv --source source.csv --config pipeline.yaml
+case $? in
+  0) echo "clean" ;;
+  4) echo "findings: fail the build" ; exit 1 ;;
+  1) echo "bad input: check the invocation" ; exit 1 ;;
+  *) echo "runtime error: alert on-call" ; exit 1 ;;
+esac
+```
+
+`decoy run` and `decoy validate config` use a simpler two-value contract (`0`
+success, nonzero failure); a plain `decoy run pipeline.yaml` already gates
+the job without any special-casing.
+
+## Next
+
+- Why exit code `4` exists as its own value instead of folding into `1`:
+  see [exit codes](/docs/concepts/exit-codes).
+- The full per-command exit-code table: [CLI reference](/docs/cli).
+- Turning STORM findings into the pipeline you are validating here: see
+  [scan for PII](/docs/how-to/scan-for-pii).

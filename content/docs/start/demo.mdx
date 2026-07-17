@@ -1,0 +1,105 @@
+---
+title: Demo
+description: Run the bundled decoy demo to see a scan-then-mask walkthrough on sample data, no config or input file required.
+---
+
+`decoy demo` runs a full scan-then-mask walkthrough on a bundled sample
+dataset. It needs no input file and no pipeline config, which makes it the
+fastest way to see what Decoy does before writing anything of your own.
+
+## Run it
+
+```bash
+decoy demo
+```
+
+```
+[1/3] Writing sample dataset...
+[2/3] Scanning with STORM...
+[3/3] Running V2 masking pipeline...
+
+╭─ decoy demo ─────────────────────────────────────────────────────────╮
+│ Sample dataset  ./decoy_demo/customers.csv                           │
+│ Rows scanned    10                                                   │
+│ PII columns     6 of 8                                               │
+│ Masked output   ./decoy_demo/customers_masked.csv                    │
+│                                                                       │
+│ Next:           head ./decoy_demo/customers_masked.csv               │
+╰────────────────────────────────────────────────────────────────────────╯
+OK demo complete.
+```
+
+Everything lands in `./decoy_demo/` by default (override with `--dir`).
+`decoy demo --json` runs the same three steps but prints a structured
+summary instead of the cards above:
+
+```json
+{
+  "command": "demo",
+  "variant": "single",
+  "status": "ok",
+  "dir": "/path/to/decoy_demo",
+  "scan": "/path/to/decoy_demo/scan.json",
+  "masked": "/path/to/decoy_demo/customers_masked.csv",
+  "pii_columns": 6
+}
+```
+
+## What each step does
+
+**[1/3] Writing sample dataset.** Decoy writes a 10-row synthetic customer
+table to `decoy_demo/customers.csv`, with columns you'd expect to find in a
+real customer export:
+
+```csv
+customer_id,first_name,last_name,email,ssn,dob,zip,gender
+C001,Alice,Anderson,alice@example.com,111-22-3333,1990-01-15,10001,F
+C002,Bob,Brown,bob@example.com,222-33-4444,1985-05-20,90210,M
+```
+
+**[2/3] Scanning with STORM.** STORM profiles the file column by column and
+writes its findings to `decoy_demo/scan.json`: inferred type, distinct
+count, format pattern, and any PII detector matches, per column. This is
+the same profiling step `decoy storm analyze` runs on your own files, and
+the same step `decoy init your_file.csv` runs before scaffolding a
+column-aware pipeline. On your own data, STORM's findings are suggestions
+you review before anything runs, never an automatic classification; see
+[STORM](/docs/concepts/storm). The demo skips that review step so the
+walkthrough completes in one command, using a pipeline Decoy scaffolds for
+you (`decoy_demo/pipeline.yaml`) from the scan.
+
+**[3/3] Running V2 masking pipeline.** Decoy runs the scaffolded pipeline
+against `customers.csv` and writes `customers_masked.csv`. The summary
+panel reports the scaffolded pipeline's verdict: of the 8 source columns, 6
+were treated as PII and masked (`first_name`, `last_name`, `email`, `ssn`,
+`dob`, `zip`); `customer_id` was redacted separately as a direct row
+identifier, and `gender` passed through unchanged.
+
+## Inspect the output
+
+```bash
+head -3 decoy_demo/customers_masked.csv
+```
+
+```csv
+customer_id,first_name,last_name,email,ssn,dob,zip,gender
+REDACTED,Christian,Salinas,lnixon@example.org,REDACTED,REDACTED,REDACTED,F
+REDACTED,Benjamin,Miller,josephwilson@example.org,REDACTED,REDACTED,REDACTED,M
+```
+
+Names and emails were swapped for synthetic values from the `faker`
+strategy; `customer_id`, `ssn`, `dob`, and `zip` were redacted to a
+constant; `gender` passed through. `decoy_demo/pipeline.yaml` is a regular
+pipeline config, readable and editable the same as anything `decoy init`
+produces, so it is a second, worked example alongside the one in
+[Quickstart](/docs/start/quickstart).
+
+## Next
+
+- [Quickstart](/docs/start/quickstart) runs the same shape of pipeline
+  against your own file, with the config-validate-run flow spelled out.
+- [Scan for PII](/docs/how-to/scan-for-pii) covers `storm analyze` on your
+  own data and reviewing its findings before you build a pipeline from
+  them.
+- [STORM](/docs/concepts/storm) explains why STORM's output is always a
+  suggestion you confirm, never an automatic classification.

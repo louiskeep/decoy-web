@@ -1,0 +1,152 @@
+---
+title: Mask a CSV
+description: Mask one CSV file with a mix of value-keyed and one-way strategies, and prove the keyed strategy is deterministic.
+---
+
+This recipe masks a single CSV: a synthetic replacement for `email`, a
+one-way redaction for `phone`, and a deterministic keyed hash for
+`customer_id` that stays stable across runs. It was run end to end against
+`decoy` CLI 0.1.0 (engine 0.4.0); every command block below is real output.
+
+## Prerequisites
+
+- The `decoy` CLI installed (see [install](/docs/start/install)).
+- A CSV with a header row. This recipe uses a `customers.csv` with columns
+  `customer_id, first_name, last_name, email, phone, city, state, account_tier`.
+
+## 1. Write a pipeline config
+
+`pipeline.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 42
+sources:
+  customers:
+    type: file
+    format: csv
+    path: ./customers.csv
+tables:
+  - name: customers
+    columns:
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: phone
+        strategy: redact
+      - name: account_tier
+        strategy: passthrough
+targets:
+  customers:
+    type: file
+    format: csv
+    path: ./customers_masked.csv
+```
+
+`email` gets a synthetic replacement, `phone` is redacted outright, and
+`account_tier` passes through unchanged because it carries no PII.
+
+## 2. Validate before running
+
+```console
+$ decoy validate config pipeline.yaml
+OK pipeline.yaml
+```
+
+`validate config` runs the same schema and plan-compile checks `run` does,
+without touching the source file. Catch a typo'd provider or a missing
+namespace here instead of mid-run.
+
+## 3. Run it
+
+```console
+$ decoy run pipeline.yaml
+
+╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      mask                                                               │
+│ Elapsed   2.18s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+```console
+$ head -3 customers_masked.csv
+customer_id,first_name,last_name,email,phone,city,state,account_tier
+10000,Danielle,Johnson,lnixon@example.org,REDACTED,South Bridget,AS,silver
+10001,Misty,Blake,josephwilson@example.org,REDACTED,Herrerafurt,CO,bronze
+```
+
+`email` is a synthetic-but-realistic address, `phone` is the literal string
+`REDACTED`, and every other column is untouched.
+
+## 4. Add a keyed strategy
+
+`faker` and `redact` above need no secret: they are drawn from a seed alone.
+A **keyed** strategy (`hash`, `fpe`, `date_shift`, and a few others) instead
+derives its output from a mask secret, so the mapping is reproducible across
+runs and machines without the source values ever appearing in the config.
+Add one to mask `customer_id` as an opaque, join-stable token:
+
+```yaml
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: hash
+        namespace: customer_id
+        provider_config:
+          truncate: 12
+      - name: email
+        strategy: faker
+        provider: person_email
+```
+
+`hash` needs a `namespace` (it scopes the derivation) and a mask secret. Pass
+the secret as `env:VAR_NAME` so the literal value never lands in the YAML or
+the CLI's own argv. The 64-hex-char value below is a throwaway example;
+generate your own with something like `openssl rand -hex 32` and keep it out
+of version control:
+
+```console
+$ export DECOY_MASK_SECRET=486d89da1b9fb10f2862483eedd1880ce5b452253de880a06a9d8cd76e4eb4c8
+$ decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET
+
+╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      mask                                                               │
+│ Elapsed   2.03s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+```console
+$ head -2 customers_masked.csv
+customer_id,first_name,last_name,email,phone,...
+caf22a36cf65,Danielle,Johnson,lnixon@example.org,...
+```
+
+Running it a second time against the same secret and config produces a
+byte-identical file:
+
+```console
+$ decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET
+$ diff run1.csv customers_masked.csv
+$ echo $?
+0
+```
+
+That determinism is what makes `hash` and the other keyed strategies safe
+for join-preserving masks: the same source value under the same secret and
+namespace always lands on the same masked value, in this run and the next
+one. See [keys and the vault](/docs/concepts/keys-and-vault) for how the
+secret and the seed relate, and the full strategy catalog on the
+[CLI reference](/docs/cli).
+
+## Next
+
+- Masking more than one table with a shared key: see
+  [mask a folder with foreign keys](/docs/how-to/mask-a-folder-with-foreign-keys).
+- Recovering a `vault: true` or `fpe` column later: `decoy unmask` (see the
+  [CLI reference](/docs/cli)).
+- Wiring this into a pipeline that gates on the result: see
+  [use Decoy in CI](/docs/how-to/use-decoy-in-ci).

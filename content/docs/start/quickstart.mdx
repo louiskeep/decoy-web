@@ -1,0 +1,148 @@
+---
+title: Quickstart
+description: From a CSV to a masked CSV with the decoy CLI, using a scaffolded pipeline, config validation, and a run.
+---
+
+This walks through the shortest real path: a CSV with sensitive columns in,
+a masked CSV out, using a scaffolded pipeline instead of hand-writing YAML
+from scratch. It assumes `decoy` is installed; see [Install](/docs/start/install)
+if it is not.
+
+## 1. A CSV to mask
+
+Start with a small file, `input.csv`:
+
+```csv
+first_name,last_name,email,ssn,account_status
+Ada,Lovelace,ada@example.com,123-45-6789,active
+Alan,Turing,alan@example.com,987-65-4321,closed
+```
+
+## 2. Scaffold a pipeline
+
+`decoy init` writes a starter `pipeline.yaml` for you. It normally runs as a
+short interactive Q&A; the fastest path for a first look is a bundled
+preset:
+
+```bash
+decoy init --preset minimal --out pipeline.yaml --json
+```
+
+```json
+{"command": "init", "status": "ok", "out": "pipeline.yaml", "preset": "minimal", "rule_count": 6}
+```
+
+The `minimal` preset scaffolds the smallest sensible pipeline: name and email
+swapped for synthetic values, SSN redacted, everything else passed through.
+It already points at `./input.csv` and `./output.csv`, which matches the file
+above, so nothing needs editing for this walkthrough:
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+
+sources:
+  people:
+    type: file
+    format: csv
+    path: ./input.csv
+
+tables:
+  - name: people
+    columns:
+      - name: first_name
+        strategy: faker
+        provider: person_first_name
+      - name: last_name
+        strategy: faker
+        provider: person_last_name
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: ssn
+        strategy: redact
+      - name: account_status
+        strategy: passthrough
+
+targets:
+  people:
+    type: file
+    format: csv
+    path: ./output.csv
+```
+
+On your own data, point `sources.people.path` at your file and edit the
+`columns:` list to match: pick a [strategy](/docs/cli/strategies) per column
+you want to change, and leave the rest as `passthrough`. If you scaffold with
+`decoy init your_file.csv` instead of a preset, STORM profiles the file first
+and writes a column-aware pipeline with a `# REVIEW:` comment above every
+strategy it inferred, so you can read and confirm each one before running it,
+the same "suggestions, not classification" review step described in
+[STORM](/docs/concepts/storm).
+
+## 3. Validate the config
+
+Check the YAML against the engine's pipeline schema before touching any
+data:
+
+```bash
+decoy validate config pipeline.yaml
+```
+
+```
+OK pipeline.yaml
+```
+
+`validate config` exits `0` on a well-formed config and non-zero on a parse
+or schema error (an unknown provider, a bad strategy name, a missing
+namespace), so it is a fast pre-flight check to run in CI before `decoy run`.
+
+## 4. Run the pipeline
+
+```bash
+decoy run pipeline.yaml
+```
+
+```
+╭─ decoy run ────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                    │
+│ Mode      mask                                                             │
+│ Elapsed   3.41s                                                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+## 5. Inspect the output
+
+```bash
+cat output.csv
+```
+
+```csv
+first_name,last_name,email,ssn,account_status
+Christian,Salinas,lnixon@example.org,REDACTED,active
+Benjamin,Miller,josephwilson@example.org,REDACTED,closed
+```
+
+Names and emails were replaced with synthetic values from the `faker`
+strategy's providers, `ssn` was redacted to a constant, and
+`account_status` passed through unchanged. Because `global_settings.seed`
+is fixed, the same config against the same input always produces this same
+output, run after run.
+
+<Callout type="info" title="Deterministic across machines">
+  A fixed `seed` is deterministic on one box across runs. For output that
+  is also stable across different machines, mask with a shared secret
+  instead: see [Keys and vault](/docs/concepts/keys-and-vault).
+</Callout>
+
+## Next
+
+- Try [Demo](/docs/start/demo) for a zero-setup walkthrough on bundled
+  sample data, including a STORM scan step.
+- See the [how-to guides](/docs/how-to/mask-a-csv) for masking recipes that
+  build on this one: foreign-key-aware folders, synthetic generation, and
+  CI usage.
+- Browse [Strategies](/docs/cli/strategies) for the full list of mask
+  strategies this pipeline could use.

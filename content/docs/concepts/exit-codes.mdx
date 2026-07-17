@@ -1,0 +1,76 @@
+---
+title: Exit codes
+description: Why the exit-code contract is a design commitment, not an afterthought.
+---
+
+Every `decoy` subcommand returns one of a small set of stable integer exit
+codes. The full table lives on the [CLI reference](/docs/cli); this page is
+about why the contract is shaped the way it is.
+
+## The problem a flat 0/1 contract has
+
+A CLI that only ever returns 0 (success) or 1 (failure) forces every caller
+to re-parse output to figure out what actually went wrong. In a CI pipeline
+that's expensive and brittle: you end up grepping stderr for magic strings
+to decide whether to retry, alert, or fail the build. The alternative is to
+put that information in the exit code itself, where a shell, a Makefile, or
+a CI job can branch on it with a plain integer comparison.
+
+## Why 4 (findings) is its own code
+
+The distinction that matters most for CI is between three different kinds of
+"not a clean success":
+
+- **The caller's request was wrong.** A config that doesn't validate, a
+  path that doesn't exist, an incompatible flag combination. The fix is in
+  the invocation, not the tool. This is exit 1.
+- **The tool itself broke.** The engine raised an unexpected error, an
+  output write failed. The fix is in the CLI or engine, not in what you
+  asked for. This is exit 3.
+- **The tool ran fine, but the data has a problem.** `decoy storm
+  integrity` completed its check and found residual PII, or a foreign-key
+  preservation check failed. Nothing about the invocation was wrong; the
+  data is what triggered the non-zero exit. This is exit 4.
+
+Collapsing those three into one failure code would make a CI pipeline treat
+a genuine data problem the same way it treats a typo in a config path or a
+transient runtime crash. A pipeline that wants to fail the build on a real
+finding, but retry or alert differently on a runtime error, needs the exit
+code to carry that distinction. This is the same split semgrep and similar
+static-analysis tools use: a clean pass, a findings-nonzero exit, and a
+tool-error exit are three different things a script needs to react to
+differently.
+
+## Why the values are stable
+
+The exit-code integers are a public contract: shell scripts, `Makefile`
+targets, and CI job definitions branch on them directly. Decoy commits to
+not moving an existing integer's meaning across releases; a new code can be
+added for a genuinely new situation (exit 4 was added for the first
+data-integrity command, ahead of any command that needed it), but 0 stays
+success, 1 stays usage error, and so on. If that contract could shift
+silently between versions, every downstream script that checks `$?` would
+need to be re-audited on every upgrade.
+
+## What this buys you in CI
+
+With a stable, specific exit code, a CI step can do this without parsing any
+output:
+
+```bash
+decoy storm integrity masked.csv --against scan.json
+case $? in
+  0) echo "clean" ;;
+  4) echo "findings: fail the build" ; exit 1 ;;
+  *) echo "tool or usage error: alert on-call" ; exit 1 ;;
+esac
+```
+
+That's the point of treating exit codes as a design commitment rather than
+whatever `sys.exit()` happened to be called with at each call site: the
+contract is what makes a `decoy` invocation safe to wire into an automated
+pipeline without also shipping a wrapper that scrapes stdout to figure out
+what happened.
+
+See the [CLI reference](/docs/cli) for the full table, and
+[using Decoy in CI](/docs/how-to/use-decoy-in-ci) for the complete recipe.

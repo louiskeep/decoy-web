@@ -1,0 +1,171 @@
+---
+title: Generate synthetic data
+description: Build a synthetic table from a column spec, then fit a real table's shape and sample from it instead.
+---
+
+Generation needs no input file: it builds rows from a column spec you write
+by hand, or from a distribution snapshot fitted off a real table. This
+recipe covers both, run end to end against `decoy` CLI 0.1.0.
+
+## 1. Generate from a column spec
+
+`gen_pipeline.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 42
+sources: {}
+tables:
+  - name: employees
+    row_count: 1000
+    generate_columns:
+      - name: employee_id
+        type: sequence
+        start: 1000
+        step: 1
+      - name: first_name
+        type: faker
+        faker_type: first_name
+      - name: department
+        type: categorical
+        categories: ["Engineering", "Marketing", "Sales", "HR", "Finance"]
+        weights: [0.3, 0.2, 0.3, 0.1, 0.1]
+targets:
+  employees:
+    type: file
+    format: csv
+    path: ./employees.csv
+```
+
+`sources: {}` because there is nothing to read; `row_count` on the table
+says how many rows to produce. Run it with `--mode generate`:
+
+```console
+$ decoy validate config gen_pipeline.yaml
+OK gen_pipeline.yaml
+$ decoy run gen_pipeline.yaml --mode generate
+
+╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+│ Pipeline  gen_pipeline.yaml                                                  │
+│ Mode      generate                                                          │
+│ Elapsed   1.02s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+```console
+$ wc -l employees.csv
+1001 employees.csv
+$ head -5 employees.csv
+employee_id,first_name,department
+1000,Isabel,Sales
+1001,Megan,Marketing
+1002,Dustin,Sales
+1003,Keith,Sales
+```
+
+1000 rows plus the header. Other `generate_columns` types: `reference`
+(mint-a-pool foreign key), `formula`/`derived` (compute from sibling
+columns), and `distribution` (draw from an inline snapshot). See the
+[CLI reference](/docs/cli) `run` entry for the full list.
+
+## 2. Fit a real table's shape
+
+Hand-written columns work for structural test data, but they will not
+resemble your production distribution. `decoy fit` reads a real CSV and
+writes a `distribution-snapshot/v1` artifact: numeric histograms and
+quantiles, categorical top-k counts, datetime year bins.
+
+```console
+$ decoy fit customers.csv --output customers.snapshot.json
+OK customers.snapshot.json
+  50 rows; columns: customer_id (numeric), first_name (freetext), last_name
+(freetext), email (freetext), phone (freetext), city (freetext), state
+(freetext), account_tier (categorical)
+```
+
+```console
+$ head -c 400 customers.snapshot.json
+{
+ "schema_version": "distribution-snapshot/v1",
+ "row_count": 50,
+ "columns": {
+  "customer_id": {
+   "dtype": "int64",
+   "kind": "numeric",
+   "null_count": 0,
+   "non_null_count": 50,
+   "distinct_count": 50,
+   "stats": {
+    "min": 10000.0,
+    "max": 10049.0,
+    "mean": 10024.5,
+    "std": 14.577379737113,
+    ...
+```
+
+## 3. Sample from the snapshot
+
+A `type: statistical` generate column reads that snapshot and samples a
+column shaped like the fitted one, instead of a hand-picked distribution:
+
+```yaml
+version: 1
+global_settings:
+  seed: 42
+sources: {}
+tables:
+  - name: customers_synth
+    row_count: 200
+    generate_columns:
+      - name: customer_id
+        type: statistical
+        snapshot_file: ./customers.snapshot.json
+        source_column: customer_id
+targets:
+  customers_synth:
+    type: file
+    format: csv
+    path: ./customers_synth.csv
+```
+
+```console
+$ decoy validate config statistical_pipeline.yaml
+OK statistical_pipeline.yaml
+$ decoy run statistical_pipeline.yaml --mode generate
+
+╭─ v decoy run ────────────────────────────────────────────────────────────────╮
+│ Pipeline  statistical_pipeline.yaml                                          │
+│ Mode      generate                                                          │
+│ Elapsed   0.89s                                                             │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+```console
+$ head -6 customers_synth.csv
+customer_id
+10023
+10019
+10009
+10015
+10040
+```
+
+200 values drawn from the fitted `customer_id` histogram's bins, not copied
+row-for-row from the source. With a dense 50-value source range some drawn
+values will coincide with a real one by chance; the numeric snapshot itself
+never stores individual source rows, only bin edges and counts. A
+`categorical` snapshot column needs one more
+opt-in: `allow_real_categories: true` on the column, because a categorical
+snapshot's `top_values` are real values from the source frame (its numeric
+bin edges and counts are not). `condition_on` needs a joint captured at fit
+time with `decoy fit --joint colA,colB`.
+
+## Next
+
+- Checking how close a generated or masked output tracks the source shape:
+  `decoy validate distribution`, covered in
+  [use Decoy in CI](/docs/how-to/use-decoy-in-ci).
+- A differentially private fit (`decoy fit --epsilon`) adds Laplace noise to
+  every snapshot count instead of exact quantiles; see the
+  [CLI reference](/docs/cli) `fit` entry.

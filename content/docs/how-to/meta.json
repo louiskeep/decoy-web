@@ -1,3 +1,10 @@
 {
-  "title": "How-to"
+  "title": "How-to",
+  "pages": [
+    "mask-a-csv",
+    "mask-a-folder-with-foreign-keys",
+    "generate-synthetic-data",
+    "scan-for-pii",
+    "use-decoy-in-ci"
+  ]
 }

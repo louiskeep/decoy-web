@@ -1,0 +1,67 @@
+---
+title: STORM
+description: What STORM does, and why it suggests rather than decides.
+---
+
+STORM scans a dataset before you write a masking pipeline and produces a
+profile: what's in the data, and where the risk is concentrated.
+
+## What a STORM scan reports
+
+Run `decoy storm analyze` against a file and you get, per column:
+
+- Inferred type, cardinality, null fraction, and top values.
+- PII detector hits, from pattern and named-entity signals.
+- Sentinel-value flags: the `999`s, `99/99/9999`s, and other placeholder
+  literals that pollute real statistics if left in.
+- Quasi-identifier groups: sets of columns that, combined, uniquely identify
+  a row even though no single column does.
+- A re-identification risk score.
+
+That output is a JSON profile you can inspect, pipe to other tools, or use
+directly to decide which columns need which mask strategy.
+
+## Suggestions, not classification
+
+STORM's detectors are heuristics: pattern matches, name hints, and
+named-entity recognition. They can miss a column that is actually sensitive
+(a false negative) and they can flag a column that isn't (a false positive).
+STORM does not mask, redact, or transform anything itself, and it does not
+apply a pipeline on your behalf. A column the scan flags as `ssn` still
+contains SSNs in the clear until a masking step in your YAML explicitly
+handles it.
+
+This is a deliberate design stance, not a current limitation waiting on a
+future release. Decoy does not ship an auto-detect-and-apply pipeline where
+the tool decides what a column is and masks it without you looking. STORM
+surfaces candidates; you review them and decide.
+
+## How a finding becomes a choice
+
+The intended flow is scan, then review, then write:
+
+1. `decoy storm analyze data.csv` produces a profile.
+2. You read the profile (or a colleague does) and decide, per column, which
+   detector hit is correct and which mask strategy fits it.
+3. You write those decisions into the pipeline YAML as explicit
+   `strategy:` entries.
+4. `decoy storm integrity` can check the resulting masked output against the
+   findings you cared about, and exits with a findings-specific code (see
+   [exit codes](/docs/concepts/exit-codes)) if something you expected to be
+   masked still shows up.
+
+A Disguise template (see [disguises](/docs/concepts/disguises)) is a
+convenient starting point built from common findings for a given
+regulation, but picking one is still something you do by hand; it is not
+something a scan chooses for you.
+
+## Why this matters for trust
+
+A tool that silently classifies and masks data makes it hard to know what it
+actually did to your dataset. Keeping detection and masking as two separate,
+inspectable steps means every masked output traces back to an explicit
+decision you can find in the YAML, not a model's guess you have to take on
+faith.
+
+See `decoy explain storm` for the command-line summary and
+`decoy storm analyze --help` for the full flag set.
