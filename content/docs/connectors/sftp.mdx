@@ -1,0 +1,43 @@
+---
+title: SFTP
+description: Current status of the SFTP connector, what exists, and what a pipeline cannot do with it yet.
+---
+
+`decoy-engine` ships an SFTP connector
+(`decoy_engine.connectors.sftp.SFTPFileSource` /
+`SFTPFileSink`), but it is not wired into pipeline YAML. `sources:` and
+`targets:` only accept `file`, `s3`, and `gcs` as a `type`; `sftp` is
+rejected at validation:
+
+```console
+$ decoy validate config pipeline.yaml
+error: Invalid config: union_tag_invalid: Input tag 'sftp' found using 'type'
+does not match any of the expected tags: 'file', 's3', 'gcs'
+  hint: see `decoy validate config --help` for the expected schema.
+```
+
+There is no `type: sftp` source or target block to write today. This page
+exists so "does Decoy support SFTP" has a clear, current answer rather than
+silence.
+
+## What exists at the connector level
+
+The connector class itself is real and unit-tested: password auth, or a
+PEM private key (RSA, Ed25519, ECDSA, DSA, auto-detected), strict host-key
+verification against `known_hosts` (no accept-any-host-key fallback), and
+streaming reads and writes. It depends on `paramiko`, an optional extra so
+customers who only use S3 or GCS do not pay for it:
+
+```bash
+pip install decoy-engine[sftp]
+```
+
+That extra makes the connector importable for direct engine-SDK use; it
+does not add a pipeline YAML source or target type. Wiring `sftp` into
+`sources:` / `targets:` the way `s3` and `gcs` are wired is on the
+roadmap, not shipped.
+
+## Next
+
+See [connectors](/docs/connectors) for the file, S3, and GCS backends a
+pipeline can actually name today.

@@ -1,0 +1,70 @@
+---
+title: GCS
+description: Pipeline YAML shape and credentials for a Google Cloud Storage source or target.
+---
+
+A GCS source or target names a `bucket` and an `object` (GCS calls its
+object path `object`, not `key`, matching the GCS API). Both `csv` and
+`parquet` are supported; nothing else.
+
+```yaml
+sources:
+  customers:
+    type: gcs
+    format: csv
+    bucket: my-decoy-bucket
+    object: incoming/customers.csv
+
+targets:
+  customers:
+    type: gcs
+    format: parquet
+    bucket: my-decoy-output
+    object: masked/customers.parquet
+```
+
+This validates cleanly against the schema:
+
+```console
+$ decoy validate config pipeline.yaml
+OK pipeline.yaml
+```
+
+<Callout type="warn" title="decoy run does not move cloud data yet">
+  Validating a config does not mean `decoy run` will execute it end to end.
+  The standalone CLI only reads and writes `type: file` sources and
+  targets today; see [connectors](/docs/connectors) for the full caveat.
+  The shape below is real and is what a Decoy platform-managed run
+  consumes.
+</Callout>
+
+## Fields
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `bucket` | yes | 1-255 characters. |
+| `object` | yes | The object path within the bucket. |
+| `credentials_ref` | no | An opaque identifier a Decoy platform-managed run resolves against its own credential store. Has no effect outside the platform; the schema forbids a raw service-account key here (`additionalProperties: false`). |
+
+No other fields are accepted, an unrecognized key (for example a raw
+`service_account_json`) fails `decoy validate config` rather than being
+silently ignored.
+
+## Credentials
+
+Outside the platform, GCS access is resolved by Application Default
+Credentials (ADC), not by the YAML:
+
+- `GOOGLE_APPLICATION_CREDENTIALS` pointing at a service-account key file.
+- `gcloud auth application-default login` user credentials.
+- The GCE or GKE metadata service, when running on Google Cloud compute
+  (including GKE workload identity).
+
+There is no `endpoint_url` equivalent for GCS: unlike S3, the connector
+does not support pointing at a non-Google-hosted GCS-compatible service.
+
+## Next
+
+See [connectors](/docs/connectors) for the file-backend comparison and the
+current `decoy run` execution scope, and [S3](/docs/connectors/s3) for the
+S3 equivalent.

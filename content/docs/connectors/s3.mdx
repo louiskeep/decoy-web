@@ -1,0 +1,84 @@
+---
+title: S3
+description: Pipeline YAML shape and credentials for an S3 (or S3-compatible) source or target.
+---
+
+An S3 source or target names a `bucket` and a `key` (the S3 object path).
+Both `csv` and `parquet` are supported; nothing else.
+
+```yaml
+sources:
+  customers:
+    type: s3
+    format: csv
+    bucket: my-decoy-bucket
+    key: incoming/customers.csv
+    region: us-east-1
+
+targets:
+  customers:
+    type: s3
+    format: parquet
+    bucket: my-decoy-output
+    key: masked/customers.parquet
+```
+
+This validates cleanly against the schema:
+
+```console
+$ decoy validate config pipeline.yaml
+OK pipeline.yaml
+```
+
+<Callout type="warn" title="decoy run does not move cloud data yet">
+  Validating a config does not mean `decoy run` will execute it end to end.
+  The standalone CLI only reads and writes `type: file` sources and
+  targets today; see [connectors](/docs/connectors) for the full caveat.
+  The shape below is real and is what a Decoy platform-managed run
+  consumes.
+</Callout>
+
+## Fields
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `bucket` | yes | 1-255 characters. |
+| `key` | yes | The object path within the bucket. |
+| `region` | no | Defaults to `us-east-1` on the connector; omit to use whatever the credential chain / environment implies. |
+| `endpoint_url` | no | Override the AWS endpoint for an S3-compatible service: MinIO, Cloudflare R2, Wasabi, Backblaze B2. Leave unset for real AWS S3. |
+| `credentials_ref` | no | An opaque identifier a Decoy platform-managed run resolves against its own credential store. Has no effect outside the platform; the schema forbids raw access keys here (`additionalProperties: false`). |
+
+No other fields are accepted, an unrecognized key (for example a raw
+`access_key_id`) fails `decoy validate config` rather than being silently
+ignored.
+
+## Credentials
+
+Outside the platform, S3 access is resolved by the AWS SDK's default
+credential chain, not by the YAML:
+
+- `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` (and `AWS_SESSION_TOKEN` for
+  temporary credentials) as environment variables.
+- `~/.aws/credentials` / `~/.aws/config`, including named profiles via
+  `AWS_PROFILE`.
+- An EC2 instance profile, ECS task role, or EKS IRSA role, when running on
+  AWS compute.
+
+Point a config at an S3-compatible store (MinIO, R2, Wasabi, B2) with
+`endpoint_url`:
+
+```yaml
+sources:
+  customers:
+    type: s3
+    format: csv
+    bucket: my-bucket
+    key: customers.csv
+    endpoint_url: http://localhost:9000
+```
+
+## Next
+
+See [connectors](/docs/connectors) for the file-backend comparison and the
+current `decoy run` execution scope, and [GCS](/docs/connectors/gcs) for
+the Google Cloud Storage equivalent.
