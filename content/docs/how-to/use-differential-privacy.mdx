@@ -1,0 +1,165 @@
+---
+title: Use differential privacy
+description: Step-by-step recipe for generating differentially private synthetic data with epsilon/delta budgets.
+draft: false
+---
+
+This recipe generates synthetic data with a formal differential privacy guarantee. It walks through configuration, the privacy budget tradeoffs, and how to check the output.
+
+## 1. Prepare your source data
+
+Start with a CSV you want to generate from:
+
+```csv
+patient_id,age,diagnosis_code,admission_date,notes
+1,45,I10,2024-01-15,Hypertension follow-up
+2,67,E11,2024-02-20,Diabetes management
+3,52,J44,2024-03-10,COPD exacerbation
+```
+
+## 2. Declare your DP configuration
+
+Create a pipeline with `global_settings.dp` and a `column_schema` that declares:
+
+- Which columns get DP protection
+- Their type (numeric or categorical)
+- Their domain (min/max for numeric, actual categories for categorical)
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+  dp:
+    epsilon: 1.0
+    delta: 1e-6
+    column_schema:
+      age:
+        kind: numeric
+        domain: [0, 120]
+      diagnosis_code:
+        kind: categorical
+        domain: ["I10", "E11", "J44", "F32", "K21"]
+
+sources:
+  patients:
+    type: file
+    format: csv
+    path: ./patients.csv
+
+tables:
+  - name: patients
+    row_count: 1000  # How many synthetic rows to generate
+    generate_columns:
+      - name: patient_id
+        type: sequence
+        start: 10000
+      - name: age
+        type: statistical
+        allow_real_categories: false
+      - name: diagnosis_code
+        type: statistical
+        allow_real_categories: false
+      - name: admission_date
+        type: faker
+        faker_type: date
+      - name: notes
+        type: faker
+        faker_type: text
+
+targets:
+  patients:
+    type: file
+    format: csv
+    path: ./patients_synthetic.csv
+```
+
+**Key decisions:**
+
+- **`epsilon: 1.0`**: Moderate privacy with reasonable fidelity. Start here for most use cases.
+- **`delta: 1e-6`**: Failure probability. Typical choice; smaller is stronger but may degrade fidelity.
+- **`column_schema`**: List only columns you want DP coverage for. Omit columns that are not sensitive or that you want to generate without DP (e.g., dates, free text).
+- **`allow_real_categories: false`**: Prevents releasing actual category names. Set to true only if your category labels are public and non-sensitive.
+
+## 3. Validate and run
+
+```console
+$ decoy validate pipeline.yaml
+OK pipeline.yaml
+
+$ decoy fit patients.csv --output patients.snapshot.json
+OK patients.snapshot.json
+  100 rows; columns: age (numeric), diagnosis_code (categorical)
+
+$ decoy run pipeline.yaml
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      generate                                                           │
+│ Rows      1000                                                               │
+│ Elapsed   3.24s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+The output is 1,000 rows of synthetic data, generated from the DP snapshot.
+
+## 4. Inspect the output
+
+```console
+$ wc -l patients_synthetic.csv
+1001 patients_synthetic.csv
+
+$ head -5 patients_synthetic.csv
+patient_id,age,diagnosis_code,admission_date,notes
+10000,42,I10,2024-05-08,Lorem ipsum dolor sit amet
+10001,71,E11,2024-06-15,Consectetur adipiscing elit
+10002,49,J44,2024-07-22,Sed do eiusmod tempor incididunt
+```
+
+## 5. Measure utility and adjust
+
+Check whether the synthetic data is useful for your downstream task (testing, model training, analysis). Compare key statistics against the source:
+
+**Source statistics:**
+- Age: mean=54, min=45, max=78
+- Diagnosis codes: I10 (40%), E11 (35%), J44 (25%)
+
+**Synthetic statistics (with ε=1.0):**
+- Age: mean=53, min=41, max=82
+- Diagnosis codes: I10 (38%), E11 (37%), J44 (25%)
+
+If fidelity is too low, you can:
+
+- **Increase epsilon** (weaker privacy, better fidelity): try 2.0 or 3.0
+- **Increase delta** (higher failure probability, better fidelity): try 1e-5 (but accept higher risk)
+- **Reduce the column count** (lower composition cost): drop non-critical columns
+
+If fidelity is acceptable, you now have synthetic data with a formal privacy guarantee.
+
+## 6. Privacy budget composition
+
+Each column in your `column_schema` composes the privacy cost. If you declare k columns and set epsilon=1.0, the total spend is approximately:
+
+```
+total_epsilon = (k + 1) * 1.0
+```
+
+For 5 DP columns with epsilon=1.0, total epsilon ≈ 6.0. This is your absolute privacy budget across all released columns.
+
+To stay within a total budget (e.g., 10):
+
+- With 5 columns: use epsilon=10/6 ≈ 1.67 per column
+- With 10 columns: use epsilon=10/11 ≈ 0.91 per column
+- With 2 columns: use epsilon=10/3 ≈ 3.33 per column
+
+## 7. Constraints and limitations
+
+- **Numeric and categorical only.** Dates, free text, and complex types are generated without DP protection. Declare them as non-DP types.
+- **No conditional generation.** `condition_on` is rejected under DP because joint distributions are not private. All columns are independent.
+- **Domain must be known upfront.** You declare age domain as [0, 120], diagnosis codes as a fixed list. The engine does not infer these from the data.
+- **Epsilon is enforced.** If you exceed the declared epsilon/delta budget, the job fails with an error.
+
+## Next steps
+
+- [Differential privacy in Decoy](/docs/concepts/differential-privacy): detailed explanation of the guarantee and its limits
+- [Generate synthetic data](/docs/how-to/generate-synthetic-data): full recipe for non-DP synthetic generation
+- [What Decoy cannot prove](/docs/concepts/what-we-cannot-prove): honest boundaries of all Decoy guarantees

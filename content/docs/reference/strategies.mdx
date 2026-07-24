@@ -1,0 +1,235 @@
+---
+title: Strategy before/after
+description: Input-to-output examples for the core masking strategies, run against the real CLI.
+---
+
+`decoy strategies list` prints all 24 registered mask strategies. This page
+covers a representative subset, the core, user-facing ones you reach for
+first, each shown with a real before/after run rather than a description
+alone. For the full registry, run:
+
+```console
+$ decoy strategies list
+```
+
+```
+Registered mask strategies (24):
+
+ Name                Class
+ ───────────────────────────────────────────────────
+ bucket_perturb      BucketPerturbStrategyHandler
+ bucketize           BucketizeStrategyHandler
+ categorical         CategoricalStrategyHandler
+ code_set            CodeSetHandler
+ date_shift          DateShiftStrategyHandler
+ derived              DerivedStrategyHandler
+ derived_aggregate   DerivedAggregateStrategyHandler
+ faker               FakerStrategyHandler
+ formula             FormulaStrategyHandler
+ fpe                 FpeStrategyHandler
+ geo_generalize      GeoGeneralizeHandler
+ group_key           GroupKeyStrategyHandler
+ grouped_series      GroupedSeriesStrategyHandler
+ hash                HashStrategyHandler
+ joint_mask          JointMaskHandler
+ nested              NestedStrategyHandler
+ passthrough         PassthroughHandler
+ redact              RedactHandler
+ shuffle             ShuffleStrategyHandler
+ text_mask           TextMaskHandler
+ text_redact         TextRedactHandler
+ top_code            TopCodeStrategyHandler
+ truncate            TruncateHandler
+ windowed_date       WindowedDateStrategyHandler
+
+Tip: inspect one with decoy strategies inspect <name>.
+```
+
+## The run
+
+One CSV, one pipeline, seven columns, seven strategies. Every value below
+is real output from `decoy run` against `decoy` CLI 0.1.0 (engine 0.4.0).
+
+Source (`customers.csv`):
+
+```console
+customer_id,email,phone,account_num,plan,signup_date,zip
+10001,dana.reyes@example.com,555-201-4488,4539123456781234,pro,2023-04-11,94107
+10002,marcus.lin@example.com,555-201-9911,4539876543211234,free,2022-11-02,73301
+10003,priya.nair@example.com,555-201-2210,4539555566671234,enterprise,2024-01-19,10001
+```
+
+`pipeline.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 42
+  mask_secret_ref: "env:DECOY_MASK_SECRET"
+sources:
+  customers:
+    type: file
+    format: csv
+    path: ./customers.csv
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: hash
+        namespace: customer_id
+        provider_config:
+          truncate: 12
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: phone
+        strategy: redact
+      - name: account_num
+        strategy: fpe
+        namespace: account_num
+        provider_config:
+          charset: digits
+          validate_luhn: true
+      - name: plan
+        strategy: categorical
+        namespace: plan
+        deterministic: true
+        provider_config:
+          categories: ["starter", "growth", "scale"]
+      - name: signup_date
+        strategy: date_shift
+        namespace: signup_date
+        provider_config:
+          min_days: -30
+          max_days: 30
+      - name: zip
+        strategy: truncate
+        provider_config:
+          length: 3
+targets:
+  customers:
+    type: file
+    format: csv
+    path: ./customers_masked.csv
+```
+
+```console
+$ decoy run pipeline.yaml
+
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      mask                                                               │
+│ Elapsed   2.75s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+Result (`customers_masked.csv`):
+
+```console
+customer_id,email,phone,account_num,plan,signup_date,zip
+515ad73df0d7,lnixon@example.org,REDACTED,3758195518872466,scale,2023-03-19,941
+a3187fc47184,josephwilson@example.org,REDACTED,6483013958578649,scale,2022-11-21,733
+97aaae1f24bf,adamsamy@example.org,REDACTED,5451140213131565,growth,2024-02-08,100
+```
+
+## Per strategy
+
+### redact
+
+Replaces every non-null value with a fixed string (`REDACTED` by default).
+No keying, no namespace. Use it when a column should be removed from view
+entirely, not replaced with a plausible-looking value.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `phone` | `555-201-4488` | `REDACTED` |
+| `phone` | `555-201-9911` | `REDACTED` |
+
+### hash
+
+A deterministic, join-stable token: the same source value always maps to
+the same output within a namespace, byte-stable across runs. `truncate`
+keeps the first N hex characters. Needs a `namespace`. Use it for opaque
+identifiers (SSN, MRN, account number, this example's `customer_id`) that
+must stay joinable but not human-readable.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `customer_id` | `10001` | `515ad73df0d7` |
+| `customer_id` | `10002` | `a3187fc47184` |
+| `customer_id` | `10003` | `97aaae1f24bf` |
+
+### faker
+
+Draws a synthetic replacement from a named provider (here,
+`person_email`). Deterministic mode keeps the same source value mapping to
+the same synthetic value within a namespace. Use it for names, emails,
+phone numbers, and addresses, anywhere a realistic-looking replacement
+beats an opaque token.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `email` | `dana.reyes@example.com` | `lnixon@example.org` |
+| `email` | `marcus.lin@example.com` | `josephwilson@example.org` |
+
+### fpe (format-preserving encryption)
+
+Encrypts in place while keeping the input's shape: a 16-digit account
+number stays 16 digits. `validate_luhn: true` additionally keeps the
+output Luhn-valid, all three masked values below pass a Luhn check.
+Needs a namespace. Use it when a downstream
+system validates the format of an identifier and you cannot change its
+shape.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `account_num` | `4539123456781234` | `3758195518872466` |
+| `account_num` | `4539876543211234` | `6483013958578649` |
+| `account_num` | `4539555566671234` | `5451140213131565` |
+
+### categorical
+
+Remaps values onto a fixed pool of categories. With `deterministic: true`
+and a `namespace`, the same source value always lands on the same category
+within a run. Use it to remap a low-cardinality field (status, region,
+plan tier) onto a controlled vocabulary instead of leaking the real one.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `plan` | `pro` | `scale` |
+| `plan` | `free` | `scale` |
+| `plan` | `enterprise` | `growth` |
+
+### date_shift
+
+Shifts each date by a deterministic per-value offset within a bounded
+range (`min_days` / `max_days`). The same source date always shifts to the
+same output date within a namespace. Use it for HIPAA-style date
+generalization, where relative spacing between events matters but the
+absolute date must move.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `signup_date` | `2023-04-11` | `2023-03-19` |
+| `signup_date` | `2022-11-02` | `2022-11-21` |
+| `signup_date` | `2024-01-19` | `2024-02-08` |
+
+### truncate
+
+Keeps the first (or last, with `keep: tail`) N characters; the dropped
+span is simply removed. No keying, no namespace. Use it for
+ZIP-to-N-digits generalization or "keep last 4" identifier masking.
+
+| Column | Before | After |
+| --- | --- | --- |
+| `zip` | `94107` | `941` |
+| `zip` | `73301` | `733` |
+| `zip` | `10001` | `100` |
+
+## Next
+
+Inspect any strategy's full parameter set with
+`decoy strategies inspect <name>`, and see
+[mask a CSV](/docs/how-to/mask-a-csv) for the keyed-strategy determinism
+walkthrough (same source value, same secret, byte-identical output across
+runs).

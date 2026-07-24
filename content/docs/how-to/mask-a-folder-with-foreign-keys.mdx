@@ -1,0 +1,149 @@
+---
+title: Mask a folder with foreign keys
+description: Mask two related tables in one run so the join between them survives.
+---
+
+When a parent table and a child table share a key, masking them separately
+breaks the join: `customers.customer_id` and `orders.customer_id` would each
+get remapped independently, and no order would point at the right customer
+anymore. This recipe masks both tables in one run and keeps the join intact.
+Run against `decoy` CLI 0.1.0; every command block is real output.
+
+## Prerequisites
+
+- A `customers.csv` (`customer_id, first_name, last_name, email, phone, city,
+  state, account_tier`) and an `orders.csv` (`order_id, customer_id,
+  order_date, total_amount, status`) with `orders.customer_id` referencing
+  `customers.customer_id`.
+
+## 1. Declare the relationship
+
+`pipeline.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 7
+sources:
+  customers:
+    type: file
+    format: csv
+    path: ./customers.csv
+  orders:
+    type: file
+    format: csv
+    path: ./orders.csv
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: faker
+        provider: person_email
+        namespace: customer_identity
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: phone
+        strategy: redact
+  - name: orders
+    columns:
+      - name: customer_id
+        strategy: faker
+        provider: person_email
+        namespace: customer_identity
+relationships:
+  - parent: {table: customers, columns: [customer_id]}
+    children:
+      - {table: orders, columns: [customer_id]}
+    orphan_policy: preserve
+    namespace: customer_identity
+targets:
+  customers:
+    type: file
+    format: csv
+    path: ./out/customers.csv
+  orders:
+    type: file
+    format: csv
+    path: ./out/orders.csv
+```
+
+Three things bind the two tables together:
+
+- The `customer_id` column on **both** tables declares the same `namespace`
+  (`customer_identity`).
+- The `relationships` block names the parent, the child, and repeats that
+  namespace.
+- `orphan_policy` says what to do with a child row whose key has no matching
+  parent. `preserve` leaves the orphan's key as-is; the other options are
+  `remap`, `warn`, and `fail`. See the [CLI reference](/docs/cli) `run` entry
+  for the full contract.
+
+You do not order the tables yourself: the engine builds an ordering from the
+`relationships` block so the parent is masked before its children.
+
+## 2. Validate and run
+
+```console
+$ decoy validate config pipeline.yaml
+OK pipeline.yaml
+$ decoy run pipeline.yaml
+
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      mask                                                               │
+│ Elapsed   3.15s                                                              │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+```console
+$ head -3 out/customers.csv
+customer_id,first_name,last_name,email,phone,city,state,account_tier
+jordan18@example.net,Danielle,Johnson,david26@example.net,REDACTED,South Bridget,AS,silver
+hodgerobert@example.org,Misty,Blake,williamsbelinda@example.net,REDACTED,Herrerafurt,CO,bronze
+
+$ head -3 out/orders.csv
+order_id,customer_id,order_date,total_amount,status
+5000,jessicaparker@example.net,2025-12-07,311.65,delivered
+5001,garyroberts@example.com,2025-09-22,797.11,delivered
+```
+
+## 3. Confirm the join actually survived
+
+The `customer_id` values look nothing alike between the two head samples
+above because different source customers appear on those first rows in each
+file. What matters is whether the SAME source `customer_id` maps to the SAME
+masked value on both sides. Checking every row against the source data for
+this run:
+
+```console
+$ python3 - <<'PY'
+import csv
+src_c = list(csv.DictReader(open("customers.csv")))
+src_o = list(csv.DictReader(open("orders.csv")))
+out_c = list(csv.DictReader(open("out/customers.csv")))
+out_o = list(csv.DictReader(open("out/orders.csv")))
+cmap = {s["customer_id"]: o["customer_id"] for s, o in zip(src_c, out_c)}
+omap = {s["order_id"]: (s["customer_id"], o["customer_id"]) for s, o in zip(src_o, out_o)}
+ok = bad = 0
+for oid, (src_cid, masked_cid) in omap.items():
+    (ok := ok + 1) if cmap.get(src_cid) == masked_cid else (bad := bad + 1)
+print(f"orders with correctly-remapped FK: {ok}, mismatched: {bad}, total orders: {len(omap)}")
+PY
+orders with correctly-remapped FK: 50, mismatched: 0, total orders: 50
+```
+
+All 50 orders resolved to the same masked `customer_id` their parent
+customer got. This holds for composite keys, self-referencing tables, and
+multi-hop chains too; the mechanism is the same shared `namespace`.
+
+## Next
+
+- What `orphan_policy` actually does to an unmatched child row, and how a
+  row-level masking error cascades across a relationship: see the
+  [CLI reference](/docs/cli) `run` and `validate` entries.
+- Cutting a small, referentially-intact slice instead of masking the whole
+  folder is an engine-core capability without a CLI verb yet; not covered
+  here.
+- Gating a folder mask like this one in a pipeline: see
+  [use Decoy in CI](/docs/how-to/use-decoy-in-ci).

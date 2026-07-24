@@ -1,0 +1,1443 @@
+---
+title: YAML schema reference
+description: The JSON Schema for a pipeline YAML config, generated from decoy schema.
+---
+
+`decoy schema` prints the full JSON Schema for a pipeline config
+(`PipelineConfig`), generated from the same Pydantic models
+`decoy validate config` and `decoy run` validate against, not hand-maintained
+separately. Point an editor's YAML/JSON Schema support at it for
+autocomplete and inline validation, or read the collapsed reference below.
+
+```console
+$ decoy schema > pipeline.schema.json
+```
+
+Regenerate it any time; this page is a snapshot from `decoy` 0.1.0 /
+`decoy-engine` 0.4.0 and can drift from a newer install. `decoy schema` is
+the source of truth, not this page.
+
+## Top-level shape
+
+A pipeline config (`PipelineConfig`) has these top-level keys:
+
+| Key | Required | Type | What it is |
+| --- | --- | --- | --- |
+| `version` | yes | `1` (const) | Schema version. Currently always `1`. |
+| `global_settings` | yes | `GlobalSettings` | Seed, mask secret reference, and pipeline-wide policy knobs. |
+| `sources` | no | map of name to source | `type: file`, `s3`, or `gcs` (discriminated on `type`). See [connectors](/docs/connectors). |
+| `tables` | yes | list of `TableConfig` | One entry per mask or generate table. At least one required. |
+| `relationships` | no | list of `RelationshipConfig` | Foreign-key edges between tables (parent, children, orphan policy). |
+| `targets` | yes | map of name to target | `type: file`, `s3`, or `gcs`. At least one required. |
+| `namespaces` | no | map of name to `NamespaceConfig` | Explicit namespace declarations, mostly informational; most namespaces are declared implicitly by column config. |
+| `run_storm` | no | boolean, default `false` | Run a STORM scan as part of this pipeline. |
+| `validators` | no | list of `ValidatorEntry` | Post-run checks: `luhn`, `fk_intact`, `leak_check`, `regex_match`, and others. |
+| `quarantine` | no | `QuarantineConfig` or `null` | Route rows that fail a wired trigger to a side file instead of failing the run. |
+| `subset` | no | `SubsetConfig` or `null` | FK-aware referential subsetting (`decoy subset`). |
+
+Every object in this schema has `additionalProperties: false`: an
+unrecognized key fails `decoy validate config` rather than being silently
+dropped, this is what makes a typo'd field name a validation error instead
+of a quiet no-op.
+
+## Key nested objects
+
+**`ColumnConfig`** (`tables[].columns[]`): one mask column. Required:
+`name`, `strategy`. Everything else, `provider`, `namespace`,
+`cardinality_mode`, `deterministic`, `scale`, `provider_config`,
+`vault`, `allow_collisions`, and more, is optional and strategy-dependent.
+See [strategy before/after](/docs/reference/strategies) for real examples.
+
+**`GenerateColumnConfig`** (`tables[].generate_columns[]`): one synthesis
+column. Required: `name`, `type` (one of `faker`, `sequence`,
+`categorical`, `formula`, `reference`, `statistical`, `derived`,
+`derived_aggregate`, `grouped_series`, `windowed_date`, `group_key`).
+Per-type parameters ride flat on the same object (`extra: allow`), not
+nested under a `config:` key.
+
+**`RelationshipConfig`** (`relationships[]`): one FK edge. `parent` and
+each entry in `children` are a `RelationshipEnd` (`table` + `columns`,
+`columns` supports composite keys). `orphan_policy` is required: one of
+`preserve`, `remap`, `warn`, `fail`.
+
+**`TableConfig`** (`tables[]`): a table is either a mask table (`columns`,
+fed by a `sources` entry) or a generate table (`generate_columns` +
+`row_count`, no source), not both. `transforms` is an ordered list of
+shaping ops (`filter`, `sort`, `limit`, `dedupe`, `derive`, `drop_column`),
+each discriminated on its own `op` field.
+
+**`GlobalSettings`**: `seed` is the only required field. `mask_secret_ref`
+is a reference (`env:NAME` or `file:/path`), never the secret itself, see
+[keys and the vault](/docs/concepts/keys-and-vault).
+
+## Full schema
+
+<details>
+<summary>Full JSON Schema (PipelineConfig, generated from `decoy schema`)</summary>
+
+```json
+{
+  "$defs": {
+    "ColumnConfig": {
+      "additionalProperties": false,
+      "description": "Per-column masking declaration.\n\n`name` is the column name in the source data. `strategy` names the\nmasking strategy (open string; S4+ catalogs the values). `provider`\nnames the semantic provider; the planner validates it against\nS1_STUB_REGISTRY at compile time.\n\n`from_parent` strategy: the column is wired from a FK parent via the\nrelationship coordinator (S2). When `strategy: from_parent`, the\nrelationship coordinator owns the namespace + provider; ColumnConfig\ndeclares only the strategy + name.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "strategy": {
+          "title": "Strategy",
+          "type": "string"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "cardinality_mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "reuse",
+                "unique",
+                "match_source_cardinality",
+                "scale_source_cardinality"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cardinality Mode"
+        },
+        "deterministic": {
+          "default": false,
+          "title": "Deterministic",
+          "type": "boolean"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale"
+        },
+        "provider_config": {
+          "additionalProperties": true,
+          "title": "Provider Config",
+          "type": "object"
+        },
+        "coherent_with": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Coherent With",
+          "type": "array"
+        },
+        "backend_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "faker",
+                "mimesis",
+                "pool",
+                "decoy_native"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Backend Type"
+        },
+        "backend_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Backend Version"
+        },
+        "pool_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Size"
+        },
+        "vault": {
+          "default": false,
+          "title": "Vault",
+          "type": "boolean"
+        },
+        "allow_collisions": {
+          "default": false,
+          "title": "Allow Collisions",
+          "type": "boolean"
+        },
+        "dtype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dtype"
+        }
+      },
+      "required": [
+        "name",
+        "strategy"
+      ],
+      "title": "ColumnConfig",
+      "type": "object"
+    },
+    "DedupeOp": {
+      "additionalProperties": false,
+      "description": "Drop duplicate rows.\n\n``columns=None`` -- dedupe on ALL columns (a \"fully equal\" row).\n``columns=['a','b']`` -- dedupe on the named subset; the first row\nof each subset-equal group is kept.",
+      "properties": {
+        "op": {
+          "const": "dedupe",
+          "title": "Op",
+          "type": "string"
+        },
+        "columns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Columns"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "title": "DedupeOp",
+      "type": "object"
+    },
+    "DeriveOp": {
+      "additionalProperties": false,
+      "description": "Compute a new column from an expression.\n\n``column`` is the name of the new column; it must not already exist\non the table at the point this op runs (compile-time check). The\n``expression`` evaluates through pandas ``DataFrame.eval`` against\nthe existing columns. Example: ``revenue / users`` produces a\nper-row ARPU column.",
+      "properties": {
+        "op": {
+          "const": "derive",
+          "title": "Op",
+          "type": "string"
+        },
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        },
+        "expression": {
+          "minLength": 1,
+          "title": "Expression",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "column",
+        "expression"
+      ],
+      "title": "DeriveOp",
+      "type": "object"
+    },
+    "DropColumnOp": {
+      "additionalProperties": false,
+      "description": "Drop one or more columns by name.",
+      "properties": {
+        "op": {
+          "const": "drop_column",
+          "title": "Op",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "columns"
+      ],
+      "title": "DropColumnOp",
+      "type": "object"
+    },
+    "FileSource": {
+      "additionalProperties": false,
+      "description": "A local-filesystem CSV, Parquet, or fixed-width source.\n\n`layout` carries the column-spec for `format==\"fixed_width\"` (see\n`FixedWidthLayout` for the schema contract); it is required for\nthat format and forbidden for `csv` / `parquet`.",
+      "properties": {
+        "type": {
+          "const": "file",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet",
+            "fixed_width"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FixedWidthLayout"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Column-spec for format=='fixed_width'; required for that format, forbidden (must be omitted/None) for csv/parquet."
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "path"
+      ],
+      "title": "FileSource",
+      "type": "object"
+    },
+    "FileTarget": {
+      "additionalProperties": false,
+      "description": "A local-filesystem CSV or Parquet target.",
+      "properties": {
+        "type": {
+          "const": "file",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "path"
+      ],
+      "title": "FileTarget",
+      "type": "object"
+    },
+    "FilterOp": {
+      "additionalProperties": false,
+      "description": "Drop rows where the predicate is False.\n\n``expression`` runs through pandas ``DataFrame.eval`` against the\ntable's columns. Reference rows by their column name; arithmetic\n+ comparison + logical operators are supported. Example:\n``age >= 18 and country == 'US'``.",
+      "properties": {
+        "op": {
+          "const": "filter",
+          "title": "Op",
+          "type": "string"
+        },
+        "expression": {
+          "minLength": 1,
+          "title": "Expression",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "expression"
+      ],
+      "title": "FilterOp",
+      "type": "object"
+    },
+    "FixedWidthColumn": {
+      "additionalProperties": false,
+      "description": "One column of a fixed-width record layout.\n\n`start` + `width` describe the half-open byte range `[start, start\n+ width)` within each record. `pad` is the single fill character\nused to pad the value out to `width` (default space); `align`\ntells the reader which side the pad lives on and therefore which\nside to strip: `\"left\"` (default) means the value is left-justified\nwith padding on the right, so the reader `rstrip`s; `\"right\"` means\nthe value is right-justified with padding on the left, so the\nreader `lstrip`s.",
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "type": {
+          "default": "str",
+          "enum": [
+            "str",
+            "int",
+            "float"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "pad": {
+          "default": " ",
+          "maxLength": 1,
+          "minLength": 1,
+          "title": "Pad",
+          "type": "string"
+        },
+        "align": {
+          "default": "left",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "title": "Align",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "start",
+        "width"
+      ],
+      "title": "FixedWidthColumn",
+      "type": "object"
+    },
+    "FixedWidthLayout": {
+      "additionalProperties": false,
+      "description": "An ordered column-spec for a fixed-width file.\n\nSee the module docstring for the frozen design decisions (0-based\n`start`, newline-delimited record model, the `str | int | float`\ntype set). `columns` must be non-empty, every name unique, and\nevery column's `start` at or after the previous column's end\n(`start + width`) -- overlapping or out-of-order columns fail loud\nat construction time, before any file is ever read.",
+      "properties": {
+        "columns": {
+          "items": {
+            "$ref": "#/$defs/FixedWidthColumn"
+          },
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        }
+      },
+      "required": [
+        "columns"
+      ],
+      "title": "FixedWidthLayout",
+      "type": "object"
+    },
+    "GCSSource": {
+      "additionalProperties": false,
+      "description": "A Google Cloud Storage CSV / Parquet source.\n\nStructural mirror of S3Source. GCS uses `object` instead of `key` to\nmatch the GCS API surface (`bucket.object_name` vs S3 `bucket.key`).",
+      "properties": {
+        "type": {
+          "const": "gcs",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "object": {
+          "minLength": 1,
+          "title": "Object",
+          "type": "string"
+        },
+        "credentials_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Opaque credentials identifier the platform resolves at run time. The engine never sees raw secrets; when None the SDK uses GCP ADC (Application Default Credentials).",
+          "title": "Credentials Ref"
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "bucket",
+        "object"
+      ],
+      "title": "GCSSource",
+      "type": "object"
+    },
+    "GCSTarget": {
+      "additionalProperties": false,
+      "description": "A Google Cloud Storage CSV / Parquet target.\n\nSymmetric with `GCSSource`. Atomic-move pattern at the platform layer\nmirrors `S3Target`.",
+      "properties": {
+        "type": {
+          "const": "gcs",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "object": {
+          "minLength": 1,
+          "title": "Object",
+          "type": "string"
+        },
+        "credentials_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Opaque credentials identifier the platform resolves at run time. The engine never sees raw secrets; when None the SDK uses GCP ADC (Application Default Credentials).",
+          "title": "Credentials Ref"
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "bucket",
+        "object"
+      ],
+      "title": "GCSTarget",
+      "type": "object"
+    },
+    "GenerateColumnConfig": {
+      "additionalProperties": true,
+      "description": "A synthesis (generation) column declaration (S6).\n\nMirrors V1's generate column shape (decoy_engine.generators.columns): ``type``\nselects the generator (``faker`` / ``sequence`` / ``categorical`` / ``formula`` --\nthe V1 ``ColumnGenerator.generators`` keys), and the per-type params\n(``faker_type``, ``start``, ``step``, ``values``, ``expr``, ...) ride FLAT on\nthe column, exactly as V1 reads them (``column_config.get(\"faker_type\")``).\n``extra=\"allow\"`` carries those flat params so the front-end emit and the V1\nparity oracle line up (Reading B). S6-ENG-1 ships the spine + ``sequence``;\nS6-ENG-2 adds the remaining parity-frozen generators.\n\nNOTE (Dennis S6-ENG-1 gate, Q-S6-1): ``extra=\"allow\"`` here is the deliberate\nmirror-V1-flat choice over a stricter nested ``config: dict`` under\n``extra=\"forbid\"`` -- flagged for the gate.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "faker",
+            "sequence",
+            "categorical",
+            "formula",
+            "reference",
+            "statistical",
+            "derived",
+            "derived_aggregate",
+            "grouped_series",
+            "windowed_date",
+            "group_key"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "GenerateColumnConfig",
+      "type": "object"
+    },
+    "GlobalSettings": {
+      "additionalProperties": false,
+      "description": "Pipeline-wide settings.\n\n`seed` is the job-level seed material (S1 stub derivation; S3 swaps\nin real HMAC-keyed material). `post_validation` opts the pipeline\ninto post-mask invariant checks per the operating model \u00a7Validation\nrequirements. `on_pool_exhaustion` drives the planner's pool-capacity\npre-flight (read via `global_settings.get(\"on_pool_exhaustion\")` in\nplan-compile); default `scale_up` matches the engine default.\n`fidelity_warn_threshold` drives the generation-time fidelity\nwarn-gate: statistical generate columns are scored against their\nsource snapshot after generation and a warning is logged when the\noverall fidelity score falls below this value (warn-only; never\nfails the run or changes output bytes).\n`unconfigured_column_policy` (DE-03) drives the fail-closed output\nprojection: `error` rejects any output column the plan does not\ndeclare a strategy for; `warn` lets it pass through with a structured\nwarning. Unset defaults to the release phase (`warn` pre-GA migration\nwindow, `error` at GA); an explicit value here overrides that. See\n`execution/_output_projection.resolve_unconfigured_column_policy`.\n`mask_secret_ref` (DE-02) is a REFERENCE to the keyed-mask secret --\nnever the secret itself. Two ref kinds are supported: `env:NAME`\n(resolved from an environment variable) and `file:/PATH` (resolved\nfrom a file's contents), each hex- or base64-decoded to >=32 raw\nbytes. The engine resolves it at the run edge into a\n`SecretKeyProvider` and NEVER serializes the raw secret into the plan,\na log, or the manifest. A programmatically supplied\n`run(key_provider=...)` takes precedence over this ref. Unset means no\nsecret: pre-GA the keyed surface falls back to `job_seed`\n(byte-identical to today); at GA a keyed plan with no secret\nhard-errors. See `decoy_engine.keyprovider`.",
+      "properties": {
+        "seed": {
+          "title": "Seed",
+          "type": "integer"
+        },
+        "post_validation": {
+          "default": false,
+          "title": "Post Validation",
+          "type": "boolean"
+        },
+        "on_pool_exhaustion": {
+          "default": "scale_up",
+          "enum": [
+            "fail",
+            "scale_up",
+            "fall_back"
+          ],
+          "title": "On Pool Exhaustion",
+          "type": "string"
+        },
+        "fidelity_warn_threshold": {
+          "default": 0.8,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Fidelity Warn Threshold",
+          "type": "number"
+        },
+        "unconfigured_column_policy": {
+          "anyOf": [
+            {
+              "enum": [
+                "warn",
+                "error"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unconfigured Column Policy"
+        },
+        "mask_secret_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mask Secret Ref"
+        }
+      },
+      "required": [
+        "seed"
+      ],
+      "title": "GlobalSettings",
+      "type": "object"
+    },
+    "LimitOp": {
+      "additionalProperties": false,
+      "description": "Cap the row count via ``df.head(n)``; rows after position ``n`` are dropped.",
+      "properties": {
+        "op": {
+          "const": "limit",
+          "title": "Op",
+          "type": "string"
+        },
+        "n": {
+          "minimum": 0,
+          "title": "N",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "op",
+        "n"
+      ],
+      "title": "LimitOp",
+      "type": "object"
+    },
+    "NamespaceConfig": {
+      "additionalProperties": false,
+      "description": "One explicitly-declared namespace binding.",
+      "properties": {
+        "declared_by": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Declared By",
+          "type": "array"
+        }
+      },
+      "title": "NamespaceConfig",
+      "type": "object"
+    },
+    "QuarantineConfig": {
+      "additionalProperties": false,
+      "description": "The ``quarantine:`` block in the pipeline config.\n\nWhen ``enabled`` is ``True`` and a configured ``trigger`` fires, the\noffending row is written to ``output_path`` instead of the main output.\nThe job continues and completes successfully.\n\nSupported triggers (all three accepted):\n  - ``validation_fail``: row failed a job-level validator.\n  - ``format_error``: a ``bucketize`` /\n    ``date_shift`` cell could not be coerced/parsed under its declared\n    strategy.\n  - ``mask_error``: a ``code_set``\n    ``chapter_preserve`` value could not be masked (input chapter absent\n    from the corpus, or a sole-member chapter bucket).\n\nAny trigger name outside the supported set is rejected at config\nvalidation (a silent no-op is refused up front).\n\nExample YAML::\n\n    quarantine:\n      enabled: true\n      output_path: /mnt/quarantine/run-2026-06-27.jsonl\n      triggers:\n        - validation_fail\n        - format_error\n        - mask_error",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "output_path": {
+          "default": "",
+          "title": "Output Path",
+          "type": "string"
+        },
+        "triggers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Triggers",
+          "type": "array"
+        }
+      },
+      "title": "QuarantineConfig",
+      "type": "object"
+    },
+    "RelationshipConfig": {
+      "additionalProperties": false,
+      "description": "One FK relationship: parent + one or more children + policy + namespace.\n\n`orphan_policy` is required (there is no default). It must be one of the\nfour valid values.",
+      "properties": {
+        "parent": {
+          "$ref": "#/$defs/RelationshipEnd"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/$defs/RelationshipEnd"
+          },
+          "minItems": 1,
+          "title": "Children",
+          "type": "array"
+        },
+        "orphan_policy": {
+          "enum": [
+            "preserve",
+            "remap",
+            "warn",
+            "fail"
+          ],
+          "title": "Orphan Policy",
+          "type": "string"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        }
+      },
+      "required": [
+        "parent",
+        "children",
+        "orphan_policy"
+      ],
+      "title": "RelationshipConfig",
+      "type": "object"
+    },
+    "RelationshipEnd": {
+      "additionalProperties": false,
+      "description": "One side of a relationship (parent or child).\n\n`columns` is a list (length 1 for single-column FKs; length >1 for\ncomposite-key FKs). Mirrors the S2 B2 resolution exactly.",
+      "properties": {
+        "table": {
+          "title": "Table",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        }
+      },
+      "required": [
+        "table",
+        "columns"
+      ],
+      "title": "RelationshipEnd",
+      "type": "object"
+    },
+    "S3Source": {
+      "additionalProperties": false,
+      "description": "An S3 (or S3-compatible) CSV / Parquet source.\n\nCompatible with real AWS S3 plus any S3-compatible service that accepts\na custom `endpoint_url` (MinIO, Cloudflare R2, Wasabi, B2). The engine\nfetches the object once into a buffer + reads into Arrow; no streaming\nin the V1 spec because the masked output is in-memory anyway.",
+      "properties": {
+        "type": {
+          "const": "s3",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "key": {
+          "minLength": 1,
+          "title": "Key",
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "endpoint_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the AWS endpoint (e.g. http://localhost:9000 for MinIO, https://<account>.r2.cloudflarestorage.com for Cloudflare R2). Leave None for real AWS S3.",
+          "title": "Endpoint Url"
+        },
+        "credentials_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Opaque credentials identifier the platform resolves at run time. The engine never sees raw secrets; when None the SDK walks its default credential chain (env vars / instance profile / etc.).",
+          "title": "Credentials Ref"
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "bucket",
+        "key"
+      ],
+      "title": "S3Source",
+      "type": "object"
+    },
+    "S3Target": {
+      "additionalProperties": false,
+      "description": "An S3 (or S3-compatible) CSV / Parquet target.\n\nSymmetric with `S3Source`. The platform writes via the atomic-move\npattern (Q12 carry): upload to `<key>.<job_id>.tmp`, server-side\n`copy_object` to the canonical key on verify, then delete the tmp.\nA mid-upload failure leaves the canonical key untouched.",
+      "properties": {
+        "type": {
+          "const": "s3",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "csv",
+            "parquet"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "key": {
+          "minLength": 1,
+          "title": "Key",
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "endpoint_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the AWS endpoint (e.g. http://localhost:9000 for MinIO, https://<account>.r2.cloudflarestorage.com for Cloudflare R2). Leave None for real AWS S3.",
+          "title": "Endpoint Url"
+        },
+        "credentials_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Opaque credentials identifier the platform resolves at run time. The engine never sees raw secrets; when None the SDK walks its default credential chain (env vars / instance profile / etc.).",
+          "title": "Credentials Ref"
+        }
+      },
+      "required": [
+        "type",
+        "format",
+        "bucket",
+        "key"
+      ],
+      "title": "S3Target",
+      "type": "object"
+    },
+    "SortOp": {
+      "additionalProperties": false,
+      "description": "Sort rows by one or more columns.\n\n``ascending`` is per-column; if a single bool is provided it\napplies to all ``by`` entries. Default is True for all columns.\nSort is stable -- equal-key rows retain their input order.",
+      "properties": {
+        "op": {
+          "const": "sort",
+          "title": "Op",
+          "type": "string"
+        },
+        "by": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "By",
+          "type": "array"
+        },
+        "ascending": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "boolean"
+              },
+              "type": "array"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "default": true,
+          "title": "Ascending"
+        }
+      },
+      "required": [
+        "op",
+        "by"
+      ],
+      "title": "SortOp",
+      "type": "object"
+    },
+    "SubsetBudgetConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "max_total_rows": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Total Rows"
+        },
+        "max_table_seed_multiple": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Table Seed Multiple"
+        }
+      },
+      "title": "SubsetBudgetConfig",
+      "type": "object"
+    },
+    "SubsetConfig": {
+      "additionalProperties": false,
+      "description": "The `subset:` block. Requires at least one seed (an empty subset job is not meaningful).",
+      "properties": {
+        "seeds": {
+          "items": {
+            "$ref": "#/$defs/SubsetSeedConfig"
+          },
+          "minItems": 1,
+          "title": "Seeds",
+          "type": "array"
+        },
+        "budget": {
+          "$ref": "#/$defs/SubsetBudgetConfig"
+        },
+        "edge_directions": {
+          "additionalProperties": {
+            "enum": [
+              "both",
+              "downward",
+              "upward",
+              "none"
+            ],
+            "type": "string"
+          },
+          "title": "Edge Directions",
+          "type": "object"
+        },
+        "allow_dangling": {
+          "default": false,
+          "title": "Allow Dangling",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "seeds"
+      ],
+      "title": "SubsetConfig",
+      "type": "object"
+    },
+    "SubsetPredicateConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "eq",
+            "ne",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "in",
+            "is_null",
+            "is_not_null"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "column",
+        "op"
+      ],
+      "title": "SubsetPredicateConfig",
+      "type": "object"
+    },
+    "SubsetSeedConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "table": {
+          "title": "Table",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "sample",
+            "filter",
+            "keys"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "key_columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Key Columns",
+          "type": "array"
+        },
+        "fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fraction"
+        },
+        "count": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Count"
+        },
+        "predicates": {
+          "items": {
+            "$ref": "#/$defs/SubsetPredicateConfig"
+          },
+          "title": "Predicates",
+          "type": "array"
+        },
+        "keys": {
+          "items": {
+            "items": {},
+            "type": "array"
+          },
+          "title": "Keys",
+          "type": "array"
+        }
+      },
+      "required": [
+        "table",
+        "mode"
+      ],
+      "title": "SubsetSeedConfig",
+      "type": "object"
+    },
+    "TableConfig": {
+      "additionalProperties": false,
+      "description": "Per-table declaration.\n\nA table is EITHER a MASK table (``columns`` of mask ColumnConfig, fed by a\nsource) OR a GENERATE table (``generate_columns`` + ``row_count``, no source),\nenforced by the validator below. ``columns`` was ``min_length=1``; it is now\nvalidated CONDITIONALLY so a generate table can omit it. The mask path is\nunchanged when no generation fields are set.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "$ref": "#/$defs/ColumnConfig"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "row_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Row Count"
+        },
+        "generate_columns": {
+          "items": {
+            "$ref": "#/$defs/GenerateColumnConfig"
+          },
+          "title": "Generate Columns",
+          "type": "array"
+        },
+        "transforms": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "dedupe": "#/$defs/DedupeOp",
+                "derive": "#/$defs/DeriveOp",
+                "drop_column": "#/$defs/DropColumnOp",
+                "filter": "#/$defs/FilterOp",
+                "limit": "#/$defs/LimitOp",
+                "sort": "#/$defs/SortOp"
+              },
+              "propertyName": "op"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/FilterOp"
+              },
+              {
+                "$ref": "#/$defs/SortOp"
+              },
+              {
+                "$ref": "#/$defs/LimitOp"
+              },
+              {
+                "$ref": "#/$defs/DedupeOp"
+              },
+              {
+                "$ref": "#/$defs/DeriveOp"
+              },
+              {
+                "$ref": "#/$defs/DropColumnOp"
+              }
+            ]
+          },
+          "title": "Transforms",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "TableConfig",
+      "type": "object"
+    },
+    "ValidatorEntry": {
+      "additionalProperties": false,
+      "description": "One validator in the ``validators:`` list.\n\n``name`` must match one of the built-in validator names (luhn, npi, iban,\nvin, fk_intact, no_orphan_children, leak_check, regex_match,\ncolumn_in_set, parent_window_respected, reconciliation_holds). Unknown\nnames are rejected at runtime by the validator registry with a\n``ValueError`` naming the offending validator and listing the known\nnames.\n\n``columns`` carries the per-table column lists for check-digit validators\n(luhn, npi, iban, vin) and the generic validators (regex_match,\ncolumn_in_set). FK and relationship validators (fk_intact,\nno_orphan_children, parent_window_respected, reconciliation_holds) read\nthe ``relationships:`` block from the top-level config; ``columns`` is\nunused for them.\n\n``params`` is a free-form per-validator knob\nbag: leak_check's ``exempt``/``max_identical_ratio``/``min_rows``,\nregex_match's ``pattern``, column_in_set's ``allowed_values``/\n``allow_null``, and the relationship validators' edge + tolerance\nparameters all live here. Each validator validates its own ``params`` at\nrun time with a loud ``ValueError`` naming the validator and the\noffending key -- a discriminated per-validator pydantic schema would\ncouple the config schema to the registry contents and force a schema\nrelease for every future validator. Additive: existing\nconfigs with no ``params`` key are unaffected (default empty dict).\n\nExample YAML::\n\n    validators:\n      - name: luhn\n        columns:\n          orders: [credit_card_number]\n      - name: fk_intact\n      - name: leak_check\n        columns:\n          orders: [card_number, email]\n        params:\n          max_identical_ratio: 0.02",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "columns": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Columns",
+          "type": "object"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ValidatorEntry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Strict, validated pipeline configuration.\n\nCallers do:\n\n    cfg_dict = PipelineConfig.model_validate(parsed_yaml).model_dump()\n\nand hand `cfg_dict` to `profile_source` and `compile_plan`. The\nengine functions do not re-validate. Validation is a one-time event\nat the choke-point.",
+  "properties": {
+    "version": {
+      "const": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "global_settings": {
+      "$ref": "#/$defs/GlobalSettings"
+    },
+    "sources": {
+      "additionalProperties": {
+        "discriminator": {
+          "mapping": {
+            "file": "#/$defs/FileSource",
+            "gcs": "#/$defs/GCSSource",
+            "s3": "#/$defs/S3Source"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/FileSource"
+          },
+          {
+            "$ref": "#/$defs/S3Source"
+          },
+          {
+            "$ref": "#/$defs/GCSSource"
+          }
+        ]
+      },
+      "title": "Sources",
+      "type": "object"
+    },
+    "tables": {
+      "items": {
+        "$ref": "#/$defs/TableConfig"
+      },
+      "minItems": 1,
+      "title": "Tables",
+      "type": "array"
+    },
+    "relationships": {
+      "items": {
+        "$ref": "#/$defs/RelationshipConfig"
+      },
+      "title": "Relationships",
+      "type": "array"
+    },
+    "targets": {
+      "additionalProperties": {
+        "discriminator": {
+          "mapping": {
+            "file": "#/$defs/FileTarget",
+            "gcs": "#/$defs/GCSTarget",
+            "s3": "#/$defs/S3Target"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/FileTarget"
+          },
+          {
+            "$ref": "#/$defs/S3Target"
+          },
+          {
+            "$ref": "#/$defs/GCSTarget"
+          }
+        ]
+      },
+      "minProperties": 1,
+      "title": "Targets",
+      "type": "object"
+    },
+    "namespaces": {
+      "additionalProperties": {
+        "$ref": "#/$defs/NamespaceConfig"
+      },
+      "title": "Namespaces",
+      "type": "object"
+    },
+    "run_storm": {
+      "default": false,
+      "title": "Run Storm",
+      "type": "boolean"
+    },
+    "validators": {
+      "items": {
+        "$ref": "#/$defs/ValidatorEntry"
+      },
+      "title": "Validators",
+      "type": "array"
+    },
+    "quarantine": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/QuarantineConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "subset": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SubsetConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "version",
+    "global_settings",
+    "tables",
+    "targets"
+  ],
+  "title": "PipelineConfig",
+  "type": "object"
+}
+```
+
+</details>
+
+## Next
+
+See [strategy before/after](/docs/reference/strategies) for what a
+`strategy` value actually does to data, and [connectors](/docs/connectors)
+for the `sources:` / `targets:` backends.

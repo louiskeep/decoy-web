@@ -1,0 +1,226 @@
+---
+title: Redact text with NER detection
+description: Activate named-entity recognition to detect and redact person names and locations in free text.
+draft: false
+---
+
+The `text_redact` strategy can use spaCy's named-entity recognition (NER) to automatically detect person names and location references in free text columns, then redact them. This page covers setup and usage.
+
+## What text_redact does
+
+`text_redact` replaces sensitive text spans with a placeholder:
+
+- **Input**: "Patient John Smith from Boston was admitted to Mass General"
+- **Output**: "Patient [NAME] from [LOCATION] was admitted to Mass General"
+
+NER detection is optional and off by default. Without it, `text_redact` uses pattern matching (phone numbers, email addresses, social security numbers). With NER enabled, it also detects person names and locations using the spaCy English model.
+
+## Prerequisites
+
+Install the NER extra:
+
+```console
+pip install decoy-engine[ner]
+```
+
+This pulls in spaCy and downloads the `en_core_web_sm` model. The model is ~50 MB and downloaded once on first use.
+
+If you get a warning about missing spacy model on the first run, run:
+
+```console
+python -m spacy download en_core_web_sm
+```
+
+## Configuration
+
+Enable NER in your pipeline YAML:
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+
+sources:
+  notes:
+    type: file
+    format: csv
+    path: ./clinical_notes.csv
+
+tables:
+  - name: notes
+    columns:
+      - name: note_id
+        strategy: passthrough
+      - name: clinical_text
+        strategy: text_redact
+        ner: true
+        redact_placeholder: "[REDACTED]"
+      - name: timestamp
+        strategy: passthrough
+
+targets:
+  notes:
+    type: file
+    format: csv
+    path: ./notes_redacted.csv
+```
+
+### Options
+
+- **`ner: true`**: Enable NER detection (requires `[ner]` extra). Detects PERSON and GPE (geopolitical entity, i.e., locations).
+- **`redact_placeholder`** (optional): String to replace sensitive spans. Default is `[PII]`. Use `[REDACTED]`, `[NAME]`, `[LOCATION]`, or any custom string.
+- **`redact_replacement`** (alternative to placeholder): Replace with a synthetic value (e.g., a generated name) instead of a fixed placeholder. See below.
+
+## Example: Clinical notes
+
+Input CSV:
+
+```csv
+note_id,clinical_text
+1,"Dr. Sarah Johnson examined patient John Smith (age 42) from Boston. Presenting complaint: fever for 3 days. Patient was treated at Massachusetts General Hospital."
+2,"Patient Jane Doe admitted from Springfield. Contact: 555-0123. Diagnosis: pneumonia."
+```
+
+Configuration:
+
+```yaml
+tables:
+  - name: notes
+    columns:
+      - name: clinical_text
+        strategy: text_redact
+        ner: true
+```
+
+Output:
+
+```csv
+note_id,clinical_text
+1,"Dr. [NAME] examined patient [NAME] (age 42) from [LOCATION]. Presenting complaint: fever for 3 days. Patient was treated at [LOCATION]."
+2,"Patient [NAME] admitted from [LOCATION]. Contact: [PII]. Diagnosis: pneumonia."
+```
+
+## Redact vs. replace
+
+By default, `text_redact` with NER replaces spans with a placeholder like `[NAME]`. Alternatively, replace with a generated value:
+
+```yaml
+- name: clinical_text
+  strategy: text_redact
+  ner: true
+  redact_replacement: text_mask_ner_replace_with_provider
+  replacement_provider: person_first_name
+```
+
+This replaces person names with generated first names, and locations with random city names (if using a location provider).
+
+## Entity types detected
+
+With NER enabled, Decoy detects and redacts:
+
+| Entity | Example | Redacted |
+|---|---|---|
+| PERSON | John Smith, Dr. Sarah Johnson | [NAME] or generated name |
+| GPE (location) | Boston, Massachusetts, USA | [LOCATION] or generated city |
+| PATTERN (heuristic) | 555-0123 (phone) | [PII] |
+| PATTERN (heuristic) | john@example.com (email) | [PII] |
+| PATTERN (heuristic) | 123-45-6789 (SSN) | [PII] |
+
+Pattern-based detectors always run, regardless of the NER setting.
+
+## Caveats
+
+NER is probabilistic. The spaCy model is trained on news and web text, so it may:
+
+- **Miss identifiers** (false negative): A person name written in lowercase or a specialized location not in the training data may be missed.
+- **Over-redact** (false positive): A word that looks like a name but is not (e.g., "Hope" as a verb, "Apple" as a fruit) may be flagged.
+
+For healthcare text, clinical abbreviations and specialized terminology may confuse the model. Always review a sample of redacted output to check for missed or over-redacted spans.
+
+**Best practice**: Run `text_redact` with NER as a first pass to catch common person names and places, then review the output manually or with a second detection pass.
+
+## Determinism
+
+With a fixed `global_settings.seed`, redaction is deterministic. Running the same pipeline twice produces identical output.
+
+If `redact_replacement` is used, the generated replacement (e.g., a synthetic first name) is seeded and reproducible.
+
+## Performance
+
+Enabling NER adds overhead: the spaCy model must load and process each text value. For large text columns (thousands of rows), this can add 1-3 seconds per million characters, depending on text length and hardware.
+
+For production pipelines on large datasets, consider:
+
+- Running NER on a sample and spot-checking results
+- Masking common known identifiers with patterns only (NER disabled), then reviewing
+- Processing in chunks or batch mode
+
+## Troubleshooting
+
+**Error: `ModuleNotFoundError: No module named 'spacy'`**
+
+Install the NER extra:
+
+```console
+pip install decoy-engine[ner]
+```
+
+**Error: `OSError: [E050] Can't find model 'en_core_web_sm'`**
+
+Download the spaCy model:
+
+```console
+python -m spacy download en_core_web_sm
+```
+
+**Output has too many false positives (over-redaction)**
+
+Disable NER for this column:
+
+```yaml
+- name: clinical_text
+  strategy: text_redact
+  ner: false
+```
+
+Or review and manually adjust the redaction placeholder.
+
+**Output has too many false negatives (missed identifiers)**
+
+This is common with domain-specific or non-standard text. Use a placeholder pass with NER, then add a secondary heuristic pass or manual review. Decoy's NER is intended as a first-line detection aid, not as a guarantee.
+
+## Examples
+
+### Example 1: Admit/discharge notes
+
+```yaml
+- name: discharge_summary
+  strategy: text_redact
+  ner: true
+  redact_placeholder: "[REDACTED]"
+```
+
+Input: "Patient Maria Lopez was discharged home. Follow-up with Dr. Robert Chen at Mayo Clinic."
+
+Output: "Patient [REDACTED] was discharged home. Follow-up with Dr. [REDACTED] at [REDACTED]."
+
+### Example 2: Replace with generated values
+
+```yaml
+- name: progress_notes
+  strategy: text_redact
+  ner: true
+  redact_replacement: text_mask_ner_replace_with_provider
+  replacement_provider: person_first_name
+```
+
+Input: "Patient John Doe from Chicago called to report symptoms."
+
+Output: "Patient Michael from Nashville called to report symptoms."
+
+## See also
+
+- [Mask a CSV](/docs/how-to/mask-a-csv): basic masking recipe
+- [Reference: strategies](/docs/reference/strategies): full strategy catalog
+- [What Decoy cannot prove](/docs/concepts/what-we-cannot-prove): honest boundaries of NER detection

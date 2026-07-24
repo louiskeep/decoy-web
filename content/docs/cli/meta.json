@@ -1,0 +1,33 @@
+{
+  "title": "CLI reference",
+  "pages": [
+    "index",
+    "catalog",
+    "checksums",
+    "compile",
+    "demo",
+    "doctor",
+    "evidence",
+    "explain",
+    "fit",
+    "info",
+    "init",
+    "jobs",
+    "plan",
+    "preflight",
+    "profile",
+    "project",
+    "providers",
+    "report",
+    "run",
+    "schema",
+    "storm",
+    "strategies",
+    "subset",
+    "templates",
+    "unmask",
+    "validate",
+    "validators",
+    "vault"
+  ]
+}

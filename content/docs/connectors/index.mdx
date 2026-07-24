@@ -1,0 +1,70 @@
+---
+title: Connectors and formats
+description: The file, S3, and GCS backends a Decoy pipeline can name as a source or target.
+---
+
+A pipeline's `sources:` and `targets:` blocks each name a `type`: `file`,
+`s3`, or `gcs`. All three share the same shape everywhere else in the
+config, the column list, strategies, relationships, and validators do not
+change based on where the bytes come from or go.
+
+## file
+
+Reads and writes CSV, Parquet, or fixed-width files on the local
+filesystem. This is the only backend the standalone `decoy run` command
+moves data through today: it reads every `type: file` source into memory
+and writes every `type: file` target back out, in full, for the mask or
+generate run. See [mask a CSV](/docs/how-to/mask-a-csv) for a worked
+example.
+
+```yaml
+sources:
+  customers:
+    type: file
+    format: csv
+    path: ./customers.csv
+targets:
+  customers:
+    type: file
+    format: csv
+    path: ./customers_masked.csv
+```
+
+## s3 and gcs
+
+The pipeline schema also accepts `type: s3` and `type: gcs` source and
+target blocks, shown on their own pages: [S3](/docs/connectors/s3),
+[GCS](/docs/connectors/gcs). Both validate with `decoy validate config` and
+both formats are `csv` or `parquet` only, no fixed-width.
+
+<Callout type="warn" title="decoy run does not move cloud data yet">
+  As of `decoy` 0.1.0 / `decoy-engine` 0.4.0, the standalone CLI's `run`
+  command only materializes `type: file` sources and targets. A `type: s3`
+  or `type: gcs` block in a config you run directly with `decoy run` will
+  not be read from or written to the cloud object: the CLI's local source
+  loader looks for a `path` field, which S3 and GCS sources do not have.
+  These blocks are the same shape a Decoy platform-managed run consumes
+  (the platform resolves credentials and streams the object on your
+  behalf); for a CLI-only workflow today, download the source to a local
+  file, mask it with `type: file`, and upload the result yourself.
+</Callout>
+
+## sftp
+
+The engine ships an SFTP connector (`decoy_engine.connectors.sftp`, behind
+the optional `sftp` extra) with password and private-key auth. It is not
+wired into pipeline YAML: `sources:` and `targets:` only accept `file`,
+`s3`, and `gcs` as a `type`. See [SFTP](/docs/connectors/sftp) for what
+exists today and what a `type: sftp` block currently does when you try it.
+
+## Credentials
+
+Neither S3 nor GCS pipeline blocks carry an access key, secret key, or
+service-account JSON field, the schema forbids unknown fields
+(`additionalProperties: false`), and those fields are not in it. Both
+backends resolve credentials from the environment: the AWS SDK's default
+credential chain for S3 (`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`,
+`~/.aws/credentials`, an instance profile) and Application Default
+Credentials for GCS (`GOOGLE_APPLICATION_CREDENTIALS`, `gcloud auth login`,
+a GCE/GKE metadata service). See each connector's page for the full field
+list.
