@@ -1,10 +1,10 @@
 ---
 title: Work with healthcare code sets
-description: Use ICD-10, HCPCS, MS-DRG, and custom code set columns for masking and generation.
+description: Use ICD-10, HCPCS, NDC, and custom code set columns for masking and generation.
 draft: false
 ---
 
-Decoy includes public-domain healthcare code sets (ICD-10-CM, ICD-10-PCS, HCPCS Level II, MS-DRG) and lets you upload your own. This page covers how to configure and use code set columns.
+Decoy includes public-domain healthcare code sets (ICD-10-CM, HCPCS Level II, NDC) and lets you upload your own. This page covers how to configure and use code set columns.
 
 ## What is a code set column?
 
@@ -16,16 +16,15 @@ A code set column contains standardized medical codes (diagnoses, procedures, bi
 
 ## Built-in code sets
 
-Decoy ships five code set corpora:
+Decoy ships three healthcare code set corpora:
 
 | Code Set | Type | Codes | Use Case |
 |---|---|---|---|
 | ICD-10-CM | Diagnosis | 74,719 | Outpatient/inpatient diagnoses |
-| ICD-10-PCS | Procedure | 79,115 | Hospital procedures |
 | HCPCS Level II | Service/Supply | 8,725 | Outpatient procedures, durable medical equipment |
-| MS-DRG | Grouper | 772 | Inpatient billing group |
+| NDC | Drug | 217,019 | Prescription and OTC medications |
 
-All are public domain (no license restrictions). Each corpus includes optional chapter/section organization for hierarchical masking.
+All are public domain (no license restrictions). Each corpus includes optional chapter organization for hierarchical masking (ICD-10-CM only; HCPCS and NDC are flat).
 
 ## Mask with a code set
 
@@ -51,9 +50,9 @@ tables:
       - name: diagnosis_code
         strategy: code_set
         corpus: shipped:icd_10_cm
-      - name: procedure_code
+      - name: drug_code
         strategy: code_set
-        corpus: shipped:icd_10_pcs
+        corpus: shipped:ndc
 
 targets:
   claims:
@@ -198,9 +197,9 @@ tables:
       - name: diagnosis_code
         strategy: code_set  # Can be different code set (if justified)
         corpus: shipped:icd_10_cm
-      - name: procedure_code
+      - name: drug_code
         strategy: code_set
-        corpus: shipped:icd_10_pcs
+        corpus: shipped:ndc
     references:
       - parent_table: diagnoses
         parent_key: [patient_id, diagnosis_code]
@@ -225,12 +224,12 @@ Mask diagnosis codes, keeping frequency distribution and chapter:
 
 ### Pattern: High-cardinality generation
 
-Generate procedure codes, retaining all observed codes:
+Generate drug codes, retaining all observed codes:
 
 ```yaml
-- name: procedure_code
+- name: drug_code
   type: statistical
-  corpus: shipped:icd_10_pcs
+  corpus: shipped:ndc
   high_cardinality: true
   allow_real_categories: true
 ```

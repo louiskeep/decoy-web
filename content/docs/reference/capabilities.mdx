@@ -6,7 +6,7 @@ draft: false
 
 This page is a complete reference of what Decoy can do. For task-oriented guides, see [how-to](/docs/how-to).
 
-## Masking strategies (23)
+## Masking strategies (24)
 
 Replace sensitive values while preserving row alignment and (when configured) referential integrity across tables.
 
@@ -36,14 +36,13 @@ Replace sensitive values while preserving row alignment and (when configured) re
 | `grouped_series` | real + sequence → offset series | Offset a sequence per group (order IDs) |
 | `top_code` | real + age → generalized | Age >89 → "90+" (HIPAA Safe Harbor) |
 
-## Generation types (12)
+## Generation types (11)
 
 Synthetic column types for generating new rows.
 
 | Type | Generates | Fitted | Use case |
 |---|---|---|---|
 | `statistical` | real-like values | yes | Match source distribution |
-| `distribution` | from inline snapshot | no | Manual distribution definition |
 | `categorical` | from categories | no | Weighted or uniform categories |
 | `faker` | plausible values | no | Names, emails, IDs (Faker providers) |
 | `formula` | computed values | no | Hash, concat, truncate (DSL) |
@@ -82,19 +81,18 @@ Standalone value generators (primarily for `faker` strategy / `faker` generation
 - `uuid4` (random UUID)
 - And 10+ composite types (person, address, city_state_zip, etc.)
 
-## Healthcare code sets (5)
+## Code sets (4)
 
 Shipped public-domain corpora for masking and generation.
 
 | Code Set | Count | Type | Chapter Support | Source | License |
 |---|---|---|---|---|---|
 | ICD-10-CM | 74,719 | Diagnosis | Yes (22 chapters) | CDC FY2026 | Public domain |
-| ICD-10-PCS | 79,115 | Inpatient Procedure | Yes (17 sections) | CMS FY2026 | Public domain |
 | HCPCS Level II | 8,725 | Outpatient Procedure / Supply | No | CMS ANWEB | Public domain |
-| MS-DRG | 772 | Inpatient Payment Grouper | No | CMS v43.0 | Public domain |
 | NDC | 217,019 | Drug | No | FDA Directory | Public domain |
+| MCC | 112 | Merchant Category (Financial) | No | ISO 18245 | Public domain |
 
-All are opt-in (not bundled in the wheel). Activate via ETL fetch command or supply your own custom code sets.
+The first three are healthcare code sets. MCC (Merchant Category Codes) is a financial/merchant set for billing and transaction classification. All are opt-in (not bundled in the wheel). Activate via ETL fetch command or supply your own custom code sets.
 
 ## Differential privacy (1 feature)
 
@@ -102,17 +100,6 @@ Marginal differential privacy on generated synthetic data.
 
 - **Marginal DP**: Per-column privacy via OpenDP mechanisms + Google composition. Numeric and categorical columns only. Configured via `global_settings.dp` with epsilon/delta budget and required `column_schema` declarations. Generates rows from a DP-noisy snapshot. Does not cover masked output, dates, free text, or joint distributions.
 
-## Data transformation operations (6)
-
-Pre-mask or post-generation transformations.
-
-| Operation | Input → Output | Use case |
-|---|---|---|
-| `slice(s, start[, end])` | String substring | Extract first/last N chars |
-| `concat(a, b, c, ...)` | Concatenate strings | Composite IDs |
-| `truncate` | Text prefix | Keep first N chars |
-| `bucketize` | Numeric range | Age binning |
-| `top_code` | Age +threshold → generalize | Age >89 → "90+" |
 
 ## Compliance presets (10)
 

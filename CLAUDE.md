@@ -8,7 +8,7 @@ Use [README.md](README.md) for the high-level "what ships here" overview, and [C
 
 The marketing site has no backend, no auth, no customer data. The rules that matter most here are about content accuracy and design discipline:
 
-- Marketing claims that outrun product capability are the chronic risk on this surface. The capability surface (13 mask strategies, 5 generate column types, 6 transform ops, 34 providers) is the source of truth; new claims must check against it.
+- Marketing claims that outrun product capability are the chronic risk on this surface. The capability surface (24 mask strategies, 11 generate types, 34 providers) is the source of truth; new claims must check against it. There is no separate transform-ops registry (transformations are implementations reused by mask strategies).
 - Performance claims trace to dated benchmarks. Any claim ("X rows per second", "Y latency") must link to a dated benchmark file in the engine's `tests/benchmark/calibration/`. Claims older than one engine release get a "last measured on" annotation.
 - Comments explain why, not what.
 - No em-dashes in repo content (U+2014 banned project-wide).

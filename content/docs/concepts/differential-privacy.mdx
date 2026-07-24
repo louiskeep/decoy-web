@@ -11,7 +11,7 @@ Decoy supports **marginal differential privacy** when you generate synthetic dat
 When you run `decoy fit --epsilon` (or set `global_settings.dp` in a pipeline), the engine:
 
 1. Reads your source data once
-2. Builds a distribution snapshot with **noise added** to protect column statistics
+2. Measures a distribution snapshot for each declared typed carrier (numeric, categorical, or flag columns) with noise added to protect column statistics
 3. Generates synthetic rows by sampling from the noisy snapshot
 4. Provides a formal privacy guarantee under the *add-or-remove-one-row* model
 
@@ -96,7 +96,7 @@ targets:
 
 Key points:
 
-- **`column_schema` is required.** You must declare upfront which columns get DP protection, their type (numeric or categorical), and their domain (min/max for numeric, category list for categorical). Inferring the domain from the data itself leaks information at zero budget.
+- **`column_schema` is required.** You declare each typed carrier (numeric, categorical, or flag column) you want DP protection for, with its type and domain (min/max for numeric, category list for categorical). Inferring the domain from the data itself leaks information at zero budget.
 - **`allow_real_categories: false`** prevents the engine from releasing actual category names from your data. When set to false, high-frequency categories are generalized.
 - **Numeric and categorical only.** Dates, free text, and complex types are not supported under DP; use non-DP generation types for these.
 
