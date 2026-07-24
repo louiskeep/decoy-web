@@ -1,0 +1,185 @@
+---
+title: High-cardinality categorical columns
+description: Generate and preserve columns with thousands of distinct categories like diagnosis codes or SKUs.
+draft: false
+---
+
+By default, Decoy treats columns with many distinct values (>30) as free text during generation: it learns text length only, not vocabulary. For structured high-cardinality data like diagnosis codes or product SKUs, you can opt in to retain the full vocabulary and frequency distribution.
+
+## The problem: high cardinality
+
+A healthcare or retail dataset often has columns with thousands of distinct values:
+
+- ICD-10 diagnosis codes: 74,000+ codes
+- SKU or product codes: 10,000+ identifiers
+- Customer IDs: millions of values
+
+By default, Decoy's `fit` command detects these as high-cardinality and reclassifies them from categorical to freetext (length-preserving only). This is a safety measure: retaining 74,000 distinct values in memory requires significant resources and may not improve data utility.
+
+For some datasets, this is fine. For others, you want the full vocabulary in the synthetic output.
+
+## Opt in with high_cardinality: true
+
+When generating a column, declare `high_cardinality: true` to force retention of all observed values:
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+
+sources:
+  claims:
+    type: file
+    format: csv
+    path: ./claims.csv
+
+tables:
+  - name: claims
+    row_count: 10000
+    generate_columns:
+      - name: diagnosis_code
+        type: statistical
+        high_cardinality: true
+        allow_real_categories: true
+```
+
+With both flags set:
+- `high_cardinality: true`: Force categorical, retaining all observed codes
+- `allow_real_categories: true`: Preserve observed frequency (if code I10 appeared 50 times, it appears at roughly 50/n in the output)
+
+## Limits and safety
+
+Retaining high-cardinality vocabulary is memory-intensive. Decoy enforces two hard limits:
+
+| Limit | Value | Why |
+|---|---|---|
+| Distinct values | 100,000 | Beyond this, memory use becomes prohibitive |
+| Combined label size | 16 MiB | UTF-8 encoded labels cannot exceed 16 MiB total |
+
+If your data exceeds either limit, the job fails with a typed error, not silent truncation.
+
+Additionally, `high_cardinality` columns must be:
+- String type (UTF-8 encodable)
+- Non-ambiguous (no values that coerce to the same string under `str()`)
+
+Numeric types (int, float) are rejected: use the `code_set` strategy for numeric codes.
+
+## When to use it
+
+Use `high_cardinality: true` for:
+- Healthcare code sets (ICD-10, HCPCS, medical codes)
+- Product SKUs or internal identifiers
+- Structured billing or claim codes
+- Domain-specific vocabularies under 100,000 distinct values
+
+Do not use for:
+- Free text (notes, descriptions, open responses)
+- Numeric columns
+- Columns with millions of distinct values
+- When the observed frequency distribution is not representative (e.g., a sample of a much larger source)
+
+## Configuration example
+
+Masking and generation with high-cardinality healthcare codes:
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+
+sources:
+  claims:
+    type: file
+    format: csv
+    path: ./claims.csv
+
+tables:
+  - name: claims
+    columns:
+      - name: claim_id
+        strategy: passthrough
+      - name: diagnosis_code
+        strategy: code_set
+        corpus: shipped:icd_10_cm
+        allow_real_categories: true
+
+  - name: procedures
+    row_count: 5000
+    references:
+      - parent_table: claims
+        parent_key: [claim_id]
+        child_key: [claim_id]
+    generate_columns:
+      - name: claim_id
+        type: reference
+        reference_table: claims
+      - name: procedure_code
+        type: statistical
+        high_cardinality: true
+        allow_real_categories: true
+
+targets:
+  claims:
+    type: file
+    format: csv
+    path: ./claims_masked.csv
+  procedures:
+    type: file
+    format: csv
+    path: ./procedures_synthetic.csv
+```
+
+## Interaction with differential privacy
+
+Under differential privacy, high-cardinality columns are not fully supported. DP measures counts per category, and with 74,000 categories, the privacy budget is consumed rapidly by composition.
+
+If you need DP protection on high-cardinality columns, declare a reduced subset of categories in your `column_schema`:
+
+```yaml
+global_settings:
+  dp:
+    epsilon: 1.0
+    delta: 1e-6
+    column_schema:
+      diagnosis_code:
+        kind: categorical
+        domain: ["I10", "E11", "J44", ...]  # Top 100 codes, not all 74k
+```
+
+This is a tradeoff: you protect the most common categories but lose privacy guarantees on rare ones. Use this approach when privacy is a requirement but high-cardinality coverage is not critical.
+
+## Troubleshooting
+
+**Error: `code_set_corpus_too_many_values` or similar**
+
+Your vocabulary exceeds 100,000 distinct values. Options:
+
+1. Set `high_cardinality: false` (default) to reclassify as freetext
+2. Use `allow_real_categories: false` to collapse rare values into `__other__`
+3. Filter your source to a representative subset
+
+**Output loses rare categories even with `high_cardinality: true`**
+
+This happens with `allow_real_categories: false` (the default). Set `allow_real_categories: true`:
+
+```yaml
+- name: diagnosis_code
+  type: statistical
+  high_cardinality: true
+  allow_real_categories: true
+```
+
+**Memory error during generation**
+
+Your vocabulary is too large or the combined UTF-8 size exceeds 16 MiB. Try:
+- Reducing the source dataset size
+- Using a reduced category list
+- Setting `allow_real_categories: false` to collapse tail categories
+
+## See also
+
+- [Work with healthcare code sets](/docs/how-to/work-with-healthcare-code-sets): code set masking and generation
+- [Generate synthetic data](/docs/how-to/generate-synthetic-data): full synthetic generation recipe
+- [Differential privacy](/docs/concepts/differential-privacy): privacy guarantees and limitations

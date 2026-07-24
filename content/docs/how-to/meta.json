@@ -5,6 +5,9 @@
     "mask-a-folder-with-foreign-keys",
     "generate-synthetic-data",
     "scan-for-pii",
-    "use-decoy-in-ci"
+    "use-decoy-in-ci",
+    "use-differential-privacy",
+    "work-with-healthcare-code-sets",
+    "redact-text-with-ner"
   ]
 }

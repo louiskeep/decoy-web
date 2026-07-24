@@ -1,0 +1,206 @@
+---
+title: Capabilities and features (0.5.0)
+description: Comprehensive inventory of masking strategies, generation types, code sets, and other features shipped in Decoy 0.5.0.
+draft: false
+---
+
+This page is a complete reference of what Decoy can do. For task-oriented guides, see [how-to](/docs/how-to).
+
+## Masking strategies (23)
+
+Replace sensitive values while preserving row alignment and (when configured) referential integrity across tables.
+
+| Strategy | Input → Output | Use case |
+|---|---|---|
+| `faker` | real → synthetic (provider) | Names, emails, addresses |
+| `hash` | real → 16-char hex digest | Deterministic anonymization |
+| `fpe` | real → in-charset masking | Preserve format (credit cards, SSNs) |
+| `redact` | real → fixed placeholder | Remove completely (ssn → `[REDACTED]`) |
+| `passthrough` | real → unchanged | Publicly safe columns |
+| `date_shift` | real → offset date | Temporal distance preserved; optionally group-anchored per entity |
+| `windowed_date` | real → random in year | Preserve calendar properties |
+| `truncate` | real → prefix | Keep first N chars (postcode → `900`) |
+| `bucketize` | real → range label | Age 45 → `[40-50)` |
+| `bucket_perturb` | real → adjacent bucket | Bounded perturbation (age 45 → 48) |
+| `categorical` | real → random category | Uniform or weighted sampling |
+| `shuffle` | real → shuffled column | Break row identity, preserve marginal |
+| `geo_generalize` | real → generalized coords | Lat/long → km-grid cell |
+| `joint_mask` | real + context → masked + joined | Preserve value pairs (city + country) |
+| `code_set` | real → valid code | Medical codes with chapter-preservation option |
+| `text_redact` | real → redacted (pattern + NER) | Find and redact PII in free text |
+| `text_mask` | real → redacted + replaced | Redact and replace with synthetic text |
+| `formula` | real + siblings → computed | Hash, concat, truncate (DSL-driven) |
+| `derived` | real + siblings → evaluated | Lark-grammar expressions with slicing, concat |
+| `derived_aggregate` | real + siblings → aggregated | Sum, count, mode across rows |
+| `group_key` | real + context → grouped | Deterministic per-group value |
+| `grouped_series` | real + sequence → offset series | Offset a sequence per group (order IDs) |
+| `top_code` | real + age → generalized | Age >89 → "90+" (HIPAA Safe Harbor) |
+
+## Generation types (12)
+
+Synthetic column types for generating new rows.
+
+| Type | Generates | Fitted | Use case |
+|---|---|---|---|
+| `statistical` | real-like values | yes | Match source distribution |
+| `distribution` | from inline snapshot | no | Manual distribution definition |
+| `categorical` | from categories | no | Weighted or uniform categories |
+| `faker` | plausible values | no | Names, emails, IDs (Faker providers) |
+| `formula` | computed values | no | Hash, concat, truncate (DSL) |
+| `derived` | evaluated values | no | Lark expressions with operators |
+| `derived_aggregate` | aggregated values | no | Sum, count, mode across rows |
+| `sequence` | auto-incrementing | no | 1, 2, 3, ... (optionally with step) |
+| `reference` | from parent pool | no | Foreign key minting (referential integrity) |
+| `group_key` | deterministic per-group | no | Same key for all rows in a group |
+| `grouped_series` | offset per-group | no | Sequence offset per group |
+| `windowed_date` | random in year | no | Calendar year preserved |
+
+## Synthetic data providers (34)
+
+Standalone value generators (primarily for `faker` strategy / `faker` generation type).
+
+**Decoy native** (deterministic, keyed, format-compliant):
+- `synthetic_ssn` (SSN, format 123-45-6789)
+- `synthetic_npi` (National Provider ID, 10 digits)
+- `synthetic_mrn` (Medical Record Number)
+- `synthetic_ndc` (National Drug Code)
+- `synthetic_icd10` (ICD-10 diagnosis code)
+- `synthetic_ein` (Employer ID)
+- `synthetic_iban` (IBAN)
+- `synthetic_cusip` (CUSIP securities ID)
+- `synthetic_pan` (Payment Card / PAN)
+
+**Faker** (via Faker library):
+- `person_first_name`, `person_last_name`, `person_full_name`
+- `person_email`, `person_phone`
+- `person_date_of_birth`
+- `address_street_name`, `address_city`, `address_state`, `address_zip`, `address_country`
+- `financial_account_number`, `financial_credit_card_number`
+- `health_plan_id`, `health_member_id`
+- `internet_url`, `internet_username`
+- `lorem_text`, `lorem_sentence`, `lorem_word`
+- `uuid4` (random UUID)
+- And 10+ composite types (person, address, city_state_zip, etc.)
+
+## Healthcare code sets (5)
+
+Shipped public-domain corpora for masking and generation.
+
+| Code Set | Count | Type | Chapter Support | Source | License |
+|---|---|---|---|---|---|
+| ICD-10-CM | 74,719 | Diagnosis | Yes (22 chapters) | CDC FY2026 | Public domain |
+| ICD-10-PCS | 79,115 | Inpatient Procedure | Yes (17 sections) | CMS FY2026 | Public domain |
+| HCPCS Level II | 8,725 | Outpatient Procedure / Supply | No | CMS ANWEB | Public domain |
+| MS-DRG | 772 | Inpatient Payment Grouper | No | CMS v43.0 | Public domain |
+| NDC | 217,019 | Drug | No | FDA Directory | Public domain |
+
+All are opt-in (not bundled in the wheel). Activate via ETL fetch command or supply your own custom code sets.
+
+## Differential privacy (1 feature)
+
+Marginal differential privacy on generated synthetic data.
+
+- **Marginal DP**: Per-column privacy via OpenDP mechanisms + Google composition. Numeric and categorical columns only. Configured via `global_settings.dp` with epsilon/delta budget and required `column_schema` declarations. Generates rows from a DP-noisy snapshot. Does not cover masked output, dates, free text, or joint distributions.
+
+## Data transformation operations (6)
+
+Pre-mask or post-generation transformations.
+
+| Operation | Input → Output | Use case |
+|---|---|---|
+| `slice(s, start[, end])` | String substring | Extract first/last N chars |
+| `concat(a, b, c, ...)` | Concatenate strings | Composite IDs |
+| `truncate` | Text prefix | Keep first N chars |
+| `bucketize` | Numeric range | Age binning |
+| `top_code` | Age +threshold → generalize | Age >89 → "90+" |
+
+## Compliance presets (10)
+
+Pre-configured field-level rule sets for common regulations.
+
+| Preset | Focus | Rules |
+|---|---|---|
+| `hipaa` | HIPAA Safe Harbor | 21 identifier rules (names, dates, addresses, etc.) |
+| `gdpr` | GDPR Article 4 | 10 personal data rules |
+| `ccpa` | CCPA PI categories | 10 rules |
+| `glba` | Financial privacy | 10 rules |
+| `pci` | PCI DSS | 10 payment card rules |
+| `sox` | Finance compliance | 9 rules |
+| `ferpa` | Student privacy | 9 rules |
+| `cpni` | Telecom data | 11 rules |
+| `pc` | Property & Casualty insurance | 12 rules |
+| `default` | Standard PII | 7 common rules |
+
+Each preset is a starting point; customize per column as needed.
+
+## Data connectors (6)
+
+Read from and write to external storage.
+
+| Connector | Read | Write | Features |
+|---|---|---|---|
+| Local file (CSV, JSON) | yes | yes | Standard format support |
+| S3 | yes | yes | Signed URLs, multipart upload, resumable download |
+| GCS | yes | yes | Signed URLs, multipart upload |
+| SFTP | yes | yes | Host key verification |
+
+## Column auto-recognition (STORM) (25)
+
+AI-assisted PII detection. Off by default; advisory only (user confirms all suggestions).
+
+Detects: ssn, npi, mrn, icd10, email, person_name, person_phone, address, us_phone, pan, iban, health_plan_id, member_id, vin, isbn13, ndc, date_of_birth, and others.
+
+## Execution routes (4)
+
+Automatic routing based on data size and memory constraints.
+
+| Route | RAM use | Speed | Best for | Supports |
+|---|---|---|---|---|
+| **In-memory (pandas)** | Full dataset | Fast | <1 GB | Masking, generation |
+| **Polars native** | Full dataset + overhead | Faster | <2 GB, prefer speed | Masking, generation |
+| **Sequential** | Per-table chunked | Medium | Medium data (1-10 GB) | Masking, generation, all strategies |
+| **Out-of-core (DuckDB)** | Configurable cap | Slower | Large data (10+ GB) | Masking, generation, spills to disk |
+
+The router automatically selects the best route based on available RAM and dataset size.
+
+## Foreign key support
+
+Referential integrity preservation across tables.
+
+- **Mask mode**: Configured orphan policies (drop invalid, remap to valid parent keys)
+- **Generate mode**: Parent-before-child compilation; mint foreign key pools from parent keys
+- **Fanout**: Configurable distribution (uniform, sequential, weighted, with optional bounds)
+- **Supported topologies**: Acyclic generate-to-generate tables only (mask-parent to generate-child is not supported in current version)
+
+## Text processing
+
+- **Pattern detection**: Email, phone, SSN, IP address, credit card patterns
+- **Named entity recognition (NER)**: Optional spaCy-backed person name and location detection (requires `[ner]` extra)
+- **Free-text strategies**: `text_redact` (replace), `text_mask` (replace with synthetic)
+
+## Determinism and keys
+
+- **Seed-based**: Fixed `global_settings.seed` produces identical output across runs
+- **Secret-based masking**: Optional `global_settings.mask_secret_ref` for confidential keying (not used in generation, affects masking only)
+- **Determinism modes**: Full reproducibility or output randomness controlled per run
+
+## Validation and safety
+
+- **Fail-closed design**: Configuration errors rejected at compile time, not silently accepted
+- **Schema validation**: YAML schema enforcement with descriptive errors
+- **Referential integrity checks**: Foreign key cycles, dangling references, and invalid masking topologies detected upfront
+- **DP budget enforcement**: Declared epsilon/delta ceilings enforced; compositions computed and checked
+
+## What is not covered
+
+- Masked output carries no privacy guarantee
+- Dates and free text are not covered by differential privacy
+- Conditional generation (`condition_on`) and joint distributions not covered by DP
+- Cross-table joint distributions not modeled
+- Composite foreign keys are not sampled tuple-wise (no joint validity)
+
+## Version and support
+
+**Current**: Decoy engine 0.5.0 (released 2026-07-24)
+
+See [what Decoy cannot prove](/docs/concepts/what-we-cannot-prove) for a detailed discussion of limitations and honest boundaries.

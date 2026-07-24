@@ -1,0 +1,289 @@
+---
+title: Work with healthcare code sets
+description: Use ICD-10, HCPCS, MS-DRG, and custom code set columns for masking and generation.
+draft: false
+---
+
+Decoy includes public-domain healthcare code sets (ICD-10-CM, ICD-10-PCS, HCPCS Level II, MS-DRG) and lets you upload your own. This page covers how to configure and use code set columns.
+
+## What is a code set column?
+
+A code set column contains standardized medical codes (diagnoses, procedures, billing codes). Decoy can:
+
+- **Mask**: replace real codes with other valid codes from the same corpus
+- **Generate**: sample synthetic codes from a distribution fitted off your source
+- **Preserve structure**: keep codes valid across related tables with foreign keys
+
+## Built-in code sets
+
+Decoy ships five code set corpora:
+
+| Code Set | Type | Codes | Use Case |
+|---|---|---|---|
+| ICD-10-CM | Diagnosis | 74,719 | Outpatient/inpatient diagnoses |
+| ICD-10-PCS | Procedure | 79,115 | Hospital procedures |
+| HCPCS Level II | Service/Supply | 8,725 | Outpatient procedures, durable medical equipment |
+| MS-DRG | Grouper | 772 | Inpatient billing group |
+
+All are public domain (no license restrictions). Each corpus includes optional chapter/section organization for hierarchical masking.
+
+## Mask with a code set
+
+Use the `code_set` strategy to replace codes with valid alternatives:
+
+```yaml
+version: 1
+
+global_settings:
+  seed: 42
+
+sources:
+  claims:
+    type: file
+    format: csv
+    path: ./claims.csv
+
+tables:
+  - name: claims
+    columns:
+      - name: claim_id
+        strategy: passthrough
+      - name: diagnosis_code
+        strategy: code_set
+        corpus: shipped:icd_10_cm
+      - name: procedure_code
+        strategy: code_set
+        corpus: shipped:icd_10_pcs
+
+targets:
+  claims:
+    type: file
+    format: csv
+    path: ./claims_masked.csv
+```
+
+### Code set masking modes
+
+**`code_set` with no extra options** (above): Replace each code with a uniform random valid code from the corpus. All 74,719 ICD-10 codes are equally likely.
+
+**`code_set` with `chapter_preserve: true`**: Keep codes in the same chapter (e.g., diagnoses starting with I for circulatory). ICD-10 chapter structure is hierarchical (I00-I99 = circulatory system); this option masks within chapter.
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  corpus: shipped:icd_10_cm
+  chapter_preserve: true
+```
+
+**`code_set` with `allow_real_categories: true`** (non-DP only): Sample from the observed frequency distribution of codes in your source, not uniform random. If your data has 50% hypertension (I10) and 30% diabetes (E11), the masked output preserves these proportions.
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  corpus: shipped:icd_10_cm
+  allow_real_categories: true
+```
+
+Combine both:
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  corpus: shipped:icd_10_cm
+  chapter_preserve: true
+  allow_real_categories: true
+```
+
+## Generate synthetic codes
+
+Use `type: statistical` with a code set column:
+
+```yaml
+tables:
+  - name: claims
+    row_count: 10000
+    generate_columns:
+      - name: claim_id
+        type: sequence
+        start: 1000000
+      - name: diagnosis_code
+        type: statistical
+        corpus: shipped:icd_10_cm
+```
+
+This fits a distribution snapshot of the source codes and samples from it. The generated codes match your source frequency (e.g., hypertension codes appear at the same rate as in the original data).
+
+### Generation options
+
+**`allow_real_categories: false`** (default under DP): Generalize rare categories to `__other__`. Use this if your source has many low-frequency codes and you want to protect them.
+
+**`allow_real_categories: true`** (non-DP only): Retain all observed codes, including rare ones. Generated data preserves exact frequency distribution.
+
+**`high_cardinality: true`**: Retain the full vocabulary of observed codes (all 1,000+ codes if present in your source). Without this, Decoy collapses codes into an `__other__` bucket if there are too many distinct values. Set this for code-set columns which naturally have high cardinality.
+
+```yaml
+- name: diagnosis_code
+  type: statistical
+  corpus: shipped:icd_10_cm
+  high_cardinality: true
+  allow_real_categories: true
+```
+
+## Upload a custom code set
+
+For codes not in the built-in sets (proprietary billing codes, internal coding schemes), upload your own:
+
+```yaml
+version: 1
+
+sources:
+  claims:
+    type: file
+    format: csv
+    path: ./claims.csv
+
+tables:
+  - name: claims
+    columns:
+      - name: internal_proc_code
+        strategy: code_set
+        corpus: customer:/path/to/my_codes.parquet
+
+targets:
+  claims:
+    type: file
+    format: csv
+    path: ./claims_masked.csv
+```
+
+### Custom corpus format
+
+Your corpus must be a Parquet file with at least these columns:
+
+```parquet
+code        | description | (optional) chapter
+------------|-------------|-------------------
+ABC001      | Widget A    | A
+ABC002      | Widget B    | A
+XYZ100      | Gadget X    | X
+```
+
+Required:
+- `code`: Non-null, non-empty, unique string identifier
+- `description`: String (can be empty)
+
+Optional:
+- `chapter`: String or int; enables `chapter_preserve: true`
+
+Store the file locally and reference it as `customer:/absolute/path/to/file.parquet`. Decoy validates the corpus at load time and fails closed if the schema is invalid.
+
+## Foreign keys with code sets
+
+Code set columns can participate in foreign key relationships. A child table can mask or generate codes from the same corpus as a parent:
+
+```yaml
+tables:
+  - name: diagnoses
+    columns:
+      - name: patient_id
+        strategy: passthrough
+      - name: diagnosis_code
+        strategy: code_set
+        corpus: shipped:icd_10_cm
+
+  - name: procedures
+    columns:
+      - name: patient_id
+        strategy: passthrough
+      - name: diagnosis_code
+        strategy: code_set  # Can be different code set (if justified)
+        corpus: shipped:icd_10_cm
+      - name: procedure_code
+        strategy: code_set
+        corpus: shipped:icd_10_pcs
+    references:
+      - parent_table: diagnoses
+        parent_key: [patient_id, diagnosis_code]
+        child_key: [patient_id, diagnosis_code]
+```
+
+Referential integrity is preserved for valid codes. If a procedure row references (patient=100, diagnosis=I10), both patient_id and diagnosis_code mask independently, but the join relationship is maintained.
+
+## Common patterns
+
+### Pattern: Preserve frequency and chapter
+
+Mask diagnosis codes, keeping frequency distribution and chapter:
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  corpus: shipped:icd_10_cm
+  chapter_preserve: true
+  allow_real_categories: true
+```
+
+### Pattern: High-cardinality generation
+
+Generate procedure codes, retaining all observed codes:
+
+```yaml
+- name: procedure_code
+  type: statistical
+  corpus: shipped:icd_10_pcs
+  high_cardinality: true
+  allow_real_categories: true
+```
+
+### Pattern: Uniform masking (anonymization-style)
+
+Mask all codes to random valid codes, no frequency preservation:
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  corpus: shipped:icd_10_cm
+  # allow_real_categories: false (default)
+  # chapter_preserve: false (default)
+```
+
+## Troubleshooting
+
+**Error: `code_set_corpus_null_code` or `code_set_corpus_empty_code`**
+
+Your corpus has a null or empty code value. Every row must have a non-empty code. Fix by filtering the corpus Parquet file:
+
+```python
+import pandas as pd
+df = pd.read_parquet("my_codes.parquet")
+df = df[df['code'].notna() & (df['code'] != '')]
+df.to_parquet("my_codes_clean.parquet")
+```
+
+**Error: `code_set_corpus_duplicate_codes`**
+
+Your corpus has duplicate codes. Each code must be unique:
+
+```python
+df = df.drop_duplicates(subset=['code'])
+df.to_parquet("my_codes_clean.parquet")
+```
+
+**Output doesn't preserve my frequency distribution**
+
+Check that `allow_real_categories: true` is set. Without it, Decoy masks to uniform random codes (anonymization mode). With it, frequency is preserved.
+
+**Code values change inconsistently across runs**
+
+The seed is not fixed. Check that `global_settings.seed` is set to a constant value:
+
+```yaml
+global_settings:
+  seed: 42  # Fixed seed
+```
+
+## See also
+
+- [Generate synthetic data](/docs/how-to/generate-synthetic-data): recipe for synthetic generation
+- [Preserve relationships](/docs/how-to/mask-a-folder-with-foreign-keys): multi-table masking with foreign keys
+- [Reference: strategies](/docs/reference/strategies): full strategy catalog
