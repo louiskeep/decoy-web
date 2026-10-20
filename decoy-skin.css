@@ -3,12 +3,12 @@
    MIT License, (c) Stichting DuckDB Foundation. DuckDB name/logo/mascot not used. */
 
 /* --- Fonts: the base's @font-face were removed; we supply those family names
-   with Decoy's own faces. Headings = Bricolage, body = Inter, mono = IBM Plex. --- */
+   with Decoy's own faces. Headings = Space Grotesk, body = Inter, mono = IBM Plex. --- */
 @font-face { font-family:"SuisseIntl"; src:url("fonts/inter-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
 @font-face { font-family:"SuisseIntl"; src:url("fonts/inter-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
-@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
-@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
-@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-800.woff2") format("woff2"); font-weight:800; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/space-grotesk-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/space-grotesk-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/space-grotesk-700.woff2") format("woff2"); font-weight:800; font-display:swap; }
 @font-face { font-family:"SuisseIntl-Book"; src:url("fonts/inter-400.woff2") format("woff2"); font-display:swap; }
 @font-face { font-family:"SuisseIntl-Regular"; src:url("fonts/inter-400.woff2") format("woff2"); font-display:swap; }
 @font-face { font-family:"SuisseIntl-Medium"; src:url("fonts/inter-500.woff2") format("woff2"); font-display:swap; }
