@@ -1,0 +1,44 @@
+/* Decoy skin over the MIT-licensed DuckDB website base.
+   Site adapted from the DuckDB website (https://github.com/duckdb/duckdb-web),
+   MIT License, (c) Stichting DuckDB Foundation. DuckDB name/logo/mascot not used. */
+
+/* --- Fonts: the base's @font-face were removed; we supply those family names
+   with Decoy's own faces. Headings = Bricolage, body = Inter, mono = IBM Plex. --- */
+@font-face { font-family:"SuisseIntl"; src:url("fonts/inter-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/inter-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
+@font-face { font-family:"SuisseIntl"; src:url("fonts/bricolage-grotesque-800.woff2") format("woff2"); font-weight:800; font-display:swap; }
+@font-face { font-family:"SuisseIntl-Book"; src:url("fonts/inter-400.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"SuisseIntl-Regular"; src:url("fonts/inter-400.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"SuisseIntl-Medium"; src:url("fonts/inter-500.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"SuisseIntl-SemiBold"; src:url("fonts/bricolage-grotesque-600.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"SuisseIntl-Bold"; src:url("fonts/bricolage-grotesque-700.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Regular"; src:url("fonts/ibm-plex-mono-500.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Medium"; src:url("fonts/ibm-plex-mono-500.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Bold"; src:url("fonts/ibm-plex-mono-600.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-ExtraBold"; src:url("fonts/ibm-plex-mono-600.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Italic"; src:url("fonts/ibm-plex-mono-500.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Medium-Italic"; src:url("fonts/ibm-plex-mono-500.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"JetBrainsMono-Bold-Italic"; src:url("fonts/ibm-plex-mono-600.woff2") format("woff2"); font-display:swap; }
+
+/* --- Recolor: remap the base's yellow accent ramp to Decoy teal (catches var usages) --- */
+:root{
+  --yellow-02:#00100e; --yellow-05:#00201d; --yellow-10:#003430; --yellow-15:#00453f;
+  --yellow-20:#00564e; --yellow-30:#006b62; --yellow-40:#00766d; --yellow-45:#007d74;
+  --yellow-48:#00837a; --yellow-50:#00867e; --yellow-55:#0a938a; --yellow-60:#1fa59c;
+  --yellow-70:#4cc2c2; --yellow-80:#86d9d4; --yellow-85:#a8e3df; --yellow-90:#cbeeeb;
+  --yellow-95:#e6f6f5; --yellow-98:#f3fbfa;
+  --yellow-transparent-05:#00201d99; --yellow-transparent-10:#00343099; --yellow-transparent-15:#00453f99;
+  --yellow-transparent-20:#00564e99; --yellow-transparent-30:#006b6299; --yellow-transparent-40:#00766d99;
+  --yellow-transparent-50:#00867e99; --yellow-transparent-60:#1fa59c99; --yellow-transparent-70:#4cc2c299;
+  --yellow-transparent-80:#86d9d499; --yellow-transparent-85:#a8e3df99; --yellow-transparent-90:#cbeeeb99;
+}
+
+/* --- Contrast: teal brand is dark, so filled brand buttons need light text --- */
+.button.yellow, a.button.yellow, .button.yellow:visited{ color:#ffffff; }
+.button.yellow:hover{ color:#ffffff; }
+
+/* Fill the wide bento boxes (where DuckDB had illustrations) with capability chips */
+.bento-box .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:4px; }
+.bento-box .chips span{ font-family:"JetBrainsMono-Regular",monospace; font-size:11.5px; line-height:1; color:var(--grey-40,#666); border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:7px; padding:5px 9px; white-space:nowrap; }
