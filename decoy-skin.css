@@ -64,3 +64,9 @@
 .feature-row .frow-shot video, .feature-row .frow-shot img{ width:100%; height:100%; object-fit:cover; display:block; }
 .feature-row .frow-shot .ph{ font-family:"JetBrainsMono-Regular",monospace; font-size:13px; color:var(--grey-50,#808080); }
 @media (max-width:760px){ .feature-row .frow-head{ grid-template-columns:1fr; gap:14px; } }
+
+/* The base nav (.landingmenu) is position:absolute, full-width, z-index:20, so it
+   overlays the logo and the right-side actions and swallows their clicks. Lift
+   those above it so the logo links home and the buttons stay clickable. */
+.decoyhome{ position:relative; z-index:21; }
+.headercontent .options{ position:relative; z-index:21; }
