@@ -189,11 +189,11 @@
 		<div class="hero-content">
       <h1 class="display-2">
 
-        Mask and generate <br/>data where it lives
+        Explicit pipelines for masking<br/>and synthetic data
 
       </h1>
 
-			<p>Self-hosted masking, synthetic generation, and subsetting, driven by explicit YAML pipelines you read, validate, and run yourself.</p>
+			<p>Realistic, safe, referentially intact data for dev, test, and CI. Self-hosted.</p>
 			<div class="hero-buttons">
 				<a class="button yellow" href="#install">Get the CLI</a>
 				<a class="button transparent" href="docs.html">Read the docs</a>
@@ -208,18 +208,39 @@
 <script>
 (function(){
   var host=document.querySelector(".hero-bg .rows"); if(!host) return;
-  var names=["James Carter","Maria Lopez","Wei Chen","Aisha Khan","Liam O'Brien","Nadia Petrov","Omar Haddad","Grace Kim","Tom Reyes","Sara Blum","Yuki Tanaka","Diego Marquez"];
-  function ssn(){return "0"+(100+(Math.random()*899|0))+"-"+(10+(Math.random()*89|0))+"-"+(1000+(Math.random()*8999|0));}
-  function row(){
-    var cells=[ names[Math.random()*names.length|0], ssn(), "user"+(1000+(Math.random()*8999|0))+"@example.com",
-      (1960+(Math.random()*45|0))+"-0"+(1+(Math.random()*8|0))+"-"+(10+(Math.random()*18|0)),
-      "(555) "+(100+(Math.random()*899|0))+"-"+(1000+(Math.random()*8999|0)), "MRN"+(100000+(Math.random()*899999|0)) ];
-    return '<div class="row">'+cells.map(function(c){return '<span class="cell'+(Math.random()<0.4?" red":"")+'">'+c+'</span>';}).join("")+'</div>';
+  var NAMES=["James Carter","Maria Lopez","Wei Chen","Aisha Khan","Liam O'Brien","Nadia Petrov","Omar Haddad","Grace Kim","Tom Reyes","Sara Blum","Yuki Tanaka","Diego Marquez","Hannah Weiss","Ravi Patel"];
+  function ri(n){return Math.random()*n|0;}
+  function hex(n){var s="0123456789abcdef",o="";for(var i=0;i<n;i++)o+=s[ri(16)];return o;}
+  function dg(n){var o="";for(var i=0;i<n;i++)o+=ri(10);return o;}
+  function pad(v){v=""+v;return v.length<2?"0"+v:v;}
+  // each column masks a different real Decoy way: faker, fpe, redact, date_shift, fpe, synthetic
+  function cell(type){
+    if(type==="name"){var v=NAMES[ri(NAMES.length)];return {o:v,m:function(){return NAMES[ri(NAMES.length)];}};}
+    if(type==="ssn"){return {o:"0"+dg(2)+"-"+dg(2)+"-"+dg(4),m:function(){return dg(3)+"-"+dg(2)+"-"+dg(4);}};}
+    if(type==="email"){var u="user"+dg(4);return {o:u+"@example.com",m:function(){return u[0]+"*******@e****.com";}};}
+    if(type==="dob"){var y=1960+ri(45),mo=1+ri(12);return {o:y+"-"+pad(mo)+"-"+pad(1+ri(27)),m:function(){return y+"-"+pad(mo)+"-"+pad(1+ri(27));}};}
+    if(type==="card"){return {o:dg(4)+" "+dg(4)+" "+dg(4)+" "+dg(4),m:function(){return dg(4)+" "+dg(4)+" "+dg(4)+" "+dg(4);}};}
+    return {o:"MRN"+dg(6),m:function(){return "MRN"+dg(6);}};
   }
-  var html=""; for(var i=0;i<13;i++) html+=row(); host.innerHTML=html;
-  if(!window.matchMedia||!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    setInterval(function(){ var cs=host.querySelectorAll(".cell"); for(var k=0;k<5;k++){ var c=cs[Math.random()*cs.length|0]; if(c) c.classList.toggle("red"); } }, 1000);
+  var COLS=["name","ssn","email","dob","card","mrn"], ROWS=18, all=[];
+  var frag=document.createDocumentFragment();
+  for(var r=0;r<ROWS;r++){
+    var row=document.createElement("div"); row.className="row";
+    for(var c=0;c<COLS.length;c++){
+      var d=cell(COLS[c]); var sp=document.createElement("span"); sp.className="cell"; sp.textContent=d.o;
+      sp._o=d.o; sp._m=d.m; sp._k=false; row.appendChild(sp); all.push(sp);
+    }
+    frag.appendChild(row);
   }
+  host.appendChild(frag);
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(function(){
+    for(var k=0;k<5;k++){
+      var sp=all[ri(all.length)]; if(!sp) continue;
+      sp._k=!sp._k; sp.classList.add("masking");
+      (function(s){ setTimeout(function(){ s.textContent = s._k ? s._m() : s._o; s.classList.remove("masking"); }, 240); })(sp);
+    }
+  }, 600);
 })();
 </script>
 
