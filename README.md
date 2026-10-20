@@ -3,7 +3,7 @@
 Marketing site for Decoy (self-hosted data masking and synthetic data generation).
 Static HTML/CSS/JS, no build step. The visual system is adapted from the
 MIT-licensed DuckDB website (https://github.com/duckdb/duckdb-web, (c) Stichting
-DuckDB Foundation), re-skinned to Decoy's own identity (teal + Bricolage, mallard
+DuckDB Foundation), re-skinned to Decoy's own identity (teal + Space Grotesk, mallard
 mark). DuckDB name/logo/mascot are not used.
 
 ## Pages
@@ -29,7 +29,7 @@ and the output/publish directory set to the repo root.
 ## Structure
 - `css/main.css` — the re-skinned base stylesheet
 - `decoy-skin.css` — Decoy token overrides (teal ramp), font aliasing, small additions
-- `fonts/` — Bricolage Grotesque (headings), Inter (body), IBM Plex Mono (code)
+- `fonts/` — Space Grotesk (headings), Inter (body), IBM Plex Mono (code)
 - `js/` — shared chrome behavior (nav, dark toggle, search), from the base
 - `images/decoy/` — logo mark + favicons
 
