@@ -42,3 +42,14 @@
 /* Fill the wide bento boxes (where DuckDB had illustrations) with capability chips */
 .bento-box .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:4px; }
 .bento-box .chips span{ font-family:"JetBrainsMono-Regular",monospace; font-size:11.5px; line-height:1; color:var(--grey-40,#666); border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:7px; padding:5px 9px; white-space:nowrap; }
+
+/* Homepage demo section (self-hosted video) */
+.demo{ text-align:center; }
+.demo .demo-frame{ position:relative; max-width:900px; margin:30px auto 0; aspect-ratio:16/9; border-radius:16px; overflow:hidden; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); background:linear-gradient(155deg,#00564e,#00867e); display:flex; align-items:center; justify-content:center; }
+.demo .demo-frame video{ width:100%; height:100%; object-fit:cover; display:block; background:#000; }
+.demo .play{ width:78px; height:78px; border-radius:50%; background:rgba(255,255,255,.94); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 34px rgba(0,0,0,.28); }
+.demo .play svg{ width:30px; height:30px; margin-left:5px; color:#00867e; }
+.demo .ph-label{ position:absolute; bottom:16px; left:0; right:0; color:#fff; font-family:"JetBrainsMono-Regular",monospace; font-size:12.5px; opacity:.85; }
+.demo .chapters{ display:flex; gap:20px; justify-content:center; flex-wrap:wrap; max-width:780px; margin:28px auto 0; }
+.demo .chapters > div{ flex:1 1 320px; text-align:left; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); border-radius:12px; padding:16px 18px; background:var(--main-codebox-main-background-color,rgba(250,250,250,.6)); color:var(--grey-40,#666); font-size:14.5px; line-height:1.5; }
+.demo .chapters strong{ color:#00867e; font-family:"SuisseIntl"; font-weight:700; }
