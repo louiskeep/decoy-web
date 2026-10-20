@@ -70,3 +70,22 @@
    those above it so the logo links home and the buttons stay clickable. */
 .decoyhome{ position:relative; z-index:21; }
 .headercontent .options{ position:relative; z-index:21; }
+
+/* ---- Rich hero: masked-data background + product screenshot frame ---- */
+.welcome{ position:relative; overflow:hidden; }
+.hero-bg{ position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.hero-bg::after{ content:""; position:absolute; inset:0; background:radial-gradient(55% 45% at 50% -5%, rgba(0,134,126,.12), transparent 70%); }
+.hero-bg .rows{ position:absolute; left:50%; top:4%; transform:translateX(-50%); display:flex; flex-direction:column; gap:12px;
+  font-family:"JetBrainsMono-Regular",monospace; font-size:13px; line-height:1; color:var(--grey-60,#999); opacity:.14; white-space:nowrap;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 55%,transparent 95%); mask-image:linear-gradient(180deg,transparent,#000 22%,#000 55%,transparent 95%); }
+.hero-bg .row{ display:flex; gap:26px; }
+.hero-bg .cell{ transition:color .5s, background-color .5s; }
+.hero-bg .cell.red{ color:transparent; background:#00867e; border-radius:3px; opacity:.55; }
+.welcome .wrap{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; }
+
+.hero-shot{ width:100%; max-width:1000px; margin:48px auto 0; border-radius:14px; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.14)); overflow:hidden; box-shadow:0 36px 90px -34px rgba(0,0,0,.4); background:var(--surface,#fff); position:relative; z-index:1; }
+.hero-shot .bar{ height:38px; display:flex; align-items:center; gap:8px; padding:0 15px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); background:var(--grey-98,#fafafa); }
+.hero-shot .bar i{ width:11px; height:11px; border-radius:50%; background:var(--grey-80,#ccc); }
+.hero-shot .shot{ aspect-ratio:16/9; background:radial-gradient(120% 120% at 72% 0%, rgba(0,134,126,.12), rgba(0,134,126,.02) 60%); display:flex; align-items:center; justify-content:center; }
+.hero-shot .shot img{ width:100%; height:100%; object-fit:cover; display:block; }
+.hero-shot .shot .ph{ font-family:"JetBrainsMono-Regular",monospace; font-size:13px; color:var(--grey-50,#808080); }

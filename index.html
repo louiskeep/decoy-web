@@ -184,6 +184,7 @@
 		
 
 			<section class="welcome">
+	<div class="hero-bg" aria-hidden="true"><div class="rows"></div></div>
 	<div class="wrap">
 		<div class="hero-content">
       <h1 class="display-2">
@@ -198,8 +199,29 @@
 				<a class="button transparent" href="docs.html">Read the docs</a>
 			</div>
 		</div>
+		<div class="hero-shot">
+			<div class="bar"><i></i><i></i><i></i></div>
+			<div class="shot"><img src="images/decoy/studio-builder.png" alt="Decoy Studio: a visual data-masking pipeline builder with a masked data preview"></div>
+		</div>
 	</div>
 </section>
+<script>
+(function(){
+  var host=document.querySelector(".hero-bg .rows"); if(!host) return;
+  var names=["James Carter","Maria Lopez","Wei Chen","Aisha Khan","Liam O'Brien","Nadia Petrov","Omar Haddad","Grace Kim","Tom Reyes","Sara Blum","Yuki Tanaka","Diego Marquez"];
+  function ssn(){return "0"+(100+(Math.random()*899|0))+"-"+(10+(Math.random()*89|0))+"-"+(1000+(Math.random()*8999|0));}
+  function row(){
+    var cells=[ names[Math.random()*names.length|0], ssn(), "user"+(1000+(Math.random()*8999|0))+"@example.com",
+      (1960+(Math.random()*45|0))+"-0"+(1+(Math.random()*8|0))+"-"+(10+(Math.random()*18|0)),
+      "(555) "+(100+(Math.random()*899|0))+"-"+(1000+(Math.random()*8999|0)), "MRN"+(100000+(Math.random()*899999|0)) ];
+    return '<div class="row">'+cells.map(function(c){return '<span class="cell'+(Math.random()<0.4?" red":"")+'">'+c+'</span>';}).join("")+'</div>';
+  }
+  var html=""; for(var i=0;i<13;i++) html+=row(); host.innerHTML=html;
+  if(!window.matchMedia||!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    setInterval(function(){ var cs=host.querySelectorAll(".cell"); for(var k=0;k<5;k++){ var c=cs[Math.random()*cs.length|0]; if(c) c.classList.toggle("red"); } }, 1000);
+  }
+})();
+</script>
 
 
 <section class="bento">
@@ -294,7 +316,7 @@
 			<p class="frow-desc">Compose mask, generate, and subset steps in a visual builder, run them as shared jobs, and watch status live. Every run keeps a quality report and an audit trail.
 				<a class="textbutton arrow-right" href="deployment.html">Explore Studio<svg class="icon"><use href="#arrow-right"></use></svg></a></p>
 		</div>
-		<div class="frow-shot"><span class="ph">Studio screenshot — job builder</span></div>
+		<div class="frow-shot"><img src="images/decoy/studio-report.png" alt="Decoy Studio run report with quality score and masking rules applied"></div>
 	</div>
 </section>
 
