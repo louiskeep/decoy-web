@@ -76,7 +76,7 @@
 .hero-bg{ position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
 .hero-bg::after{ content:""; position:absolute; inset:0; background:radial-gradient(55% 45% at 50% -5%, rgba(0,134,126,.12), transparent 70%); }
 .hero-bg .rows{ position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; gap:16px; padding-top:34px;
-  font-family:"JetBrainsMono-Regular",monospace; font-size:13px; line-height:1; color:var(--grey-55,#8a8a8a); opacity:.15; white-space:nowrap;
+  font-family:"JetBrainsMono-Regular",monospace; font-size:13px; line-height:1; color:var(--grey-55,#8a8a8a); opacity:.10; white-space:nowrap;
   -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 80%); mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 80%); }
 .hero-bg .row{ display:flex; gap:30px; }
 .hero-bg .cell{ transition:color .3s ease; }

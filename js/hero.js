@@ -21,10 +21,12 @@
   function paint(sp){ var masked=sp._state==="masked"; sp.textContent=masked?sp._v.masked:sp._v.raw; sp.classList.toggle("masking",masked); }
 
   var PAT=["name","ssn","email","dob","card","mrn","name","email","card","ssn"], ROWS=16;
+  // Enough columns to overflow the screen edges (sized to the monitor, not the window).
+  var COLS=Math.max(12, Math.min(32, Math.ceil(Math.max(window.innerWidth, (window.screen&&screen.width)||0)/120)+3));
   var rows=[], frag=document.createDocumentFragment();
   for(var r=0;r<ROWS;r++){
     var row=document.createElement("div"); row.className="row";
-    for(var c=0;c<PAT.length;c++){
+    for(var c=0;c<COLS;c++){
       var sp=document.createElement("span"); sp.className="cell";
       sp._type=PAT[(c+r)%PAT.length]; sp._v=gen(sp._type); sp._state="raw"; paint(sp);
       row.appendChild(sp);
