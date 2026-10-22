@@ -291,3 +291,45 @@ html.darkmode{ --accent:#f2b84a; --accent-text:#f2b84a; --accent-tint:rgba(242,1
 .cap-split .window{ margin:0; }
 .cap-panel .shot-ph-wide{ max-width:760px; margin:24px 0 0; }
 @media (max-width:760px){ .cap-split{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   Homepage hero header: a teal panel with a faint dot-grid that
+   fades downward into the black hero, so the top of the page
+   bookends the teal footer at the bottom. Homepage only.
+   ============================================================ */
+body.home header{ color:#fff;
+  background:
+    radial-gradient(rgba(255,255,255,.13) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    linear-gradient(160deg,#00756e 0%,#00867e 55%,#0a9b92 100%);
+}
+/* The teal melts down into the black hero: the fade sits at the top
+   of the hero (not the sticky header), so it scrolls away and leaves
+   a clean teal bar when the page is scrolled. */
+body.home .welcome::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:150px; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(rgba(255,255,255,.13) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    linear-gradient(180deg,#0a9b92 0%,rgba(10,155,146,0) 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent);
+  mask-image:linear-gradient(180deg,#000,transparent);
+}
+/* Knock the header's marks and text white, the way the footer does.
+   The base theme sets these dark in light mode (and the brand uses an
+   inline colour), so override with !important to win in both modes. */
+body.home header .decoyhome,
+body.home header .decoyhome .brand{ color:#fff !important; }
+body.home header .decoyhome .brand img{ filter:brightness(0) invert(1); }
+body.home header nav > div > a{ color:rgba(255,255,255,.9) !important; }
+body.home header nav > div > a:hover{ color:#fff !important; }
+body.home header .search_icon .icon,
+body.home header .mode .icon,
+body.home header .hamburger-inner,
+body.home header .hamburger-inner::before,
+body.home header .hamburger-inner::after{ color:#fff; }
+body.home header .search_icon .icon{ fill:#fff; }
+/* Buttons: the teal fill would vanish on teal, so invert it; the
+   ghost becomes a white outline. */
+body.home header .options .button.yellow{ background:#fff; color:#00756e; border-color:#fff; }
+body.home header .options .button.yellow:hover{ background:#eafaf8; color:#005f59; }
+body.home header .options .button.transparent{ border-color:rgba(255,255,255,.55); color:#fff; }
+body.home header .options .button.transparent:hover{ background:rgba(255,255,255,.12); border-color:#fff; color:#fff; }
