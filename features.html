@@ -201,156 +201,286 @@
 
 <section id="capabilities" class="cap-tabs">
 	<div class="wrap">
-		<div class="cap-tablist" role="tablist" aria-label="Engine capabilities">
+		<div class="cap-tablist" role="tablist" aria-label="Engine and Studio capabilities">
 			<button class="cap-tab" id="tab-masking" role="tab" aria-selected="true" aria-controls="panel-masking" tabindex="0">Masking</button>
 			<button class="cap-tab" id="tab-generation" role="tab" aria-selected="false" aria-controls="panel-generation" tabindex="-1">Generation</button>
 			<button class="cap-tab" id="tab-subsetting" role="tab" aria-selected="false" aria-controls="panel-subsetting" tabindex="-1">Subsetting</button>
 			<button class="cap-tab" id="tab-detection" role="tab" aria-selected="false" aria-controls="panel-detection" tabindex="-1">Detection</button>
-			<button class="cap-tab" id="tab-observability" role="tab" aria-selected="false" aria-controls="panel-observability" tabindex="-1">Observability</button>
 			<button class="cap-tab" id="tab-disguises" role="tab" aria-selected="false" aria-controls="panel-disguises" tabindex="-1">Disguises</button>
+			<button class="cap-tab" id="tab-builder" role="tab" aria-selected="false" aria-controls="panel-builder" tabindex="-1">Builder</button>
+			<button class="cap-tab" id="tab-jobs" role="tab" aria-selected="false" aria-controls="panel-jobs" tabindex="-1">Jobs</button>
+			<button class="cap-tab" id="tab-access" role="tab" aria-selected="false" aria-controls="panel-access" tabindex="-1">Access</button>
+			<button class="cap-tab" id="tab-reports" role="tab" aria-selected="false" aria-controls="panel-reports" tabindex="-1">Reports</button>
+			<button class="cap-tab" id="tab-notifications" role="tab" aria-selected="false" aria-controls="panel-notifications" tabindex="-1">Notifications</button>
 		</div>
 	</div>
 
 	<div class="cap-panels">
 
 		<div class="cap-panel" id="panel-masking" role="tabpanel" aria-labelledby="tab-masking">
-			<div class="flexwrap wrap">
-				<div class="intro">
-					<h2 class="display-3">Masking</h2>
-					<p>Replace sensitive fields in place and keep the data usable. 23 strategies cover format, distribution, and referential integrity, so masked tables still join and still look real.</p>
-					<p>Pick a strategy per column: hash and fpe for identifiers, date_shift for timestamps, redact for free text, faker for realistic stand-ins, categorical for coded values. Keyed and native strategies are deterministic, so repeat runs and foreign keys stay consistent. Many providers are not deterministic by design.</p>
-				</div>
-				<div class="install">
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Command line</p>
+				<h2 class="display-3">Masking</h2>
+				<p>Masking replaces the sensitive value in a column and keeps the row usable. You choose a strategy for each column. The 23 strategies cover tokens, format-preserving encryption, redaction, date shifts, and realistic fake values. Keyed strategies are deterministic, so a masked key still joins across tables.</p>
+				<p class="cap-run">Validate the config, then run it: <code>decoy validate pipeline.yaml</code> and <code>decoy run pipeline.yaml</code>.</p>
+			</div>
+			<div class="wrap">
+				<div class="cap-split">
 					<div class="window">
 						<div class="result content">
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: mask
-input:  { type: csv, path: customers.csv }
-output: { type: csv, path: customers_masked.csv }
-masking_rules:
-  - { column: email, type: faker, faker_type: email }
-  - { column: ssn, type: fpe }
-  - { column: signup_date, type: date_shift, days: 30 }
-  - { column: notes, type: redact }
-  - { column: account_id, type: hash }
-  - { column: plan_tier, type: categorical }</code></pre></figure>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">version: 1
+global_settings:
+  seed: 42
+sources:
+  people:
+    type: file
+    format: csv
+    path: ./people.csv
+tables:
+  - name: people
+    columns:
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: ssn
+        strategy: hash
+        namespace: identity
+      - name: signup_date
+        strategy: date_shift
+        namespace: dates
+      - name: account_status
+        strategy: passthrough
+targets:
+  people:
+    type: file
+    format: csv
+    path: ./people_masked.csv</code></pre></figure>
 						</div>
 					</div>
+					<figure class="shot-ph">
+						<div class="bar"><i></i><i></i><i></i></div>
+						<div class="canvas"><span class="ph">Mask node</span></div>
+						<figcaption>The mask step in the Studio builder.</figcaption>
+					</figure>
 				</div>
 			</div>
 		</div>
 
 		<div class="cap-panel" id="panel-generation" role="tabpanel" aria-labelledby="tab-generation" hidden>
-			<div class="flexwrap wrap">
-				<div class="intro">
-					<h2 class="display-3">Generation</h2>
-					<p>Build synthetic columns, or whole tables from a schema with no source data. 12 generation strategies and 34 providers cover sequences, categories, references, and formulas.</p>
-					<p>Fill a new column with realistic values, or run generate mode to produce a complete dataset for tests, demos, and seed data. Providers supply names, addresses, and identifiers; references keep generated keys pointing at real rows.</p>
-				</div>
-				<div class="install">
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Command line</p>
+				<h2 class="display-3">Generation</h2>
+				<p>Generation builds synthetic rows from a column spec, with no source file. You set a row count and a type for each column. The 12 generation strategies and 34 providers cover sequences, categories, references, formulas, and realistic values.</p>
+				<p class="cap-run">Run it with <code>decoy run pipeline.yaml --mode generate</code>.</p>
+			</div>
+			<div class="wrap">
+				<div class="cap-split">
 					<div class="window">
 						<div class="result content">
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: generate
-output: { type: parquet, path: synthetic_users.parquet }
-rows: 10000
-columns:
-  - { name: user_id, type: sequence, start: 1 }
-  - { name: full_name, type: provider, provider: name }
-  - { name: country, type: category, values: [US, CA, GB, DE] }
-  - { name: org_id, type: reference, table: orgs, column: id }
-  - { name: label, type: formula, expr: "country + '-' + user_id" }</code></pre></figure>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">version: 1
+global_settings:
+  seed: 42
+sources: {}
+tables:
+  - name: employees
+    row_count: 1000
+    generate_columns:
+      - name: employee_id
+        type: sequence
+        start: 1000
+        step: 1
+      - name: first_name
+        type: faker
+        faker_type: first_name
+      - name: department
+        type: categorical
+        categories: ["Engineering", "Sales", "Finance"]
+        weights: [0.5, 0.3, 0.2]
+targets:
+  employees:
+    type: file
+    format: csv
+    path: ./employees.csv</code></pre></figure>
 						</div>
 					</div>
+					<figure class="shot-ph">
+						<div class="bar"><i></i><i></i><i></i></div>
+						<div class="canvas"><span class="ph">Generate node</span></div>
+						<figcaption>The generate step in the Studio builder.</figcaption>
+					</figure>
 				</div>
 			</div>
 		</div>
 
 		<div class="cap-panel" id="panel-subsetting" role="tabpanel" aria-labelledby="tab-subsetting" hidden>
-			<div class="flexwrap wrap">
-				<div class="intro">
-					<h2 class="display-3">Subsetting</h2>
-					<p>Pull a small, referentially intact slice of related tables. Seed by sample, filter, or key, then follow foreign keys up, down, or both, bounded by a fan-out budget so the slice stays small.</p>
-					<p>Run a preflight first to see how large the slice will be and which tables it touches, then run the subset for real. The output keeps its foreign keys valid, so it loads cleanly into a smaller environment.</p>
-				</div>
-				<div class="install">
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Command line</p>
+				<h2 class="display-3">Subsetting</h2>
+				<p>Subsetting pulls a small, referentially-intact slice of related tables. You seed it with a sample, a filter, or a key list. Decoy walks the foreign keys up and down to a fixpoint, so no row is left orphaned. A fan-out budget stops a slice that grows too large.</p>
+				<p class="cap-run">Subsetting reads Parquet and runs before masking, from a <code>subset:</code> block. Run it with <code>decoy run pipeline.yaml</code>.</p>
+			</div>
+			<div class="wrap">
+				<div class="cap-split">
 					<div class="window">
 						<div class="result content">
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: subset
-input:  { type: parquet, path: warehouse/ }
-output: { type: parquet, path: sandbox/ }
-seed:
-  table: orders
-  filter: "region = 'EU'"
-follow:
-  direction: both
-  max_fanout: 5000</code></pre></figure>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">version: 1
+global_settings:
+  seed: 7
+sources:
+  customers:
+    type: file
+    format: parquet
+    path: ./customers.parquet
+  orders:
+    type: file
+    format: parquet
+    path: ./orders.parquet
+relationships:
+  - parent: {table: customers, columns: [customer_id]}
+    children:
+      - {table: orders, columns: [customer_id]}
+subset:
+  seeds:
+    - table: customers
+      mode: sample
+      key_columns: [customer_id]
+      fraction: 0.02
+  budget:
+    max_total_rows: 500000
+targets:
+  customers:
+    type: file
+    format: parquet
+    path: ./out/customers.parquet
+  orders:
+    type: file
+    format: parquet
+    path: ./out/orders.parquet</code></pre></figure>
 						</div>
 					</div>
+					<figure class="shot-ph">
+						<div class="bar"><i></i><i></i><i></i></div>
+						<div class="canvas"><span class="ph">Subset node</span></div>
+						<figcaption>The subset step in the Studio builder.</figcaption>
+					</figure>
 				</div>
 			</div>
 		</div>
 
 		<div class="cap-panel" id="panel-detection" role="tabpanel" aria-labelledby="tab-detection" hidden>
-			<div class="flexwrap wrap">
-				<div class="intro">
-					<h2 class="display-3">Detection &amp; profiling (STORM)</h2>
-					<p>Scan a file to find the fields that are likely sensitive before you write a rule for them. STORM runs 25 detectors over the data and reports what it found for you to review, then mask.</p>
-					<p>The optional machine-learning classifier is off by default; detection runs on the built-in detectors unless you turn it on. Nothing is masked by a scan. You read the report, decide, and apply the rules yourself.</p>
-				</div>
-				<div class="install">
-					<div class="window">
-						<div class="result content">
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">decoy storm analyze customers.csv --report storm.json
-
-# review the findings, then mask with your own rules
-decoy mask config.yaml</code></pre></figure>
-						</div>
-					</div>
-				</div>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Command line</p>
+				<h2 class="display-3">Detection and profiling (STORM)</h2>
+				<p>Detection scans a file for the fields that are likely sensitive. STORM runs 25 detectors and reports what it found, grouped by domain. A scan masks nothing. You read the report, then write your own rules. The machine-learning classifier is off by default.</p>
 			</div>
-		</div>
-
-		<div class="cap-panel" id="panel-observability" role="tabpanel" aria-labelledby="tab-observability" hidden>
-			<div class="flexwrap wrap">
-				<div class="intro">
-					<h2 class="display-3">Observability</h2>
-					<p>See what every run did. The CLI writes local run output and JSON reports you can keep or feed into CI.</p>
-					<p>Decoy Studio adds the shared view on top: run logs, quality and privacy reports, evidence manifests, run provenance, audit history, and optional metrics. It is where a team reviews runs together and keeps the record.</p>
-				</div>
-				<div class="install">
+			<div class="wrap">
+				<div class="cap-split">
 					<div class="window">
 						<div class="result content">
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">decoy mask config.yaml --report run.json
-# run.json: rows processed, rules applied, per-column summary</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"># profile a file; nothing is masked
+decoy storm analyze data.csv
+
+# write the full profile as JSON
+decoy storm analyze data.csv --json --out profile.json</code></pre></figure>
 						</div>
 					</div>
+					<figure class="shot-ph">
+						<div class="bar"><i></i><i></i><i></i></div>
+						<div class="canvas"><span class="ph">Detection report</span></div>
+						<figcaption>STORM findings in Studio.</figcaption>
+					</figure>
 				</div>
 			</div>
 		</div>
 
 		<div class="cap-panel" id="panel-disguises" role="tabpanel" aria-labelledby="tab-disguises" hidden>
-			<div class="wrap">
-				<div class="intro">
-					<h2 class="display-3">Compliance disguises</h2>
-					<p>Start from a template instead of a blank config. Each disguise is a reviewable set of rules aimed at a common regime, a starting point you validate against your own schema, not auto-classification. You read it, adjust it, and run it.</p>
-				</div>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Command line</p>
+				<h2 class="display-3">Compliance disguises</h2>
+				<p>A disguise is a reviewable rule set for one regime. There are 10: HIPAA, PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, P&amp;C, and a default. A disguise does not decide which fields are sensitive. You start from it, check it against your schema, adjust it, and run it.</p>
 			</div>
 			<div class="wrap">
-				<div class="bento-grid">
-					<div class="bento-box">
-						<div class="bento-title">
-							<svg class="icon"><use href="#shield-tick"></use></svg>
-							<span>Ten templates</span>
+				<div class="cap-split">
+					<div class="window">
+						<div class="result content">
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"># browse the bundled compliance starters
+decoy templates list
+
+# scaffold a pipeline, then review and adjust it
+decoy init</code></pre></figure>
 						</div>
-						<p>HIPAA, PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, P&amp;C, and a default template. Each one produces a rule set you review before any run.</p>
 					</div>
-					<div class="bento-box wide">
-						<div class="bento-title">
-							<svg class="icon"><use href="#check-verified-01"></use></svg>
-							<span>Reviewable, not automatic</span>
-						</div>
-						<p>A disguise does not decide which of your fields are sensitive. It gives you a sensible first draft for a regime; you confirm the columns and strategies against your data, then run it yourself.</p>
-					</div>
+					<figure class="shot-ph">
+						<div class="bar"><i></i><i></i><i></i></div>
+						<div class="canvas"><span class="ph">Disguise picker</span></div>
+						<figcaption>Choosing a disguise in Studio.</figcaption>
+					</figure>
 				</div>
+			</div>
+		</div>
+
+		<div class="cap-panel" id="panel-builder" role="tabpanel" aria-labelledby="tab-builder" hidden>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Decoy Studio</p>
+				<h2 class="display-3">Visual builder</h2>
+				<p>Decoy Studio adds a visual builder. You place source, subset, generate, mask, and output steps as nodes and connect them. The builder writes the same YAML the command line runs, so a job stays portable.</p>
+				<figure class="shot-ph shot-ph-wide">
+					<div class="bar"><i></i><i></i><i></i></div>
+					<div class="canvas"><span class="ph">Pipeline builder</span></div>
+					<figcaption>Source, subset, generate, mask, and output as nodes.</figcaption>
+				</figure>
+			</div>
+		</div>
+
+		<div class="cap-panel" id="panel-jobs" role="tabpanel" aria-labelledby="tab-jobs" hidden>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Decoy Studio</p>
+				<h2 class="display-3">Jobs and schedules</h2>
+				<p>Studio runs a pipeline as a shared job. The team sees the run history, the status, and the output in one place. You can schedule a job to run at a set time or on a fixed interval.</p>
+				<figure class="shot-ph shot-ph-wide">
+					<div class="bar"><i></i><i></i><i></i></div>
+					<div class="canvas"><span class="ph">Jobs and run history</span></div>
+					<figcaption>Shared jobs with status and a schedule.</figcaption>
+				</figure>
+			</div>
+		</div>
+
+		<div class="cap-panel" id="panel-access" role="tabpanel" aria-labelledby="tab-access" hidden>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Decoy Studio</p>
+				<h2 class="display-3">Access and audit</h2>
+				<p>Studio groups work into projects and gives each member a role. A role sets what a member can see and do. Studio also keeps an audit history of every change and run, so you can show who did what.</p>
+				<figure class="shot-ph shot-ph-wide">
+					<div class="bar"><i></i><i></i><i></i></div>
+					<div class="canvas"><span class="ph">Projects and roles</span></div>
+					<figcaption>Role-based access with an audit history.</figcaption>
+				</figure>
+			</div>
+		</div>
+
+		<div class="cap-panel" id="panel-reports" role="tabpanel" aria-labelledby="tab-reports" hidden>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Decoy Studio</p>
+				<h2 class="display-3">Reports and evidence</h2>
+				<p>Every run keeps a report. The quality report shows what each rule did, per column. The privacy report shows the residual-PII scan. Studio also keeps an evidence manifest and the run provenance, so you can prove what ran on which data.</p>
+				<figure class="shot-ph shot-ph-wide">
+					<div class="bar"><i></i><i></i><i></i></div>
+					<div class="canvas"><span class="ph">Quality and privacy report</span></div>
+					<figcaption>A per-run quality and privacy report.</figcaption>
+				</figure>
+			</div>
+		</div>
+
+		<div class="cap-panel" id="panel-notifications" role="tabpanel" aria-labelledby="tab-notifications" hidden>
+			<div class="wrap cap-lead">
+				<p class="cap-eyebrow">Decoy Studio</p>
+				<h2 class="display-3">Notifications</h2>
+				<p>Studio tells your team when a job finishes or fails. It sends the alert by email, Slack, or a webhook. You choose the channel and the condition for each rule.</p>
+				<figure class="shot-ph shot-ph-wide">
+					<div class="bar"><i></i><i></i><i></i></div>
+					<div class="canvas"><span class="ph">Notification rules</span></div>
+					<figcaption>Alerts by email, Slack, or webhook.</figcaption>
+				</figure>
 			</div>
 		</div>
 
