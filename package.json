@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
+  "pnpm": {
+    "onlyBuiltDependencies": ["core-js", "esbuild", "sharp"]
+  },
   "scripts": {
     "predev": "node scripts/build-cli-mdx.mjs",
     "dev": "next dev",

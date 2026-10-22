@@ -37,3 +37,4 @@ tsconfig.tsbuildinfo
 content/docs/cli/*.mdx
 !content/docs/cli/_index-intro.mdx
 .gstack/
+out/

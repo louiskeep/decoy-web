@@ -1,28 +1,40 @@
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { DocsLayout } from 'fumadocs-ui/layouts/docs'
-import { Navigation } from '@/components/marketing/navigation'
-import { Footer } from '@/components/marketing/footer'
 import { source } from '@/lib/docs/source'
 import { isDocsPublished } from '@/lib/docs/publish-gate'
 
+// The docs are their own deploy (docs.decoystorm.dev). The chrome links back to
+// the marketing site instead of the Next marketing pages, which do not ship here.
+const SITE = 'https://decoystorm.dev'
+
 export default function Layout({ children }: { children: ReactNode }) {
-  // Single choke point for the whole-tree launch gate (spec Section 6): every
-  // /docs route renders through this layout, so one check here is enough to
-  // keep the tree unreachable in production until launch.
+  // Single choke point for the whole-tree launch gate: every /docs route renders
+  // through this layout, so one check keeps the tree unreachable until launch.
   if (!isDocsPublished()) {
     notFound()
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Reuse the marketing chrome instead of Fumadocs' own nav bar, so /docs
-          stays visually continuous with the rest of the site (spec Section 1.2). */}
-      <Navigation />
-      <DocsLayout tree={source.getPageTree()} nav={{ enabled: false }}>
-        {children}
-      </DocsLayout>
-      <Footer />
-    </div>
+    <DocsLayout
+      tree={source.getPageTree()}
+      nav={{
+        title: (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}>
+            <img src="/decoy-mark.png" alt="" width={22} height={22} />
+            Decoy
+          </span>
+        ),
+        url: SITE,
+      }}
+      githubUrl="https://github.com/louiskeep/decoy"
+      links={[
+        { text: 'Features', url: `${SITE}/features` },
+        { text: 'Pricing', url: `${SITE}/pricing` },
+        { text: 'Security', url: `${SITE}/security` },
+      ]}
+    >
+      {children}
+    </DocsLayout>
   )
 }

@@ -1,37 +1,18 @@
-import { Navigation } from "@/components/marketing/navigation"
-import { Hero } from "@/components/marketing/hero"
-import { OriginStory } from "@/components/marketing/origin-story"
-import { Disguises } from "@/components/marketing/disguises"
-import { Storm } from "@/components/marketing/storm"
-import { TerminalDemo } from "@/components/marketing/terminal-demo"
-import { Features } from "@/components/marketing/features"
-import { Integrations } from "@/components/marketing/integrations"
-import { SelfHosting } from "@/components/marketing/self-hosting"
-import { Comparison } from "@/components/marketing/comparison"
-import { Pricing } from "@/components/marketing/pricing"
-import { FAQ } from "@/components/marketing/faq"
-import { CTA } from "@/components/marketing/cta"
-import { Footer } from "@/components/marketing/footer"
+'use client'
 
+import { useEffect } from 'react'
+
+// This deploy serves only the docs. The root sends people to /docs. Cloudflare
+// also does this at the edge (public/_redirects); this is the in-page fallback.
 export default function Home() {
+  useEffect(() => {
+    window.location.replace('/docs')
+  }, [])
   return (
-    <div className="min-h-screen">
-      <Navigation />
-      <main>
-        <Hero />
-        <OriginStory />
-        <Disguises />
-        <Storm />
-        <TerminalDemo />
-        <Features />
-        <Integrations />
-        <SelfHosting />
-        <Comparison />
-        <Pricing />
-        <FAQ />
-        <CTA />
-      </main>
-      <Footer />
-    </div>
+    <main style={{ display: 'flex', minHeight: '60vh', alignItems: 'center', justifyContent: 'center' }}>
+      <p>
+        Redirecting to the <a href="/docs">documentation</a>.
+      </p>
+    </main>
   )
 }
