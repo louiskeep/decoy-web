@@ -1,28 +1,29 @@
 ---
 title: geo_generalize
-description: Generalize coordinates to a grid cell.
+description: Generalize a location through a cascade of coarser levels.
 ---
 
-Maps a latitude/longitude to an H3 hexagonal grid cell, so an exact point is
-coarsened to a region. `k_threshold` keeps a cell only if enough rows fall in it,
-so a cell never identifies one person.
+Generalizes a ZIP or a latitude/longitude through an ordered cascade of coarser
+levels. A level is kept only if its cell holds at least `k_threshold` rows,
+otherwise the value drops to the next level; the cascade ends with `suppress`, so
+no output ever identifies a small group.
 
 ## Settings
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `type` | string | required | Grid resolution: `h3_resolution_9` (~174 m), `h3_resolution_7` (~1.2 km), `h3_resolution_5` (~8.5 km) |
-| `k_threshold` | integer | none | Minimum rows per cell; cells below it are generalized further or dropped |
-| `cascade` | boolean | `false` | Coarsen a sparse cell to the next resolution instead of failing it |
+| `type` | string | required | `zip` or `lat_lng` |
+| `cascade` | list of string | required | Ordered levels, ending with `suppress`. For `zip`: `zip5`, `zip3`, `state`. For `lat_lng`: `h3_resolution_9`, `h3_resolution_7`, `h3_resolution_5` |
+| `k_threshold` | integer | `20000` | A level is kept only if its cell holds at least this many rows |
 
 For the full parameter set, run `decoy strategies inspect geo_generalize`.
 
 ## Example
 
 ```yaml
-- name: location
+- name: patient_zip
   strategy: geo_generalize
   provider_config:
-    type: h3_resolution_7
-    k_threshold: 20
+    type: zip
+    cascade: [zip5, zip3, suppress]
 ```

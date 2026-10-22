@@ -11,7 +11,7 @@ for a given group within a namespace.
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `group_by` | list of string | required | Columns that define a group |
+| `group_by` | string | required | The single column that partitions rows into groups |
 | `length` | integer | `16` | Output hex length, even, 8 to 64 |
 | `prefix` | string | `""` | Constant prefix on every key |
 
@@ -20,9 +20,9 @@ For the full parameter set, run `decoy strategies inspect group_key`.
 ## Example
 
 ```yaml
-- name: household_id
+- name: household_key
   strategy: group_key
   provider_config:
-    group_by: [address, last_name]
+    group_by: household_id
     prefix: "HH-"
 ```

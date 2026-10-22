@@ -12,11 +12,11 @@ it change. Use `text_redact` to blank spans instead of replacing them.
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `detectors` | list of string | see inspect | Pattern detectors to run over the text |
-| `ner` | boolean | `false` | Also run named-entity recognition |
-| `entities` | list of string | none | NER entity types to catch (person, location, and similar) |
-| `model` | string | default | The NER model to load |
+| `ner` | boolean or object | `false` | Enable NER (`true`), or `{ model, entities }` to configure it |
+| `ner.entities` | list of string | all | NER entity ids to keep: `person_name`, `location` |
+| `ner.model` | string | default | The NER model to load |
 | `per_detector_strategy` | map | none | Override the replacement per detector |
-| `token` | string | none | Replacement token when a span has no synthetic value |
+| `token` | string | `[REDACTED]` | Fallback token when a span has no synthetic value |
 | `unmatched_span_policy` | string | see inspect | What to do with spans no strategy handled |
 
 For the full parameter set, run `decoy strategies inspect text_mask`. See also
@@ -28,6 +28,6 @@ For the full parameter set, run `decoy strategies inspect text_mask`. See also
 - name: clinical_note
   strategy: text_mask
   provider_config:
-    ner: true
-    entities: [person, location]
+    ner:
+      entities: [person_name, location]
 ```

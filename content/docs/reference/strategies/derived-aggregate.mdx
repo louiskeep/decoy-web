@@ -3,15 +3,15 @@ title: derived_aggregate
 description: Replace a value with an aggregate across rows.
 ---
 
-Computes an aggregate over a column across rows (sum, count, mode) and writes it
-back, so a column can carry a group-level summary instead of the raw value.
+Computes an aggregate over a column across rows and writes it back, so a column
+can carry a group-level summary instead of the raw value.
 
 ## Settings
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `column` | string | required | The column to aggregate |
-| `op` | string | required | The aggregate: `sum`, `count`, or `mode` |
+| `op` | string | required | The aggregate: `sum`, `mean`, `min`, `max`, or `count` |
 
 For the full parameter set, run `decoy strategies inspect derived_aggregate`.
 

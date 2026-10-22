@@ -12,9 +12,9 @@ synthetic text. Use `text_mask` to replace spans with realistic values instead.
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `detectors` | list of string | see inspect | Pattern detectors to run over the text |
-| `ner` | boolean | `false` | Also run named-entity recognition |
-| `entities` | list of string | none | NER entity types to catch (person, location, and similar) |
-| `model` | string | default | The NER model to load |
+| `ner` | boolean or object | `false` | Enable NER (`true`), or `{ model, entities }` to configure it |
+| `ner.entities` | list of string | all | NER entity ids to keep: `person_name`, `location` |
+| `ner.model` | string | default | The NER model to load |
 | `token` | string | `[REDACTED]` | The fixed replacement for each span |
 | `label_token` | boolean | `false` | Tag the token with the detected type |
 
@@ -27,7 +27,7 @@ For the full parameter set, run `decoy strategies inspect text_redact`. See also
 - name: free_text
   strategy: text_redact
   provider_config:
-    ner: true
-    entities: [person]
+    ner:
+      entities: [person_name]
     label_token: true
 ```

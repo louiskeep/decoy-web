@@ -3,18 +3,17 @@ title: code_set
 description: Replace a code with another valid code from the same set.
 ---
 
-Swaps a value for a real code drawn from a standard corpus (ICD-10, HCPCS, NDC, or
-a custom set), so the output is still a valid code. `chapter_preserve` keeps the
-replacement in the same category as the original.
+Swaps a value for a real code from a corpus, so the output is still a valid code.
+`chapter_preserve` keeps the replacement in the same chapter as the original.
 
 ## Settings
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `corpus_source` | string | required | The code set: `icd10`, `hcpcs`, `ndc`, or a custom source |
-| `corpus_source_version` | string | latest | Pin a specific version of the corpus |
-| `chapter_preserve` | boolean | `false` | Keep the replacement in the original code's chapter/category |
-| `mode` | string | see inspect | How codes are drawn |
+| `code_set` | string | required | The corpus: `icd10`, `hcpcs`, `ndc`, or `mcc` |
+| `chapter_preserve` | boolean | `false` | Keep the replacement in the original code's chapter |
+| `corpus_source` | string | `shipped` | `shipped`, or `customer:<absolute_path>` to use your own set |
+| `corpus_source_version` | string | none | Pin an expected corpus release id |
 
 For the full parameter set, run `decoy strategies inspect code_set`. See also
 [Work with healthcare code sets](/docs/how-to/work-with-healthcare-code-sets).
@@ -25,6 +24,6 @@ For the full parameter set, run `decoy strategies inspect code_set`. See also
 - name: diagnosis
   strategy: code_set
   provider_config:
-    corpus_source: icd10
+    code_set: icd10
     chapter_preserve: true
 ```

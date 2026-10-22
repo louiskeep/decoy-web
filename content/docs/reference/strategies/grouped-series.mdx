@@ -12,10 +12,11 @@ that restart per customer.
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `group_by` | list of string | required | Columns that define a group |
-| `order_by` | list of string | none | Columns that order the rows within a group |
-| `start` | number | `1` | First value in each group |
+| `order_by` | list of string | required | Columns that order the rows within a group |
+| `generator` | string | `cumcount` | The series generator |
+| `start` | number | `0` (cumcount) | First value in each group |
 | `step` | number | `1` | Increment between rows |
-| `max_step` | number | none | Cap on a randomized step, when set |
+| `max_step` | number | `10` | Cap for the `monotone_walk` generator's randomized step |
 
 For the full parameter set, run `decoy strategies inspect grouped_series`.
 

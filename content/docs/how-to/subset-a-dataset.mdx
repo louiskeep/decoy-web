@@ -42,9 +42,10 @@ Every seed picks rows one of three ways:
     - { column: region, op: eq, value: EU }
     - { column: active, op: eq, value: true }
 
-# sample: a fraction (or a fixed count) of rows
+# sample: a fraction (or a fixed count) of rows, over a key
 - table: customers
   mode: sample
+  key_columns: [customer_id]
   fraction: 0.1
 
 # keys: exact key tuples

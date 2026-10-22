@@ -1,19 +1,19 @@
 ---
 title: joint_mask
-description: Mask correlated columns together.
+description: Mask correlated columns together from a reference table.
 ---
 
-Masks a set of columns as one unit, so their combination stays consistent after
-masking (a city keeps a matching country). Without this, masking each column alone
-would break the correlation.
+Masks a set of columns together by looking up a matching row in a reference table,
+so their combination stays valid after masking (a city keeps a real state and
+ZIP). `key_by` names the one source column whose value drives the lookup.
 
 ## Settings
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `mode` | string | required | How the columns are jointly masked |
-| `key_by` | list of string | none | Columns whose combination is kept consistent |
-| `reference` | string | none | A reference set the joint values are drawn from |
+| `columns` | list of string | required | The columns masked jointly |
+| `reference` | string | required | The reference table: a shipped name (for example `us_zip5_city_state`) or `customer:<absolute_path>` |
+| `key_by` | string | required | The one source column whose value selects the reference row |
 
 For the full parameter set, run `decoy strategies inspect joint_mask`.
 
@@ -23,5 +23,7 @@ For the full parameter set, run `decoy strategies inspect joint_mask`.
 - name: city
   strategy: joint_mask
   provider_config:
-    key_by: [city, state, country]
+    columns: [city, state, zip]
+    reference: us_zip5_city_state
+    key_by: zip
 ```

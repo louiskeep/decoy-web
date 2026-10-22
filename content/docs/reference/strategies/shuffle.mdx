@@ -3,9 +3,10 @@ title: shuffle
 description: Shuffle a column to break row identity.
 ---
 
-Reorders a column's values across rows. The column keeps its distribution, but no
-value stays on its original row, so the link between this column and the rest of
-the row is broken. No namespace.
+Reorders a column's values across rows, so the column keeps its distribution but
+the values no longer line up with the rest of their row. It is a plain
+permutation, so a value can land back on its own row. A deterministic shuffle
+needs a `namespace`.
 
 ## Example
 

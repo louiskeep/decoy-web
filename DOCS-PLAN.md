@@ -186,6 +186,15 @@ troubleshooting/FAQ.
 6. Build the Studio section as held drafts, shipped surfaces only, from the
    content-map.
 
+## Review log
+
+- 2026-10-22, dennis factual-accuracy cold-read of the 23 strategy pages +
+  providers + relationships + subset + parquet against the engine handlers:
+  11 P1 / 4 P2 / 3 P3. All remediated with the engine evidence (the grep-extracted
+  DSL/NER/geo/code_set/joint_mask pages had guessed semantics; fixed). The simple
+  number/date pages held up. Final Codex gate + Cam review still pending before
+  merge.
+
 ## Post-reorg backlog (Codex IA review 2026-10-22)
 
 The reorg is done (4 sections; connectors + CLI nested under Reference; order +

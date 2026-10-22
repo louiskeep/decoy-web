@@ -1,26 +1,26 @@
 ---
 title: bucket_perturb
-description: Nudge a value into a nearby bucket.
+description: Snap a date to a deterministic position in its week, month, or quarter.
 ---
 
-Shifts a value by a bounded, deterministic amount so it moves into a neighboring
-bucket without leaving its neighborhood (age 45 becomes 48, not 90). Keyed, so the
-same input always moves the same way.
+Moves a date to a deterministic position inside its ISO week, calendar month, or
+calendar quarter, so the date shifts within a bounded period and the same input
+always lands the same way. This is a date strategy; it does not apply to numbers.
 
 ## Settings
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `bucket` | number | required | Bucket size that bounds the perturbation |
-| `date_format` | string | none | Format string when the column is a date |
+| `bucket` | string | required | The period to snap within: `week`, `month`, or `quarter` |
+| `date_format` | string | none | Format string for the date column |
 
 For the full parameter set, run `decoy strategies inspect bucket_perturb`.
 
 ## Example
 
 ```yaml
-- name: age
+- name: admit_date
   strategy: bucket_perturb
   provider_config:
-    bucket: 5
+    bucket: month
 ```

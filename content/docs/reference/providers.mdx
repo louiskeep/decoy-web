@@ -13,15 +13,16 @@ sets `deterministic: true`.
 
 | Provider | Generates | Backend |
 | --- | --- | --- |
-| `person_name` | A full name | mimesis |
-| `person_first_name` | A first name | mimesis |
-| `person_last_name` | A last name | mimesis |
-| `person_full_name` | A full name | mimesis |
-| `person_email` | An email address | mimesis |
+| `person_name` | A full name | faker |
+| `person_first_name` | A first name | faker |
+| `person_last_name` | A last name | faker |
+| `person_full_name` | A full name | faker |
+| `person_email` | An email address | faker |
 | `person_phone` | A phone number | faker |
 | `person_dob` | A date of birth | faker |
 
-The mimesis-backed providers need the `mimesis` extra installed.
+The name and email providers use faker by default; install the `mimesis` extra to
+back them with mimesis instead.
 
 ## Addresses
 
