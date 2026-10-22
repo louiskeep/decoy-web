@@ -223,7 +223,8 @@ the reorg:
 3. Finish the remaining ~12 per-strategy pages (see item 2 in the sequence).
 4. Connectors and formats: give CSV, Parquet, and other formats their own lookup
    pages alongside the file/S3/GCS/SFTP connector pages.
-5. Move `exit-codes` out of Concepts and under CLI reference.
+5. DONE: `exit-codes` moved from Concepts to reference/exit-codes (after CLI
+   reference); the two inbound links repointed.
 6. Split `high-cardinality-categories`: keep rationale in Concepts, move settings
    and failure cases into Configuration/reference.
 7. DONE: `what-we-cannot-prove` -> reference/limits "Security, privacy, and
