@@ -156,3 +156,22 @@ html.anim-on .welcome .hero-bg{ animation:anim-fade 1.4s ease .3s both; }
   html.anim-on .welcome .hero-bg{
     animation:none !important; transition:none !important; opacity:1 !important; transform:none !important; }
 }
+
+/* ============================================================
+   Footer: a teal panel with white text and a faint dot-grid
+   texture, so it bookends the page with contrast instead of a
+   flat white slab. Shared across every page.
+   ============================================================ */
+footer .sitefooter{ position:relative; overflow:hidden;
+  background:linear-gradient(160deg,#00756e 0%,#00867e 55%,#0a9b92 100%); color:#fff; }
+footer .sitefooter::before{ content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1px, transparent 1.4px); background-size:22px 22px;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.3)); mask-image:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.3)); }
+footer .footercontent{ position:relative; z-index:1; }
+footer .footerbrand p{ color:rgba(255,255,255,.82); }
+footer .footerbrand .brand img{ filter:brightness(0) invert(1); }
+footer .footer-title{ color:#fff; }
+/* Match the base's `.footercontent > div a` specificity so white wins. */
+footer .sitefooter .footercontent > div a{ color:rgba(255,255,255,.80); transition:color .15s ease; }
+footer .sitefooter .footercontent > div a:hover{ color:#fff; text-decoration:underline; }
+footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px solid rgba(255,255,255,.18); padding-top:18px; margin-top:6px; }
