@@ -206,6 +206,10 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
 .pmatrix .yes svg{ width:19px; height:19px; color:#00867e; }
 .pmatrix .no{ display:inline-block; width:12px; height:2px; border-radius:2px; background:var(--grey-80,#cfcfcf); vertical-align:middle; }
 
+/* Merged cell that says a higher tier inherits everything below it. */
+.pmatrix td.inherit{ vertical-align:middle; text-align:center; color:#00867e; font-family:"SuisseIntl"; font-weight:600; font-size:13.5px; line-height:1.4; letter-spacing:.01em; }
+.darkmode .pmatrix td.inherit{ color:#4cc2c2; }
+
 /* Highlight the Studio column top to bottom. */
 .pmatrix .pop{ background:rgba(0,134,126,.06); }
 .pmatrix thead th.pop{ border-top:2px solid #00867e; border-bottom-color:rgba(0,134,126,.25); border-radius:10px 10px 0 0; }
