@@ -1,4 +1,4 @@
 {
   "title": "Strategies",
-  "pages": ["index", "hash", "fpe", "faker", "redact", "categorical", "date-shift", "truncate", "passthrough", "shuffle", "bucketize", "top-code"]
+  "pages": ["index", "hash", "fpe", "faker", "redact", "categorical", "date-shift", "windowed-date", "truncate", "passthrough", "shuffle", "bucketize", "top-code", "geo-generalize", "group-key", "grouped-series"]
 }

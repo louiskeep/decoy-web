@@ -1,0 +1,28 @@
+---
+title: geo_generalize
+description: Generalize coordinates to a grid cell.
+---
+
+Maps a latitude/longitude to an H3 hexagonal grid cell, so an exact point is
+coarsened to a region. `k_threshold` keeps a cell only if enough rows fall in it,
+so a cell never identifies one person.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `type` | string | required | Grid resolution: `h3_resolution_9` (~174 m), `h3_resolution_7` (~1.2 km), `h3_resolution_5` (~8.5 km) |
+| `k_threshold` | integer | none | Minimum rows per cell; cells below it are generalized further or dropped |
+| `cascade` | boolean | `false` | Coarsen a sparse cell to the next resolution instead of failing it |
+
+For the full parameter set, run `decoy strategies inspect geo_generalize`.
+
+## Example
+
+```yaml
+- name: location
+  strategy: geo_generalize
+  provider_config:
+    type: h3_resolution_7
+    k_threshold: 20
+```

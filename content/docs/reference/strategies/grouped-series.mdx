@@ -1,0 +1,32 @@
+---
+title: grouped_series
+description: Generate a per-group sequence.
+---
+
+Produces a sequence within each group: rows in a group are ordered, then numbered
+from `start` by `step`. Use it for per-entity running values, like order numbers
+that restart per customer.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `group_by` | list of string | required | Columns that define a group |
+| `order_by` | list of string | none | Columns that order the rows within a group |
+| `start` | number | `1` | First value in each group |
+| `step` | number | `1` | Increment between rows |
+| `max_step` | number | none | Cap on a randomized step, when set |
+
+For the full parameter set, run `decoy strategies inspect grouped_series`.
+
+## Example
+
+```yaml
+- name: order_seq
+  strategy: grouped_series
+  provider_config:
+    group_by: [customer_id]
+    order_by: [ordered_at]
+    start: 1
+    step: 1
+```
