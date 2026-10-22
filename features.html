@@ -198,16 +198,30 @@
 </section>
 
 
-<section id="masking">
-	<div class="flexwrap wrap">
-		<div class="intro">
-      <h2 class="display-3">Masking</h2>
-			<p>Replace sensitive fields in place and keep the data usable. 23 strategies cover format, distribution, and referential integrity, so masked tables still join and still look real.</p>
-			<p>Pick a strategy per column: hash and fpe for identifiers, date_shift for timestamps, redact for free text, faker for realistic stand-ins, categorical for coded values. Keyed and native strategies are deterministic, so repeat runs and foreign keys stay consistent. Many providers are not deterministic by design.</p>
+<section id="capabilities" class="cap-tabs">
+	<div class="wrap">
+		<div class="cap-tablist" role="tablist" aria-label="Engine capabilities">
+			<button class="cap-tab" id="tab-masking" role="tab" aria-selected="true" aria-controls="panel-masking" tabindex="0">Masking</button>
+			<button class="cap-tab" id="tab-generation" role="tab" aria-selected="false" aria-controls="panel-generation" tabindex="-1">Generation</button>
+			<button class="cap-tab" id="tab-subsetting" role="tab" aria-selected="false" aria-controls="panel-subsetting" tabindex="-1">Subsetting</button>
+			<button class="cap-tab" id="tab-detection" role="tab" aria-selected="false" aria-controls="panel-detection" tabindex="-1">Detection</button>
+			<button class="cap-tab" id="tab-observability" role="tab" aria-selected="false" aria-controls="panel-observability" tabindex="-1">Observability</button>
+			<button class="cap-tab" id="tab-disguises" role="tab" aria-selected="false" aria-controls="panel-disguises" tabindex="-1">Disguises</button>
 		</div>
-		<div class="install">
-			<div class="window">
-				<div class="result content">
+	</div>
+
+	<div class="cap-panels">
+
+		<div class="cap-panel" id="panel-masking" role="tabpanel" aria-labelledby="tab-masking">
+			<div class="flexwrap wrap">
+				<div class="intro">
+					<h2 class="display-3">Masking</h2>
+					<p>Replace sensitive fields in place and keep the data usable. 23 strategies cover format, distribution, and referential integrity, so masked tables still join and still look real.</p>
+					<p>Pick a strategy per column: hash and fpe for identifiers, date_shift for timestamps, redact for free text, faker for realistic stand-ins, categorical for coded values. Keyed and native strategies are deterministic, so repeat runs and foreign keys stay consistent. Many providers are not deterministic by design.</p>
+				</div>
+				<div class="install">
+					<div class="window">
+						<div class="result content">
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: mask
 input:  { type: csv, path: customers.csv }
 output: { type: csv, path: customers_masked.csv }
@@ -218,23 +232,22 @@ masking_rules:
   - { column: notes, type: redact }
   - { column: account_id, type: hash }
   - { column: plan_tier, type: categorical }</code></pre></figure>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
-
-<section id="generation">
-	<div class="flexwrap wrap">
-		<div class="intro">
-      <h2 class="display-3">Generation</h2>
-			<p>Build synthetic columns, or whole tables from a schema with no source data. 12 generation strategies and 34 providers cover sequences, categories, references, and formulas.</p>
-			<p>Fill a new column with realistic values, or run generate mode to produce a complete dataset for tests, demos, and seed data. Providers supply names, addresses, and identifiers; references keep generated keys pointing at real rows.</p>
-		</div>
-		<div class="install">
-			<div class="window">
-				<div class="result content">
+		<div class="cap-panel" id="panel-generation" role="tabpanel" aria-labelledby="tab-generation" hidden>
+			<div class="flexwrap wrap">
+				<div class="intro">
+					<h2 class="display-3">Generation</h2>
+					<p>Build synthetic columns, or whole tables from a schema with no source data. 12 generation strategies and 34 providers cover sequences, categories, references, and formulas.</p>
+					<p>Fill a new column with realistic values, or run generate mode to produce a complete dataset for tests, demos, and seed data. Providers supply names, addresses, and identifiers; references keep generated keys pointing at real rows.</p>
+				</div>
+				<div class="install">
+					<div class="window">
+						<div class="result content">
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: generate
 output: { type: parquet, path: synthetic_users.parquet }
 rows: 10000
@@ -244,23 +257,22 @@ columns:
   - { name: country, type: category, values: [US, CA, GB, DE] }
   - { name: org_id, type: reference, table: orgs, column: id }
   - { name: label, type: formula, expr: "country + '-' + user_id" }</code></pre></figure>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
-
-<section id="subsetting">
-	<div class="flexwrap wrap">
-		<div class="intro">
-      <h2 class="display-3">Subsetting</h2>
-			<p>Pull a small, referentially intact slice of related tables. Seed by sample, filter, or key, then follow foreign keys up, down, or both, bounded by a fan-out budget so the slice stays small.</p>
-			<p>Run a preflight first to see how large the slice will be and which tables it touches, then run the subset for real. The output keeps its foreign keys valid, so it loads cleanly into a smaller environment.</p>
-		</div>
-		<div class="install">
-			<div class="window">
-				<div class="result content">
+		<div class="cap-panel" id="panel-subsetting" role="tabpanel" aria-labelledby="tab-subsetting" hidden>
+			<div class="flexwrap wrap">
+				<div class="intro">
+					<h2 class="display-3">Subsetting</h2>
+					<p>Pull a small, referentially intact slice of related tables. Seed by sample, filter, or key, then follow foreign keys up, down, or both, bounded by a fan-out budget so the slice stays small.</p>
+					<p>Run a preflight first to see how large the slice will be and which tables it touches, then run the subset for real. The output keeps its foreign keys valid, so it loads cleanly into a smaller environment.</p>
+				</div>
+				<div class="install">
+					<div class="window">
+						<div class="result content">
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml">mode: subset
 input:  { type: parquet, path: warehouse/ }
 output: { type: parquet, path: sandbox/ }
@@ -270,78 +282,109 @@ seed:
 follow:
   direction: both
   max_fanout: 5000</code></pre></figure>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
-
-<section id="detection">
-	<div class="flexwrap wrap">
-		<div class="intro">
-      <h2 class="display-3">Detection &amp; profiling (STORM)</h2>
-			<p>Scan a file to find the fields that are likely sensitive before you write a rule for them. STORM runs 25 detectors over the data and reports what it found for you to review, then mask.</p>
-			<p>The optional machine-learning classifier is off by default; detection runs on the built-in detectors unless you turn it on. Nothing is masked by a scan. You read the report, decide, and apply the rules yourself.</p>
-		</div>
-		<div class="install">
-			<div class="window">
-				<div class="result content">
+		<div class="cap-panel" id="panel-detection" role="tabpanel" aria-labelledby="tab-detection" hidden>
+			<div class="flexwrap wrap">
+				<div class="intro">
+					<h2 class="display-3">Detection &amp; profiling (STORM)</h2>
+					<p>Scan a file to find the fields that are likely sensitive before you write a rule for them. STORM runs 25 detectors over the data and reports what it found for you to review, then mask.</p>
+					<p>The optional machine-learning classifier is off by default; detection runs on the built-in detectors unless you turn it on. Nothing is masked by a scan. You read the report, decide, and apply the rules yourself.</p>
+				</div>
+				<div class="install">
+					<div class="window">
+						<div class="result content">
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">decoy storm analyze customers.csv --report storm.json
 
 # review the findings, then mask with your own rules
 decoy mask config.yaml</code></pre></figure>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
-
-<section id="observability">
-	<div class="flexwrap wrap">
-		<div class="intro">
-      <h2 class="display-3">Observability</h2>
-			<p>See what every run did. The CLI writes local run output and JSON reports you can keep or feed into CI.</p>
-			<p>Decoy Studio adds the shared view on top: run logs, quality and privacy reports, evidence manifests, run provenance, audit history, and optional metrics. It is where a team reviews runs together and keeps the record.</p>
-		</div>
-		<div class="install">
-			<div class="window">
-				<div class="result content">
+		<div class="cap-panel" id="panel-observability" role="tabpanel" aria-labelledby="tab-observability" hidden>
+			<div class="flexwrap wrap">
+				<div class="intro">
+					<h2 class="display-3">Observability</h2>
+					<p>See what every run did. The CLI writes local run output and JSON reports you can keep or feed into CI.</p>
+					<p>Decoy Studio adds the shared view on top: run logs, quality and privacy reports, evidence manifests, run provenance, audit history, and optional metrics. It is where a team reviews runs together and keeps the record.</p>
+				</div>
+				<div class="install">
+					<div class="window">
+						<div class="result content">
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">decoy mask config.yaml --report run.json
 # run.json: rows processed, rules applied, per-column summary</code></pre></figure>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
+		<div class="cap-panel" id="panel-disguises" role="tabpanel" aria-labelledby="tab-disguises" hidden>
+			<div class="wrap">
+				<div class="intro">
+					<h2 class="display-3">Compliance disguises</h2>
+					<p>Start from a template instead of a blank config. Each disguise is a reviewable set of rules aimed at a common regime, a starting point you validate against your own schema, not auto-classification. You read it, adjust it, and run it.</p>
+				</div>
+			</div>
+			<div class="wrap">
+				<div class="bento-grid">
+					<div class="bento-box">
+						<div class="bento-title">
+							<svg class="icon"><use href="#shield-tick"></use></svg>
+							<span>Ten templates</span>
+						</div>
+						<p>HIPAA, PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, P&amp;C, and a default template. Each one produces a rule set you review before any run.</p>
+					</div>
+					<div class="bento-box wide">
+						<div class="bento-title">
+							<svg class="icon"><use href="#check-verified-01"></use></svg>
+							<span>Reviewable, not automatic</span>
+						</div>
+						<p>A disguise does not decide which of your fields are sensitive. It gives you a sensible first draft for a regime; you confirm the columns and strategies against your data, then run it yourself.</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
-<section id="disguises">
-	<div class="wrap">
-		<div class="intro">
-      <h2 class="display-3">Compliance disguises</h2>
-			<p>Start from a template instead of a blank config. Each disguise is a reviewable set of rules aimed at a common regime, a starting point you validate against your own schema, not auto-classification. You read it, adjust it, and run it.</p>
-		</div>
 	</div>
-	<div class="wrap">
-		<div class="bento-grid">
-			<div class="bento-box">
-				<div class="bento-title">
-					<svg class="icon"><use href="#shield-tick"></use></svg>
-					<span>Ten templates</span>
-				</div>
-				<p>HIPAA, PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, P&amp;C, and a default template. Each one produces a rule set you review before any run.</p>
-			</div>
-			<div class="bento-box wide">
-				<div class="bento-title">
-					<svg class="icon"><use href="#check-verified-01"></use></svg>
-					<span>Reviewable, not automatic</span>
-				</div>
-				<p>A disguise does not decide which of your fields are sensitive. It gives you a sensible first draft for a regime; you confirm the columns and strategies against your data, then run it yourself.</p>
-			</div>
-		</div>
-	</div>
+
+	<script>
+	(function(){
+		var tabs = Array.prototype.slice.call(document.querySelectorAll('.cap-tab'));
+		if(!tabs.length) return;
+		function select(tab){
+			tabs.forEach(function(t){
+				var on = t === tab;
+				t.setAttribute('aria-selected', on ? 'true' : 'false');
+				t.tabIndex = on ? 0 : -1;
+				var panel = document.getElementById(t.getAttribute('aria-controls'));
+				if(panel) panel.hidden = !on;
+			});
+		}
+		tabs.forEach(function(tab, i){
+			tab.addEventListener('click', function(){ select(tab); });
+			tab.addEventListener('keydown', function(e){
+				var idx = null;
+				if(e.key === 'ArrowRight' || e.key === 'ArrowDown') idx = (i + 1) % tabs.length;
+				else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') idx = (i - 1 + tabs.length) % tabs.length;
+				else if(e.key === 'Home') idx = 0;
+				else if(e.key === 'End') idx = tabs.length - 1;
+				if(idx !== null){ e.preventDefault(); tabs[idx].focus(); select(tabs[idx]); }
+			});
+		});
+		// Preserve the old section anchors (#masking, #generation, ...) as deep links.
+		var h = (location.hash || '').replace('#', '');
+		var match = h && document.getElementById('tab-' + h);
+		select(match || tabs[0]);
+	})();
+	</script>
 </section>
 
 

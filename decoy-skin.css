@@ -89,3 +89,25 @@
 .hero-shot .shot{ aspect-ratio:16/9; background:radial-gradient(120% 120% at 72% 0%, rgba(0,134,126,.12), rgba(0,134,126,.02) 60%); display:flex; align-items:center; justify-content:center; }
 .hero-shot .shot img{ width:100%; height:100%; object-fit:cover; display:block; }
 .hero-shot .shot .ph{ font-family:"JetBrainsMono-Regular",monospace; font-size:13px; color:var(--grey-50,#808080); }
+
+/* ---- Capability tabs (features page): one capability at a time, no scrolling ---- */
+.cap-tablist{ display:flex; flex-wrap:wrap; gap:4px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); margin-bottom:38px; }
+.cap-tab{ appearance:none; background:none; border:0; border-bottom:2px solid transparent; margin-bottom:-1px; padding:12px 18px; cursor:pointer; font-family:"SuisseIntl"; font-weight:600; font-size:15.5px; line-height:1.2; color:var(--grey-40,#666); transition:color .15s ease, border-color .15s ease; }
+.cap-tab:hover{ color:#0d0d0d; }
+.cap-tab[aria-selected="true"]{ color:#00867e; border-bottom-color:#00867e; }
+.cap-tab:focus-visible{ outline:2px solid #00867e; outline-offset:-2px; border-radius:4px; }
+.cap-panel[hidden]{ display:none; }
+.cap-panel{ animation:cap-fade .18s ease; }
+@keyframes cap-fade{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:none; } }
+.cap-panel > section, .cap-tabs section{ padding-top:0; }
+
+.darkmode .cap-tablist{ border-bottom-color:rgba(255,255,255,.14); }
+.darkmode .cap-tab{ color:var(--grey-60,#9a9a9a); }
+.darkmode .cap-tab:hover{ color:#fff; }
+.darkmode .cap-tab[aria-selected="true"]{ color:#4cc2c2; border-bottom-color:#4cc2c2; }
+
+@media (max-width:760px){
+  .cap-tablist{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .cap-tablist::-webkit-scrollbar{ display:none; }
+  .cap-tab{ white-space:nowrap; padding:11px 13px; font-size:14.5px; }
+}
