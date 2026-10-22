@@ -205,6 +205,25 @@ troubleshooting/FAQ.
   number/date pages held up. Final Codex gate + Cam review still pending before
   merge.
 
+## Within-section ordering (Codex review 2026-10-22)
+
+Applied Codex's within-section ordering so sections read as a progression, not
+authoring order:
+- Guides grouped by outcome (Discover and mask / Build safer test datasets /
+  Handle specialized data / Operationalize).
+- Concepts ordered foundational-first (determinism, keys, storm, disguises, DP).
+- Reference ordered capabilities, configuration, strategies, providers,
+  relationships, connectors, cli, exit-codes, limits.
+- Strategies grouped (Common masking, Categories/generalization, Dates/geography,
+  Free text/domain codes, Derived values, Grouped/multicolumn).
+- Moved high-cardinality from Concepts to Guides ("Handle high-cardinality
+  categorical data"); it was config/examples, not a concept.
+
+Codex new-guide suggestions (TODO): `choose-a-masking-strategy` (bridge STORM
+findings to the strategy pages) and `unmask-data` (FPE/vault reversal, currently
+undocumented; verify against the engine). Also: refactor `strategies/index`
+(before/after gallery) into a concise categorized index, since it reads guide-like.
+
 ## Post-reorg backlog (Codex IA review 2026-10-22)
 
 The reorg is done (4 sections; connectors + CLI nested under Reference; order +

@@ -1,11 +1,4 @@
 {
   "title": "Concepts",
-  "pages": [
-    "storm",
-    "disguises",
-    "keys-and-vault",
-    "determinism",
-    "differential-privacy",
-    "high-cardinality-categories"
-  ]
+  "pages": ["determinism", "keys-and-vault", "storm", "disguises", "differential-privacy"]
 }

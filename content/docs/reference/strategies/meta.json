@@ -1,4 +1,18 @@
 {
   "title": "Strategies",
-  "pages": ["index", "faker", "hash", "fpe", "redact", "passthrough", "categorical", "bucketize", "bucket-perturb", "top-code", "truncate", "shuffle", "date-shift", "windowed-date", "geo-generalize", "code-set", "derived", "derived-aggregate", "formula", "group-key", "grouped-series", "joint-mask", "text-mask", "text-redact"]
+  "pages": [
+    "index",
+    "---Common masking---",
+    "faker", "hash", "redact", "fpe", "passthrough",
+    "---Categories and generalization---",
+    "categorical", "shuffle", "truncate", "bucketize", "top-code",
+    "---Dates and geography---",
+    "date-shift", "bucket-perturb", "windowed-date", "geo-generalize",
+    "---Free text and domain codes---",
+    "text-redact", "text-mask", "code-set",
+    "---Derived values---",
+    "derived", "formula", "derived-aggregate",
+    "---Grouped and multicolumn---",
+    "group-key", "grouped-series", "joint-mask"
+  ]
 }
