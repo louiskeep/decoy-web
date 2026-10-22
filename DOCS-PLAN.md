@@ -195,8 +195,9 @@ the reorg:
 1. Split Configuration (yaml-schema) from one JSON-Schema dump into a folder:
    pipeline structure, global settings, sources and targets, tables, generation,
    validation, subsetting. Each as a settings-table + example page.
-2. Providers catalog: the 34 synthetic providers as product reference (one page
-   per provider or family), distinct from the `decoy providers` CLI page.
+2. DONE: Providers catalog at reference/providers (the 34 providers grouped by
+   family: people, addresses, composites, identifiers, generic), distinct from
+   the `decoy providers` CLI page. Could split into per-family pages later.
 3. Finish the remaining ~12 per-strategy pages (see item 2 in the sequence).
 4. Connectors and formats: give CSV, Parquet, and other formats their own lookup
    pages alongside the file/S3/GCS/SFTP connector pages.

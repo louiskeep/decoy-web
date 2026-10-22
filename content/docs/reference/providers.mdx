@@ -1,0 +1,96 @@
+---
+title: Synthetic data providers
+description: The named value sources for the faker strategy and generation type.
+---
+
+A provider is the value source behind the `faker` mask strategy and the `faker`
+generation type. Set it with `provider:` on a column. There are 34, across people,
+addresses, identifiers, and composites. The `decoy_native` providers are
+deterministic and checksummed; the faker ones are random per run unless the column
+sets `deterministic: true`.
+
+## People
+
+| Provider | Generates | Backend |
+| --- | --- | --- |
+| `person_name` | A full name | mimesis |
+| `person_first_name` | A first name | mimesis |
+| `person_last_name` | A last name | mimesis |
+| `person_full_name` | A full name | mimesis |
+| `person_email` | An email address | mimesis |
+| `person_phone` | A phone number | faker |
+| `person_dob` | A date of birth | faker |
+
+The mimesis-backed providers need the `mimesis` extra installed.
+
+## Addresses
+
+| Provider | Generates | Backend |
+| --- | --- | --- |
+| `address_full` | A full street address | faker |
+| `address_street` | A street line | faker |
+| `address_city` | A city | faker |
+| `address_state` | A state or region | faker |
+| `address_zip` | A postal code | faker |
+
+## Composites
+
+Composites keep several fields coherent with each other (a city that matches its
+state and ZIP). Pair them with `coherent_with` on the columns they cover.
+
+| Provider | Generates | Backend |
+| --- | --- | --- |
+| `composite_person` | A coherent person record | composite |
+| `composite_name_email` | A name with a matching email | composite |
+| `composite_address` | A coherent address | composite |
+| `composite_city_state_zip` | A matching city, state, and ZIP | composite |
+| `composite_provider` | A coherent provider record | composite |
+| `composite_custom` | A user-defined coherent set | composite |
+
+## Identifiers (deterministic)
+
+These are `decoy_native`, deterministic and checksummed, so the same input maps to
+a valid, stable identifier.
+
+| Provider | Generates | Unique |
+| --- | --- | --- |
+| `synthetic_ssn` | A synthetic SSN | yes |
+| `synthetic_npi` | A National Provider Identifier | yes |
+| `synthetic_mrn` | A medical record number | yes |
+| `synthetic_icd10` | An ICD-10 diagnosis code | no |
+| `synthetic_ndc` | A National Drug Code | yes |
+| `synthetic_pan` | A primary account (card) number | yes |
+| `synthetic_iban` | An IBAN | yes |
+| `synthetic_ein` | An Employer Identification Number | yes |
+| `synthetic_cusip` | A CUSIP security identifier | yes |
+
+## Identifiers (faker)
+
+| Provider | Generates | Backend |
+| --- | --- | --- |
+| `synthetic_account_number` | An account number | faker |
+| `synthetic_member_id` | A health-plan member ID | faker |
+| `synthetic_plan_id` | A plan ID | faker |
+| `uuid` | A UUID | faker |
+
+## Generic
+
+| Provider | Generates | Backend |
+| --- | --- | --- |
+| `lorem_text` | Placeholder text | faker |
+| `random_choice` | A value from a given set | faker |
+| `random_int_range` | An integer in a range | faker |
+
+## Usage
+
+```yaml
+# masking: replace a column with a provider value
+- name: email
+  strategy: faker
+  provider: person_email
+
+# generation: a synthetic column from a provider
+- name: npi
+  type: faker
+  faker_type: synthetic_npi
+```
