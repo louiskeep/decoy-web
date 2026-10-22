@@ -213,43 +213,55 @@
   function ri(n){return Math.random()*n|0;}
   function dg(n){var o="";for(var i=0;i<n;i++)o+=ri(10);return o;}
   function pad(v){v=""+v;return v.length<2?"0"+v:v;}
-  function cell(type){
-    if(type==="name"){return {o:NAMES[ri(NAMES.length)],m:function(){return NAMES[ri(NAMES.length)];}};}
-    if(type==="ssn"){return {o:"0"+dg(2)+"-"+dg(2)+"-"+dg(4),m:function(){return dg(3)+"-"+dg(2)+"-"+dg(4);}};}
-    if(type==="email"){var u="user"+dg(4);return {o:u+"@example.com",m:function(){return u[0]+"*******@e****.com";}};}
-    if(type==="dob"){var y=1960+ri(45),mo=1+ri(12);return {o:y+"-"+pad(mo)+"-"+pad(1+ri(27)),m:function(){return y+"-"+pad(mo)+"-"+pad(1+ri(27));}};}
-    if(type==="card"){return {o:dg(4)+" "+dg(4)+" "+dg(4)+" "+dg(4),m:function(){return dg(4)+" "+dg(4)+" "+dg(4)+" "+dg(4);}};}
-    return {o:"MRN"+dg(6),m:function(){return "MRN"+dg(6);}};
+  function dots(n){var o="";for(var i=0;i<n;i++)o+="•";return o;}
+  // Each cell renders a realistic value and the masked form of the same field.
+  function gen(type){
+    if(type==="name"){var n=NAMES[ri(NAMES.length)];return {raw:n, masked:n.charAt(0)+dots(Math.max(4,n.length-1))};}
+    if(type==="ssn"){var t=dg(4);return {raw:"0"+dg(2)+"-"+dg(2)+"-"+t, masked:dots(3)+"-"+dots(2)+"-"+t};}
+    if(type==="email"){var u="user"+dg(4);return {raw:u+"@example.com", masked:u.charAt(0)+dots(6)+"@"+dots(4)+".com"};}
+    if(type==="dob"){var y=1960+ri(45),mo=pad(1+ri(12)),d=pad(1+ri(27));return {raw:y+"-"+mo+"-"+d, masked:(""+y).slice(0,2)+dots(2)+"-"+dots(2)+"-"+dots(2)};}
+    if(type==="card"){var l=dg(4);return {raw:dg(4)+" "+dg(4)+" "+dg(4)+" "+l, masked:dots(4)+" "+dots(4)+" "+dots(4)+" "+l};}
+    var m=dg(2);return {raw:"MRN"+dg(4)+m, masked:"MRN"+dots(4)+m};
   }
-  var PAT=["name","ssn","email","dob","card","mrn","name","email","card","ssn"], ROWS=18, all=[];
-  var frag=document.createDocumentFragment();
+  function paint(sp){ var masked=sp._state==="masked"; sp.textContent=masked?sp._v.masked:sp._v.raw; sp.classList.toggle("masking",masked); }
+
+  var PAT=["name","ssn","email","dob","card","mrn","name","email","card","ssn"], ROWS=16;
+  var rows=[], frag=document.createDocumentFragment();
   for(var r=0;r<ROWS;r++){
     var row=document.createElement("div"); row.className="row";
     for(var c=0;c<PAT.length;c++){
-      var d=cell(PAT[(c+r)%PAT.length]); var sp=document.createElement("span"); sp.className="cell"; sp.textContent=d.o;
-      sp._o=d.o; sp._m=d.m; sp._k=false; row.appendChild(sp); all.push(sp);
+      var sp=document.createElement("span"); sp.className="cell";
+      sp._type=PAT[(c+r)%PAT.length]; sp._v=gen(sp._type); sp._state="raw"; paint(sp);
+      row.appendChild(sp);
     }
-    frag.appendChild(row);
+    frag.appendChild(row); rows.push(row);
   }
   host.appendChild(frag);
+
   if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var SC="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789*#";
-  function scramble(el, fin){
-    el.classList.add("masking");
-    var start=performance.now(), dur=260+Math.random()*200;
-    function frame(now){
-      var t=Math.min(1,(now-start)/dur), reveal=Math.floor(t*fin.length), out="";
-      for(var i=0;i<fin.length;i++){ var ch=fin[i];
-        out += (i<reveal||ch===" "||ch==="-"||ch==="@"||ch===".") ? ch : SC[ri(SC.length)]; }
-      el.textContent=out;
-      if(t<1) requestAnimationFrame(frame); else { el.textContent=fin; el.classList.remove("masking"); }
-    }
-    requestAnimationFrame(frame);
+  if(typeof Element.prototype.animate !== "function") return;
+
+  // Flip one row edge-on, swap its values, flip it back. masked->raw draws a fresh record.
+  function flipRow(row){
+    var down=row.animate([{transform:"rotateX(0deg)"},{transform:"rotateX(90deg)"}],{duration:220,easing:"cubic-bezier(.4,0,1,.5)",fill:"forwards"});
+    down.onfinish=function(){
+      for(var i=0;i<row.children.length;i++){
+        var sp=row.children[i];
+        if(sp._state==="raw"){ sp._state="masked"; }
+        else { sp._v=gen(sp._type); sp._state="raw"; }
+        paint(sp);
+      }
+      row.animate([{transform:"rotateX(-90deg)"},{transform:"rotateX(0deg)"}],{duration:240,easing:"cubic-bezier(0,.5,.3,1)"});
+      down.cancel();
+    };
   }
-  setInterval(function(){
-    var n=4+ri(3);
-    for(var k=0;k<n;k++){ var sp=all[ri(all.length)]; if(!sp) continue; sp._k=!sp._k; scramble(sp, sp._k ? sp._m() : sp._o); }
-  }, 700);
+
+  var STEP=110;
+  function wave(){
+    for(var i=0;i<rows.length;i++){ (function(row,d){ setTimeout(function(){ flipRow(row); }, d); })(rows[i], i*STEP); }
+    setTimeout(wave, rows.length*STEP + 1600);
+  }
+  setTimeout(wave, 1100);
 })();
 </script>
 

@@ -81,6 +81,9 @@
 .hero-bg .row{ display:flex; gap:30px; }
 .hero-bg .cell{ transition:color .3s ease; }
 .hero-bg .cell.masking{ color:#00867e; }
+/* Row-by-row flip: rows turn edge-on and come back as a fresh record. */
+.hero-bg .rows{ perspective:900px; }
+.hero-bg .row{ transform-style:preserve-3d; backface-visibility:hidden; will-change:transform; }
 .welcome .wrap{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; }
 
 .hero-shot{ width:100%; max-width:1000px; margin:48px auto 0; border-radius:14px; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.14)); overflow:hidden; box-shadow:0 36px 90px -34px rgba(0,0,0,.4); background:var(--surface,#fff); position:relative; z-index:1; }
