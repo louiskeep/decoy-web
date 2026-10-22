@@ -1,0 +1,108 @@
+---
+title: Foreign keys and relationships
+description: Keep foreign keys joinable after masking, across every FK shape.
+---
+
+Mask the key columns on both sides with the same `namespace`, so a source value
+maps to the same masked value everywhere, and declare the link under
+`relationships:`. Joins survive because the keys move together. This works on CSV
+for masking; subsetting the same tables needs Parquet.
+
+## Settings
+
+Each entry in the `relationships:` list:
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `parent.table` | string | required | Table that owns the key |
+| `parent.columns` | list of string | required | Key column(s) on the parent |
+| `children` | list | required, min 1 | Each `{ table, columns }` that references the parent |
+| `orphan_policy` | enum | required | What to do with a child key that has no parent |
+| `namespace` | string | optional | Binds the keys; parent, child, and this entry share it |
+
+`orphan_policy` values:
+
+| Value | Effect |
+| --- | --- |
+| `preserve` | Keep the orphan key as-is |
+| `remap` | Route it through the parent strategy for a fresh value |
+| `warn` | Keep it, emit one aggregated warning |
+| `fail` | Abort with `orphan_fk_violation` |
+
+## Shapes
+
+All shapes are deterministic and byte-stable across runs given the same seed. A
+null key passes through as null, not an orphan.
+
+### One-to-many (and one-to-one)
+
+One parent, one child table. Same config whether each parent has one match or
+many.
+
+```yaml
+relationships:
+  - parent:   { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders, columns: [customer_id] }
+    orphan_policy: preserve
+    namespace: customer_id
+```
+
+### Composite key
+
+Multi-column key. Both sides list the columns in the same order.
+
+```yaml
+relationships:
+  - parent:   { table: orders, columns: [order_id, region] }
+    children:
+      - { table: order_lines, columns: [order_id, region] }
+    orphan_policy: preserve
+    namespace: order_id
+```
+
+### Self-referential
+
+Parent and child are the same table (an employee's manager is an employee).
+
+```yaml
+relationships:
+  - parent:   { table: employees, columns: [employee_id] }
+    children:
+      - { table: employees, columns: [manager_id] }
+    orphan_policy: preserve
+    namespace: employee_id
+```
+
+### Multiple children
+
+One parent key referenced by several tables. Add a child entry per table.
+
+```yaml
+relationships:
+  - parent:   { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders,  columns: [customer_id] }
+      - { table: tickets, columns: [customer_id] }
+    orphan_policy: preserve
+    namespace: customer_id
+```
+
+### Chain (multi-hop)
+
+A to B to C. One entry per edge.
+
+```yaml
+relationships:
+  - parent:   { table: customers, columns: [customer_id] }
+    children: [ { table: orders, columns: [customer_id] } ]
+    orphan_policy: preserve
+    namespace: customer_id
+  - parent:   { table: orders, columns: [order_id] }
+    children: [ { table: order_lines, columns: [order_id] } ]
+    orphan_policy: preserve
+    namespace: order_id
+```
+
+For a full runnable config with sources, tables, and targets, see
+[Mask a folder with foreign keys](/docs/how-to/mask-a-folder-with-foreign-keys).

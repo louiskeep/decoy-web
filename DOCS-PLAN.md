@@ -38,6 +38,15 @@ Reference pages (strategies, providers, config keys, connectors) use the full
 template. Recipe/how-to pages use: goal, the config that does it, the run
 command, the result. No long English explanations.
 
+Rules:
+- The frontmatter `description` is the one-line tagline (it renders as the page
+  subtitle). Do NOT repeat it as the first body line. The body opens with "how
+  it works".
+- Prefer visual input/output examples for every setting: show a before/after
+  table or a sample dataset transformation, not just prose.
+- Strategy reference is one page per strategy (DuckDB-granular), best for search
+  and AI retrieval.
+
 ## Information architecture (one unified site)
 
 ```
@@ -80,7 +89,7 @@ product gaps.
 | FK / relationships | only single-column 1:N shown | add 1:1, composite-key, self-referential, multi-parent YAML examples |
 | Subset | `decoy subset` command documented; no runnable `subset:` YAML | add a subset recipe: seeds (sample/filter/keys), budget, edge_directions, allow_dangling; note Parquet-only |
 | Parquet | named in format enums only | add one end-to-end Parquet read/write example |
-| Templates | `init` / `templates` documented | add a page showing actual `decoy templates show <name>` contents |
+| Templates | `init` / `templates` documented | add a page showing actual `decoy templates show <name>` contents. BLOCKED: needs real CLI output (no decoy-cli repo or template files locally; do not fabricate) |
 | `reference/yaml-schema.mdx` | raw JSON-Schema dump | restyle to settings tables + examples per config object |
 | `reference/capabilities.mdx` | prose/tables, no examples | restyle, or repurpose as a "what's supported today" index |
 | Version skew | capabilities.mdx says 0.7.0; how-to/CLI pages say CLI 0.1.0 / engine 0.4.0 | reconcile to current versions across all pages |
@@ -157,6 +166,24 @@ troubleshooting/FAQ.
 4. Add `llms.txt`.
 5. Build the Studio section as held drafts, shipped surfaces only, from the
    content-map.
+
+## Later (after the core docs ship)
+
+Captured from Cam 2026-10-22, not for this pass:
+
+1. "Intended workflow" guide (own page, top-level). An end-to-end A-Z that walks
+   each tool/step in order and says where it is meant to be used and what it does:
+   pre-STORM scan the files, configure the YAML (optionally from STORM output),
+   configure a generate job off a mask table, compile the job, run it, post-check.
+   Include a visual node-based view of the flow so a user can learn to run Decoy
+   without reading everything. The goal: give context up front so users see the
+   simple path and know which advanced features they can ignore.
+2. In-browser demo on the marketing site: a playable Decoy CLI walkthrough and a
+   platform walkthrough, both running a basic A-Z workflow on a sample healthcare
+   dataset.
+3. Visual-first examples everywhere: basic input plus output for a given setting,
+   or what a setting does to a dataset. (Now a standing rule in the page template
+   above; listed here as the origin.)
 
 ## Open questions for Cam
 

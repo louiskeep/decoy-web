@@ -3,7 +3,9 @@
   "pages": [
     "mask-a-csv",
     "mask-a-folder-with-foreign-keys",
+    "subset-a-dataset",
     "generate-synthetic-data",
+    "use-parquet",
     "scan-for-pii",
     "use-decoy-in-ci",
     "use-differential-privacy",

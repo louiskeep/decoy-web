@@ -1,0 +1,41 @@
+---
+title: Use Parquet files
+description: Read and write Parquet instead of CSV.
+---
+
+Set `format: parquet` on a source or target. Nothing else in the pipeline
+changes. Parquet is required for subsetting and is the better choice for large or
+relational data.
+
+## Example
+
+```yaml
+sources:
+  accounts:
+    type: file
+    format: parquet
+    path: data/accounts.parquet
+targets:
+  accounts:
+    type: file
+    format: parquet
+    path: out/accounts.parquet
+```
+
+Run it the same way as a CSV pipeline:
+
+```console
+$ decoy run pipeline.yaml
+```
+
+## When to use it
+
+| Situation | Format |
+| --- | --- |
+| Small CSV in, CSV out | CSV is fine |
+| Subsetting (`subset:` block) | Parquet required |
+| Large datasets, out-of-core runs | Parquet (columnar, typed) |
+| Mixed CSV and Parquet | Set `format` per source and target |
+
+S3 and GCS sources and targets also take `csv` or `parquet`. Fixed-width is input
+only.
