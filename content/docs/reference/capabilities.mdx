@@ -121,16 +121,20 @@ Pre-configured field-level rule sets for common regulations.
 
 Each preset is a starting point; customize per column as needed.
 
-## Data connectors (6)
+## Data connectors
 
-Read from and write to external storage.
+Decoy ships connector implementations for local files, S3, GCS, and SFTP. The
+standalone `decoy run` moves `type: file` sources and targets today; S3 and GCS
+blocks validate and execute under a platform-managed deployment, and SFTP is not
+yet wired into the pipeline config. See
+[Connectors and formats](/docs/reference/connectors).
 
-| Connector | Read | Write | Features |
-|---|---|---|---|
-| Local file (CSV, JSON) | yes | yes | Standard format support |
-| S3 | yes | yes | Signed URLs, multipart upload, resumable download |
-| GCS | yes | yes | Signed URLs, multipart upload |
-| SFTP | yes | yes | Host key verification |
+| Connector | `decoy run` | Formats |
+|---|---|---|
+| Local file | yes | CSV, Parquet; fixed-width (read only) |
+| S3 | platform | CSV, Parquet |
+| GCS | platform | CSV, Parquet |
+| SFTP | not wired | n/a |
 
 ## Column auto-recognition (STORM) (25)
 

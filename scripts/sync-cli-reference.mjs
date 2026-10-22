@@ -13,7 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(__dirname, '..')
 
 const sourcePath = resolve(repoRoot, process.env.DECOY_CLI_REF || '../decoy/docs/cli-reference.md')
-const destPath = resolve(repoRoot, 'content/docs/cli/_source/cli-reference.md')
+const destPath = resolve(repoRoot, 'content/docs/reference/cli/_source/cli-reference.md')
 
 if (!existsSync(sourcePath)) {
   console.error(`[sync-cli-reference] source file not found: ${sourcePath}`)

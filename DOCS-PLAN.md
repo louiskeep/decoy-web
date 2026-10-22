@@ -188,6 +188,16 @@ troubleshooting/FAQ.
 
 ## Review log
 
+- 2026-10-22, Codex final pre-merge review. Verdict FIX-FIRST, 3 blockers, all
+  fixed: (1) a reorg bug, sync-cli-reference.mjs still wrote the old
+  content/docs/cli/_source path; (2) connector claims contradicted themselves
+  (capabilities said S3/GCS/SFTP read-write and claimed fixed-width output, vs
+  the connectors page saying the CLI moves only type:file and fixed-width is
+  input-only) -- reconciled to the CLI reality; (3) the DP concept page
+  overstated the guarantee and had two factual errors (person-level direction,
+  epsilon/noise direction) that contradicted the limits page -- fixed and
+  aligned to the engine's honest-limits position. Nav was otherwise coherent.
+
 - 2026-10-22, dennis factual-accuracy cold-read of the 23 strategy pages +
   providers + relationships + subset + parquet against the engine handlers:
   11 P1 / 4 P2 / 3 P3. All remediated with the engine evidence (the grep-extracted

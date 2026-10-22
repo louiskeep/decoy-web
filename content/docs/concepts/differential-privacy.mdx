@@ -15,9 +15,9 @@ When you run `decoy fit --epsilon` (or set `global_settings.dp` in a pipeline), 
 3. Generates synthetic rows by sampling from the noisy snapshot
 4. Provides a formal privacy guarantee under the *add-or-remove-one-row* model
 
-The guarantee is: an attacker who sees the generated synthetic data cannot distinguish between two runs on datasets that differ by a single row, up to a specified privacy budget `(epsilon, delta)`.
+The budget `(epsilon, delta)` bounds the per-column marginal snapshot: the measured statistics are indistinguishable, up to that budget, between two runs on datasets that differ by one row. Decoy measures each column's marginal independently; it does not account for a joint guarantee over the whole synthetic table, and the generated rows are a deterministic sample from the noisy snapshot. See [Security, privacy, and compliance limits](/docs/reference/limits) for exactly what the generated output does and does not inherit.
 
-**This is not obfuscation or anonymization.** Differential privacy is a mathematical guarantee. It is the right tool when you need to publish synthetic data and want a proof that it does not leak individual-level information at a bounded rate.
+**This is not obfuscation or anonymization.** Differential privacy is a mathematical guarantee on the measured statistics. It is the right tool when you want a budgeted, measured bound on what a column's published distribution can reveal about any one row.
 
 ## When to use it
 
@@ -119,7 +119,7 @@ The guarantee does **not** cover:
 
 **DP is not anonymization.** Privacy and utility are a tradeoff. Adding noise makes the output safer to publish but less faithful to the source. You still need to review the synthetic output and decide if it is safe for your use case.
 
-**DP in Decoy measures by row, not person.** If a person in your source has fifty rows (claim records, lab results), removing one person removes fifty rows. The DP guarantee covers removing one row, not one person. For healthcare multi-record scenarios, this means the per-person privacy is stronger than the per-row epsilon would suggest, but Decoy's configuration treats rows as the unit.
+**DP in Decoy measures by row, not person.** If a person in your source has fifty rows (claim records, lab results), removing one person removes fifty rows. The DP guarantee covers removing one row, not one person. For healthcare multi-record scenarios, this means the per-person privacy is weaker than the per-row epsilon suggests: removing a fifty-row person is a fifty-row change, far beyond the one-row guarantee. Decoy's configuration treats rows as the unit.
 
 ## Comparing to non-DP generation
 
@@ -142,7 +142,7 @@ Turning on DP normally reduces expected fidelity compared to the same fit withou
 
 - Noise is added to histogram counts and quantiles to achieve the privacy guarantee
 - Categorical tail mass (rare values) is redistributed or collapsed into an `__other__` category
-- High-epsilon (more noise) pushes the output further from the source distribution
+- Low epsilon (more noise) pushes the output further from the source distribution
 
 To improve fidelity under DP, you can:
 - Increase epsilon (weaker privacy guarantee, better fidelity)
