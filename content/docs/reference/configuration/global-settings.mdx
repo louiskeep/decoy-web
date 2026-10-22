@@ -1,0 +1,30 @@
+---
+title: Global settings
+description: Run-wide settings under global_settings.
+---
+
+Settings that apply to the whole run, set under `global_settings`. Only `seed` is
+required.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `seed` | integer | required | Determinism anchor for the whole run |
+| `mask_secret_ref` | string | none | Where the masking secret comes from: `env:NAME` or `file:/path` |
+| `post_validation` | boolean | `false` | Re-validate the output after the run |
+| `on_pool_exhaustion` | string | `scale_up` | `fail`, `scale_up`, or `fall_back` when a value pool runs out |
+| `unconfigured_column_policy` | string | none | `warn` or `error` for columns the plan does not configure |
+| `fidelity_warn_threshold` | number | `0.8` | Warn when generation fidelity drops below this |
+| `categorical_retention_warn_threshold` | number | `0.8` | Warn when categorical retention drops below this |
+| `dp` | object | none | Differential-privacy budget `{ epsilon, delta }`, generate-only. See [differential privacy](/docs/concepts/differential-privacy) |
+
+For the full set, see the [configuration schema](/docs/reference/configuration/schema).
+
+## Example
+
+```yaml
+global_settings:
+  seed: 42
+  mask_secret_ref: "env:DECOY_MASK_SECRET"
+```

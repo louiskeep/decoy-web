@@ -1,7 +1,7 @@
 {
   "title": "Reference",
   "pages": [
-    "yaml-schema",
+    "configuration",
     "strategies",
     "providers",
     "connectors",

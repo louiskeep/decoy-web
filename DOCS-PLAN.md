@@ -201,9 +201,12 @@ The reorg is done (4 sections; connectors + CLI nested under Reference; order +
 rename). These follow-ups came out of the Codex review, deferred by Cam to after
 the reorg:
 
-1. Split Configuration (yaml-schema) from one JSON-Schema dump into a folder:
-   pipeline structure, global settings, sources and targets, tables, generation,
-   validation, subsetting. Each as a settings-table + example page.
+1. DONE (folder): Configuration is now a folder with a clean overview index
+   (top-level keys table linking out), a Global settings page, and the full
+   field-by-field JSON schema as a sub-page. Sources/targets, tables, generation,
+   validation detail link to the existing connectors/strategies/providers pages
+   rather than being re-derived (avoids the guessed-param risk dennis flagged);
+   dedicated sources-and-targets and tables pages can follow if wanted.
 2. DONE: Providers catalog at reference/providers (the 34 providers grouped by
    family: people, addresses, composites, identifiers, generic), distinct from
    the `decoy providers` CLI page. Could split into per-family pages later.
