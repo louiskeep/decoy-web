@@ -1,4 +1,13 @@
 {
   "title": "Reference",
-  "pages": ["yaml-schema", "strategies", "providers", "connectors", "relationships", "cli", "capabilities"]
+  "pages": [
+    "yaml-schema",
+    "strategies",
+    "providers",
+    "connectors",
+    "relationships",
+    "cli",
+    "capabilities",
+    "limits"
+  ]
 }

@@ -213,13 +213,12 @@ the reorg:
 5. Move `exit-codes` out of Concepts and under CLI reference.
 6. Split `high-cardinality-categories`: keep rationale in Concepts, move settings
    and failure cases into Configuration/reference.
-7. Rename `what-we-cannot-prove` -> "Security, privacy, and compliance limits"
-   and place under Feature support and limits, with links from concepts.
+7. DONE: `what-we-cannot-prove` -> reference/limits "Security, privacy, and
+   compliance limits", under Feature support; the 4 inbound links updated.
 8. Replace the Feature-support page body with a concise support matrix that links
    to the authoritative strategy/provider/connector/validation/limits pages.
-9. Refresh the docs landing page: task-based entry points (and a Command line /
-   Studio surface chooser once Studio ships). The current copy says sections are
-   "planned" though they exist.
+9. DONE (partial): docs landing now has task-based entry points to the four
+   sections. A Command line / Studio surface chooser comes when Studio ships.
 
 ## Later (after the core docs ship)
 
