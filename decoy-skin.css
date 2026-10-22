@@ -257,3 +257,25 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
 .pt-cta{ border-radius:6px; }
 .pt-banner{ border-radius:6px; }
 .shot-ph .bar{ border-radius:0; }
+
+/* ============================================================
+   Accent: amber/gold as the second colour alongside teal. Teal
+   stays the primary brand; amber carries secondary buttons,
+   "explore" links, and eyebrow labels so the page reads in two
+   colours instead of one.
+   ============================================================ */
+:root{ --accent:#d98c00; --accent-text:#9a6600; --accent-tint:rgba(217,140,0,.12); --accent-ink:#231800; }
+html.darkmode{ --accent:#f2b84a; --accent-text:#f2b84a; --accent-tint:rgba(242,184,74,.16); }
+
+/* Secondary buttons move from a grey ghost to an amber one. */
+.button.transparent, a.button.transparent, a.button.transparent:visited{ border-color:var(--accent); color:var(--accent-text); }
+.button.transparent:hover, a.button.transparent:hover{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+
+/* "Explore / learn more" links and their arrows. */
+.bento-box .bento-link, .bento-box .bento-link:visited{ color:var(--accent-text); }
+.bento-box .bento-link:hover{ color:var(--accent); }
+.textbutton.arrow-right, .textbutton.arrow-right:visited{ color:var(--accent-text); }
+.textbutton.arrow-right:hover{ color:var(--accent); }
+
+/* Eyebrow label on the homepage feature rows. */
+.feature-row .frow-label{ color:var(--accent-text); }
