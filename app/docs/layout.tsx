@@ -4,9 +4,10 @@ import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 import { source } from '@/lib/docs/source'
 import { isDocsPublished } from '@/lib/docs/publish-gate'
 
-// The docs are their own deploy (docs.decoystorm.dev). The chrome links back to
-// the marketing site instead of the Next marketing pages, which do not ship here.
-const SITE = 'https://decoystorm.dev'
+// The docs mount under /docs on the marketing site. The chrome links back with
+// relative paths so it stays on one site (the marketing pages live at the root,
+// not in this Next app).
+const SITE = ''
 
 export default function Layout({ children }: { children: ReactNode }) {
   // Single choke point for the whole-tree launch gate: every /docs route renders
@@ -25,13 +26,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             Decoy
           </span>
         ),
-        url: SITE,
+        url: '/docs',
       }}
       githubUrl="https://github.com/louiskeep/decoy"
       links={[
-        { text: 'Features', url: `${SITE}/features` },
-        { text: 'Pricing', url: `${SITE}/pricing` },
-        { text: 'Security', url: `${SITE}/security` },
+        { text: 'Features', url: `${SITE}/features`, external: true },
+        { text: 'Pricing', url: `${SITE}/pricing`, external: true },
+        { text: 'Security', url: `${SITE}/security`, external: true },
       ]}
     >
       {children}
