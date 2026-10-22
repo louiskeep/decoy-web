@@ -92,7 +92,7 @@ product gaps.
 | Templates | `init` / `templates` documented | add a page showing actual `decoy templates show <name>` contents. BLOCKED: needs real CLI output (no decoy-cli repo or template files locally; do not fabricate) |
 | `reference/yaml-schema.mdx` | raw JSON-Schema dump | restyle to settings tables + examples per config object |
 | `reference/capabilities.mdx` | prose/tables, no examples | restyle, or repurpose as a "what's supported today" index |
-| Version skew | capabilities.mdx says 0.7.0; how-to/CLI pages say CLI 0.1.0 / engine 0.4.0 | reconcile to current versions across all pages |
+| Version skew | capabilities.mdx says 0.7.0; how-to/CLI pages say CLI 0.1.0 / engine 0.4.0 | PARTIAL. Fixed the stale `0.2.0` removal claim in scan-for-pii. The "captured against CLI 0.1.0 / engine 0.4.0" tags are honest provenance on real output; bumping them without re-running would falsify the claim (CLI-blocked, needs a re-capture). The generated CLI-reference `0.2.0` removal targets come from the vendored CLI help (CLI-side fix). |
 
 FK shapes to show (all supported, deterministic, byte-stable):
 1:1, 1:N, composite keys (`columns: [a, b]`), self-referential
@@ -158,13 +158,18 @@ troubleshooting/FAQ.
 
 ## Build sequence
 
-1. Two sample pages in the DuckDB style for sign-off: the FK-shapes recipe and a
-   strategy reference page.
-2. CLI gap-fill: FK shapes, subset recipe, Parquet example, templates-contents
-   page. Fix version skew.
+1. DONE: sample pages signed off; FK-shapes reference, subset recipe, Parquet
+   page shipped.
+2. Per-strategy pages, one page each under `reference/strategies/`. DONE (7
+   common): hash, fpe, faker, redact, categorical, date-shift, truncate. TODO
+   (~16): bucket_perturb, bucketize, code_set, derived, derived_aggregate,
+   formula, geo_generalize, group_key, grouped_series, joint_mask, passthrough,
+   shuffle, text_mask, text_redact, top_code, windowed_date.
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
 4. Add `llms.txt`.
-5. Build the Studio section as held drafts, shipped surfaces only, from the
+5. Templates-contents page (BLOCKED on CLI) and version-provenance refresh
+   (BLOCKED on CLI).
+6. Build the Studio section as held drafts, shipped surfaces only, from the
    content-map.
 
 ## Later (after the core docs ship)

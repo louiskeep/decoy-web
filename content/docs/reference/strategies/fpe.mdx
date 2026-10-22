@@ -1,0 +1,35 @@
+---
+title: fpe
+description: Encrypt in place while preserving the format.
+---
+
+Format-preserving encryption keeps the input's shape: a 16-digit number stays 16
+digits. It is keyed, so the mapping is stable within a namespace, and reversible
+with the key. Use it when a downstream system validates the format and the shape
+cannot change.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `charset` | string | input charset | The character set to encrypt within, for example `digits` |
+| `validate_luhn` | boolean | `false` | Keep the output Luhn-valid (card numbers) |
+| `namespace` | string | per-table default | Binds the mapping |
+
+For the full parameter set, run `decoy strategies inspect fpe`.
+
+## Example
+
+```yaml
+- name: account_num
+  strategy: fpe
+  namespace: account_num
+  provider_config:
+    charset: digits
+    validate_luhn: true
+```
+
+| Before | After |
+| --- | --- |
+| `4539123456781234` | `3758195518872466` |
+| `4539876543211234` | `6483013958578649` |

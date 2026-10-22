@@ -1,0 +1,35 @@
+---
+title: categorical
+description: Remap values onto a fixed set of categories.
+---
+
+Maps each value onto a category from `categories`. With `deterministic: true` and
+a namespace, the same input always lands on the same category. Use it to replace a
+low-cardinality field (status, region, plan tier) with a controlled vocabulary.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `categories` | list of string | required | The pool to map onto |
+| `deterministic` | boolean | `false` | Map the same input to the same category |
+| `namespace` | string | per-table default | Binds the mapping when deterministic |
+
+For the full parameter set, run `decoy strategies inspect categorical`.
+
+## Example
+
+```yaml
+- name: plan
+  strategy: categorical
+  namespace: plan
+  deterministic: true
+  provider_config:
+    categories: ["starter", "growth", "scale"]
+```
+
+| Before | After |
+| --- | --- |
+| `pro` | `scale` |
+| `free` | `scale` |
+| `enterprise` | `growth` |
