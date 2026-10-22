@@ -177,51 +177,46 @@ footer .sitefooter .footercontent > div a:hover{ color:#fff; text-decoration:und
 footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px solid rgba(255,255,255,.18); padding-top:18px; margin-top:6px; }
 
 /* ============================================================
-   Pricing comparison matrix (pricing.html).
+   Pricing cards (pricing.html). Three tiers as cards; the middle
+   (Studio) tier carries all the emphasis, the other two stay quiet.
    ============================================================ */
-.pricing-matrix-sec .matrix-intro{ text-align:center; max-width:680px; margin:0 auto 26px; }
-.matrix-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-.pmatrix{ width:100%; min-width:720px; border-collapse:collapse; font-size:14.5px; }
-.pmatrix .vh{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.welcome.pricing-intro{ padding-top:58px; padding-bottom:6px; }
+.pricing-cards-sec{ padding-top:24px; }
+.ptiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:start; max-width:1060px; margin:0 auto; }
 
-.pmatrix thead th{ vertical-align:top; text-align:center; padding:18px 18px 20px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); }
-.pmatrix thead th.feat-col{ width:34%; border-bottom-color:transparent; }
-.pmatrix .t-name{ display:block; font-family:"SuisseIntl"; font-weight:700; font-size:15px; }
-.pmatrix .t-price{ display:block; font-family:"SuisseIntl"; font-weight:700; font-size:26px; margin-top:6px; }
-.pmatrix .t-price small{ font-size:13px; font-weight:500; color:var(--grey-40,#666); }
-.pmatrix .t-note{ display:block; color:var(--grey-40,#666); font-size:12px; margin-top:4px; }
-.pmatrix .t-tag{ display:inline-block; font-family:"JetBrainsMono-Regular",monospace; font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; color:#fff; background:#00867e; border-radius:20px; padding:3px 10px; margin-bottom:8px; }
-.pmatrix .t-cta{ display:inline-block; margin-top:14px; font-size:13px; font-weight:600; padding:8px 16px; border-radius:8px; text-decoration:none; transition:background .15s ease, color .15s ease; }
-.pmatrix .t-cta.solid{ background:#00867e; color:#fff; }
-.pmatrix .t-cta.solid:hover{ background:#00756e; }
-.pmatrix .t-cta.ghost{ border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.18)); color:var(--text-color,#0d0d0d); }
-.pmatrix .t-cta.ghost:hover{ border-color:#00867e; color:#00867e; }
+.ptier{ position:relative; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:14px; background:var(--surface,#fff); padding:30px 26px 34px; }
+.ptier .pt-head{ text-align:center; padding-bottom:22px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); }
+.pt-name{ font-family:"SuisseIntl"; font-weight:700; font-size:22px; }
+.pt-desc{ color:var(--grey-40,#666); font-size:13.5px; line-height:1.5; margin:8px auto 0; max-width:30ch; min-height:40px; }
+.pt-price{ margin-top:16px; display:flex; align-items:baseline; justify-content:center; gap:5px; }
+.pt-price .amt{ font-family:"SuisseIntl"; font-weight:800; font-size:40px; line-height:1; }
+.pt-price .per{ color:var(--grey-40,#666); font-size:15px; font-weight:500; }
+.pt-bill{ color:var(--grey-50,#808080); font-size:12.5px; margin-top:8px; min-height:17px; }
+.pt-cta{ display:block; margin-top:20px; text-align:center; font-weight:600; font-size:14.5px; padding:11px 18px; border-radius:9px; text-decoration:none; transition:background .15s ease, color .15s ease, border-color .15s ease; }
+.pt-cta.solid{ background:#00867e; color:#fff; }
+.pt-cta.solid:hover{ background:#00756e; }
+.pt-cta.ghost{ border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.2)); color:inherit; }
+.pt-cta.ghost:hover{ border-color:#00867e; color:#00867e; }
 
-.pmatrix tbody th{ text-align:left; font-weight:500; color:inherit; padding:13px 16px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.08)); }
-.pmatrix tbody td{ text-align:center; padding:13px 16px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.08)); color:var(--grey-40,#666); }
-.pmatrix td.val{ font-size:13.5px; color:inherit; }
-.pmatrix tr.grp th{ font-family:"JetBrainsMono-Regular",monospace; font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:#00867e; background:var(--surface-2,#fafbfb); padding:10px 16px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); }
+.pt-feats{ padding-top:20px; }
+.pt-lead{ font-weight:600; font-size:13px; margin-bottom:15px; }
+.pt-feats ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+.pt-feats li{ position:relative; padding-left:27px; font-size:14px; line-height:1.45; }
+.pt-feats li::before{ content:""; position:absolute; left:0; top:2px; width:16px; height:16px; background:#00867e;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat; }
 
-.pmatrix .yes{ display:inline-flex; }
-.pmatrix .yes svg{ width:19px; height:19px; color:#00867e; }
-.pmatrix .no{ display:inline-block; width:12px; height:2px; border-radius:2px; background:var(--grey-80,#cfcfcf); vertical-align:middle; }
+/* The one tier that carries the emphasis. */
+.ptier.pop{ padding-top:50px; border-color:#00867e; box-shadow:0 26px 64px -32px rgba(0,134,126,.5); background:linear-gradient(180deg, rgba(0,134,126,.05), rgba(0,134,126,0) 180px); }
+.pt-banner{ position:absolute; top:0; left:0; right:0; background:#00867e; color:#fff; text-align:center; font-family:"SuisseIntl"; font-weight:600; font-size:12.5px; padding:8px; border-radius:13px 13px 0 0; }
 
-/* Merged cell that says a higher tier inherits everything below it. */
-.pmatrix td.inherit{ vertical-align:middle; text-align:center; color:#00867e; font-family:"SuisseIntl"; font-weight:600; font-size:13.5px; line-height:1.4; letter-spacing:.01em; }
-.darkmode .pmatrix td.inherit{ color:#4cc2c2; }
+.darkmode .ptier{ background:#161616; border-color:rgba(255,255,255,.12); }
+.darkmode .ptier .pt-head{ border-bottom-color:rgba(255,255,255,.1); }
+.darkmode .pt-cta.ghost{ border-color:rgba(255,255,255,.2); }
+.darkmode .ptier.pop{ border-color:#0a938a; box-shadow:0 26px 64px -32px rgba(0,0,0,.7); background:linear-gradient(180deg, rgba(0,134,126,.16), rgba(0,134,126,0) 180px); }
 
-/* Highlight the Studio column top to bottom. */
-.pmatrix .pop{ background:rgba(0,134,126,.06); }
-.pmatrix thead th.pop{ border-top:2px solid #00867e; border-bottom-color:rgba(0,134,126,.25); border-radius:10px 10px 0 0; }
-
-.darkmode .pmatrix thead th, .darkmode .pmatrix tbody th, .darkmode .pmatrix tbody td{ border-bottom-color:rgba(255,255,255,.1); }
-.darkmode .pmatrix tr.grp th{ background:rgba(255,255,255,.04); border-bottom-color:rgba(255,255,255,.1); }
-.darkmode .pmatrix .t-cta.ghost{ border-color:rgba(255,255,255,.2); color:#fff; }
-.darkmode .pmatrix .no{ background:rgba(255,255,255,.28); }
-.darkmode .pmatrix .pop{ background:rgba(0,134,126,.14); }
-
-@media (max-width:620px){
-  .pmatrix{ font-size:13.5px; min-width:560px; }
-  .pmatrix thead th, .pmatrix tbody th, .pmatrix tbody td{ padding:11px 11px; }
-  .pmatrix .t-price{ font-size:22px; }
+@media (max-width:860px){
+  .ptiers{ grid-template-columns:1fr; max-width:440px; gap:18px; }
+  .ptier.pop{ order:-1; }
+  .pt-desc{ min-height:0; }
 }

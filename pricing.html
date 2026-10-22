@@ -185,7 +185,7 @@
 		
 
 
-			<section class="welcome">
+			<section class="welcome pricing-intro">
 	<div class="wrap">
 		<div class="hero-content">
       <h1 class="display-2">Compare the tiers</h1>
@@ -195,65 +195,76 @@
 </section>
 
 
-<section class="pricing-matrix-sec">
+<section class="pricing-cards-sec">
 	<div class="wrap">
-		<div class="matrix-scroll">
-			<table class="pmatrix">
-				<thead>
-					<tr>
-						<th class="feat-col"><span class="vh">Feature</span></th>
-						<th scope="col">
-							<span class="t-name">Command line</span>
-							<span class="t-price">$0</span>
-							<span class="t-note">Free, source-available</span>
-							<a class="t-cta ghost" href="mailto:goodneighbor@goodneighbor.design?subject=Notify%20me%20when%20the%20Decoy%20CLI%20ships">Get notified</a>
-						</th>
-						<th scope="col" class="pop">
-							<span class="t-tag">Most popular</span>
-							<span class="t-name">Decoy Studio</span>
-							<span class="t-price">$499 <small>/ mo</small></span>
-							<span class="t-note">Billed annually, per instance</span>
-							<a class="t-cta solid" href="mailto:goodneighbor@goodneighbor.design?subject=Decoy%20Studio">Get Studio</a>
-						</th>
-						<th scope="col">
-							<span class="t-name">Enterprise</span>
-							<span class="t-price">Request</span>
-							<span class="t-note">Scoped with you</span>
-							<a class="t-cta ghost" href="mailto:goodneighbor@goodneighbor.design?subject=Decoy%20Enterprise%20plan">Contact us</a>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="grp"><th colspan="4" scope="colgroup">Engine</th></tr>
-					<tr><th scope="row">Masking strategies (23)</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td><td class="pop inherit" rowspan="6">All of<br>Decoy engine</td><td class="inherit" rowspan="6">All of<br>Decoy engine</td></tr>
-					<tr><th scope="row">Generation strategies (12) and 34 providers</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">FK-aware subsetting</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">STORM detection (25 detectors)</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Compliance disguises (10 templates)</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Local runs, YAML validation, JSON reports</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
+		<div class="ptiers">
 
-					<tr class="grp"><th colspan="4" scope="colgroup">Decoy Studio</th></tr>
-					<tr><th scope="row">Visual pipeline builder</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td><td class="inherit" rowspan="9">All of<br>Decoy Studio</td></tr>
-					<tr><th scope="row">Shared jobs and run history</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Scheduling and recurring runs</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">RBAC: projects and roles</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Shared quality and privacy reports</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Evidence manifests and run provenance</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Audit history</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Notifications: email, Slack, webhook</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Metrics (optional)</th><td><span class="no"></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
+			<article class="ptier">
+				<div class="pt-head">
+					<h2 class="pt-name">Command line</h2>
+					<p class="pt-desc">The full engine, free and source-available.</p>
+					<div class="pt-price"><span class="amt">$0</span></div>
+					<p class="pt-bill">Source-available under BUSL-1.1</p>
+					<a class="pt-cta ghost" href="mailto:goodneighbor@goodneighbor.design?subject=Notify%20me%20when%20the%20Decoy%20CLI%20ships">Get notified</a>
+				</div>
+				<div class="pt-feats">
+					<p class="pt-lead">Includes</p>
+					<ul>
+						<li>23 masking strategies</li>
+						<li>12 generation strategies, 34 providers</li>
+						<li>FK-aware subsetting</li>
+						<li>STORM detection, 25 detectors</li>
+						<li>10 compliance disguises</li>
+						<li>Local runs, YAML validation, JSON reports</li>
+						<li>Self-hosted, runs where your data lives</li>
+					</ul>
+				</div>
+			</article>
 
-					<tr class="grp"><th colspan="4" scope="colgroup">Enterprise</th></tr>
-					<tr><th scope="row">Multiple environments (dev, staging, prod)</th><td><span class="no"></span></td><td class="pop"><span class="no"></span></td><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Custom SSO and SAML</th><td><span class="no"></span></td><td class="pop"><span class="no"></span></td><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Priority support and custom terms</th><td><span class="no"></span></td><td class="pop"><span class="no"></span></td><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
+			<article class="ptier pop">
+				<div class="pt-banner">Most popular</div>
+				<div class="pt-head">
+					<h2 class="pt-name">Decoy Studio</h2>
+					<p class="pt-desc">The shared team app on top of the engine.</p>
+					<div class="pt-price"><span class="amt">$499</span><span class="per">/ mo</span></div>
+					<p class="pt-bill">Billed annually, per instance</p>
+					<a class="pt-cta solid" href="mailto:goodneighbor@goodneighbor.design?subject=Decoy%20Studio">Get Studio</a>
+				</div>
+				<div class="pt-feats">
+					<p class="pt-lead">Everything in the command line, plus</p>
+					<ul>
+						<li>Visual pipeline builder</li>
+						<li>Shared jobs and run history</li>
+						<li>Scheduling and recurring runs</li>
+						<li>RBAC: projects and roles</li>
+						<li>Shared quality and privacy reports</li>
+						<li>Evidence manifests and run provenance</li>
+						<li>Audit history</li>
+						<li>Notifications: email, Slack, webhook</li>
+						<li>Email support, business hours</li>
+					</ul>
+				</div>
+			</article>
 
-					<tr class="grp"><th colspan="4" scope="colgroup">Deployment and support</th></tr>
-					<tr><th scope="row">Self-hosted in your environment</th><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td><td class="pop"><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td><td><span class="yes"><svg class="icon"><use href="#check"></use></svg></span></td></tr>
-					<tr><th scope="row">Support</th><td class="val">Community</td><td class="pop val">Email, business hours</td><td class="val">Priority, custom terms</td></tr>
-					<tr><th scope="row">License</th><td class="val">BUSL-1.1</td><td class="pop val">Commercial</td><td class="val">Commercial</td></tr>
-				</tbody>
-			</table>
+			<article class="ptier">
+				<div class="pt-head">
+					<h2 class="pt-name">Enterprise</h2>
+					<p class="pt-desc">For teams running Decoy across environments.</p>
+					<div class="pt-price"><span class="amt">Custom</span></div>
+					<p class="pt-bill">Scoped with you</p>
+					<a class="pt-cta ghost" href="mailto:goodneighbor@goodneighbor.design?subject=Decoy%20Enterprise%20plan">Contact us</a>
+				</div>
+				<div class="pt-feats">
+					<p class="pt-lead">Everything in Studio, plus</p>
+					<ul>
+						<li>Multiple environments (dev, staging, prod)</li>
+						<li>Custom SSO and SAML</li>
+						<li>Priority support and custom terms</li>
+						<li>Integration and onboarding help</li>
+					</ul>
+				</div>
+			</article>
+
 		</div>
 	</div>
 </section>
