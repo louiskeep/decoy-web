@@ -111,3 +111,45 @@
   .cap-tablist::-webkit-scrollbar{ display:none; }
   .cap-tab{ white-space:nowrap; padding:11px 13px; font-size:14.5px; }
 }
+
+/* ============================================================
+   Motion layer. Every hidden start-state is gated on html.anim-on,
+   which a small synchronous <head> script adds only when the
+   visitor has not asked for reduced motion. So no-JS, crawlers,
+   and reduced-motion visitors get the finished page with no
+   movement; everyone else gets the entrance and scroll reveals.
+   ============================================================ */
+
+/* Clean cross-page fade in Chromium; a no-op where unsupported. */
+@view-transition { navigation: auto; }
+
+/* Soft arrival on every page load. */
+@keyframes anim-page-in{ from{ opacity:0; } to{ opacity:1; } }
+html.anim-on body{ animation:anim-page-in .45s ease both; }
+
+/* Scroll reveals: fade + small rise as a block enters the viewport. */
+html.anim-on .reveal{ opacity:0; transform:translateY(16px);
+  transition:opacity .62s cubic-bezier(.2,.7,.2,1), transform .62s cubic-bezier(.2,.7,.2,1);
+  transition-delay:var(--d,0s); }
+html.anim-on .reveal.in{ opacity:1; transform:none; }
+
+/* Hero entrance: headline, subhead, buttons, then the product shot. */
+@keyframes anim-rise{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:none; } }
+@keyframes anim-shot-in{ from{ opacity:0; transform:translateY(26px) scale(.985); } to{ opacity:1; transform:none; } }
+@keyframes anim-fade{ from{ opacity:0; } to{ opacity:1; } }
+html.anim-on .welcome .hero-content > *{ animation:anim-rise .8s cubic-bezier(.2,.7,.2,1) both; }
+html.anim-on .welcome .hero-content h1{ animation-delay:.08s; }
+html.anim-on .welcome .hero-content p{ animation-delay:.20s; }
+html.anim-on .welcome .hero-content .hero-buttons{ animation-delay:.32s; }
+html.anim-on .welcome .hero-shot{ animation:anim-shot-in .85s cubic-bezier(.2,.7,.2,1) .42s both; }
+html.anim-on .welcome .hero-bg{ animation:anim-fade 1.4s ease .3s both; }
+
+/* Runtime safety net if the motion preference changes after the head script ran. */
+@media (prefers-reduced-motion: reduce){
+  html.anim-on body,
+  html.anim-on .reveal,
+  html.anim-on .welcome .hero-content > *,
+  html.anim-on .welcome .hero-shot,
+  html.anim-on .welcome .hero-bg{
+    animation:none !important; transition:none !important; opacity:1 !important; transform:none !important; }
+}
