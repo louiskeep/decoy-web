@@ -23,6 +23,63 @@ custom ones. Accuracy is the chronic risk on this surface, so the program below
 is built around a single generated source of truth rather than hand-typed
 examples.
 
+## Where we stopped and how to resume (paused 2026-10-22)
+
+Cam paused the program here as a clean stopping point. The docs work is finished
+and pushed; the three-idea program is planned but not started. Two decisions
+pinned at the pause:
+
+- **Leave `decoy-engine` alone for now.** The foundation slice touches the engine
+  proof generator; do not start it until Cam reopens the program.
+- **Publish the docs**, then stop. See the deploy note below.
+
+### Next action when we resume: the engine refresh (proof manifest v2)
+
+This is the first slice and the piece most likely to be forgotten, so it is
+written out here. Full plan:
+`docs/plans/2026-10-22-proof-manifest-v2-foundation.md`. In order:
+
+1. `decoy-engine/scripts/gen_proof_manifest.py`: the engine version is a
+   deliberately **frozen** stamp (`ENGINE_VERSION = "0.2.0"` near line 58, with
+   `GENERATED_AT = "2026-06-14"`), kept manual so the sentry-diff test stays
+   deterministic. Nobody re-ran it after the engine moved to 0.7.0, so the
+   manifest is stale. Decide one of: (a) bump both stamps by hand to the
+   documented release (0.7.0 and today), or (b) change the mechanism to read
+   `decoy_engine.__version__` plus the engine git short SHA and pin the engine
+   version in CI so the sentry diff stays stable. The v2 design prefers (b) so it
+   cannot drift again.
+2. Regenerate `decoy-engine/docs/proof-manifest.json`. It runs real pipelines
+   through the public `PipelineConfig` + `run_pipeline` path; in the engine
+   `.venv` it already produces the full 22 mask / 12 generation / 34 provider
+   surface (verified 2026-10-22).
+3. Re-vendor the fresh manifest to `decoy-web-docs/lib/data/proof-manifest.json`
+   and confirm `/proof` renders the full surface. This fixes the live
+   under-selling (currently 11 mask / 7 generation; see the known-issue section).
+4. Extend to the v2 schema: per-case input/config/output records, setting-variant
+   cases, changed-cell annotations, provenance + fixture/config hashes + seeds,
+   synthetic-data safety tests, a Zod build-time consumer (replacing the current
+   unsafe TS cast), and a drift gate. This is the shared foundation Ideas 1 and 3
+   and the Idea 2 fixture all consume.
+
+Gate: every engine edit runs the engine repo gate chain (ci-mirror, dennis,
+Codex final) before merge to engine main; the web consumer changes then run the
+web gates. After the foundation lands, resume at execution-order step 2.
+
+Nothing is lost at the pause: all docs work is committed and pushed to
+`origin/feat/cli-docs-fumadocs` (33 commits ahead of the merge base).
+
+### Deploy note (how "merge" works for this surface)
+
+`origin/main` is the **live static marketing site** (plain HTML: `index.html`,
+`features.html`, and four more, latest commit the teal hero). The docs are a
+separate Next.js + Fumadocs app on `feat/cli-docs-fumadocs` that builds to a
+static export under `/docs`. The two are different codebases, so a plain
+`git merge` of the docs branch into main is NOT the publish path; it would splice
+the Next app on top of the live marketing site. Publish the docs by one of:
+building the static export and vendoring it into the marketing site under a
+`docs/` path on main, or deploying the docs branch as its own Cloudflare Pages
+project on the `/docs` route. Cloudflare deploy is Cam's action.
+
 ## Current state (done / merge-ready)
 
 - **Docs set**: complete and reviewed. 90-page build, clean `check:docs` lint,
