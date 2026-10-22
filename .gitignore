@@ -38,3 +38,6 @@ content/docs/cli/*.mdx
 !content/docs/cli/_index-intro.mdx
 .gstack/
 out/
+
+# Generated docs index (rebuilt from frontmatter on prebuild/predev)
+public/llms.txt

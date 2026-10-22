@@ -168,7 +168,9 @@ troubleshooting/FAQ.
    param extraction (DSL/NER/transform logic) or `decoy strategies inspect`;
    do not fabricate param tables.
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
-4. Add `llms.txt`.
+4. DONE: `llms.txt` generated from frontmatter by scripts/build-llms-txt.mjs
+   (prebuild), serves at the docs deploy root. Deploy detail: in the unified
+   /docs model it lands at decoystorm.dev/llms.txt listing the /docs pages.
 5. Templates-contents page (BLOCKED on CLI) and version-provenance refresh
    (BLOCKED on CLI).
 6. Build the Studio section as held drafts, shipped surfaces only, from the

@@ -7,9 +7,9 @@
     "onlyBuiltDependencies": ["core-js", "esbuild", "sharp"]
   },
   "scripts": {
-    "predev": "node scripts/build-cli-mdx.mjs",
+    "predev": "node scripts/build-cli-mdx.mjs && node scripts/build-llms-txt.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/build-cli-mdx.mjs",
+    "prebuild": "node scripts/build-cli-mdx.mjs && node scripts/build-llms-txt.mjs",
     "build": "next build",
     "start": "next start",
     "sync:cli-ref": "node scripts/sync-cli-reference.mjs",
