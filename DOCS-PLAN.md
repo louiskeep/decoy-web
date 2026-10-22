@@ -160,11 +160,13 @@ troubleshooting/FAQ.
 
 1. DONE: sample pages signed off; FK-shapes reference, subset recipe, Parquet
    page shipped.
-2. Per-strategy pages, one page each under `reference/strategies/`. DONE (7
-   common): hash, fpe, faker, redact, categorical, date-shift, truncate. TODO
-   (~16): bucket_perturb, bucketize, code_set, derived, derived_aggregate,
-   formula, geo_generalize, group_key, grouped_series, joint_mask, passthrough,
-   shuffle, text_mask, text_redact, top_code, windowed_date.
+2. Per-strategy pages, one page each under `reference/strategies/`. DONE (11):
+   hash, fpe, faker, redact, categorical, date-shift, truncate, passthrough,
+   shuffle, bucketize, top_code. TODO (~12): bucket_perturb, code_set, derived,
+   derived_aggregate, formula, geo_generalize, group_key, grouped_series,
+   joint_mask, text_mask, text_redact, windowed_date. These need per-handler
+   param extraction (DSL/NER/transform logic) or `decoy strategies inspect`;
+   do not fabricate param tables.
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
 4. Add `llms.txt`.
 5. Templates-contents page (BLOCKED on CLI) and version-provenance refresh

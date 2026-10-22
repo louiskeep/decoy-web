@@ -1,0 +1,31 @@
+---
+title: top_code
+description: Collapse the rare tail of a numeric column into a label.
+---
+
+Values above `cap` become `over_label`, and (optionally) values below `floor`
+become `under_label`. The rest pass through. Use it for HIPAA Safe Harbor age
+generalization, where every age over 89 must aggregate into one group.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `cap` | number | required (or `preset`) | Values strictly above this become `over_label` |
+| `over_label` | string | required with `cap` | Label for the high tail |
+| `floor` | number | none | Values strictly below this become `under_label` |
+| `under_label` | string | none | Label for the low tail |
+| `preset` | string | none | A named preset, e.g. `hipaa_age` (cap 89, over_label `90+`) |
+
+For the full parameter set, run `decoy strategies inspect top_code`.
+
+## Example
+
+```yaml
+- name: age
+  strategy: top_code
+  provider_config:
+    preset: hipaa_age
+```
+
+Every age over 89 becomes `90+`; the rest are unchanged.

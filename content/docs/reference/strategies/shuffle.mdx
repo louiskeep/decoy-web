@@ -1,0 +1,15 @@
+---
+title: shuffle
+description: Shuffle a column to break row identity.
+---
+
+Reorders a column's values across rows. The column keeps its distribution, but no
+value stays on its original row, so the link between this column and the rest of
+the row is broken. No namespace.
+
+## Example
+
+```yaml
+- name: salary
+  strategy: shuffle
+```

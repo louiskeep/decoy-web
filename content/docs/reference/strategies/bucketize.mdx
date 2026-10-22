@@ -1,0 +1,30 @@
+---
+title: bucketize
+description: Round numbers into fixed-width bins.
+---
+
+Floors each value into a bin of width `width`, then labels the bin per `format`.
+Non-numeric or null values fall through unchanged. Use it to generalize a numeric
+quasi-identifier (age, income, count).
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `width` | number | required (or `preset`) | Bin width; a value floors into `[n*width, (n+1)*width)` |
+| `preset` | string | none | A named width shortcut instead of `width` |
+| `format` | string | `lower` | Bin label: `lower`, `range`, or `midpoint` |
+
+For the full parameter set, run `decoy strategies inspect bucketize`.
+
+## Example
+
+```yaml
+- name: age
+  strategy: bucketize
+  provider_config:
+    width: 10
+    format: range
+```
+
+With `width: 10` and `format: range`, `45` becomes `[40, 50)`.

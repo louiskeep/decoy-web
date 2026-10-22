@@ -1,0 +1,15 @@
+---
+title: passthrough
+description: Leave the value unchanged.
+---
+
+Copies the value as-is. No keying, no settings. Use it to mark a column that is
+already safe to publish, so the pipeline is explicit about every column rather
+than silent.
+
+## Example
+
+```yaml
+- name: country
+  strategy: passthrough
+```
