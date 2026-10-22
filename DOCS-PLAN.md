@@ -219,10 +219,11 @@ authoring order:
 - Moved high-cardinality from Concepts to Guides ("Handle high-cardinality
   categorical data"); it was config/examples, not a concept.
 
-Codex new-guide suggestions (TODO): `choose-a-masking-strategy` (bridge STORM
-findings to the strategy pages) and `unmask-data` (FPE/vault reversal, currently
-undocumented; verify against the engine). Also: refactor `strategies/index`
-(before/after gallery) into a concise categorized index, since it reads guide-like.
+Codex new-guide suggestions: DONE `choose-a-masking-strategy` (decision table
+bridging STORM findings to the strategy pages) and `unmask-data` (FPE reverses
+from the config; vault:true columns reverse with the vault file; everything else
+one-way, verified against the generated unmask CLI reference). TODO: refactor
+`strategies/index` (before/after gallery) into a concise categorized index.
 
 ## Post-reorg backlog (Codex IA review 2026-10-22)
 
