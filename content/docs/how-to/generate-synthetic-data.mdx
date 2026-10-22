@@ -67,7 +67,7 @@ employee_id,first_name,department
 1000 rows plus the header. Other `generate_columns` types: `reference`
 (mint-a-pool foreign key), `formula`/`derived` (compute from sibling
 columns), and `distribution` (draw from an inline snapshot). See the
-[CLI reference](/docs/cli) `run` entry for the full list.
+[CLI reference](/docs/reference/cli) `run` entry for the full list.
 
 ## 2. Fit a real table's shape
 
@@ -168,4 +168,4 @@ time with `decoy fit --joint colA,colB`.
   [use Decoy in CI](/docs/how-to/use-decoy-in-ci).
 - A differentially private fit (`decoy fit --epsilon`) adds Laplace noise to
   every snapshot count instead of exact quantiles; see the
-  [CLI reference](/docs/cli) `fit` entry.
+  [CLI reference](/docs/reference/cli) `fit` entry.

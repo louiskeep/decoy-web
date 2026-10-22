@@ -1,5 +1,5 @@
 ---
-title: YAML schema reference
+title: Configuration
 description: The JSON Schema for a pipeline YAML config, generated from decoy schema.
 ---
 
@@ -25,7 +25,7 @@ A pipeline config (`PipelineConfig`) has these top-level keys:
 | --- | --- | --- | --- |
 | `version` | yes | `1` (const) | Schema version. Currently always `1`. |
 | `global_settings` | yes | `GlobalSettings` | Seed, mask secret reference, and pipeline-wide policy knobs. |
-| `sources` | no | map of name to source | `type: file`, `s3`, or `gcs` (discriminated on `type`). See [connectors](/docs/connectors). |
+| `sources` | no | map of name to source | `type: file`, `s3`, or `gcs` (discriminated on `type`). See [connectors](/docs/reference/connectors). |
 | `tables` | yes | list of `TableConfig` | One entry per mask or generate table. At least one required. |
 | `relationships` | no | list of `RelationshipConfig` | Foreign-key edges between tables (parent, children, orphan policy). |
 | `targets` | yes | map of name to target | `type: file`, `s3`, or `gcs`. At least one required. |
@@ -1439,5 +1439,5 @@ is a reference (`env:NAME` or `file:/path`), never the secret itself, see
 ## Next
 
 See [strategy before/after](/docs/reference/strategies) for what a
-`strategy` value actually does to data, and [connectors](/docs/connectors)
+`strategy` value actually does to data, and [connectors](/docs/reference/connectors)
 for the `sources:` / `targets:` backends.

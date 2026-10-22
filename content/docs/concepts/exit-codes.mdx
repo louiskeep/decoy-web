@@ -4,7 +4,7 @@ description: Why the exit-code contract is a design commitment, not an afterthou
 ---
 
 Every `decoy` subcommand returns one of a small set of stable integer exit
-codes. The full table lives on the [CLI reference](/docs/cli); this page is
+codes. The full table lives on the [CLI reference](/docs/reference/cli); this page is
 about why the contract is shaped the way it is.
 
 ## The problem a flat 0/1 contract has
@@ -80,5 +80,5 @@ contract is what makes a `decoy` invocation safe to wire into an automated
 pipeline without also shipping a wrapper that scrapes stdout to figure out
 what happened.
 
-See the [CLI reference](/docs/cli) for the full table, and
+See the [CLI reference](/docs/reference/cli) for the full table, and
 [using Decoy in CI](/docs/how-to/use-decoy-in-ci) for the complete recipe.

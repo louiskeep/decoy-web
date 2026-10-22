@@ -33,8 +33,8 @@ targets:
 ## s3 and gcs
 
 The pipeline schema also accepts `type: s3` and `type: gcs` source and
-target blocks, shown on their own pages: [S3](/docs/connectors/s3),
-[GCS](/docs/connectors/gcs). Both validate with `decoy validate config` and
+target blocks, shown on their own pages: [S3](/docs/reference/connectors/s3),
+[GCS](/docs/reference/connectors/gcs). Both validate with `decoy validate config` and
 both formats are `csv` or `parquet` only, no fixed-width.
 
 <Callout type="warn" title="decoy run does not move cloud data yet">
@@ -54,7 +54,7 @@ both formats are `csv` or `parquet` only, no fixed-width.
 The engine ships an SFTP connector (`decoy_engine.connectors.sftp`, behind
 the optional `sftp` extra) with password and private-key auth. It is not
 wired into pipeline YAML: `sources:` and `targets:` only accept `file`,
-`s3`, and `gcs` as a `type`. See [SFTP](/docs/connectors/sftp) for what
+`s3`, and `gcs` as a `type`. See [SFTP](/docs/reference/connectors/sftp) for what
 exists today and what a `type: sftp` block currently does when you try it.
 
 ## Credentials

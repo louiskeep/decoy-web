@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(__dirname, '..')
-const outDir = resolve(repoRoot, 'content/docs/cli')
+const outDir = resolve(repoRoot, 'content/docs/reference/cli')
 const introPartialPath = resolve(outDir, '_index-intro.mdx')
 
 // Override for the loud-fail verification proof (Section 4.3): point at a scratch
@@ -23,7 +23,7 @@ const introPartialPath = resolve(outDir, '_index-intro.mdx')
 // normal prebuild/predev/CI runs.
 const sourcePath = resolve(
   repoRoot,
-  process.env.CLI_MDX_SOURCE || 'content/docs/cli/_source/cli-reference.md'
+  process.env.CLI_MDX_SOURCE || 'content/docs/reference/cli/_source/cli-reference.md'
 )
 
 // "Group count below an expected floor" guard (spec Section 4.3). 27 groups exist

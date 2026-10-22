@@ -74,7 +74,7 @@ targets:
 ```
 
 On your own data, point `sources.people.path` at your file and edit the
-`columns:` list to match: pick a [strategy](/docs/cli/strategies) per column
+`columns:` list to match: pick a [strategy](/docs/reference/cli/strategies) per column
 you want to change, and leave the rest as `passthrough`. If you scaffold with
 `decoy init your_file.csv` instead of a preset, STORM profiles the file first
 and writes a column-aware pipeline with a `# REVIEW:` comment above every
@@ -147,5 +147,5 @@ output, run after run.
 - See the [how-to guides](/docs/how-to/mask-a-csv) for masking recipes that
   build on this one: foreign-key-aware folders, synthetic generation, and
   CI usage.
-- Browse [Strategies](/docs/cli/strategies) for the full list of mask
+- Browse [Strategies](/docs/reference/cli/strategies) for the full list of mask
   strategies this pipeline could use.

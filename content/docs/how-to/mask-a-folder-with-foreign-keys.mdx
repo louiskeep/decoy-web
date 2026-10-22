@@ -76,7 +76,7 @@ Three things bind the two tables together:
   namespace.
 - `orphan_policy` says what to do with a child row whose key has no matching
   parent. `preserve` leaves the orphan's key as-is; the other options are
-  `remap`, `warn`, and `fail`. See the [CLI reference](/docs/cli) `run` entry
+  `remap`, `warn`, and `fail`. See the [CLI reference](/docs/reference/cli) `run` entry
   for the full contract.
 
 You do not order the tables yourself: the engine builds an ordering from the
@@ -141,7 +141,7 @@ multi-hop chains too; the mechanism is the same shared `namespace`.
 
 - What `orphan_policy` actually does to an unmatched child row, and how a
   row-level masking error cascades across a relationship: see the
-  [CLI reference](/docs/cli) `run` and `validate` entries.
+  [CLI reference](/docs/reference/cli) `run` and `validate` entries.
 - Cutting a small, referentially-intact slice instead of masking the whole
   folder is an engine-core capability without a CLI verb yet; not covered
   here.

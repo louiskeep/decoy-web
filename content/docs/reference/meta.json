@@ -1,4 +1,4 @@
 {
   "title": "Reference",
-  "pages": ["capabilities", "strategies", "relationships", "yaml-schema"]
+  "pages": ["yaml-schema", "strategies", "connectors", "relationships", "cli", "capabilities"]
 }

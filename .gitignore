@@ -34,8 +34,8 @@ tsconfig.tsbuildinfo
 # Generated CLI reference pages (rebuilt from content/docs/cli/_source/cli-reference.md
 # by scripts/build-cli-mdx.mjs on prebuild/predev). The hand-written intro partial is
 # the one .mdx file in this folder that stays committed.
-content/docs/cli/*.mdx
-!content/docs/cli/_index-intro.mdx
+content/docs/reference/cli/*.mdx
+!content/docs/reference/cli/_index-intro.mdx
 .gstack/
 out/
 

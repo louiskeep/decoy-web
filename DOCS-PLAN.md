@@ -47,20 +47,32 @@ Rules:
 - Strategy reference is one page per strategy (DuckDB-granular), best for search
   and AI retrieval.
 
-## Information architecture (one unified site)
+## Information architecture (final, Codex-reviewed 2026-10-22)
+
+Four top-level sections (Diataxis: learn, do, understand, look up):
 
 ```
 Get started    install, quickstart, demo
-Guides         recipe cookbook (task-oriented)
-CLI reference  generated per-command (exists)
-Configuration  every YAML key as settings-table + example
-Strategies     each strategy/provider: what, settings, example
-Concepts       determinism, DP, STORM, disguises, limits
-Decoy Studio   platform surfaces (held draft until platform launch)
-llms.txt       AI-parseable index
+Guides         the recipe cookbook (task-oriented how-tos)
+Concepts       determinism, keys & vault, STORM, disguises, DP, limits
+Reference      Configuration (yaml-schema -> folder, post-reorg)
+               Masking strategies   (one page per strategy)
+               Synthetic data providers  (catalog, post-reorg)
+               Connectors and formats
+               Relationships
+               CLI reference        (generated per-command)
+               Feature support and limits   (renamed from Capabilities)
+llms.txt       AI-parseable index, generated from frontmatter
 ```
 
-Chrome links back to the marketing site at the root. Docs mount at /docs.
+Connectors and CLI reference are nested UNDER Reference (they are lookup
+material), not top-level. Chrome links back to the marketing site at the root.
+Docs mount at /docs.
+
+When Studio docs arrive, split the nav by surface and centralize shared material:
+`Get started / Command line (Guides+Reference) / Decoy Studio (Guides+Reference) /
+Concepts / Engine reference`. Shared strategies, providers, config, connectors,
+relationships live in Engine reference, not under a single implicit surface.
 
 ## Sources of truth
 
@@ -175,6 +187,31 @@ troubleshooting/FAQ.
    (BLOCKED on CLI).
 6. Build the Studio section as held drafts, shipped surfaces only, from the
    content-map.
+
+## Post-reorg backlog (Codex IA review 2026-10-22)
+
+The reorg is done (4 sections; connectors + CLI nested under Reference; order +
+rename). These follow-ups came out of the Codex review, deferred by Cam to after
+the reorg:
+
+1. Split Configuration (yaml-schema) from one JSON-Schema dump into a folder:
+   pipeline structure, global settings, sources and targets, tables, generation,
+   validation, subsetting. Each as a settings-table + example page.
+2. Providers catalog: the 34 synthetic providers as product reference (one page
+   per provider or family), distinct from the `decoy providers` CLI page.
+3. Finish the remaining ~12 per-strategy pages (see item 2 in the sequence).
+4. Connectors and formats: give CSV, Parquet, and other formats their own lookup
+   pages alongside the file/S3/GCS/SFTP connector pages.
+5. Move `exit-codes` out of Concepts and under CLI reference.
+6. Split `high-cardinality-categories`: keep rationale in Concepts, move settings
+   and failure cases into Configuration/reference.
+7. Rename `what-we-cannot-prove` -> "Security, privacy, and compliance limits"
+   and place under Feature support and limits, with links from concepts.
+8. Replace the Feature-support page body with a concise support matrix that links
+   to the authoritative strategy/provider/connector/validation/limits pages.
+9. Refresh the docs landing page: task-based entry points (and a Command line /
+   Studio surface chooser once Studio ships). The current copy says sections are
+   "planned" though they exist.
 
 ## Later (after the core docs ship)
 
