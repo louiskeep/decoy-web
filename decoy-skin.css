@@ -241,3 +241,19 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
 .darkmode .shot-ph .bar{ background:#1d1d1d; }
 
 @media (max-width:760px){ .iface-shots, .run-split{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   Shape: rectangles instead of pill buttons, and slightly
+   sharper card corners for a more deliberate, less templated feel.
+   ============================================================ */
+.button, a.button, a.button:visited{ border-radius:6px; }
+.bento-box,
+.hero-shot,
+.shot-ph,
+.ptier,
+.feature-row .frow-shot,
+.demo .demo-frame,
+.demo .chapters > div{ border-radius:8px; }
+.pt-cta{ border-radius:6px; }
+.pt-banner{ border-radius:6px; }
+.shot-ph .bar{ border-radius:0; }
