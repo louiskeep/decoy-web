@@ -222,8 +222,9 @@ authoring order:
 Codex new-guide suggestions: DONE `choose-a-masking-strategy` (decision table
 bridging STORM findings to the strategy pages) and `unmask-data` (FPE reverses
 from the config; vault:true columns reverse with the vault file; everything else
-one-way, verified against the generated unmask CLI reference). TODO: refactor
-`strategies/index` (before/after gallery) into a concise categorized index.
+one-way, verified against the generated unmask CLI reference). DONE: refactored
+`strategies/index` from the before/after gallery into a concise categorized index
+(the per-strategy pages hold the before/after now).
 
 ## Post-reorg backlog (Codex IA review 2026-10-22)
 
