@@ -181,7 +181,7 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
    (Studio) tier carries all the emphasis, the other two stay quiet.
    ============================================================ */
 .welcome.pricing-intro{ padding-top:58px; padding-bottom:6px; }
-.pricing-cards-sec{ padding-top:48px; }
+.pricing-cards-sec{ padding-top:24px; }
 .ptiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:start; max-width:1060px; margin:0 auto; }
 
 .ptier{ position:relative; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:14px; background:var(--surface,#fff); padding:30px 26px 34px; }
@@ -208,14 +208,11 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
 
 /* The one tier that carries the emphasis. */
 .ptier.pop{ border-color:#00867e; box-shadow:0 26px 64px -32px rgba(0,134,126,.5); background:linear-gradient(180deg, rgba(0,134,126,.05), rgba(0,134,126,0) 180px); }
-/* Floats above the card so all three card tops stay level; faded so it reads as a hint, not a shout. */
-.pt-banner{ position:absolute; left:0; right:0; bottom:100%; margin-bottom:10px; text-align:center; font-family:"SuisseIntl"; font-weight:600; font-size:12px; letter-spacing:.01em; padding:7px 8px; border-radius:9px; color:#00867e; background:rgba(0,134,126,.1); border:1px solid rgba(0,134,126,.2); }
 
 .darkmode .ptier{ background:#161616; border-color:rgba(255,255,255,.12); }
 .darkmode .ptier .pt-head{ border-bottom-color:rgba(255,255,255,.1); }
 .darkmode .pt-cta.ghost{ border-color:rgba(255,255,255,.2); }
 .darkmode .ptier.pop{ border-color:#0a938a; box-shadow:0 26px 64px -32px rgba(0,0,0,.7); background:linear-gradient(180deg, rgba(0,134,126,.16), rgba(0,134,126,0) 180px); }
-.darkmode .pt-banner{ color:#4cc2c2; background:rgba(0,134,126,.18); border-color:rgba(76,194,194,.3); }
 
 @media (max-width:860px){
   .ptiers{ grid-template-columns:1fr; max-width:440px; gap:18px; }
