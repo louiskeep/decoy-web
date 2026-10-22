@@ -207,38 +207,32 @@
 		</div>
 	</div>
 	<div class="wrap">
-		<div class="bento-grid">
-			<div class="bento-box">
-				<div class="bento-title">
-					<svg class="icon"><use href="#terminal-browser"></use></svg>
-					<span>Free CLI</span>
-				</div>
-				<p>The full engine, free and source-available. Run it on your laptop or in CI, driven by YAML you read and version. Masking, generation, subsetting, detection, and the disguise templates are all here.</p>
-				<p>Pick this when one person or a pipeline runs the jobs and the config lives in a repo.</p>
-				<a class="bento-link" href="features.html">What the engine does<svg class="icon"><use href="#arrow-right"></use></svg></a>
-			</div>
-			<div class="bento-box">
-				<div class="bento-title">
-					<svg class="icon"><use href="#layout-grid-01"></use></svg>
-					<span>Decoy Studio</span>
-				</div>
-				<p>A self-hosted team app on top of the engine, $499 per month. It adds a visual builder, shared jobs, role-based access, schedules, and reporting with evidence and audit history.</p>
-				<p>Pick this when a team shares jobs, needs access control, and keeps a record of every run.</p>
-				<a class="bento-link" href="mailto:goodneighbor@goodneighbor.design?subject=Decoy%20Studio">Get Studio<svg class="icon"><use href="#arrow-right"></use></svg></a>
-			</div>
+		<div class="iface-shots">
+			<figure class="shot-ph">
+				<div class="bar"><i></i><i></i><i></i></div>
+				<div class="canvas"><span class="ph">Command line</span></div>
+				<figcaption>Free CLI, driven by YAML you keep in your repo.</figcaption>
+			</figure>
+			<figure class="shot-ph">
+				<div class="bar"><i></i><i></i><i></i></div>
+				<div class="canvas"><span class="ph">Decoy Studio</span></div>
+				<figcaption>The shared team app, $499 per month.</figcaption>
+			</figure>
 		</div>
 	</div>
 </section>
 
 
 <section id="run">
-	<div class="flexwrap wrap">
+	<div class="wrap">
 		<div class="intro">
       <h2 class="display-3">Run it</h2>
 			<p>Decoy is self-hosted. It runs inside your environment, next to your data, and nothing goes to Decoy.</p>
 			<p>Run the CLI locally or in CI straight from a config file. For a longer-lived setup, run it from a container with Docker Compose using the compose file from the docs, with your config and storage mounted in.</p>
 		</div>
-		<div class="install">
+	</div>
+	<div class="wrap">
+		<div class="run-split">
 			<div class="window">
 				<div class="result content">
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"># local, straight from a config file
@@ -248,6 +242,11 @@ decoy mask config.yaml
 docker compose -f decoy-compose.yaml run decoy mask config.yaml</code></pre></figure>
 				</div>
 			</div>
+			<figure class="shot-ph">
+				<div class="bar"><i></i><i></i><i></i></div>
+				<div class="canvas"><span class="ph">Decoy nodes</span></div>
+				<figcaption>The pipeline nodes: source, subset, generate, mask, output.</figcaption>
+			</figure>
 		</div>
 	</div>
 </section>
