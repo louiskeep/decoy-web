@@ -1,0 +1,26 @@
+---
+title: derived_aggregate
+description: Replace a value with an aggregate across rows.
+---
+
+Computes an aggregate over a column across rows (sum, count, mode) and writes it
+back, so a column can carry a group-level summary instead of the raw value.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `column` | string | required | The column to aggregate |
+| `op` | string | required | The aggregate: `sum`, `count`, or `mode` |
+
+For the full parameter set, run `decoy strategies inspect derived_aggregate`.
+
+## Example
+
+```yaml
+- name: order_total
+  strategy: derived_aggregate
+  provider_config:
+    column: line_amount
+    op: sum
+```

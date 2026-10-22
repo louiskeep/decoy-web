@@ -172,13 +172,11 @@ troubleshooting/FAQ.
 
 1. DONE: sample pages signed off; FK-shapes reference, subset recipe, Parquet
    page shipped.
-2. Per-strategy pages, one page each under `reference/strategies/`. DONE (15):
-   hash, fpe, faker, redact, categorical, date-shift, windowed-date, truncate,
-   passthrough, shuffle, bucketize, top_code, geo_generalize, group_key,
-   grouped_series. TODO (8): bucket_perturb, code_set, derived,
-   derived_aggregate, formula, joint_mask, text_mask, text_redact. These need
-   per-handler param extraction (DSL/NER/transform logic) or
-   `decoy strategies inspect`; do not fabricate param tables.
+2. Per-strategy pages, one page each under `reference/strategies/`. DONE (23/23,
+   all user-facing mask strategies). Params verified from the engine handlers;
+   each page points to `decoy strategies inspect <name>` for the complete set.
+   Follow-up (CLI-blocked): add verified before/after output for the pages that
+   currently show config-only examples (needs a real CLI run).
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
 4. DONE: `llms.txt` generated from frontmatter by scripts/build-llms-txt.mjs
    (prebuild), serves at the docs deploy root. Deploy detail: in the unified

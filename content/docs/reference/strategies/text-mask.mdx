@@ -1,0 +1,33 @@
+---
+title: text_mask
+description: Find PII in free text and replace it.
+---
+
+Detects spans in free text (pattern detectors plus optional NER) and replaces each
+with synthetic text, so a note keeps its shape while the names and identifiers in
+it change. Use `text_redact` to blank spans instead of replacing them.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `detectors` | list of string | see inspect | Pattern detectors to run over the text |
+| `ner` | boolean | `false` | Also run named-entity recognition |
+| `entities` | list of string | none | NER entity types to catch (person, location, and similar) |
+| `model` | string | default | The NER model to load |
+| `per_detector_strategy` | map | none | Override the replacement per detector |
+| `token` | string | none | Replacement token when a span has no synthetic value |
+| `unmatched_span_policy` | string | see inspect | What to do with spans no strategy handled |
+
+For the full parameter set, run `decoy strategies inspect text_mask`. See also
+[Redact text with NER](/docs/how-to/redact-text-with-ner).
+
+## Example
+
+```yaml
+- name: clinical_note
+  strategy: text_mask
+  provider_config:
+    ner: true
+    entities: [person, location]
+```

@@ -1,0 +1,27 @@
+---
+title: joint_mask
+description: Mask correlated columns together.
+---
+
+Masks a set of columns as one unit, so their combination stays consistent after
+masking (a city keeps a matching country). Without this, masking each column alone
+would break the correlation.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `mode` | string | required | How the columns are jointly masked |
+| `key_by` | list of string | none | Columns whose combination is kept consistent |
+| `reference` | string | none | A reference set the joint values are drawn from |
+
+For the full parameter set, run `decoy strategies inspect joint_mask`.
+
+## Example
+
+```yaml
+- name: city
+  strategy: joint_mask
+  provider_config:
+    key_by: [city, state, country]
+```

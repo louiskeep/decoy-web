@@ -1,0 +1,30 @@
+---
+title: code_set
+description: Replace a code with another valid code from the same set.
+---
+
+Swaps a value for a real code drawn from a standard corpus (ICD-10, HCPCS, NDC, or
+a custom set), so the output is still a valid code. `chapter_preserve` keeps the
+replacement in the same category as the original.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `corpus_source` | string | required | The code set: `icd10`, `hcpcs`, `ndc`, or a custom source |
+| `corpus_source_version` | string | latest | Pin a specific version of the corpus |
+| `chapter_preserve` | boolean | `false` | Keep the replacement in the original code's chapter/category |
+| `mode` | string | see inspect | How codes are drawn |
+
+For the full parameter set, run `decoy strategies inspect code_set`. See also
+[Work with healthcare code sets](/docs/how-to/work-with-healthcare-code-sets).
+
+## Example
+
+```yaml
+- name: diagnosis
+  strategy: code_set
+  provider_config:
+    corpus_source: icd10
+    chapter_preserve: true
+```

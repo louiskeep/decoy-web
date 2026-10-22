@@ -1,0 +1,24 @@
+---
+title: formula
+description: Compute a value from a formula over the row.
+---
+
+Runs a formula over the row's columns (hash, concat, truncate, and similar), so a
+masked column can be assembled from its siblings with a short expression.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `formula` | string | required | The formula to evaluate over sibling columns |
+
+For the full parameter set, run `decoy strategies inspect formula`.
+
+## Example
+
+```yaml
+- name: account_ref
+  strategy: formula
+  provider_config:
+    formula: "concat(region, '-', hash(account_id))"
+```

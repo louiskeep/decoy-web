@@ -1,0 +1,26 @@
+---
+title: bucket_perturb
+description: Nudge a value into a nearby bucket.
+---
+
+Shifts a value by a bounded, deterministic amount so it moves into a neighboring
+bucket without leaving its neighborhood (age 45 becomes 48, not 90). Keyed, so the
+same input always moves the same way.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `bucket` | number | required | Bucket size that bounds the perturbation |
+| `date_format` | string | none | Format string when the column is a date |
+
+For the full parameter set, run `decoy strategies inspect bucket_perturb`.
+
+## Example
+
+```yaml
+- name: age
+  strategy: bucket_perturb
+  provider_config:
+    bucket: 5
+```
