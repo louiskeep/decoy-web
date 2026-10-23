@@ -407,6 +407,17 @@ body.home .hero-bg .cell.masking{ color:#4cd3c6; }
 body.home .hero-shot{ background:#0c1a17; border-color:rgba(120,195,183,.16); box-shadow:0 44px 120px -52px rgba(0,0,0,.85); }
 body.home .hero-shot .bar{ background:#0e1f1b; border-bottom-color:rgba(120,195,183,.14); }
 body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
+/* REDESIGN: split hero. Copy on the left, the Studio screenshot on the right,
+   the masked-data motif running behind both. Stacks back to centered on narrow
+   screens (the base .welcome .wrap column layout). */
+@media (min-width:900px){
+  body.home section.welcome .wrap{ flex-direction:row; align-items:center; justify-content:space-between; gap:clamp(32px,5vw,72px); }
+  body.home .welcome .hero-content{ flex:0 1 46%; max-width:560px; align-items:flex-start; text-align:left; }
+  body.home .welcome .hero-content h1,
+  body.home .welcome .hero-content p{ text-align:left; }
+  body.home .welcome .hero-buttons{ justify-content:flex-start; }
+  body.home .welcome .hero-shot{ flex:1 1 54%; width:auto; max-width:none; margin:0; margin-right:clamp(-80px,-4vw,-24px); }
+}
 
 /* ============================================================
    REDESIGN: deliberate placeholder states. Until real product
