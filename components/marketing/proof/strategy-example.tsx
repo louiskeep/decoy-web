@@ -6,13 +6,21 @@ import {
 } from "@/lib/proof"
 import { cn } from "@/lib/utils"
 
-// Which output cells differ from the matching input cell. Compared per row and
-// per column so the highlight marks the values that actually changed, not the
+// Which output cells differ from the matching input cell. Keyed by column name
+// (not position) so the highlight stays correct even if rows ever carry their
+// columns in a different order. Marks the values that actually changed, not the
 // whole masked column.
-function changedCells(input: SampleRecord[], output: SampleRecord[]): boolean[][] {
+function changedCells(
+  input: SampleRecord[],
+  output: SampleRecord[],
+): Record<string, boolean>[] {
   return output.map((outRow, i) => {
     const inRow = input[i] ?? {}
-    return Object.keys(outRow).map((col) => inRow[col] !== outRow[col])
+    const row: Record<string, boolean> = {}
+    for (const col of Object.keys(outRow)) {
+      row[col] = inRow[col] !== outRow[col]
+    }
+    return row
   })
 }
 
@@ -23,7 +31,7 @@ function DiffTable({
 }: {
   rows: SampleRecord[]
   caption: string
-  changed?: boolean[][]
+  changed?: Record<string, boolean>[]
 }) {
   if (rows.length === 0) return null
   const columns = Object.keys(rows[0])
@@ -48,8 +56,8 @@ function DiffTable({
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="border-t border-border">
-              {columns.map((c, j) => {
-                const isChanged = changed?.[i]?.[j] ?? false
+              {columns.map((c) => {
+                const isChanged = changed?.[i]?.[c] ?? false
                 return (
                   <td
                     key={c}

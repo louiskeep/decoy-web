@@ -2,8 +2,9 @@
 // scripts/gen_proof_manifest.py and synced here. To refresh it after an engine
 // change, copy the regenerated file:
 //   cp ../decoy-engine/docs/proof-manifest.json lib/data/proof-manifest.json
-// It is parsed with a Zod schema at module load, so any shape drift fails the
-// build with a clear error instead of surfacing as a runtime surprise.
+// It is parsed with a Zod schema at module load, so a missing or wrong-typed
+// field fails the build with a clear error instead of surfacing as a runtime
+// surprise. (Unknown extra keys are stripped, not rejected.)
 import { z } from "zod"
 import manifestJson from "@/lib/data/proof-manifest.json"
 
