@@ -40,6 +40,28 @@ bodyClass: page-security
   </div>
 </section>
 
+<section class="section section--tight" id="outbound">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Outbound connections</p>
+      <h2>Every connection the Platform can make</h2>
+      <p>None of these exist until you configure them, and none go to Decoy.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Destination</th><th>When</th><th>Where it is configured</th></tr></thead>
+        <tbody>
+          <tr><td>Object storage (S3, S3-compatible, GCS)</td><td>A job reads a source or writes a target</td><td>Admin &rsaquo; Cloud accounts</td></tr>
+          <tr><td>PostgreSQL source</td><td>A job snapshots tables into a dataset</td><td>Data sources</td></tr>
+          <tr><td>OIDC identity provider</td><td>Sign-in</td><td>Admin &rsaquo; SSO</td></tr>
+          <tr><td>SMTP, Slack, webhook endpoints</td><td>An alert rule fires on job success or failure</td><td>Notifications</td></tr>
+          <tr><td>Container registry</td><td>Pulling the image at install or upgrade time only</td><td>Your Docker host</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="keys">
   <div class="container">
     <div class="section-head">
@@ -105,6 +127,7 @@ bodyClass: page-security
         </tbody>
       </table>
     </div>
+    <p class="small muted" style="margin-top: var(--space-4)">Each Disguise is a dated, versioned rule set you can read in full before adopting it, and the pipeline file records which one a run used.</p>
     <div class="note note--raw" style="margin-top: var(--space-5)">
       <strong>What we do not claim.</strong> No SOC 2 report, no HIPAA certification or BAA, no PCI assessment, no FIPS validation. Disguises encode a reading of each framework and are versioned so you can review them; your assessor decides whether the result meets your obligation.
     </div>
