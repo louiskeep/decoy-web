@@ -2,8 +2,8 @@
   "engine_version": "0.2.0",
   "generated_at": "2026-06-14",
   "surface": {
-    "mask": 12,
-    "generate": 7,
+    "mask": 23,
+    "generate": 12,
     "providers": 34
   },
   "hero": {
@@ -66,51 +66,51 @@
         ],
         "output": [
           {
-            "member_id": "289467148",
-            "ssn": "676-97-0861",
-            "first_name": "Nu",
-            "last_name": "Merritt",
-            "email": "nu.merritt@example.net",
+            "member_id": "621067875",
+            "ssn": "769-09-6725",
+            "first_name": "Heather",
+            "last_name": "Smith",
+            "email": "heather.smith@example.net",
             "city": "Raleigh",
             "state": "NC",
             "zip": "27601"
           },
           {
-            "member_id": "243396886",
-            "ssn": "977-34-0754",
-            "first_name": "Christoper",
-            "last_name": "Woodard",
-            "email": "christoper.woodard@corp.example.com",
+            "member_id": "842078876",
+            "ssn": "967-75-6485",
+            "first_name": "Katie",
+            "last_name": "Thomas",
+            "email": "katie.thomas@corp.example.com",
             "city": "St. Louis",
             "state": "MO",
             "zip": "63101"
           },
           {
-            "member_id": "835995586",
-            "ssn": "774-70-2468",
-            "first_name": "Jeanene",
-            "last_name": "Mitchell",
-            "email": "jeanene.mitchell@mail.example.com",
+            "member_id": "611418145",
+            "ssn": "460-48-9848",
+            "first_name": "Sonia",
+            "last_name": "Hall",
+            "email": "sonia.hall@mail.example.com",
             "city": "Philadelphia",
             "state": "PA",
             "zip": "19101"
           },
           {
-            "member_id": "029661349",
-            "ssn": "125-38-2088",
-            "first_name": "Robbie",
-            "last_name": "Swanson",
-            "email": "robbie.swanson@mail.example.com",
+            "member_id": "301467856",
+            "ssn": "511-51-5529",
+            "first_name": "Victoria",
+            "last_name": "Reeves",
+            "email": "victoria.reeves@mail.example.com",
             "city": "New York",
             "state": "NY",
             "zip": "10001"
           },
           {
-            "member_id": "398056721",
-            "ssn": "222-41-8208",
-            "first_name": "Piedad",
-            "last_name": "Walsh",
-            "email": "piedad.walsh@example.org",
+            "member_id": "661897357",
+            "ssn": "305-80-2379",
+            "first_name": "Nicole",
+            "last_name": "Mitchell",
+            "email": "nicole.mitchell@example.org",
             "city": "Baltimore",
             "state": "MD",
             "zip": "21201"
@@ -148,28 +148,28 @@
         ],
         "output": [
           {
-            "member_id": "289467148",
-            "claim_id": "410976",
+            "member_id": "621067875",
+            "claim_id": "605108",
             "billed_amount": "100.0"
           },
           {
-            "member_id": "243396886",
-            "claim_id": "713510",
+            "member_id": "842078876",
+            "claim_id": "029848",
             "billed_amount": "113.5"
           },
           {
-            "member_id": "835995586",
-            "claim_id": "163910",
+            "member_id": "611418145",
+            "claim_id": "312360",
             "billed_amount": "127.0"
           },
           {
-            "member_id": "029661349",
-            "claim_id": "242341",
+            "member_id": "301467856",
+            "claim_id": "512363",
             "billed_amount": "140.5"
           },
           {
-            "member_id": "398056721",
-            "claim_id": "620751",
+            "member_id": "661897357",
+            "claim_id": "694418",
             "billed_amount": "154.0"
           }
         ]
@@ -200,24 +200,24 @@
         ],
         "output": [
           {
-            "npi": "8227807855",
-            "pan": "4011233603868940"
+            "npi": "9605602698",
+            "pan": "8102802635372245"
           },
           {
-            "npi": "7353656635",
-            "pan": "4011233603868940"
+            "npi": "7610263395",
+            "pan": "8102802635372245"
           },
           {
-            "npi": "9332766264",
-            "pan": "4011233603868940"
+            "npi": "9909786450",
+            "pan": "8102802635372245"
           },
           {
-            "npi": "6973604942",
-            "pan": "4011233603868940"
+            "npi": "4599267540",
+            "pan": "8102802635372245"
           },
           {
-            "npi": "2680298499",
-            "pan": "4011233603868940"
+            "npi": "0133796805",
+            "pan": "8102802635372245"
           }
         ]
       }
@@ -225,28 +225,28 @@
     "audit_log": [
       {
         "event_id": "1",
-        "actor": "pagegabriella",
+        "actor": "rossnicole",
         "action": "edit"
       },
       {
         "event_id": "2",
-        "actor": "montoyaelizabeth",
+        "actor": "waterscassandra",
         "action": "export"
       },
       {
         "event_id": "3",
-        "actor": "lmartin",
+        "actor": "aewing",
         "action": "edit"
       },
       {
         "event_id": "4",
-        "actor": "nicoleterry",
-        "action": "delete"
+        "actor": "christopher72",
+        "action": "view"
       },
       {
         "event_id": "5",
-        "actor": "lancearnold",
-        "action": "export"
+        "actor": "fbell",
+        "action": "edit"
       }
     ],
     "invariants": [
@@ -276,13 +276,13 @@
       ],
       "output": [
         {
-          "account": "216864985"
+          "account": "827097706"
         },
         {
-          "account": "369850545"
+          "account": "936758993"
         },
         {
-          "account": "362617244"
+          "account": "125340253"
         }
       ],
       "invariant": "Output preserves the exact length and digit charset of the input, and is reversible with the key."
@@ -336,13 +336,13 @@
       ],
       "output": [
         {
-          "user_id": "539f20fd0b2c15177afb691bbd61201d3b56833c4ca59194f76686b64bc5d86e"
+          "user_id": "67208a15cfeafe0c343a444b9e59a2bb2235800ed60026ed2fb59d5a65665c6c"
         },
         {
-          "user_id": "46222fe0d4ebb36b6a9dad35bce7acf1e18c4c15dbb6a96f3aa893ffba17e857"
+          "user_id": "56770d460af74f8da1744125a1ba0704e6422d6a4b704ef393790bdc20dea902"
         },
         {
-          "user_id": "9670b5c4b2aa3fffb84c6fb4ae9405d3f333aa312d158f5f3ee20a9c6780a1f2"
+          "user_id": "423500d584fd207c6e554d04b008b01f6a3824507574dccb5f15164e180a9680"
         }
       ],
       "invariant": "Each value becomes a fixed-length keyed hex token; equal inputs hash equally, so joins survive."
@@ -408,6 +408,36 @@
       "invariant": "Numeric values collapse into fixed-width ranges, so distinct inputs share a bucket."
     },
     {
+      "id": "mask.top_code",
+      "kind": "mask",
+      "title": "Top-coding (age 90+ generalization)",
+      "column": "age",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: age\n    strategy: top_code\n    provider_config:\n      preset: hipaa_age",
+      "input": [
+        {
+          "age": "67"
+        },
+        {
+          "age": "94"
+        },
+        {
+          "age": "101"
+        }
+      ],
+      "output": [
+        {
+          "age": "67"
+        },
+        {
+          "age": "90+"
+        },
+        {
+          "age": "90+"
+        }
+      ],
+      "invariant": "Ages over 89 collapse into a single '90+' category (HIPAA Safe Harbor \u00a7164.514(b)(2)(i)(C)); ages at or below 89 are preserved, so distinct high ages share one bucket while the rest keep their own value."
+    },
+    {
       "id": "mask.categorical",
       "kind": "mask",
       "title": "Categorical remap",
@@ -456,16 +486,46 @@
       ],
       "output": [
         {
-          "dob": "1980-02-28"
+          "dob": "1980-02-21"
         },
         {
-          "dob": "1991-08-24"
+          "dob": "1991-09-18"
         },
         {
-          "dob": "2004-01-16"
+          "dob": "2003-12-08"
         }
       ],
       "invariant": "Each date is shifted by a keyed offset inside the configured window, preserving the date format."
+    },
+    {
+      "id": "mask.bucket_perturb",
+      "kind": "mask",
+      "title": "Calendar-bucket date perturbation",
+      "column": "event_date",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: event_date\n    strategy: bucket_perturb\n    namespace: event_date\n    provider_config:\n      bucket: month",
+      "input": [
+        {
+          "event_date": "2024-01-15"
+        },
+        {
+          "event_date": "2024-04-30"
+        },
+        {
+          "event_date": "2024-07-10"
+        }
+      ],
+      "output": [
+        {
+          "event_date": "2024-01-06"
+        },
+        {
+          "event_date": "2024-04-21"
+        },
+        {
+          "event_date": "2024-07-08"
+        }
+      ],
+      "invariant": "Each date is snapped to a deterministic position within its calendar month. The output is always a valid date in the same month as the input; exact day is derived from (job_seed, namespace, value) so the same input always produces the same output across runs."
     },
     {
       "id": "mask.shuffle",
@@ -489,10 +549,10 @@
           "salary": "92000"
         },
         {
-          "salary": "75000"
+          "salary": "50000"
         },
         {
-          "salary": "50000"
+          "salary": "75000"
         }
       ],
       "invariant": "Values are permuted within the column; the exact multiset of values is preserved."
@@ -516,13 +576,13 @@
       ],
       "output": [
         {
-          "first_name": "Lane"
+          "first_name": "Meagan"
         },
         {
-          "first_name": "Rubie"
+          "first_name": "Victoria"
         },
         {
-          "first_name": "Rodrick"
+          "first_name": "Amber"
         }
       ],
       "invariant": "Values are replaced with synthetic provider output drawn from a value pool, not the originals."
@@ -586,6 +646,392 @@
         }
       ],
       "invariant": "PII spans inside free text are replaced with a redaction token; surrounding text is preserved."
+    },
+    {
+      "id": "mask.text_mask",
+      "kind": "mask",
+      "title": "Per-detector span masking",
+      "column": "note",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: note\n    strategy: text_mask\n    provider_config:\n      detectors:\n      - ssn\n      unmatched_span_policy: passthrough",
+      "input": [
+        {
+          "note": "Patient SSN 500-10-1000 on file"
+        },
+        {
+          "note": "SSN 501-11-1001 updated on record"
+        },
+        {
+          "note": "Contact SSN 502-12-1002 verified"
+        }
+      ],
+      "output": [
+        {
+          "note": "Patient SSN 985-79-6664 on file"
+        },
+        {
+          "note": "SSN 546-01-2785 updated on record"
+        },
+        {
+          "note": "Contact SSN 816-64-4824 verified"
+        }
+      ],
+      "invariant": "PII spans are detected and masked per-detector (FPE for SSN by default); unmatched surrounding text is controlled by unmatched_span_policy."
+    },
+    {
+      "id": "mask.geo_generalize",
+      "kind": "mask",
+      "title": "ZIP Safe Harbor k-threshold cascade",
+      "column": "zipcode",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: zipcode\n    strategy: geo_generalize\n    provider_config:\n      type: zip\n      cascade:\n      - zip5\n      - zip3\n      - state\n      - suppress\n      k_threshold: 3",
+      "input": [
+        {
+          "zipcode": "98101"
+        },
+        {
+          "zipcode": "98102"
+        },
+        {
+          "zipcode": "98103"
+        }
+      ],
+      "output": [
+        {
+          "zipcode": "981"
+        },
+        {
+          "zipcode": "981"
+        },
+        {
+          "zipcode": "981"
+        }
+      ],
+      "invariant": "Each ZIP5 is generalised to the most specific level whose in-dataset count satisfies the k-threshold; restricted ZIP3 prefixes (HHS Safe Harbor 45 CFR 164.514(b)(2)(i)(B)) are skipped regardless of count."
+    },
+    {
+      "id": "mask.code_set",
+      "kind": "mask",
+      "title": "Medical-code corpus remap",
+      "column": "diag_code",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: diag_code\n    strategy: code_set\n    provider_config:\n      code_set: icd10\n      mode: mask",
+      "input": [
+        {
+          "diag_code": "I10"
+        },
+        {
+          "diag_code": "E11.9"
+        },
+        {
+          "diag_code": "F32.9"
+        }
+      ],
+      "output": [
+        {
+          "diag_code": "H35.30"
+        },
+        {
+          "diag_code": "D64.9"
+        },
+        {
+          "diag_code": "A04.7"
+        }
+      ],
+      "invariant": "Each diagnosis code is replaced with a different real ICD-10 code drawn from the shipped corpus via HMAC-keyed selection. Output is always a valid corpus code and is always different from the input."
+    },
+    {
+      "id": "mask.joint_mask",
+      "kind": "mask",
+      "title": "Joint reference-tuple masking (ZIP/city/state)",
+      "column": "zip",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: zip\n    strategy: joint_mask\n    provider_config:\n      columns: [zip, city, state]\n      reference: us_zip5_city_state\n      key_by: patient_id",
+      "input": [
+        {
+          "patient_id": "P0001",
+          "zip": "00000"
+        },
+        {
+          "patient_id": "P0002",
+          "zip": "00000"
+        },
+        {
+          "patient_id": "P0003",
+          "zip": "00000"
+        }
+      ],
+      "output": [
+        {
+          "patient_id": "P0001",
+          "zip": "19102",
+          "city": "Philadelphia",
+          "state": "PA"
+        },
+        {
+          "patient_id": "P0002",
+          "zip": "30304",
+          "city": "Atlanta",
+          "state": "GA"
+        },
+        {
+          "patient_id": "P0003",
+          "zip": "85004",
+          "city": "Phoenix",
+          "state": "AZ"
+        }
+      ],
+      "invariant": "Every output (zip, city, state) tuple is a real row from the reference table; geographic consistency is guaranteed because the entire row is drawn from a single reference record, never assembled field-by-field."
+    },
+    {
+      "id": "mask.derived",
+      "kind": "mask",
+      "title": "Row-context expression (derived)",
+      "column": "b",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: a\n    strategy: passthrough\n  - name: b\n    strategy: derived\n    provider_config:\n      expression: a * 2",
+      "input": [
+        {
+          "a": "1.0",
+          "b": "0.0"
+        },
+        {
+          "a": "2.0",
+          "b": "0.0"
+        },
+        {
+          "a": "3.0",
+          "b": "0.0"
+        },
+        {
+          "a": "4.0",
+          "b": "0.0"
+        },
+        {
+          "a": "5.0",
+          "b": "0.0"
+        }
+      ],
+      "output": [
+        {
+          "a": "1.0",
+          "b": "2.0"
+        },
+        {
+          "a": "2.0",
+          "b": "4.0"
+        },
+        {
+          "a": "3.0",
+          "b": "6.0"
+        },
+        {
+          "a": "4.0",
+          "b": "8.0"
+        },
+        {
+          "a": "5.0",
+          "b": "10.0"
+        }
+      ],
+      "invariant": "Each row's output is a pure function of the same row's source columns evaluated via a closed-vocabulary Lark expression. The same row context always produces the same result; no RNG is involved."
+    },
+    {
+      "id": "mask.derived_aggregate",
+      "kind": "mask",
+      "title": "Intra-table aggregate (derived_aggregate)",
+      "column": "total",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: amount\n    strategy: passthrough\n  - name: total\n    strategy: derived_aggregate\n    provider_config:\n      op: sum\n      column: amount",
+      "input": [
+        {
+          "amount": "10.0",
+          "total": "0.0"
+        },
+        {
+          "amount": "20.0",
+          "total": "0.0"
+        },
+        {
+          "amount": "30.0",
+          "total": "0.0"
+        },
+        {
+          "amount": "40.0",
+          "total": "0.0"
+        },
+        {
+          "amount": "50.0",
+          "total": "0.0"
+        }
+      ],
+      "output": [
+        {
+          "amount": "10.0",
+          "total": "150.0"
+        },
+        {
+          "amount": "20.0",
+          "total": "150.0"
+        },
+        {
+          "amount": "30.0",
+          "total": "150.0"
+        },
+        {
+          "amount": "40.0",
+          "total": "150.0"
+        },
+        {
+          "amount": "50.0",
+          "total": "150.0"
+        }
+      ],
+      "invariant": "Every row of the target column carries the same scalar aggregate (sum, mean, min, max, or count) computed from the named source column. Deterministic: same source column -> same scalar on every run. No individual row values are exposed in the output."
+    },
+    {
+      "id": "mask.grouped_series",
+      "kind": "mask",
+      "title": "Per-group series (grouped_series)",
+      "column": "counter",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: counter\n    strategy: grouped_series\n    provider_config:\n      group_by: group_id\n      order_by: order_col\n      generator: cumcount",
+      "input": [
+        {
+          "group_id": "A",
+          "order_col": "1",
+          "counter": "0"
+        },
+        {
+          "group_id": "A",
+          "order_col": "2",
+          "counter": "0"
+        },
+        {
+          "group_id": "A",
+          "order_col": "3",
+          "counter": "0"
+        },
+        {
+          "group_id": "B",
+          "order_col": "1",
+          "counter": "0"
+        },
+        {
+          "group_id": "B",
+          "order_col": "2",
+          "counter": "0"
+        }
+      ],
+      "output": [
+        {
+          "group_id": "A",
+          "order_col": "1",
+          "counter": "0"
+        },
+        {
+          "group_id": "A",
+          "order_col": "2",
+          "counter": "1"
+        },
+        {
+          "group_id": "A",
+          "order_col": "3",
+          "counter": "2"
+        },
+        {
+          "group_id": "B",
+          "order_col": "1",
+          "counter": "0"
+        },
+        {
+          "group_id": "B",
+          "order_col": "2",
+          "counter": "1"
+        }
+      ],
+      "invariant": "Within each distinct group_by value, the counter resets and increases monotonically from the configured start. The original column value is not preserved; the output is structurally derived from the group and order columns only. Deterministic: same seed + same input -> same output."
+    },
+    {
+      "id": "mask.windowed_date",
+      "kind": "mask",
+      "title": "Anchor-relative windowed date (windowed_date)",
+      "column": "event_date",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: event_date\n    strategy: windowed_date\n    provider_config:\n      anchor: anchor\n      min_days: 1\n      max_days: 30\n      distribution: uniform",
+      "input": [
+        {
+          "anchor": "2024-01-15",
+          "event_date": "1900-01-01"
+        },
+        {
+          "anchor": "2024-06-30",
+          "event_date": "1900-01-01"
+        },
+        {
+          "anchor": "2024-11-02",
+          "event_date": "1900-01-01"
+        }
+      ],
+      "output": [
+        {
+          "anchor": "2024-01-15",
+          "event_date": "2024-01-28"
+        },
+        {
+          "anchor": "2024-06-30",
+          "event_date": "2024-07-15"
+        },
+        {
+          "anchor": "2024-11-02",
+          "event_date": "2024-11-30"
+        }
+      ],
+      "invariant": "Each output date falls within [min_days, max_days] of the anchor column value in the same row. The exact offset is seeded per-row from the job seed; the same input always produces the same output across runs. The original column value is not preserved."
+    },
+    {
+      "id": "mask.group_key",
+      "kind": "mask",
+      "title": "HMAC-keyed per-group identifier (group_key)",
+      "column": "key",
+      "config_yaml": "tables:\n- name: t\n  columns:\n  - name: key\n    strategy: group_key\n    provider_config:\n      group_by: cluster_id\n      length: 16\n      prefix: GK-",
+      "input": [
+        {
+          "cluster_id": "X",
+          "key": ""
+        },
+        {
+          "cluster_id": "X",
+          "key": ""
+        },
+        {
+          "cluster_id": "Y",
+          "key": ""
+        },
+        {
+          "cluster_id": "Y",
+          "key": ""
+        },
+        {
+          "cluster_id": "Z",
+          "key": ""
+        }
+      ],
+      "output": [
+        {
+          "cluster_id": "X",
+          "key": "GK-4eb7d8466d4bd97b"
+        },
+        {
+          "cluster_id": "X",
+          "key": "GK-4eb7d8466d4bd97b"
+        },
+        {
+          "cluster_id": "Y",
+          "key": "GK-edba65caae3eb8d4"
+        },
+        {
+          "cluster_id": "Y",
+          "key": "GK-edba65caae3eb8d4"
+        },
+        {
+          "cluster_id": "Z",
+          "key": "GK-b2b54b800e2f3fb2"
+        }
+      ],
+      "invariant": "Every row sharing the same group_by value receives the same HKDF-SHA256 derived hex key. Distinct group_by values produce distinct keys (collision probability negligible under 32-byte HMAC output). The original column value is not preserved. Deterministic: same seed + same group_by -> same key on every run."
     }
   ],
   "providers": [
@@ -796,34 +1242,17 @@
   ],
   "generation_strategies": [
     "categorical",
+    "derived",
+    "derived_aggregate",
     "distribution",
     "faker",
     "formula",
+    "group_key",
+    "grouped_series",
     "reference",
     "sequence",
-    "statistical"
+    "statistical",
+    "windowed_date"
   ],
-  "benchmarks": [
-    {
-      "shape": "1M rows, HIPAA-shaped parquet, hybrid engine",
-      "throughput": "~1.7M rows/s",
-      "measured_at": "2026-05-09",
-      "note": "0.59 s elapsed; Intel Core i7-1265U; single hash-rule pipeline",
-      "source": "tests/benchmark/calibration/results.md"
-    },
-    {
-      "shape": "5M rows, HIPAA-shaped parquet, hybrid engine",
-      "throughput": "~1.6M rows/s",
-      "measured_at": "2026-05-09",
-      "note": "3.14 s elapsed; Intel Core i7-1265U; single hash-rule pipeline",
-      "source": "tests/benchmark/calibration/results.md"
-    },
-    {
-      "shape": "10M rows, HIPAA-shaped parquet, hybrid engine",
-      "throughput": "~1.8M rows/s",
-      "measured_at": "2026-05-09",
-      "note": "5.47 s elapsed; Intel Core i7-1265U; single hash-rule pipeline",
-      "source": "tests/benchmark/calibration/results.md"
-    }
-  ]
+  "benchmarks": []
 }
