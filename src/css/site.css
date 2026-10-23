@@ -316,3 +316,14 @@ html[data-prelaunch] .launch-only { display: none; }
 .t-cmd::after { content: ""; }
 .is-typing .t-cmd::after { content: "▍"; color: var(--accent); animation: blink 1s steps(2) infinite; }
 @keyframes blink { to { opacity: 0; } }
+
+/* Audit chain illustration */
+.audit-chain { display: grid; gap: 0; font-family: var(--font-mono); font-size: var(--text-xs); }
+.audit-entry { display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 1rem; padding: 0.8rem 1rem; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--bg-1); }
+.audit-k { color: var(--fg-faint); }
+.audit-v { color: var(--fg); font-family: var(--font-sans); font-size: var(--text-sm); }
+.audit-h { grid-column: 1 / -1; color: var(--fg-muted); }
+.audit-h b { color: var(--safe); font-weight: 500; }
+.audit-link { width: 2px; height: 22px; margin-left: 1.5rem; background: linear-gradient(var(--safe), var(--safe)) no-repeat; background-size: 100% var(--draw, 100%); background-color: var(--line); }
+.audit-verify { margin-top: var(--space-3); color: var(--fg-muted); }
+.audit-verify .ok { color: var(--safe); }

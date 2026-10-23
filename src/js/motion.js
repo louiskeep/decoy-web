@@ -20,6 +20,7 @@
       heroMaskTable();
       typedTerminal();
       countUp();
+      auditChain();
       flowStrips(pinned);
     }
   );
@@ -28,8 +29,8 @@
 
   // Groups marked data-reveal stagger their children up on first entry.
   function reveal() {
-    document.querySelectorAll("[data-reveal]").forEach((group) => {
-      const items = Array.from(group.children);
+    document.querySelectorAll("[data-reveal], [data-reveal-self]").forEach((group) => {
+      const items = group.hasAttribute("data-reveal-self") ? [group] : Array.from(group.children);
       if (!items.length) return;
       gsap.set(items, { autoAlpha: 0, y: 24 });
       const stagger = Math.min(0.08, 1.2 / items.length); // large grids finish in about a second
@@ -157,6 +158,25 @@
       }
     });
     ScrollTrigger.create({ trigger: term, start: "top 80%", once: true, onEnter: () => tl.play() });
+  }
+
+  // Platform: audit entries land one by one and the chain links draw between them.
+  function auditChain() {
+    const chain = document.querySelector("[data-chain]");
+    if (!chain) return;
+    const entries = chain.querySelectorAll(".audit-entry");
+    const links = chain.querySelectorAll(".audit-link");
+    const verify = chain.querySelector(".audit-verify");
+    gsap.set(entries, { autoAlpha: 0, y: 12 });
+    gsap.set(links, { "--draw": "0%" });
+    gsap.set(verify, { autoAlpha: 0 });
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+    entries.forEach((entry, i) => {
+      tl.to(entry, { autoAlpha: 1, y: 0, duration: 0.4 });
+      if (links[i]) tl.to(links[i], { "--draw": "100%", duration: 0.35, ease: "none" });
+    });
+    tl.to(verify, { autoAlpha: 1, duration: 0.4 }, "+=0.2");
+    ScrollTrigger.create({ trigger: chain, start: "top 80%", once: true, onEnter: () => tl.play() });
   }
 
   // Stat tiles count up once when they enter the viewport.

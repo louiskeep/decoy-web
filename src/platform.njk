@@ -2,12 +2,13 @@
 title: "Decoy Platform: Self-Hosted Team App for Masking and Synthetic Data"
 description: "Decoy Platform is a self-hosted web app on the Decoy engine: a visual job builder, shared run history, a tamper-evident audit log, role-based access, OIDC single sign-on, and S3, GCS, and Postgres sources. One Docker Compose deploy on your host."
 bodyClass: page-platform
+motion: true
 ---
 <section class="hero hero--page">
   <div class="container">
     <div class="hero-copy">
       <p class="eyebrow">{{ site.products.platform }}</p>
-      <h1>The same engine, shared by the whole team</h1>
+      <h1 data-split>The same engine, shared by the whole team</h1>
       <p class="lede">A self-hosted web app for building pipelines together, running them against shared sources, reviewing what STORM found, and keeping an audit trail you can hand to a reviewer. Deployed with one Docker Compose file on a host you control.</p>
       <div class="hero-actions">
         <a class="btn btn--primary btn--lg" href="/pricing/">See pricing {% icon "arrow-right" %}</a>
@@ -20,17 +21,14 @@ bodyClass: page-platform
 <section class="section section--tight">
   <div class="container">
     <div class="frame">
-      <picture>
-        <source srcset="/images/decoy/studio-builder.webp" type="image/webp">
-        <img src="/images/decoy/studio-builder.png" alt="Job Studio: the visual pipeline builder in Decoy Platform" width="1600" height="900" loading="eager">
-      </picture>
+      <img src="/images/decoy/studio-builder.webp" alt="Job Studio: the visual pipeline builder in Decoy Platform" width="1600" height="900" loading="eager">
     </div>
   </div>
 </section>
 
 <section class="section" id="studio">
   <div class="container">
-    <div class="feature-row">
+    <div class="feature-row" data-reveal>
       <div>
         <p class="eyebrow">{{ site.products.builder }}</p>
         <h3>Build the pipeline visually, keep it as YAML</h3>
@@ -42,14 +40,11 @@ bodyClass: page-platform
         </ul>
       </div>
       <div class="frame">
-        <picture>
-          <source srcset="/images/decoy/studio-report.webp" type="image/webp">
-          <img src="/images/decoy/studio-report.png" alt="A run report in Decoy Platform" width="1600" height="900" loading="lazy">
-        </picture>
+        <img src="/images/decoy/studio-report.webp" alt="A run report in Decoy Platform" width="1600" height="900" loading="lazy">
       </div>
     </div>
 
-    <div class="feature-row feature-row--flip" id="jobs">
+    <div class="feature-row feature-row--flip" data-reveal id="jobs">
       <div>
         <p class="eyebrow">Jobs and triggers</p>
         <h3>Run on demand, from your scheduler, or from a webhook</h3>
@@ -73,31 +68,30 @@ bodyClass: page-platform
         <h3>A log that proves it was not edited</h3>
         <p>Every action is appended to a hash-chained audit log that Postgres will not let anyone update or delete. An integrity verifier walks the chain, and the whole log exports to CSV or JSON for a reviewer. Retention defaults to seven years and nothing is purged.</p>
         <ul>
-          <li>Hash chain with append-only enforcement</li>
-          <li>Integrity verification and aggregations</li>
-          <li>Evidence manifest and masking report per run</li>
-        </ul>
-      </div>
-      <div class="card">
-        <p class="eyebrow">Reports</p>
-        <h3>What a run leaves behind</h3>
-        <ul class="muted small">
-          <li>Masking report: strategy per column, counts, warnings</li>
-          <li>Evidence manifest: pipeline hash, file fingerprints, row counts, no raw values</li>
-          <li>Sampled quality report and HTML compliance export</li>
+          <li>Hash chain with append-only enforcement in Postgres</li>
+          <li>Integrity verifier, aggregations, CSV and JSON export</li>
+          <li>Per run: masking report, evidence manifest, sampled quality report, HTML compliance export</li>
           <li>Structured JSON server logs; optional Prometheus metrics</li>
         </ul>
       </div>
+      <div class="audit-chain" data-chain aria-label="Three audit entries linked by hashes">
+        <div class="audit-entry"><span class="audit-k">#4817</span><span class="audit-v">job.run · cust-staging · ok</span><span class="audit-h">prev 9c1e…b2 → <b>e07a…41</b></span></div>
+        <div class="audit-link"></div>
+        <div class="audit-entry"><span class="audit-k">#4818</span><span class="audit-v">report.export · csv · rdahl</span><span class="audit-h">prev e07a…41 → <b>52f9…c8</b></span></div>
+        <div class="audit-link"></div>
+        <div class="audit-entry"><span class="audit-k">#4819</span><span class="audit-v">user.permission.revoke · developer</span><span class="audit-h">prev 52f9…c8 → <b>a3d0…7e</b></span></div>
+        <div class="audit-verify"><span class="ok">verify</span> chain intact · 4,819 entries · append-only</div>
+      </div>
     </div>
 
-    <div class="feature-row feature-row--flip" id="access">
+    <div class="feature-row feature-row--flip" data-reveal id="access">
       <div>
         <p class="eyebrow">Access</p>
         <h3>Four roles, single sign-on, scoped keys</h3>
         <p>Admin, release manager, developer, and user roles, with per-user permission revocation on top. Users see their own pipelines and jobs; admins see everything. Sign in with local accounts or OIDC (tested with Okta, Entra ID, Google Workspace, Keycloak, and Auth0). API keys are shown once, stored hashed, and inherit their owner's permissions.</p>
         <p class="small faint">SAML-only identity providers are not supported.</p>
       </div>
-      <div class="grid grid-2">
+      <div class="grid grid-2" data-reveal>
         <div class="card"><h4>admin</h4><p>Everything, including users, keys, SSO, storage</p></div>
         <div class="card"><h4>release_manager</h4><p>Approve and run across the instance</p></div>
         <div class="card"><h4>developer</h4><p>Build and run own pipelines</p></div>
@@ -109,12 +103,12 @@ bodyClass: page-platform
 
 <section class="section" id="connectors">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Connectors</p>
       <h2>Where the data comes from and goes</h2>
       <p>Shipped today versus on the roadmap, stated plainly.</p>
     </div>
-    <div class="table-wrap">
+    <div class="table-wrap" data-reveal-self>
       <table>
         <thead><tr><th>Source or target</th><th>Status</th><th>Notes</th></tr></thead>
         <tbody>
@@ -132,7 +126,7 @@ bodyClass: page-platform
 
 <section class="section" id="self-host">
   <div class="container">
-    <div class="grid grid-2">
+    <div class="grid grid-2" data-reveal>
       <div>
         <p class="eyebrow">Self-hosting</p>
         <h2>One Compose file, one host, no phone home</h2>
