@@ -264,8 +264,8 @@ footer .sitefooter .bottomline{ color:rgba(255,255,255,.66); border-top:1px soli
    "explore" links, and eyebrow labels so the page reads in two
    colours instead of one.
    ============================================================ */
-:root{ --accent:#d98c00; --accent-text:#9a6600; --accent-tint:rgba(217,140,0,.12); --accent-ink:#231800; }
-html.darkmode{ --accent:#f2b84a; --accent-text:#f2b84a; --accent-tint:rgba(242,184,74,.16); }
+:root{ --accent:#c9a227; --accent-text:#7a5400; --accent-tint:rgba(201,162,39,.13); --accent-ink:#1c1400; --main-background-lines:#00564e; }
+html.darkmode{ --accent:#e6c254; --accent-text:#e6c254; --accent-tint:rgba(230,194,84,.16); --main-background-lines:#0a2420; }
 
 /* Secondary buttons move from a grey ghost to an amber one. */
 .button.transparent, a.button.transparent, a.button.transparent:visited{ border-color:var(--accent); color:var(--accent-text); }
@@ -400,3 +400,152 @@ body.home header .options .button.transparent:hover{ background:rgba(255,255,255
 
 .wf-note{ border-left:3px solid #00867e; background:var(--yellow-98,#f3fbfa); border-radius:8px; padding:16px 18px; margin-top:22px; font-size:14.5px; line-height:1.55; }
 .darkmode .wf-note{ border-left-color:#4cc2c2; background:rgba(76,194,194,.08); }
+
+/* ============================================================
+   REDESIGN — premium dark home hero. The home hero was a white
+   slab under a teal header; make it a near-black teal-tinted
+   ground with a teal glow and a brass gold accent, so the first
+   impression matches the dark marketing grounds. Scoped to the
+   home page so inner pages are untouched.
+   ============================================================ */
+body.home .welcome{
+  background:
+    radial-gradient(60% 55% at 50% -10%, rgba(25,178,164,.18), transparent 70%),
+    radial-gradient(42% 42% at 86% 8%, rgba(230,194,84,.07), transparent 70%),
+    #06100e;
+  color:#e9f1ee;
+}
+body.home .welcome .hero-content h1{ color:#ffffff; }
+body.home .welcome .hero-content p{ color:#a4b8b1; }
+/* Hero buttons: bright teal fill + a brass-gold outlined secondary. */
+body.home .welcome .hero-buttons .button.yellow{ background:#19b2a4; border-color:#19b2a4; color:#021512; }
+body.home .welcome .hero-buttons .button.yellow:hover{ background:#2bc3b4; box-shadow:0 12px 36px -12px rgba(76,211,198,.6); }
+body.home .welcome .hero-buttons .button.transparent{ border-color:rgba(230,194,84,.55); color:#e6c254; }
+body.home .welcome .hero-buttons .button.transparent:hover{ background:rgba(230,194,84,.12); border-color:#e6c254; color:#f0d37a; }
+/* Strengthen the masked-data motif on the dark ground. */
+body.home .hero-bg .rows{ opacity:.16; color:#7f9a93; }
+body.home .hero-bg .cell.masking{ color:#4cd3c6; }
+/* The product-shot frame becomes a dark window on the dark hero. */
+body.home .hero-shot{ background:#0c1a17; border-color:rgba(120,195,183,.16); box-shadow:0 44px 120px -52px rgba(0,0,0,.85); }
+body.home .hero-shot .bar{ background:#0e1f1b; border-bottom-color:rgba(120,195,183,.14); }
+body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
+
+/* ============================================================
+   REDESIGN — deliberate placeholder states. Until real product
+   screenshots land, the empty shot frames read as intentional
+   "coming soon" cards (icon chip + label + subcaption) instead
+   of a bare grey word on a gradient.
+   ============================================================ */
+.hero-shot .shot .ph,
+.shot-ph .canvas .ph,
+.feature-row .frow-shot .ph{
+  display:inline-flex; flex-direction:column; align-items:center; gap:11px;
+  font-family:"JetBrainsMono-Regular",monospace; font-size:13px; letter-spacing:.03em;
+  color:var(--grey-50,#808080); text-align:center;
+}
+.hero-shot .shot .ph::before,
+.shot-ph .canvas .ph::before,
+.feature-row .frow-shot .ph::before{
+  content:"▦"; display:grid; place-items:center; width:46px; height:46px; border-radius:12px;
+  border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.14)); color:#00867e;
+  background:var(--surface,#fff); font-size:21px; line-height:1;
+}
+.hero-shot .shot .ph::after,
+.shot-ph .canvas .ph::after,
+.feature-row .frow-shot .ph::after{
+  content:"screenshot dropping in soon"; font-size:11.5px; opacity:.72; letter-spacing:.02em;
+}
+.darkmode .hero-shot .shot .ph::before,
+.darkmode .shot-ph .canvas .ph::before,
+.darkmode .feature-row .frow-shot .ph::before{ color:#4cc2c2; background:#161616; border-color:rgba(255,255,255,.14); }
+body.home .hero-shot .shot .ph::before{ color:#4cc2c2; background:#0e1f1b; border-color:rgba(120,195,183,.18); }
+
+/* ============================================================
+   REDESIGN — content pages added in this branch (resources,
+   changelog, support, compliance). Shared building blocks.
+   ============================================================ */
+.eyebrow-label{ font-family:"JetBrainsMono-Regular",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent-text); display:inline-flex; align-items:center; gap:9px; margin:0 0 14px; }
+.eyebrow-label::before{ content:""; width:22px; height:1px; background:var(--accent); }
+
+/* Resource cards */
+.res-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+@media(max-width:720px){ .res-grid{ grid-template-columns:1fr; } }
+.res-card{ display:flex; gap:16px; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:12px;
+  padding:22px 24px; background:var(--surface,#fff); text-decoration:none; color:inherit; transition:border-color .18s ease, transform .18s ease; }
+.res-card:hover{ border-color:rgba(0,134,126,.5); transform:translateY(-2px); }
+.res-card .ic{ flex:0 0 auto; width:40px; height:40px; border-radius:10px; display:grid; place-items:center; color:#00867e; background:rgba(0,134,126,.12); }
+.res-card .ic .icon{ width:20px; height:20px; }
+.res-card .k{ font-family:"JetBrainsMono-Regular",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-text); }
+.res-card h3{ font-size:17.5px; margin:5px 0 4px; }
+.res-card p{ margin:0; color:var(--grey-40,#666); font-size:14px; line-height:1.5; }
+.darkmode .res-card{ background:#161616; border-color:rgba(255,255,255,.12); }
+.darkmode .res-card p{ color:var(--grey-60,#9a9a9a); }
+.darkmode .res-card .ic{ color:#4cc2c2; background:rgba(76,194,194,.12); }
+
+/* Compliance mapping table */
+.cmp-wrap{ border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:12px; overflow:auto; background:var(--surface,#fff); }
+table.cmp{ width:100%; border-collapse:collapse; min-width:620px; font-size:14.5px; }
+table.cmp th{ text-align:left; padding:14px 18px; font-family:"JetBrainsMono-Regular",monospace; font-size:11px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--grey-40,#666); border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); background:var(--grey-98,#fafafa); white-space:nowrap; }
+table.cmp td{ padding:15px 18px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); vertical-align:top; }
+table.cmp tr:last-child td{ border-bottom:0; }
+table.cmp .reg{ font-weight:600; white-space:nowrap; }
+table.cmp .how{ color:var(--grey-40,#666); }
+table.cmp code{ font-family:"JetBrainsMono-Regular",monospace; font-size:12.5px; color:#00867e; background:rgba(0,134,126,.1);
+  padding:2px 7px; border-radius:5px; margin:0 3px 4px 0; display:inline-block; }
+.darkmode table.cmp{ }
+.darkmode table.cmp th{ background:#1a1a1a; color:var(--grey-60,#9a9a9a); border-bottom-color:rgba(255,255,255,.12); }
+.darkmode .cmp-wrap{ background:#161616; border-color:rgba(255,255,255,.12); }
+.darkmode table.cmp td{ border-bottom-color:rgba(255,255,255,.08); }
+.darkmode table.cmp code{ color:#4cc2c2; background:rgba(76,194,194,.12); }
+
+/* Changelog timeline */
+.changelog{ border-left:2px solid var(--main-codebox-border-color,rgba(13,13,13,.14)); padding-left:26px; display:flex; flex-direction:column; gap:30px; max-width:720px; }
+.changelog .rel{ position:relative; }
+.changelog .rel::before{ content:""; position:absolute; left:-33px; top:6px; width:11px; height:11px; border-radius:50%; background:#00867e; box-shadow:0 0 0 4px var(--main-background-color,#fff); }
+.changelog .rel .ver{ display:flex; align-items:baseline; gap:12px; margin-bottom:9px; flex-wrap:wrap; }
+.changelog .rel .ver b{ font-family:"SuisseIntl"; font-weight:700; font-size:19px; }
+.changelog .rel .ver time{ font-family:"JetBrainsMono-Regular",monospace; font-size:12px; color:var(--grey-50,#808080); }
+.changelog .rel .ver .pill{ font-family:"JetBrainsMono-Regular",monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:20px; border:1px solid var(--accent); color:var(--accent-text); }
+.changelog .rel ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
+.changelog .rel li{ color:var(--grey-40,#666); font-size:14.5px; padding-left:20px; position:relative; line-height:1.5; }
+.changelog .rel li::before{ content:""; position:absolute; left:0; top:10px; width:7px; height:1px; background:#00867e; }
+.changelog .rel li code{ font-family:"JetBrainsMono-Regular",monospace; font-size:13px; color:#00867e; }
+.darkmode .changelog .rel::before{ box-shadow:0 0 0 4px var(--main-background-color,#111); background:#4cc2c2; }
+.darkmode .changelog .rel li{ color:var(--grey-60,#9a9a9a); }
+.darkmode .changelog .rel li code,.darkmode .changelog .rel li::before{ color:#4cc2c2; }
+
+/* Support tiers + contact fields */
+.tiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+@media(max-width:860px){ .tiers{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; } }
+.tier{ border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:14px; padding:26px; background:var(--surface,#fff); }
+.tier.pop{ border-color:#00867e; box-shadow:0 0 0 1px #00867e inset, 0 24px 60px -36px rgba(0,134,126,.45); }
+.tier h3{ font-size:20px; margin:0; }
+.tier .who{ color:var(--grey-40,#666); font-size:13.5px; margin:5px 0 18px; }
+.tier ul{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:11px; }
+.tier li{ font-size:14px; padding-left:25px; position:relative; line-height:1.4; }
+.tier li::before{ content:""; position:absolute; left:0; top:3px; width:15px; height:15px; background:#00867e;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat; }
+.darkmode .tier{ background:#161616; border-color:rgba(255,255,255,.12); }
+.darkmode .tier li::before{ background:#4cc2c2; }
+.copyrow{ display:flex; flex-wrap:wrap; gap:14px; }
+.copyfield{ display:inline-flex; align-items:center; gap:12px; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.16)); border-radius:10px; padding:9px 9px 9px 16px; background:var(--surface,#fff); }
+.copyfield .em{ font-family:"JetBrainsMono-Regular",monospace; font-size:14px; }
+.copyfield button{ background:#00867e; color:#fff; border:0; border-radius:7px; padding:7px 13px; font-size:12.5px; font-weight:600; cursor:pointer; font-family:"SuisseIntl"; }
+.copyfield button:hover{ background:#00756e; }
+.darkmode .copyfield{ background:#161616; border-color:rgba(255,255,255,.16); }
+
+/* ============================================================
+   REDESIGN — footer columns. The base lays the nav columns out at
+   a fixed width:20% each, which overflows once the brand block and
+   four columns share the row. Make them flex and wrap so they fit
+   at every width.
+   ============================================================ */
+footer .footertop{ gap:48px; align-items:flex-start; }
+footer .footerbrand{ flex:0 1 300px; }
+footer .footerbrand p{ max-width:32ch; }
+footer .footernavigation{ flex:1 1 auto; flex-wrap:wrap; column-gap:40px; row-gap:28px; }
+footer .footernavigation > div{ width:auto; flex:1 1 120px; min-width:110px; max-width:220px; }
+@media(max-width:760px){ footer .footertop{ flex-direction:column; gap:34px; } footer .footerbrand{ flex-basis:auto; } }
