@@ -34,6 +34,15 @@ export default function (eleventyConfig) {
     return svg.replace("<svg", `<svg class="icon${cls ? " " + cls : ""}" aria-hidden="true" focusable="false"`);
   });
 
+  // {% snippet "file" %} inlines a verified sample from src/_includes/snippets, HTML-escaped and
+  // untouched by the template engine, so samples cannot drift from the files the checker reads.
+  const SNIPPET_DIR = path.join(import.meta.dirname, "src/_includes/snippets");
+  eleventyConfig.addShortcode("snippet", (name) => {
+    const file = path.join(SNIPPET_DIR, name);
+    if (!fs.existsSync(file)) throw new Error(`Unknown snippet: ${name}`);
+    return fs.readFileSync(file, "utf8").trimEnd().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  });
+
   eleventyConfig.addFilter("absoluteUrl", (href, base) => new URL(href, base).href);
   eleventyConfig.addFilter("year", () => String(new Date().getFullYear()));
 

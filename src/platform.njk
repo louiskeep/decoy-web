@@ -63,11 +63,7 @@ bodyClass: page-platform
       </div>
       <div class="terminal">
         <div class="terminal-bar"><i></i><i></i><i></i><span>cron</span></div>
-<pre><span class="dim"># nightly refresh of the staging dataset</span>
-0 2 * * *  curl -fsS -X POST https://decoy.internal/api/jobs \
-  -H "Authorization: Bearer $DECOY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"pipeline_id": "cust-staging"}'</pre>
+<pre>{% snippet "cron.txt" %}</pre>
       </div>
     </div>
 

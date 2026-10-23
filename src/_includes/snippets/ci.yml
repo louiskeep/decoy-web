@@ -1,0 +1,5 @@
+- run: decoy validate config pipeline.yaml
+- run: decoy run pipeline.yaml --quiet --evidence-out evidence.json
+  env:
+    DECOY_MASK_SECRET: ${{ secrets.DECOY_MASK_SECRET }}
+- run: decoy storm integrity pipeline.yaml out/

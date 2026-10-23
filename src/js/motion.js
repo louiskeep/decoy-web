@@ -18,6 +18,7 @@
       reveal();
       hero();
       heroMaskTable();
+      typedTerminal();
       countUp();
       flowStrips(pinned);
     }
@@ -31,11 +32,12 @@
       const items = Array.from(group.children);
       if (!items.length) return;
       gsap.set(items, { autoAlpha: 0, y: 24 });
+      const stagger = Math.min(0.08, 1.2 / items.length); // large grids finish in about a second
       ScrollTrigger.create({
         trigger: group,
         start: "top 88%",
         once: true,
-        onEnter: () => gsap.to(items, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, overwrite: true }),
+        onEnter: () => gsap.to(items, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger, overwrite: true }),
       });
     });
   }
@@ -120,6 +122,41 @@
     });
     tl.add(() => { caption.textContent = "customers · 3 rows masked · joins intact · exit 0"; }, "+=0.35");
     tl.to({}, { duration: 3.2 });
+  }
+
+  // CLI hero: command lines type out, output lines land after each, once, when in view.
+  function typedTerminal() {
+    const term = document.querySelector("[data-terminal]");
+    if (!term) return;
+    const lines = Array.from(term.querySelectorAll(".t-line"));
+    if (!lines.length) return;
+    const cmds = lines.filter((l) => l.hasAttribute("data-cmd")).map((l) => {
+      const el = l.querySelector(".t-cmd");
+      const text = el.textContent;
+      return { line: l, el, text };
+    });
+    gsap.set(lines, { autoAlpha: 0 });
+    cmds.forEach(({ el }) => { el.textContent = ""; });
+
+    const tl = gsap.timeline({ paused: true });
+    lines.forEach((line) => {
+      const cmd = cmds.find((c) => c.line === line);
+      if (cmd) {
+        const state = { n: 0 };
+        tl.set(line, { autoAlpha: 1 })
+          .add(() => line.classList.add("is-typing"))
+          .to(state, {
+            n: cmd.text.length,
+            duration: Math.min(1.4, 0.035 * cmd.text.length),
+            ease: "none",
+            onUpdate: () => { cmd.el.textContent = cmd.text.slice(0, Math.round(state.n)); },
+          })
+          .add(() => line.classList.remove("is-typing"), "+=0.25");
+      } else {
+        tl.to(line, { autoAlpha: 1, duration: 0.08 }, "+=0.12");
+      }
+    });
+    ScrollTrigger.create({ trigger: term, start: "top 80%", once: true, onEnter: () => tl.play() });
   }
 
   // Stat tiles count up once when they enter the viewport.

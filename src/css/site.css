@@ -299,3 +299,20 @@ html[data-prelaunch] .launch-only { display: none; }
 .pipeline-stage--pinned .stage-cards { display: block; position: relative; height: 230px; margin-top: var(--space-6); }
 .pipeline-stage--pinned .stage-cards .card { position: absolute; top: 0; left: 0; right: 0; margin: 0 auto; width: min(100%, 760px); }
 .stage-cards { margin-top: var(--space-7); }
+
+/* Strategy categories and legend */
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); margin-bottom: var(--space-4); font-size: var(--text-xs); color: var(--fg-muted); }
+.legend span { display: inline-flex; align-items: center; gap: 0.45em; }
+.legend i, .strategy::before { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--fg-faint); }
+.strategy { position: relative; padding-left: 1.6rem; }
+.strategy::before { content: ""; position: absolute; left: 0.75rem; top: 0.95rem; }
+[data-kind="anon"]::before, i[data-kind="anon"] { background: var(--raw); }
+[data-kind="pseudo"]::before, i[data-kind="pseudo"] { background: var(--safe); }
+[data-kind="synth"]::before, i[data-kind="synth"] { background: #8b7cf6; }
+[data-kind="pass"]::before, i[data-kind="pass"] { background: var(--fg-faint); }
+
+/* Typed terminal */
+.t-line { display: block; min-height: 1.65em; }
+.t-cmd::after { content: ""; }
+.is-typing .t-cmd::after { content: "▍"; color: var(--accent); animation: blink 1s steps(2) infinite; }
+@keyframes blink { to { opacity: 0; } }

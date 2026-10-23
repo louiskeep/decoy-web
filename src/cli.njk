@@ -2,12 +2,13 @@
 title: "Decoy CLI: Data Masking and Synthetic Data from the Command Line"
 description: "The free, source-available Decoy CLI masks PII, generates synthetic rows, subsets related tables, and scans for sensitive data from explicit YAML pipelines. Deterministic, CI-friendly, and run entirely on your machine."
 bodyClass: page-cli
+motion: true
 ---
 <section class="hero hero--split">
   <div class="container">
     <div class="hero-copy">
       <p class="eyebrow">{{ site.products.cli }}</p>
-      <h1>The whole engine, in your terminal</h1>
+      <h1 data-split>The whole engine, in your terminal</h1>
       <p class="lede">Scaffold a pipeline from a real file, let STORM suggest a strategy per column, run it, and gate your build on the exit code. Every capability of the engine is in the free CLI; nothing is held back for the platform.</p>
       <div class="hero-actions">
         <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified at launch</a>
@@ -15,57 +16,60 @@ bodyClass: page-cli
         <a class="btn btn--secondary btn--lg" href="/docs/start/quickstart">Quickstart {% icon "arrow-right" %}</a>
       </div>
     </div>
-    <div class="terminal" aria-label="Example terminal session">
+    <div class="terminal" data-terminal aria-label="Example terminal session">
       <div class="terminal-bar"><i></i><i></i><i></i><span>bash</span></div>
-<pre><span class="prompt">$</span> decoy init customers.csv
-<span class="dim">wrote pipeline.yaml (7 columns, 5 REVIEW comments)</span>
-<span class="prompt">$</span> decoy storm analyze customers.csv
-<span class="dim">email      CONTACT   </span><span class="raw">email_address</span><span class="dim">    0.99</span>
-<span class="dim">ssn        IDENTITY  </span><span class="raw">us_ssn</span><span class="dim">           0.98</span>
-<span class="dim">dob        IDENTITY  </span><span class="raw">date_of_birth</span><span class="dim">    0.97</span>
-<span class="prompt">$</span> decoy validate config pipeline.yaml
-<span class="ok">ok</span> <span class="dim">pipeline.yaml is valid (schema v1)</span>
-<span class="prompt">$</span> decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET \
-    --evidence-out run.json
-<span class="dim">customers  1,000,000 rows  </span><span class="safe">masked</span><span class="dim">  3 strategies  1.9s</span>
-<span class="dim">evidence   run.json  sha256:3f1c…9a</span>
-<span class="prompt">$</span> echo $?
-<span class="ok">0</span></pre>
+<pre><span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy init customers.csv</span></span>
+<span class="t-line dim">wrote pipeline.yaml (7 columns, 5 REVIEW comments)</span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy storm analyze customers.csv</span></span>
+<span class="t-line"><span class="dim">email      CONTACT   </span><span class="raw">email_address</span><span class="dim">    0.99</span></span>
+<span class="t-line"><span class="dim">ssn        IDENTITY  </span><span class="raw">us_ssn</span><span class="dim">           0.98</span></span>
+<span class="t-line"><span class="dim">dob        IDENTITY  </span><span class="raw">date_of_birth</span><span class="dim">    0.97</span></span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy validate config pipeline.yaml</span></span>
+<span class="t-line"><span class="ok">ok</span> <span class="dim">pipeline.yaml is valid (schema v1)</span></span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET \
+    --evidence-out run.json</span></span>
+<span class="t-line"><span class="dim">customers  1,000,000 rows  </span><span class="safe">masked</span><span class="dim">  3 strategies  1.9s</span></span>
+<span class="t-line dim">evidence   run.json  sha256:3f1c…9a</span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">echo $?</span></span>
+<span class="t-line ok">0</span></pre>
     </div>
   </div>
 </section>
 
 <section class="section" id="masking">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Masking</p>
       <h2>23 strategies, each labelled by what it promises</h2>
       <p>Every strategy is tagged as anonymisation, pseudonymisation, synthetic replacement, or passthrough. Keyed strategies are deterministic: the same secret and the same input always produce the same output.</p>
     </div>
-    <div class="strategy-grid">
-      <div class="strategy">hash<span>keyed digest</span></div>
-      <div class="strategy">fpe<span>FF1 format-preserving</span></div>
-      <div class="strategy">faker<span>realistic replacement</span></div>
-      <div class="strategy">redact<span>fixed placeholder</span></div>
-      <div class="strategy">categorical<span>remap to a set</span></div>
-      <div class="strategy">shuffle<span>break row identity</span></div>
-      <div class="strategy">truncate<span>keep N characters</span></div>
-      <div class="strategy">bucketize<span>fixed-width bins</span></div>
-      <div class="strategy">top_code<span>collapse the tail</span></div>
-      <div class="strategy">date_shift<span>bounded offset</span></div>
-      <div class="strategy">bucket_perturb<span>snap within period</span></div>
-      <div class="strategy">windowed_date<span>random in window</span></div>
-      <div class="strategy">geo_generalize<span>ZIP cascade, H3</span></div>
-      <div class="strategy">code_set<span>ICD-10, NDC, HCPCS</span></div>
-      <div class="strategy">text_redact<span>spans to tokens</span></div>
-      <div class="strategy">text_mask<span>spans to synthetic</span></div>
-      <div class="strategy">joint_mask<span>columns together</span></div>
-      <div class="strategy">group_key<span>shared group id</span></div>
-      <div class="strategy">grouped_series<span>series per group</span></div>
-      <div class="strategy">derived<span>from another column</span></div>
-      <div class="strategy">derived_aggregate<span>from a group</span></div>
-      <div class="strategy">formula<span>expression</span></div>
-      <div class="strategy">passthrough<span>unchanged</span></div>
+    <div class="legend" aria-label="Strategy categories">
+      <span><i data-kind="anon"></i>Anonymisation</span><span><i data-kind="pseudo"></i>Pseudonymisation (keyed)</span><span><i data-kind="synth"></i>Synthetic replacement</span><span><i data-kind="pass"></i>Passthrough</span>
+    </div>
+    <div class="strategy-grid" data-reveal>
+      <div class="strategy" data-kind="pseudo">hash<span>keyed digest</span></div>
+      <div class="strategy" data-kind="pseudo">fpe<span>FF1 format-preserving</span></div>
+      <div class="strategy" data-kind="synth">faker<span>realistic replacement</span></div>
+      <div class="strategy" data-kind="anon">redact<span>fixed placeholder</span></div>
+      <div class="strategy" data-kind="synth">categorical<span>remap to a set</span></div>
+      <div class="strategy" data-kind="anon">shuffle<span>break row identity</span></div>
+      <div class="strategy" data-kind="anon">truncate<span>keep N characters</span></div>
+      <div class="strategy" data-kind="anon">bucketize<span>fixed-width bins</span></div>
+      <div class="strategy" data-kind="anon">top_code<span>collapse the tail</span></div>
+      <div class="strategy" data-kind="pseudo">date_shift<span>bounded offset</span></div>
+      <div class="strategy" data-kind="anon">bucket_perturb<span>snap within period</span></div>
+      <div class="strategy" data-kind="pseudo">windowed_date<span>random in window</span></div>
+      <div class="strategy" data-kind="anon">geo_generalize<span>ZIP cascade, H3</span></div>
+      <div class="strategy" data-kind="anon">code_set<span>ICD-10, NDC, HCPCS</span></div>
+      <div class="strategy" data-kind="anon">text_redact<span>spans to tokens</span></div>
+      <div class="strategy" data-kind="pseudo">text_mask<span>spans to synthetic</span></div>
+      <div class="strategy" data-kind="anon">joint_mask<span>columns together</span></div>
+      <div class="strategy" data-kind="pseudo">group_key<span>shared group id</span></div>
+      <div class="strategy" data-kind="synth">grouped_series<span>series per group</span></div>
+      <div class="strategy" data-kind="pseudo">derived<span>from another column</span></div>
+      <div class="strategy" data-kind="pseudo">derived_aggregate<span>from a group</span></div>
+      <div class="strategy" data-kind="pseudo">formula<span>expression</span></div>
+      <div class="strategy" data-kind="pass">passthrough<span>unchanged</span></div>
     </div>
     <p class="small muted" style="margin-top: var(--space-4)"><a class="link-arrow" href="/docs/reference/strategies">Strategy reference {% icon "arrow-right" %}</a></p>
   </div>
@@ -73,7 +77,7 @@ bodyClass: page-cli
 
 <section class="section" id="generation">
   <div class="container">
-    <div class="grid grid-2">
+    <div class="grid grid-2" data-reveal>
       <div>
         <p class="eyebrow">Generation</p>
         <h2>Synthetic rows from a spec, or from the shape of real data</h2>
@@ -94,7 +98,7 @@ bodyClass: page-cli
 
 <section class="section" id="subsetting">
   <div class="container">
-    <div class="grid grid-2">
+    <div class="grid grid-2" data-reveal>
       <div class="card">
         <p class="eyebrow">Subsetting</p>
         <h3>A small, referentially intact slice</h3>
@@ -111,7 +115,7 @@ bodyClass: page-cli
 
 <section class="section" id="disguises">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Disguises</p>
       <h2>Policy templates for the frameworks you answer to</h2>
       <p>A Disguise is a dated, versioned bundle of column-pattern-to-strategy rules. Ten ship with the engine: HIPAA Safe Harbor (21 rules), PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, property and casualty insurance, and a default. They are templates that encode a reading of each framework, not certifications.</p>
@@ -124,7 +128,7 @@ bodyClass: page-cli
 
 <section class="section" id="determinism">
   <div class="container">
-    <div class="grid grid-2">
+    <div class="grid grid-2" data-reveal>
       <div>
         <p class="eyebrow">Determinism and joins</p>
         <h2>Same secret, same input, same output. Everywhere.</h2>
@@ -133,30 +137,7 @@ bodyClass: page-cli
       </div>
       <div class="terminal">
         <div class="terminal-bar"><i></i><i></i><i></i><span>pipeline.yaml</span></div>
-<pre>version: 1
-global_settings:
-  mask_secret_ref: env:DECOY_MASK_SECRET
-sources:
-  - name: customers
-    type: file
-    path: customers.parquet
-  - name: orders
-    type: file
-    path: orders.parquet
-tables:
-  customers:
-    columns:
-      id:    { strategy: hash, namespace: customer_id }
-      email: { strategy: faker, provider: email, deterministic: true }
-      ssn:   { strategy: fpe, checksum: none }
-      dob:   { strategy: date_shift, max_days: 30 }
-  orders:
-    columns:
-      customer_id: { strategy: hash, namespace: customer_id }
-relationships:
-  - child: orders.customer_id
-    parent: customers.id
-    orphan_policy: fail</pre>
+<pre>{% snippet "pipeline.yaml" %}</pre>
       </div>
     </div>
   </div>
@@ -164,7 +145,7 @@ relationships:
 
 <section class="section" id="ci">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">CI</p>
       <h2>Made to run unattended</h2>
       <p><code>--json</code> writes results to stdout and progress to stderr. <code>--quiet</code> leaves only the exit code. <code>--evidence-out</code> records what ran without recording a single raw value, and <code>decoy evidence verify</code> checks it later.</p>
@@ -186,7 +167,7 @@ relationships:
 
 <section class="section" id="performance">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Performance</p>
       <h2>Measured, with the conditions attached</h2>
       <p>Masking runs on pandas with a compiled Rust kernel for the hot strategies; Arrow carries data between stages; DuckDB handles out-of-core joins for large foreign-key work. The figures below are single-host developer runs, not a marketing benchmark.</p>
@@ -209,7 +190,7 @@ relationships:
 
 <section class="section" id="formats">
   <div class="container">
-    <div class="grid grid-2">
+    <div class="grid grid-2" data-reveal>
       <div>
         <p class="eyebrow">Formats and limits</p>
         <h2>Files first</h2>
@@ -225,17 +206,25 @@ relationships:
 
 <section class="section" id="install">
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Install</p>
-      <h2 class="prelaunch-only">The CLI is almost here</h2>
-      <h2 class="launch-only">Download and run</h2>
-      <p class="prelaunch-only">The CLI ships as a local download for Linux, macOS, and Windows. It is not published yet. Leave your email and we will send one message when it is.</p>
-      <p class="launch-only">Download the archive for your platform, unpack it, and run <code>decoy doctor</code> to confirm the native kernel and optional extras are ready.</p>
-    </div>
-    <div class="hero-actions">
-      <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified</a>
-      <a class="btn btn--primary btn--lg launch-only" href="{{ site.github }}/releases/latest">{% icon "download" %} Latest release</a>
-      <a class="btn btn--secondary btn--lg" href="/docs/start/install">Install guide</a>
+    <div class="grid grid-2" data-reveal>
+      <div>
+        <p class="eyebrow">Install</p>
+        <h2 class="prelaunch-only">The CLI is almost here</h2>
+        <h2 class="launch-only">Download and run</h2>
+        <p class="muted prelaunch-only">The CLI ships as a local download for Linux, macOS, and Windows. It is not published yet. Leave your email and we will send one message when it is.</p>
+        <p class="muted launch-only">Download the archive for your platform, unpack it onto your path, and run <code>decoy doctor</code> to confirm the native kernel and any optional extras are ready. Python 3.10 to 3.12.</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified</a>
+          <a class="btn btn--primary launch-only" href="{{ site.github }}/releases/latest">{% icon "download" %} Linux x86-64</a>
+          <a class="btn btn--secondary launch-only" href="{{ site.github }}/releases/latest">{% icon "download" %} macOS</a>
+          <a class="btn btn--secondary launch-only" href="{{ site.github }}/releases/latest">{% icon "download" %} Windows</a>
+          <a class="btn btn--secondary btn--lg" href="/docs/start/install">Install guide</a>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>first run</span></div>
+<pre>{% snippet "doctor.txt" %}</pre>
+      </div>
     </div>
   </div>
 </section>

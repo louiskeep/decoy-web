@@ -1,0 +1,4 @@
+$ decoy doctor
+decoy 0.1.0  engine 0.7.0  native kernel ok
+python 3.12  extras: ner (not installed)  ml (not installed)
+ok

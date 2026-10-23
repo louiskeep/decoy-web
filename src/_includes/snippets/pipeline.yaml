@@ -1,0 +1,24 @@
+version: 1
+global_settings:
+  mask_secret_ref: env:DECOY_MASK_SECRET
+sources:
+  - name: customers
+    type: file
+    path: customers.parquet
+  - name: orders
+    type: file
+    path: orders.parquet
+tables:
+  customers:
+    columns:
+      id:    { strategy: hash, namespace: customer_id }
+      email: { strategy: faker, provider: email, deterministic: true }
+      ssn:   { strategy: fpe, checksum: none }
+      dob:   { strategy: date_shift, max_days: 30 }
+  orders:
+    columns:
+      customer_id: { strategy: hash, namespace: customer_id }
+relationships:
+  - child: orders.customer_id
+    parent: customers.id
+    orphan_policy: fail

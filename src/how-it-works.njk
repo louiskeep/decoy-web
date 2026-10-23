@@ -96,11 +96,7 @@ motion: true
           <p class="muted">Runs locally and in CI with no server or account. Validate a config, run it, gate on the exit code, keep the evidence artifact. Free and source-available.</p>
           <a class="link-arrow" href="/cli/">The CLI page {% icon "arrow-right" %}</a>
         </div>
-        <div class="terminal"><div class="terminal-bar"><i></i><i></i><i></i><span>ci.yml</span></div><pre>- run: decoy validate config pipeline.yaml
-- run: decoy run pipeline.yaml --quiet --evidence-out evidence.json
-  env:
-    DECOY_MASK_SECRET: ${{ "{{" }} secrets.DECOY_MASK_SECRET {{ "}}" }}
-- run: decoy storm integrity pipeline.yaml out/</pre></div>
+        <div class="terminal"><div class="terminal-bar"><i></i><i></i><i></i><span>ci.yml</span></div><pre>{% snippet "ci.yml" %}</pre></div>
       </div>
     </div>
     <div role="tabpanel" class="tab-panel" id="panel-platform" aria-labelledby="tab-platform" hidden>
