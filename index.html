@@ -9,7 +9,7 @@
     <link rel="alternate" hreflang="en" href="https://decoystorm.dev/" />
     <link rel="alternate" hreflang="x-default" href="https://decoystorm.dev/" />
 	
-    <title>Decoy: mask and generate data where it lives</title>
+    <title>Decoy: Self-Hosted Data Masking and Synthetic Data</title>
 	
 
 	<script data-cfasync="false">
@@ -64,40 +64,84 @@
 	<link rel="manifest" href="/images/favicon/site.webmanifest">
 	<meta name="theme-color" content="#00867e">
 
-	<!-- Begin Jekyll SEO tag v2.9.1 -->
-<meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="Decoy: mask and generate data where it lives" />
-<meta name="author" content="Decoy" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Self-hosted data masking and synthetic data generation. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines you run yourself." />
-<meta name="twitter:description" property="og:description" content="Self-hosted data masking and synthetic data generation. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines you run yourself." />
-<link rel="canonical" href="https://decoystorm.dev/" />
-<meta property="og:url" content="https://decoystorm.dev/" />
-<meta property="og:image" content="https://decoystorm.dev/images/decoy/og.png" />
-<meta name="twitter:image" content="https://decoystorm.dev/images/decoy/og.png" />
-<meta property="og:site_name" content="Decoy" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Decoy: mask and generate data where it lives" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Organization","name":"Decoy"},"description":"Self-hosted data masking and synthetic data generation.","headline":"Mask and generate data where it lives","name":"Decoy","url":"https://decoystorm.dev/"}</script>
-<!-- End Jekyll SEO tag -->
+	<meta name="description" content="Decoy is self-hosted data masking and synthetic data generation. Mask PII, generate synthetic rows, and subset related tables with YAML pipelines you run yourself." />
+	<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+	<meta name="author" content="Decoy" />
+	<link rel="canonical" href="https://decoystorm.dev/" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Decoy" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:title" content="Decoy: Self-Hosted Data Masking and Synthetic Data" />
+	<meta property="og:description" content="Mask PII, generate synthetic rows, and subset related tables with YAML pipelines you run yourself. Self-hosted, so no data leaves your environment." />
+	<meta property="og:url" content="https://decoystorm.dev/" />
+	<meta property="og:image" content="https://decoystorm.dev/images/decoy/og.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="Decoy: self-hosted data masking and synthetic data generation" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Decoy: Self-Hosted Data Masking and Synthetic Data" />
+	<meta name="twitter:description" content="Mask PII, generate synthetic rows, and subset related tables with YAML pipelines you run yourself. Self-hosted." />
+	<meta name="twitter:image" content="https://decoystorm.dev/images/decoy/og.png" />
+	<meta name="twitter:image:alt" content="Decoy: self-hosted data masking and synthetic data generation" />
+
+	<!-- Google Search Console verification: paste the token when the property is set up.
+	<meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" /> -->
+	<!-- Google Analytics 4: uncomment and set the measurement ID when ready.
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+	<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+	-->
 
 
 	
 	<script type="application/ld+json">
 	{
-		"@context": "https://schema.org",
-		"@type": "SoftwareApplication",
-		"name": "Decoy",
-		"applicationCategory": "DeveloperApplication",
-		"operatingSystem": "Windows, macOS, Linux",
-		"offers": {
-			"@type": "Offer",
-			"price": "0",
-			"priceCurrency": "USD"
-		},
-		"license": "https://opensource.org/licenses/Apache-2.0"
+	  "@context": "https://schema.org",
+	  "@graph": [
+	    {
+	      "@type": "Organization",
+	      "@id": "https://decoystorm.dev/#organization",
+	      "name": "Decoy",
+	      "url": "https://decoystorm.dev/",
+	      "logo": "https://decoystorm.dev/images/decoy/mark.png",
+	      "description": "Self-hosted data masking and synthetic data generation."
+	    },
+	    {
+	      "@type": "WebSite",
+	      "@id": "https://decoystorm.dev/#website",
+	      "name": "Decoy",
+	      "url": "https://decoystorm.dev/",
+	      "publisher": { "@id": "https://decoystorm.dev/#organization" },
+	      "description": "Self-hosted data masking and synthetic data generation.",
+	      "inLanguage": "en-US"
+	    },
+	    {
+	      "@type": "SoftwareApplication",
+	      "@id": "https://decoystorm.dev/#software",
+	      "name": "Decoy",
+	      "applicationCategory": "DeveloperApplication",
+	      "applicationSubCategory": "Data masking and synthetic data generation",
+	      "operatingSystem": "Windows, macOS, Linux",
+	      "description": "Self-hosted data masking, synthetic data generation, and referentially-intact database subsetting driven by explicit YAML pipelines.",
+	      "publisher": { "@id": "https://decoystorm.dev/#organization" },
+	      "offers": [
+	        {
+	          "@type": "Offer",
+	          "name": "Decoy CLI",
+	          "price": "0",
+	          "priceCurrency": "USD",
+	          "description": "The full engine on the command line, source-available under BUSL-1.1."
+	        },
+	        {
+	          "@type": "Offer",
+	          "name": "Decoy Studio",
+	          "price": "499",
+	          "priceCurrency": "USD",
+	          "description": "Self-hosted team app, per instance per month, billed annually."
+	        }
+	      ]
+	    }
+	  ]
 	}
 	</script>
 	
@@ -123,7 +167,7 @@
 		<div class="headerline">
 			<div class="headercontent">
 				<div class="decoyhome">
-					<a href="/" class="brand" style="display:inline-flex;align-items:center;gap:9px;font-family:'SuisseIntl';font-weight:800;font-size:22px;color:inherit;text-decoration:none;"><img src="images/decoy/mark.png" alt="Decoy" style="width:30px;height:30px;object-fit:contain;">Decoy</a>
+					<a href="/" class="brand" style="display:inline-flex;align-items:center;gap:9px;font-family:'SuisseIntl';font-weight:800;font-size:22px;color:inherit;text-decoration:none;"><img src="images/decoy/mark.png" alt="Decoy" width="30" height="30" style="width:30px;height:30px;object-fit:contain;">Decoy</a>
 				</div>
 				<div class="landingmenu">
 					
@@ -201,7 +245,7 @@
 		</div>
 		<div class="hero-shot">
 			<div class="bar"><i></i><i></i><i></i></div>
-			<div class="shot"><img src="images/decoy/studio-builder.png" alt="Decoy Studio: a visual data-masking pipeline builder with a masked data preview"></div>
+			<div class="shot"><picture><source type="image/webp" srcset="images/decoy/studio-builder.webp"><img src="images/decoy/studio-builder.png" alt="Decoy Studio: a visual data-masking pipeline builder with a masked data preview" width="1344" height="752" loading="lazy" decoding="async"></picture></div>
 		</div>
 	</div>
 </section>
@@ -299,7 +343,7 @@
 			<p class="frow-desc">Compose mask, generate, and subset steps in a visual builder, run them as shared jobs, and watch status live. Every run keeps a quality report and an audit trail.
 				<a class="textbutton arrow-right" href="/deployment">Explore Studio<svg class="icon"><use href="#arrow-right"></use></svg></a></p>
 		</div>
-		<div class="frow-shot"><img src="images/decoy/studio-report.png" alt="Decoy Studio run report with quality score and masking rules applied"></div>
+		<div class="frow-shot"><picture><source type="image/webp" srcset="images/decoy/studio-report.webp"><img src="images/decoy/studio-report.png" alt="Decoy Studio run report with quality score and masking rules applied" width="1344" height="752" loading="lazy" decoding="async"></picture></div>
 	</div>
 </section>
 
@@ -346,7 +390,7 @@ masking_rules:
 	<div class="flexwrap wrap">
 		<div class="intro">
 			<p class="eyebrow">Launching soon</p>
-      <h1 class="display-3">The Decoy CLI is almost here</h1>
+      <h2 class="display-3">The Decoy CLI is almost here</h2>
 			<p>The command line is the full engine, free and source-available. It is not published yet. Leave your email and we will tell you the day it ships.</p>
 			<a class="button yellow" href="mailto:goodneighbor@goodneighbor.design?subject=Notify%20me%20when%20the%20Decoy%20CLI%20ships">Get notified</a>
 		</div>
@@ -366,7 +410,7 @@ masking_rules:
 		<div class="footercontent">
 			<div class="footertop">
 				<div class="footerbrand">
-					<a href="/" class="brand" style="display:inline-flex;align-items:center;gap:9px;font-family:'SuisseIntl';font-weight:800;font-size:22px;color:inherit;text-decoration:none;"><img src="images/decoy/mark.png" alt="Decoy" style="width:30px;height:30px;object-fit:contain;">Decoy</a>
+					<a href="/" class="brand" style="display:inline-flex;align-items:center;gap:9px;font-family:'SuisseIntl';font-weight:800;font-size:22px;color:inherit;text-decoration:none;"><img src="images/decoy/mark.png" alt="Decoy" width="30" height="30" style="width:30px;height:30px;object-fit:contain;">Decoy</a>
 					<p>Self-hosted data masking and synthetic data generation, run through explicit YAML pipelines you can read and run yourself.</p>
 				</div>
 				<div class="footernavigation">
