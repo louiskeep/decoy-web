@@ -223,7 +223,7 @@
 		</div>
 	</div>
 	<div class="wrap">
-		<div class="wf-flow wf-flow--detailed" role="list" aria-label="Data flows from your sources, through Decoy, to a cloud bucket">
+		<div class="wf-flow wf-flow--detailed" role="group" aria-label="Data flows from your sources, through Decoy, to a cloud bucket">
 				<div class="wf-sources" role="list" aria-label="Sources">
 					<div class="wf-node" role="listitem">
 						<div class="bento-title"><svg class="icon"><use href="#file-05"></use></svg><span>Files</span></div>
@@ -239,13 +239,13 @@
 					</div>
 				</div>
 				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
-				<div class="wf-node wf-decoy" role="listitem">
+				<div class="wf-node wf-decoy">
 					<div class="bento-title"><svg class="icon"><use href="#shield-tick"></use></svg><span>Decoy</span></div>
 					<p>Subset related tables, generate synthetic rows, and mask sensitive fields in one run. Configured relationships are preserved, so joins still hold.</p>
 					<p class="wf-selfhost">Self-hosted: it runs in your environment, and nothing is sent to Decoy.</p>
 				</div>
 				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
-				<div class="wf-node wf-target" role="listitem">
+				<div class="wf-node wf-target">
 					<div class="bento-title"><svg class="icon"><use href="#upload-cloud-01"></use></svg><span>Cloud bucket</span></div>
 					<p>Safe data written to S3 or Google Cloud Storage for dev, test, CI, and analytics. It can also write local files.</p>
 				</div>
@@ -394,14 +394,14 @@ pipeline:
 							<td>about 1.4 million rows<span class="wf-sub">Synthea synthetic data, 3 linked tables</span></td>
 							<td>about 35 seconds<span class="wf-sub">roughly 40,000 rows a second</span></td>
 							<td class="wf-na">mask phase only</td>
-							<td>laptop-class box<span class="wf-sub">one thread</span></td>
+							<td>one devbox<span class="wf-sub">one thread</span></td>
 							<td>five masking strategies across linked tables</td>
 						</tr>
 						<tr>
 							<th scope="row">Engine path</th>
 							<td>1 million rows<span class="wf-sub">four columns</span></td>
-							<td>roughly 224,000 to 261,000 rows a second<span class="wf-sub">native engine</span></td>
-							<td class="wf-na">about 74,000 rows a second on the free pandas path</td>
+							<td>roughly 224,000 to 261,000 rows a second<span class="wf-sub">native engine, 1 to 4 threads; about 74,000 on the free pandas path</span></td>
+							<td class="wf-na">mask comparison</td>
 							<td>one devbox</td>
 							<td>why the native engine is faster for this job</td>
 						</tr>
@@ -414,7 +414,7 @@ pipeline:
 				<summary>Method and exact figures</summary>
 				<div class="wf-method-body">
 					<p><strong>Large job.</strong> 100,000,000 rows (20M parent, 80M child, one foreign-key chain, 1 percent configured orphan rate). Four keyed-hash columns, one redact, one passthrough, plus foreign-key carry. Decoy native engine, one native thread. One run: mask phase 419.7 s, which is 238,243 rows a second; worker wall 563.2 s including generate and write, about 177,600 rows a second. Peak memory 8,045 MB under an 8,192 MB ceiling on a 32 GB host, with no temporary spill. A full foreign-key scan of the 80M child rows found 0 mismatches, with 800,000 orphan rows present exactly as configured. GCP n2-standard-8, 2026-10-18.</p>
-					<p><strong>Synthetic healthcare.</strong> Synthea generates synthetic patients, not real records. A 108-patient sample was replicated to 1,414,464 rows across three linked tables. Configured transforms across five strategies (hash, format-preserving encryption, redact, date-shift, passthrough) plus foreign-key wiring; pandas path, one thread. Mask phase 34.9 s, which is 40,493 rows a second, excluding input read and output write. Demographics and clinical codes are retained by configuration; this run does not demonstrate de-identification or HIPAA compliance. Laptop-class devbox, 2026-10-18.</p>
+					<p><strong>Synthetic healthcare.</strong> Synthea generates synthetic patients, not real records. A 108-patient sample was replicated to 1,414,464 rows across three linked tables. Configured transforms across five strategies (hash, format-preserving encryption, redact, date-shift, passthrough) plus foreign-key wiring; pandas path, one thread. Mask phase 34.9 s, which is 40,493 rows a second, excluding input read and output write. Demographics and clinical codes are retained by configuration; this run does not demonstrate de-identification or HIPAA compliance. Devbox (.55), 2026-10-18.</p>
 					<p><strong>Engine path.</strong> 1,000,000 rows, four columns (hash, redact, truncate, passthrough), seven seeded rounds. Pandas path about 74,000 rows a second; native engine about 224,000 on one thread and 261,000 on four. This is a measured comparison for this one workload, not a universal multiplier. Devbox, 2026-10-01.</p>
 				</div>
 			</details>
