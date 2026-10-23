@@ -285,3 +285,17 @@ html[data-prelaunch] .launch-only { display: none; }
 /* 404 */
 .notfound { min-height: 60vh; display: grid; place-items: center; text-align: center; }
 .notfound .code { font-family: var(--font-mono); color: var(--fg-faint); margin-bottom: var(--space-4); }
+
+/* Motion layer (motion.js). Start states are set by JS; nothing here hides content. */
+.flow { position: relative; }
+.packet { position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--safe); box-shadow: 0 0 0 4px var(--accent-soft), 0 0 18px var(--safe); pointer-events: none; z-index: 2; }
+.flow-step { transition: border-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), background 0.35s var(--ease-out); }
+.flow-step.is-active { border-color: var(--safe); background: var(--bg-2); box-shadow: 0 0 0 1px color-mix(in srgb, var(--safe) 35%, transparent), 0 0 28px -8px var(--safe); }
+.flow-step.is-active::before { color: var(--safe); }
+.split-line { will-change: transform; }
+.br-wide { display: none; }
+@media (min-width: 600px) { .br-wide { display: inline; } h1[data-split] { text-wrap: initial; } }
+.hero-visual td span { display: inline-block; transform-origin: 50% 50%; }
+.pipeline-stage--pinned .stage-cards { display: block; position: relative; height: 230px; margin-top: var(--space-6); }
+.pipeline-stage--pinned .stage-cards .card { position: absolute; top: 0; left: 0; right: 0; margin: 0 auto; width: min(100%, 760px); }
+.stage-cards { margin-top: var(--space-7); }

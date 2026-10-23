@@ -14,6 +14,10 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/js");
+  // GSAP is self-hosted so motion pages make no third-party requests.
+  for (const f of ["gsap", "ScrollTrigger", "SplitText"]) {
+    eleventyConfig.addPassthroughCopy({ [`node_modules/gsap/dist/${f}.min.js`]: `js/vendor/${f}.min.js` });
+  }
   for (const f of ["_headers", "_redirects", "robots.txt", "llms.txt", "sitemap.xml", "decoy-mark.png", "decoy-favicon-32.png"]) {
     eleventyConfig.addPassthroughCopy(`src/${f}`);
   }

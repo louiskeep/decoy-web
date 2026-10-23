@@ -56,6 +56,12 @@
   </main>
   {% include "partials/footer.njk" %}
   <script src="/js/site.js" defer></script>
+  {% if motion %}
+  <script src="/js/vendor/gsap.min.js" defer></script>
+  <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="/js/vendor/SplitText.min.js" defer></script>
+  <script src="/js/motion.js" defer></script>
+  {% endif %}
   {% block scripts %}{% endblock %}
 </body>
 </html>

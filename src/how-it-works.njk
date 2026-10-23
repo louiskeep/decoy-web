@@ -2,12 +2,13 @@
 title: "How Decoy Works: Where It Fits in Your Data Pipeline"
 description: "How Decoy scans, subsets, masks, generates, validates, and documents a dataset, where it sits in an existing pipeline, how the CLI and Platform share one engine, and what the measured performance looks like."
 bodyClass: page-how
+motion: true
 ---
 <section class="hero hero--page">
   <div class="container">
     <div class="hero-copy">
       <p class="eyebrow">How it works</p>
-      <h1>One step in a pipeline you already run</h1>
+      <h1 data-split>One step in a pipeline you already run</h1>
       <p class="lede">Decoy does not replace your warehouse, your ETL, or your CI. It sits between a source you trust and the environments that should never see raw PII, and it leaves evidence of what it did.</p>
     </div>
   </div>
@@ -15,58 +16,60 @@ bodyClass: page-how
 
 <section class="section" id="pipeline">
   <div class="container">
-    <div class="flow" role="list">
-      <div class="flow-step flow-step--edge" role="listitem"><strong>Source</strong><span>Files, object storage, or a Postgres snapshot</span></div>
-      <div class="flow-step" role="listitem"><strong>Scan</strong><span>STORM profiles columns and suggests strategies</span></div>
-      <div class="flow-step" role="listitem"><strong>Subset</strong><span>Follow foreign keys to a small, intact slice</span></div>
-      <div class="flow-step" role="listitem"><strong>Mask or generate</strong><span>Keyed, deterministic transforms per column</span></div>
-      <div class="flow-step" role="listitem"><strong>Validate</strong><span>Residual PII, FK parity, distribution integrity</span></div>
-      <div class="flow-step flow-step--safe" role="listitem"><strong>Evidence</strong><span>Manifest, report, audit entry</span></div>
-      <div class="flow-step flow-step--edge" role="listitem"><strong>Target</strong><span>Local, S3, GCS, dev and test databases</span></div>
+    <div class="pipeline-stage" data-pipeline>
+    <div class="flow" data-flow role="list">
+      <div class="flow-step flow-step--edge" role="listitem" data-stage="source"><strong>Source</strong><span>Files, object storage, or a Postgres snapshot</span></div>
+      <div class="flow-step" role="listitem" data-stage="scan"><strong>Scan</strong><span>STORM profiles columns and suggests strategies</span></div>
+      <div class="flow-step" role="listitem" data-stage="subset"><strong>Subset</strong><span>Follow foreign keys to a small, intact slice</span></div>
+      <div class="flow-step" role="listitem" data-stage="mask"><strong>Mask or generate</strong><span>Keyed, deterministic transforms per column</span></div>
+      <div class="flow-step" role="listitem" data-stage="validate"><strong>Validate</strong><span>Residual PII, FK parity, distribution integrity</span></div>
+      <div class="flow-step flow-step--safe" role="listitem" data-stage="evidence"><strong>Evidence</strong><span>Manifest, report, audit entry</span></div>
+      <div class="flow-step flow-step--edge" role="listitem" data-stage="target"><strong>Target</strong><span>Local, S3, GCS, dev and test databases</span></div>
     </div>
 
-    <div class="grid grid-3" style="margin-top: var(--space-7)">
-      <div class="card">
+    <div class="grid grid-3 stage-cards" data-reveal>
+      <div class="card" data-stage="scan">
         <div class="icon-badge">{% icon "scan" %}</div>
         <h3>Scan</h3>
         <p>STORM runs 25 value detectors over every column, tags findings by domain, and writes a draft pipeline with a review comment on each suggestion. It suggests; you decide.</p>
       </div>
-      <div class="card">
+      <div class="card" data-stage="subset">
         <div class="icon-badge">{% icon "link" %}</div>
         <h3>Subset</h3>
         <p>Declare relationships once. Subsetting walks them to a fixpoint under a fan-out budget, and the same declarations keep joins intact when masking.</p>
       </div>
-      <div class="card">
+      <div class="card" data-stage="mask">
         <div class="icon-badge">{% icon "key" %}</div>
         <h3>Mask or generate</h3>
         <p>Each column gets one of 23 masking strategies or 12 generation types. Keyed strategies derive output from your secret and the source value, so results are stable across tables and runs.</p>
       </div>
-      <div class="card">
+      <div class="card" data-stage="validate">
         <div class="icon-badge">{% icon "shield" %}</div>
         <h3>Validate</h3>
         <p>After the run, an integrity check looks for residual PII, confirms foreign-key parity, and compares distributions. Findings fail the build with exit code 4.</p>
       </div>
-      <div class="card">
+      <div class="card" data-stage="evidence">
         <div class="icon-badge">{% icon "file" %}</div>
         <h3>Evidence</h3>
         <p>An evidence manifest records the pipeline hash, file fingerprints, and row counts, never a raw value. The Platform appends every action to a hash-chained audit log.</p>
       </div>
-      <div class="card">
+      <div class="card" data-stage="target">
         <div class="icon-badge">{% icon "box" %}</div>
         <h3>Target</h3>
         <p>Write CSV or Parquet locally or to object storage, and load it wherever lower environments read from. Nothing is sent to Decoy at any stage.</p>
       </div>
+    </div>
     </div>
   </div>
 </section>
 
 <section class="section" id="inside-a-run">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Inside a run</p>
       <h2>What happens between <code>decoy run</code> and exit 0</h2>
     </div>
-    <ol class="grid grid-2" style="list-style: none; padding: 0; counter-reset: run">
+    <ol class="grid grid-2" data-reveal style="list-style: none; padding: 0; counter-reset: run">
       <li class="card"><h4>1. Validate and plan</h4><p>The YAML is checked against the schema without touching data. A plan is compiled and stamped with the seed-protocol version so the run is reproducible.</p></li>
       <li class="card"><h4>2. Derive keys</h4><p>The mask secret is loaded from an environment variable or file. Per-strategy keys derive from it with HKDF-SHA256; nothing is stored.</p></li>
       <li class="card"><h4>3. Transform</h4><p>Tables stream through pandas with a compiled Rust kernel for hashing and other hot strategies. Large foreign-key work takes an out-of-core route through DuckDB.</p></li>
@@ -77,7 +80,7 @@ bodyClass: page-how
 
 <section class="section" id="surfaces">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Surfaces</p>
       <h2>Three ways to run the same engine</h2>
     </div>
@@ -125,7 +128,7 @@ bodyClass: page-how
 
 <section class="section" id="performance">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="eyebrow">Performance</p>
       <h2>What runtime depends on</h2>
       <p>Four things: row count, the strategy mix (hash is cheap, FPE and free-text are not), the hardware, and how far the data has to move. The figures below are single-host developer runs with their conditions; they are not a benchmark against anyone.</p>
