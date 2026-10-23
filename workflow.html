@@ -6,7 +6,7 @@
     <!-- Layout adapted from the DuckDB website (https://github.com/duckdb/duckdb-web), MIT License, (c) Stichting DuckDB Foundation. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link rel="alternate" hreflang="en" href="https://decoystorm.dev/deployment" />
+    <link rel="alternate" hreflang="en" href="https://decoystorm.dev/workflow" />
     <link rel="alternate" hreflang="x-default" href="https://decoystorm.dev/" />
 	
     <title>Decoy Workflow: How It Fits Your Data Pipeline</title>
@@ -355,21 +355,18 @@ pipeline:
 		</div>
 	</div>
 	<div class="wrap">
+		<!-- Benchmark note for review (Cam): a historical run exists in
+		     decoy-engine/tests/benchmark/calibration/results.md (2026-05-09,
+		     i7-1265U, hybrid engine, HIPAA-shaped Parquet; pipeline is
+		     source -> 10% row filter -> single hash-rule mask -> write; 10M
+		     rows in, ~1M actually masked; 5.47s whole-pipeline wall-clock).
+		     Held from publication: presenting it as throughput would overstate,
+		     because the run is filtered and the timing covers the whole pipeline,
+		     not the mask step. Decide the framing before we quote any number. -->
 		<div class="wf-measure">
-			<p class="wf-kicker">ONE MEASURED SCENARIO</p>
-			<p class="wf-headline">10M rows in 5.47 seconds</p>
-			<dl>
-				<dt>Workload</dt><dd>10M rows, HIPAA-shaped Parquet, single hash-rule pipeline</dd>
-				<dt>Engine mode</dt><dd>hybrid engine (engine build not recorded for this run)</dd>
-				<dt>Hardware</dt><dd>Intel Core i7-1265U laptop</dd>
-				<dt>Timing</dt><dd>wall-clock, mask step</dd>
-				<dt>Measured</dt><dd>2026-05-09</dd>
-				<dt>Evidence</dt><dd><code>tests/benchmark/calibration/results.md</code></dd>
-			</dl>
-			<p class="wf-caveat">This is one recorded run of one pipeline, not a guarantee. A single hash rule is near the fastest case. A mixed pipeline with redaction or encryption, or a larger dataset, takes longer.</p>
-		</div>
-		<div class="wf-note">
-			A fuller benchmark set across workloads and data sizes is in progress and will land here once confirmed. Until then, the number above is the single scenario published so far, labeled with exactly how it was measured.
+			<p class="wf-kicker">BENCHMARKS</p>
+			<p class="wf-headline">Numbers, with the method attached</p>
+			<p class="wf-caveat">A throughput number only means something next to the run that produced it: the pipeline, how many rows were actually processed, the hardware, the engine build, where timing started and stopped, and the date. We are finishing a benchmark suite that reports speed that way, across real workloads and data sizes. The figures will land here once they are clean enough to stand on their own. Until then, the factors above are what move your runtime.</p>
 		</div>
 	</div>
 </section>
