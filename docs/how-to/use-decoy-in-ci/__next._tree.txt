@@ -1,6 +1,6 @@
 :HL["/_next/static/chunks/2so_4r2w0y9j2.css","style"]
-:HL["/_next/static/chunks/2wgiojiqag9ug.css","style"]
+:HL["/_next/static/chunks/1tnfema8oxs8f.css","style"]
 :HL["/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/decoy-mark.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"docs","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"oc","key":"how-to/use-decoy-in-ci","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"yPeGqf1fvBpoWHGgv1wON"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"docs","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"oc","key":"how-to/use-decoy-in-ci","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"eMRkjLr_0v3lZfWRym1jt"}
