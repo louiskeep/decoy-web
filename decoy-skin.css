@@ -334,9 +334,18 @@ body.home .welcome::before{
 .wf-flow--detailed .wf-decoy, .wf-flow--detailed .wf-target{ align-self:center; }
 .wf-flow--detailed .wf-selfhost{ margin-top:10px; font-size:13.5px; color:#00756e; }
 .darkmode .wf-flow--detailed .wf-selfhost{ color:#4cc2c2; }
+/* animated flow wires: glowing dots travel along the connectors, source -> Decoy -> bucket */
+.wf-wire{ flex:0 0 auto; width:clamp(40px,5vw,66px); align-self:stretch; display:flex; min-height:120px; }
+.wf-wire-svg{ width:100%; height:100%; display:block; overflow:visible; }
+.wf-wire-lines path{ fill:none; stroke:rgba(0,134,126,.32); }
+.wf-wire-dots circle{ fill:#00867e; filter:drop-shadow(0 0 3px rgba(0,134,126,.85)); }
+.darkmode .wf-wire-lines path{ stroke:rgba(76,194,194,.32); }
+.darkmode .wf-wire-dots circle{ fill:#7fe9df; filter:drop-shadow(0 0 4px rgba(76,194,194,.9)); }
+@media (prefers-reduced-motion:reduce){ .wf-wire-dots{ display:none; } }
 @media (max-width:820px){
   .wf-sources{ width:100%; }
   .wf-flow--detailed .wf-decoy, .wf-flow--detailed .wf-target{ align-self:stretch; }
+  .wf-wire{ display:none; }
 }
 
 .wf-factors{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:8px; }

@@ -237,13 +237,36 @@
 						<p>Export the tables you need to CSV or Parquet, then point Decoy at them.</p>
 					</div>
 				</div>
-				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
+				<div class="wf-wire wf-wire--in" aria-hidden="true">
+						<svg class="wf-wire-svg" viewBox="0 0 64 300" preserveAspectRatio="none">
+							<g class="wf-wire-lines" stroke-width="1.6" stroke-linecap="round">
+								<path d="M0 50 C34 50 30 150 64 150"/>
+								<path d="M0 150 H64"/>
+								<path d="M0 250 C34 250 30 150 64 150"/>
+							</g>
+							<g class="wf-wire-dots">
+								<circle r="3"><animateMotion dur="3s" begin="0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;1" keyTimes="0;1" path="M0 50 C34 50 30 150 64 150"/></circle>
+								<circle r="3"><animateMotion dur="3s" begin="-1s" repeatCount="indefinite" calcMode="linear" keyPoints="0;1" keyTimes="0;1" path="M0 150 H64"/></circle>
+								<circle r="3"><animateMotion dur="3s" begin="-2s" repeatCount="indefinite" calcMode="linear" keyPoints="0;1" keyTimes="0;1" path="M0 250 C34 250 30 150 64 150"/></circle>
+							</g>
+						</svg>
+					</div>
 				<div class="wf-node wf-decoy">
 					<div class="bento-title"><svg class="icon"><use href="#shield-tick"></use></svg><span>Decoy</span></div>
 					<p>Subset related tables, generate synthetic rows, and mask sensitive fields in one run. Configured relationships are preserved, so joins still hold.</p>
 					<p class="wf-selfhost">Self-hosted: it runs in your environment, and no source or masked data is sent to Decoy.</p>
 				</div>
-				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
+				<div class="wf-wire wf-wire--out" aria-hidden="true">
+						<svg class="wf-wire-svg" viewBox="0 0 64 300" preserveAspectRatio="none">
+							<g class="wf-wire-lines" stroke-width="1.6" stroke-linecap="round">
+								<path d="M0 150 H64"/>
+							</g>
+							<g class="wf-wire-dots">
+								<circle r="3"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;1" keyTimes="0;1" path="M0 150 H64"/></circle>
+								<circle r="3"><animateMotion dur="2.4s" begin="-1.2s" repeatCount="indefinite" calcMode="linear" keyPoints="0;1" keyTimes="0;1" path="M0 150 H64"/></circle>
+							</g>
+						</svg>
+					</div>
 				<div class="wf-node wf-target">
 					<div class="bento-title"><svg class="icon"><use href="#upload-cloud-01"></use></svg><span>Cloud bucket</span></div>
 					<p>Safe data written to S3 or Google Cloud Storage for dev, test, CI, and analytics. It can also write local files.</p>
