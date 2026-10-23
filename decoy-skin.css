@@ -274,8 +274,6 @@ html.darkmode{ --accent:#e6c254; --accent-text:#e6c254; --accent-tint:rgba(230,1
 /* "Explore / learn more" links and their arrows. */
 .bento-box .bento-link, .bento-box .bento-link:visited{ color:var(--accent-text); }
 .bento-box .bento-link:hover{ color:var(--accent); }
-/* A little more air between the capability cards on the grid layouts. */
-@media (min-width:641px){ .bento .bento-grid{ gap:clamp(24px,2.4vw,36px); } }
 .textbutton.arrow-right, .textbutton.arrow-right:visited{ color:var(--accent-text); }
 .textbutton.arrow-right:hover{ color:var(--accent); }
 
@@ -420,9 +418,11 @@ body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
   body.home .welcome .hero-content p{ text-align:left; }
   body.home .welcome .hero-buttons{ justify-content:flex-start; }
   /* Screenshot fills the entire right half of the viewport, flush to the edge. */
-  body.home .welcome .hero-shot{ flex:0 0 auto; width:50vw; max-width:none; margin:0; margin-right:calc(50% - 50vw); align-self:stretch; display:flex; flex-direction:column; border-radius:0; border:0; border-left:1px solid rgba(120,195,183,.18); box-shadow:none; }
+  body.home .welcome .hero-shot{ flex:0 0 auto; width:50vw; max-width:none; margin:0; margin-right:calc(50% - 50vw); align-self:stretch; display:flex; flex-direction:column; border-radius:0; border:0; box-shadow:none; -webkit-mask-image:linear-gradient(to right, transparent 0, #000 8%); mask-image:linear-gradient(to right, transparent 0, #000 8%); }
   body.home .welcome .hero-shot .shot{ aspect-ratio:auto; flex:1 1 auto; display:block; min-height:0; }
   body.home .welcome .hero-shot .shot img{ width:100%; height:100%; object-fit:cover; object-position:left center; display:block; }
+  /* Larger breathing gap between the hero and the first card row. */
+  body.home section.welcome + section.bento{ padding-top:clamp(56px,7vw,104px); }
 }
 
 /* ============================================================
