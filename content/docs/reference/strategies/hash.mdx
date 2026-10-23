@@ -18,16 +18,4 @@ For the full parameter set, run `decoy strategies inspect hash`.
 
 ## Example
 
-```yaml
-- name: customer_id
-  strategy: hash
-  namespace: customer_id
-  provider_config:
-    truncate: 12
-```
-
-| Before | After |
-| --- | --- |
-| `10001` | `515ad73df0d7` |
-| `10002` | `a3187fc47184` |
-| `10003` | `97aaae1f24bf` |
+<StrategyExample id="mask.hash" />

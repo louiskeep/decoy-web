@@ -20,25 +20,7 @@ Set under `provider_config` on a mask column.
 
 ## Examples
 
-```yaml
-tables:
-  - name: accounts
-    columns:
-      - name: signup_date
-        strategy: date_shift
-        namespace: signup_date
-        provider_config:
-          min_days: -30
-          max_days: 30
-```
-
-Before and after (same seed, so the mapping is stable):
-
-| Column | Before | After |
-| --- | --- | --- |
-| `signup_date` | `2023-04-11` | `2023-03-19` |
-| `signup_date` | `2022-11-02` | `2022-11-21` |
-| `signup_date` | `2024-01-19` | `2024-02-08` |
+<StrategyExample id="mask.date_shift" />
 
 To anchor every date for one entity to the same offset (so a patient's whole
 timeline shifts together), give the date column and the entity key the same
