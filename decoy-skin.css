@@ -372,6 +372,8 @@ body.home header .options .button.transparent:hover{ background:rgba(255,255,255
 .wf-matrix-fig{ margin:24px 0 0; }
 .wf-matrix-fig .wf-kicker{ font-family:"SuisseIntl"; font-weight:600; font-size:13px; letter-spacing:.04em; color:var(--grey-40,#666); margin:0 0 10px; }
 .wf-matrix-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.12)); border-radius:12px; }
+.wf-matrix-scroll:focus-visible{ outline:2px solid #00867e; outline-offset:2px; }
+.darkmode .wf-matrix-scroll:focus-visible{ outline-color:#4cc2c2; }
 .wf-matrix{ width:100%; border-collapse:collapse; font-size:14px; line-height:1.45; min-width:680px; }
 .wf-matrix th, .wf-matrix td{ text-align:left; padding:14px 16px; border-bottom:1px solid var(--main-codebox-border-color,rgba(13,13,13,.1)); vertical-align:top; }
 .wf-matrix thead th{ font-weight:600; color:var(--grey-40,#666); background:var(--yellow-98,#f3fbfa); white-space:nowrap; }
