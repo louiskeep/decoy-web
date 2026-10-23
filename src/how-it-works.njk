@@ -1,0 +1,158 @@
+---
+title: "How Decoy Works: Where It Fits in Your Data Pipeline"
+description: "How Decoy scans, subsets, masks, generates, validates, and documents a dataset, where it sits in an existing pipeline, how the CLI and Platform share one engine, and what the measured performance looks like."
+bodyClass: page-how
+---
+<section class="hero hero--page">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">How it works</p>
+      <h1>One step in a pipeline you already run</h1>
+      <p class="lede">Decoy does not replace your warehouse, your ETL, or your CI. It sits between a source you trust and the environments that should never see raw PII, and it leaves evidence of what it did.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pipeline">
+  <div class="container">
+    <div class="flow" role="list">
+      <div class="flow-step flow-step--edge" role="listitem"><strong>Source</strong><span>Files, object storage, or a Postgres snapshot</span></div>
+      <div class="flow-step" role="listitem"><strong>Scan</strong><span>STORM profiles columns and suggests strategies</span></div>
+      <div class="flow-step" role="listitem"><strong>Subset</strong><span>Follow foreign keys to a small, intact slice</span></div>
+      <div class="flow-step" role="listitem"><strong>Mask or generate</strong><span>Keyed, deterministic transforms per column</span></div>
+      <div class="flow-step" role="listitem"><strong>Validate</strong><span>Residual PII, FK parity, distribution integrity</span></div>
+      <div class="flow-step flow-step--safe" role="listitem"><strong>Evidence</strong><span>Manifest, report, audit entry</span></div>
+      <div class="flow-step flow-step--edge" role="listitem"><strong>Target</strong><span>Local, S3, GCS, dev and test databases</span></div>
+    </div>
+
+    <div class="grid grid-3" style="margin-top: var(--space-7)">
+      <div class="card">
+        <div class="icon-badge">{% icon "scan" %}</div>
+        <h3>Scan</h3>
+        <p>STORM runs 25 value detectors over every column, tags findings by domain, and writes a draft pipeline with a review comment on each suggestion. It suggests; you decide.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "link" %}</div>
+        <h3>Subset</h3>
+        <p>Declare relationships once. Subsetting walks them to a fixpoint under a fan-out budget, and the same declarations keep joins intact when masking.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "key" %}</div>
+        <h3>Mask or generate</h3>
+        <p>Each column gets one of 23 masking strategies or 12 generation types. Keyed strategies derive output from your secret and the source value, so results are stable across tables and runs.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "shield" %}</div>
+        <h3>Validate</h3>
+        <p>After the run, an integrity check looks for residual PII, confirms foreign-key parity, and compares distributions. Findings fail the build with exit code 4.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "file" %}</div>
+        <h3>Evidence</h3>
+        <p>An evidence manifest records the pipeline hash, file fingerprints, and row counts, never a raw value. The Platform appends every action to a hash-chained audit log.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "box" %}</div>
+        <h3>Target</h3>
+        <p>Write CSV or Parquet locally or to object storage, and load it wherever lower environments read from. Nothing is sent to Decoy at any stage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="inside-a-run">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Inside a run</p>
+      <h2>What happens between <code>decoy run</code> and exit 0</h2>
+    </div>
+    <ol class="grid grid-2" style="list-style: none; padding: 0; counter-reset: run">
+      <li class="card"><h4>1. Validate and plan</h4><p>The YAML is checked against the schema without touching data. A plan is compiled and stamped with the seed-protocol version so the run is reproducible.</p></li>
+      <li class="card"><h4>2. Derive keys</h4><p>The mask secret is loaded from an environment variable or file. Per-strategy keys derive from it with HKDF-SHA256; nothing is stored.</p></li>
+      <li class="card"><h4>3. Transform</h4><p>Tables stream through pandas with a compiled Rust kernel for hashing and other hot strategies. Large foreign-key work takes an out-of-core route through DuckDB.</p></li>
+      <li class="card"><h4>4. Validate and write evidence</h4><p>Outputs are written, the integrity check runs, and the manifest and report are emitted. Exit codes tell CI exactly what happened.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="surfaces">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Surfaces</p>
+      <h2>Three ways to run the same engine</h2>
+    </div>
+    <div role="tablist" class="tabs" aria-label="Ways to use Decoy">
+      <button role="tab" class="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="true" data-hash="cli">CLI</button>
+      <button role="tab" class="tab" id="tab-platform" aria-controls="panel-platform" aria-selected="false" data-hash="platform">Platform</button>
+      <button role="tab" class="tab" id="tab-engine" aria-controls="panel-engine" aria-selected="false" data-hash="engine">Engine</button>
+    </div>
+    <div role="tabpanel" class="tab-panel" id="panel-cli" aria-labelledby="tab-cli">
+      <div class="grid grid-2">
+        <div>
+          <h3>For the developer and the build</h3>
+          <p class="muted">Runs locally and in CI with no server or account. Validate a config, run it, gate on the exit code, keep the evidence artifact. Free and source-available.</p>
+          <a class="link-arrow" href="/cli/">The CLI page {% icon "arrow-right" %}</a>
+        </div>
+        <div class="terminal"><div class="terminal-bar"><i></i><i></i><i></i><span>ci.yml</span></div><pre>- run: decoy validate config pipeline.yaml
+- run: decoy run pipeline.yaml --quiet --evidence-out evidence.json
+  env:
+    DECOY_MASK_SECRET: ${{ "{{" }} secrets.DECOY_MASK_SECRET {{ "}}" }}
+- run: decoy storm integrity pipeline.yaml out/</pre></div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-panel" id="panel-platform" aria-labelledby="tab-platform" hidden>
+      <div class="grid grid-2">
+        <div>
+          <h3>For the team and the reviewer</h3>
+          <p class="muted">A self-hosted web app on the same engine: a visual builder, shared sources and job history, roles and single sign-on, and a hash-chained audit log. ${{ site.pricing.platformMonthly }} a month per instance.</p>
+          <a class="link-arrow" href="/platform/">The Platform page {% icon "arrow-right" %}</a>
+        </div>
+        <div class="card"><h4>What the Platform adds</h4><ul class="muted small"><li>Job Studio builder and run history</li><li>S3, GCS, and Postgres sources</li><li>Four roles, OIDC SSO, API keys</li><li>Tamper-evident audit log with export</li><li>Alerts by email, Slack, webhook</li></ul></div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-panel" id="panel-engine" aria-labelledby="tab-engine" hidden>
+      <div class="grid grid-2">
+        <div>
+          <h3>For your own code</h3>
+          <p class="muted">The Apache-2.0 Python engine accepts Arrow, pandas, and Polars tables in memory and returns the same deterministic results the CLI produces. Both products import it; neither calls the other.</p>
+          <a class="link-arrow" href="/docs/reference/configuration">Configuration reference {% icon "arrow-right" %}</a>
+        </div>
+        <div class="card"><h4>Data plane</h4><p>pandas for masking with a Rust kernel for hot strategies, pyarrow between stages, Polars for subsetting, DuckDB for out-of-core joins. Faker for providers, OpenDP for differential privacy.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="performance">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Performance</p>
+      <h2>What runtime depends on</h2>
+      <p>Four things: row count, the strategy mix (hash is cheap, FPE and free-text are not), the hardware, and how far the data has to move. The figures below are single-host developer runs with their conditions; they are not a benchmark against anyone.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Workload</th><th>Result</th><th>Conditions</th></tr></thead>
+        <tbody>
+          <tr><td>Hash strategy, per column</td><td>About 1.04M rows/s</td><td>Native kernel, x86-64 Linux; about 235k rows/s on pandas</td></tr>
+          <tr><td>1M rows, four strategies</td><td>1.27 s</td><td>4 threads; 10.7 s on pandas; byte-identical output</td></tr>
+          <tr><td>100M rows, hash strategies</td><td>About 430 s, 447 MB peak</td><td>8 threads, one host</td></tr>
+          <tr><td>Mixed generate + mask, 10M rows</td><td>About 176k rows/s, 2.0 GB peak</td><td>4 vCPU, 12 GiB</td></tr>
+          <tr><td>Pure generation, 10M rows</td><td>About 14k rows/s, 226 MB peak</td><td>Python path; native generation in progress</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top: var(--space-4)">Reproduced from the engine's published capacity records. Linux x86-64 only; no performance evidence is published yet for Windows, macOS, or ARM64.</p>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Start where it makes sense</h2>
+    <p class="lede">Run the CLI against one file. When the team needs to share it, the Platform runs the same pipeline.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary btn--lg" href="/cli/">The CLI</a>
+      <a class="btn btn--secondary btn--lg" href="/platform/">The Platform</a>
+    </div>
+  </div>
+</section>

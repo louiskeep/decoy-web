@@ -1,0 +1,42 @@
+import fs from "node:fs";
+import path from "node:path";
+
+const ICON_DIR = path.join(import.meta.dirname, "src/_includes/icons");
+
+export default function (eleventyConfig) {
+  // Static assets copied verbatim. The vendored Fumadocs export (docs/, _next/, api/) lives at the
+  // repo root because its absolute /_next and /api/search paths cannot move.
+  eleventyConfig.addPassthroughCopy({ docs: "docs", _next: "_next", api: "api" });
+  // The export's own index page: served as /docs on clean-URL hosts and as /docs/ by directory.
+  eleventyConfig.addPassthroughCopy({ "docs.html": "docs.html" });
+  eleventyConfig.addPassthroughCopy({ "docs.html": "docs/index.html" });
+  eleventyConfig.addPassthroughCopy("src/fonts");
+  eleventyConfig.addPassthroughCopy("src/images");
+  eleventyConfig.addPassthroughCopy("src/css");
+  eleventyConfig.addPassthroughCopy("src/js");
+  for (const f of ["_headers", "_redirects", "robots.txt", "llms.txt", "sitemap.xml", "decoy-mark.png", "decoy-favicon-32.png"]) {
+    eleventyConfig.addPassthroughCopy(`src/${f}`);
+  }
+
+  eleventyConfig.ignores.add("legacy/**");
+  eleventyConfig.ignores.add("README.md");
+  eleventyConfig.watchIgnores.add("dist/**");
+
+  // {% icon "name" %} inlines an SVG from src/_includes/icons; keeps icons out of a sprite.
+  eleventyConfig.addShortcode("icon", (name, cls = "") => {
+    const file = path.join(ICON_DIR, `${name}.svg`);
+    if (!fs.existsSync(file)) throw new Error(`Unknown icon: ${name}`);
+    const svg = fs.readFileSync(file, "utf8").trim();
+    return svg.replace("<svg", `<svg class="icon${cls ? " " + cls : ""}" aria-hidden="true" focusable="false"`);
+  });
+
+  eleventyConfig.addFilter("absoluteUrl", (href, base) => new URL(href, base).href);
+  eleventyConfig.addFilter("year", () => String(new Date().getFullYear()));
+
+  return {
+    dir: { input: "src", includes: "_includes", data: "_data", output: "dist" },
+    templateFormats: ["njk", "md", "html"],
+    htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
+  };
+}

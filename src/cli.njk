@@ -1,0 +1,241 @@
+---
+title: "Decoy CLI: Data Masking and Synthetic Data from the Command Line"
+description: "The free, source-available Decoy CLI masks PII, generates synthetic rows, subsets related tables, and scans for sensitive data from explicit YAML pipelines. Deterministic, CI-friendly, and run entirely on your machine."
+bodyClass: page-cli
+---
+<section class="hero hero--split">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">{{ site.products.cli }}</p>
+      <h1>The whole engine, in your terminal</h1>
+      <p class="lede">Scaffold a pipeline from a real file, let STORM suggest a strategy per column, run it, and gate your build on the exit code. Every capability of the engine is in the free CLI; nothing is held back for the platform.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified at launch</a>
+        <a class="btn btn--primary btn--lg launch-only" href="#install">{% icon "download" %} Download</a>
+        <a class="btn btn--secondary btn--lg" href="/docs/start/quickstart">Quickstart {% icon "arrow-right" %}</a>
+      </div>
+    </div>
+    <div class="terminal" aria-label="Example terminal session">
+      <div class="terminal-bar"><i></i><i></i><i></i><span>bash</span></div>
+<pre><span class="prompt">$</span> decoy init customers.csv
+<span class="dim">wrote pipeline.yaml (7 columns, 5 REVIEW comments)</span>
+<span class="prompt">$</span> decoy storm analyze customers.csv
+<span class="dim">email      CONTACT   </span><span class="raw">email_address</span><span class="dim">    0.99</span>
+<span class="dim">ssn        IDENTITY  </span><span class="raw">us_ssn</span><span class="dim">           0.98</span>
+<span class="dim">dob        IDENTITY  </span><span class="raw">date_of_birth</span><span class="dim">    0.97</span>
+<span class="prompt">$</span> decoy validate config pipeline.yaml
+<span class="ok">ok</span> <span class="dim">pipeline.yaml is valid (schema v1)</span>
+<span class="prompt">$</span> decoy run pipeline.yaml --mask-secret env:DECOY_MASK_SECRET \
+    --evidence-out run.json
+<span class="dim">customers  1,000,000 rows  </span><span class="safe">masked</span><span class="dim">  3 strategies  1.9s</span>
+<span class="dim">evidence   run.json  sha256:3f1c…9a</span>
+<span class="prompt">$</span> echo $?
+<span class="ok">0</span></pre>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="masking">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Masking</p>
+      <h2>23 strategies, each labelled by what it promises</h2>
+      <p>Every strategy is tagged as anonymisation, pseudonymisation, synthetic replacement, or passthrough. Keyed strategies are deterministic: the same secret and the same input always produce the same output.</p>
+    </div>
+    <div class="strategy-grid">
+      <div class="strategy">hash<span>keyed digest</span></div>
+      <div class="strategy">fpe<span>FF1 format-preserving</span></div>
+      <div class="strategy">faker<span>realistic replacement</span></div>
+      <div class="strategy">redact<span>fixed placeholder</span></div>
+      <div class="strategy">categorical<span>remap to a set</span></div>
+      <div class="strategy">shuffle<span>break row identity</span></div>
+      <div class="strategy">truncate<span>keep N characters</span></div>
+      <div class="strategy">bucketize<span>fixed-width bins</span></div>
+      <div class="strategy">top_code<span>collapse the tail</span></div>
+      <div class="strategy">date_shift<span>bounded offset</span></div>
+      <div class="strategy">bucket_perturb<span>snap within period</span></div>
+      <div class="strategy">windowed_date<span>random in window</span></div>
+      <div class="strategy">geo_generalize<span>ZIP cascade, H3</span></div>
+      <div class="strategy">code_set<span>ICD-10, NDC, HCPCS</span></div>
+      <div class="strategy">text_redact<span>spans to tokens</span></div>
+      <div class="strategy">text_mask<span>spans to synthetic</span></div>
+      <div class="strategy">joint_mask<span>columns together</span></div>
+      <div class="strategy">group_key<span>shared group id</span></div>
+      <div class="strategy">grouped_series<span>series per group</span></div>
+      <div class="strategy">derived<span>from another column</span></div>
+      <div class="strategy">derived_aggregate<span>from a group</span></div>
+      <div class="strategy">formula<span>expression</span></div>
+      <div class="strategy">passthrough<span>unchanged</span></div>
+    </div>
+    <p class="small muted" style="margin-top: var(--space-4)"><a class="link-arrow" href="/docs/reference/strategies">Strategy reference {% icon "arrow-right" %}</a></p>
+  </div>
+</section>
+
+<section class="section" id="generation">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Generation</p>
+        <h2>Synthetic rows from a spec, or from the shape of real data</h2>
+        <p class="muted">Twelve generation types and 34 domain providers (names, addresses, SSN, NPI, MRN, NDC, IBAN, PAN, CUSIP, ICD-10 and more). Run <code>decoy fit</code> on a real table to capture histograms, quantiles, and top-k values, then sample from that snapshot instead of inventing a distribution.</p>
+        <p class="muted">Marginal differential privacy is available for generated data: per-column mechanisms from OpenDP with a single (epsilon, delta) budget. It covers the column types you declare and does not extend to relationships between columns or to masked output. <a href="/docs/concepts/differential-privacy">What it does and does not cover</a>.</p>
+      </div>
+      <div class="card">
+        <ul class="stack" style="list-style: none; padding: 0; color: var(--fg-muted); font-size: var(--text-sm)">
+          <li><strong class="tag-safe">categorical, distribution, sequence</strong> for shape</li>
+          <li><strong class="tag-safe">faker, formula, derived, derived_aggregate</strong> for values</li>
+          <li><strong class="tag-safe">reference, group_key, grouped_series</strong> for child tables that point at generated parents</li>
+          <li><strong class="tag-safe">statistical, windowed_date</strong> for fitted snapshots and time windows</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="subsetting">
+  <div class="container">
+    <div class="grid grid-2">
+      <div class="card">
+        <p class="eyebrow">Subsetting</p>
+        <h3>A small, referentially intact slice</h3>
+        <p>Start from a filter on one table and walk the declared relationships to a fixpoint under a fan-out budget. Composite and self-referencing keys are supported; nulls pass through; orphan rows follow the policy you set: preserve, remap, warn, or fail. Parquet in, Parquet out.</p>
+      </div>
+      <div class="card" id="detection">
+        <p class="eyebrow">Detection</p>
+        <h3>STORM finds it, you decide</h3>
+        <p>STORM profiles every column with 25 value detectors and tags each finding with a domain: identity, financial, health, contact, location. After a run, <code>decoy storm integrity</code> checks the output for residual PII and FK parity and returns exit code 4 on findings. An optional spaCy model adds person and location detection in free text.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="disguises">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Disguises</p>
+      <h2>Policy templates for the frameworks you answer to</h2>
+      <p>A Disguise is a dated, versioned bundle of column-pattern-to-strategy rules. Ten ship with the engine: HIPAA Safe Harbor (21 rules), PCI, GDPR, GLBA, CCPA, CPNI, FERPA, SOX, property and casualty insurance, and a default. They are templates that encode a reading of each framework, not certifications.</p>
+    </div>
+    <div class="cluster">
+      <span class="pill pill--accent">hipaa</span><span class="pill pill--accent">pci</span><span class="pill pill--accent">gdpr</span><span class="pill pill--accent">glba</span><span class="pill pill--accent">ccpa</span><span class="pill pill--accent">cpni</span><span class="pill pill--accent">ferpa</span><span class="pill pill--accent">sox</span><span class="pill pill--accent">pc</span><span class="pill pill--accent">default</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="determinism">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Determinism and joins</p>
+        <h2>Same secret, same input, same output. Everywhere.</h2>
+        <p class="muted">Keyed strategies derive their output with HKDF-SHA256 from a mask secret you supply (at least 32 bytes, from an environment variable or a file) and the source value. Tables that share a namespace mask the same value the same way, so joins between them survive and output is byte-stable across runs.</p>
+        <p class="muted">Format-preserving encryption uses NIST SP 800-38G FF1 with AES-256 and refuses domains under one million values. FPE columns reverse from the config alone; one-way columns can be made reversible by writing an encrypted token vault.</p>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>pipeline.yaml</span></div>
+<pre>version: 1
+global_settings:
+  mask_secret_ref: env:DECOY_MASK_SECRET
+sources:
+  - name: customers
+    type: file
+    path: customers.parquet
+  - name: orders
+    type: file
+    path: orders.parquet
+tables:
+  customers:
+    columns:
+      id:    { strategy: hash, namespace: customer_id }
+      email: { strategy: faker, provider: email, deterministic: true }
+      ssn:   { strategy: fpe, checksum: none }
+      dob:   { strategy: date_shift, max_days: 30 }
+  orders:
+    columns:
+      customer_id: { strategy: hash, namespace: customer_id }
+relationships:
+  - child: orders.customer_id
+    parent: customers.id
+    orphan_policy: fail</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ci">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">CI</p>
+      <h2>Made to run unattended</h2>
+      <p><code>--json</code> writes results to stdout and progress to stderr. <code>--quiet</code> leaves only the exit code. <code>--evidence-out</code> records what ran without recording a single raw value, and <code>decoy evidence verify</code> checks it later.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Exit code</th><th>Meaning</th><th>Typical cause</th></tr></thead>
+        <tbody>
+          <tr><td><code>0</code></td><td>OK</td><td>Run completed, checks passed</td></tr>
+          <tr><td><code>1</code></td><td>Usage</td><td>Bad flags or arguments</td></tr>
+          <tr><td><code>3</code></td><td>Runtime</td><td>Unreadable input, strategy error, I/O failure</td></tr>
+          <tr><td><code>4</code></td><td>Findings</td><td>Residual PII, FK parity or policy violations from <code>storm integrity</code></td></tr>
+          <tr><td><code>5</code></td><td>Capacity</td><td><code>preflight</code> estimates the job cannot fit on this host</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="performance">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Performance</p>
+      <h2>Measured, with the conditions attached</h2>
+      <p>Masking runs on pandas with a compiled Rust kernel for the hot strategies; Arrow carries data between stages; DuckDB handles out-of-core joins for large foreign-key work. The figures below are single-host developer runs, not a marketing benchmark.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Workload</th><th>Result</th><th>Conditions</th></tr></thead>
+        <tbody>
+          <tr><td>Hash strategy, per column</td><td>About 1.04M rows/s</td><td>Native kernel, x86-64 Linux, versus about 235k rows/s on pandas</td></tr>
+          <tr><td>1M rows, hash + redact + truncate + passthrough</td><td>1.27 s</td><td>4 threads; 10.7 s on pandas; byte-identical output</td></tr>
+          <tr><td>100M rows, hash strategies</td><td>About 430 s, 447 MB peak</td><td>8 threads, one host</td></tr>
+          <tr><td>Mixed generate + mask, 10M rows</td><td>About 176k rows/s, 2.0 GB peak</td><td>4 vCPU, 12 GiB</td></tr>
+          <tr><td>Pure generation, 10M rows</td><td>About 14k rows/s, 226 MB peak</td><td>Python path; native generation is in progress</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top: var(--space-4)">Numbers are reproduced from the engine's published capacity records. Windows, macOS, and ARM64 are supported but have no published performance evidence yet.</p>
+  </div>
+</section>
+
+<section class="section" id="formats">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Formats and limits</p>
+        <h2>Files first</h2>
+        <p class="muted">The CLI reads and writes CSV, Parquet, and fixed-width files on local disk, and masks folders of related tables in one run. Chunked streaming handles files larger than memory for CSV and Parquet with value-keyed strategies.</p>
+        <p class="muted">Object storage and databases are a Platform feature today; the CLI tells you so at validation rather than failing mid-run. Databases round-trip through an export. <a href="/docs/reference/limits">Full list of limits</a>.</p>
+      </div>
+      <div class="note note--raw">
+        <strong>What we do not claim.</strong> Masked output carries no differential-privacy guarantee. Free-text detection is best effort. Disguises are templates, not certifications. The engine's own <a href="/docs/reference/capabilities">feature support and limits</a> page is the source of truth.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="install">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Install</p>
+      <h2 class="prelaunch-only">The CLI is almost here</h2>
+      <h2 class="launch-only">Download and run</h2>
+      <p class="prelaunch-only">The CLI ships as a local download for Linux, macOS, and Windows. It is not published yet. Leave your email and we will send one message when it is.</p>
+      <p class="launch-only">Download the archive for your platform, unpack it, and run <code>decoy doctor</code> to confirm the native kernel and optional extras are ready.</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified</a>
+      <a class="btn btn--primary btn--lg launch-only" href="{{ site.github }}/releases/latest">{% icon "download" %} Latest release</a>
+      <a class="btn btn--secondary btn--lg" href="/docs/start/install">Install guide</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,128 @@
+---
+title: "Decoy Security: Self-Hosted, Your Data Stays in Your Environment"
+description: "How Decoy keeps data inside your environment: self-hosted only, keyed masking with HKDF-SHA256 and FF1, encrypted credentials, a hash-chained audit log, a mapping from HIPAA, GDPR, PCI, and CCPA obligations to strategies, and a responsible-disclosure policy."
+theme: light
+bodyClass: page-security
+---
+<section class="hero hero--page">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">Security</p>
+      <h1>Your data stays yours</h1>
+      <p class="lede">Decoy has no hosted control plane. The CLI runs on your machine and the Platform runs on your host. The only data that leaves your network is data you configure it to write somewhere.</p>
+      <div class="hero-actions">
+        <a class="btn btn--secondary" href="#disclosure">Report a vulnerability</a>
+        <a class="btn btn--secondary" href="#compliance">Compliance mapping</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="boundary">
+  <div class="container">
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="icon-badge">{% icon "server" %}</div>
+        <h3>No data sent to Decoy</h3>
+        <p>There is no telemetry, no usage reporting, and no licence check that leaves your network. After the Platform image is pulled it runs with no outbound internet at all.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "cloud" %}</div>
+        <h3>Outbound calls you choose</h3>
+        <p>The Platform makes outbound requests only to the storage, database, identity provider, and alert endpoints you configure. Each one is visible in the admin settings.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "users" %}</div>
+        <h3>Zero sub-processors</h3>
+        <p>Because nothing is hosted by us, there is no sub-processor list to maintain and no data-residency question to answer. Your deployment is the whole system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="keys">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Keys and encryption</p>
+      <h2>What protects what</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Asset</th><th>Mechanism</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Deterministic masking</td><td>HKDF-SHA256 from a 32-byte master key you supply</td><td>Per-strategy keys are derived at run time and never stored</td></tr>
+          <tr><td>Format-preserving encryption</td><td>NIST SP 800-38G FF1 with AES-256</td><td>Refuses domains under one million values; reversible from the config</td></tr>
+          <tr><td>Token vault (reversible one-way masks)</td><td>Encrypted map written only when a column opts in</td><td>Read back with <code>decoy unmask --vault</code></td></tr>
+          <tr><td>Stored credentials and OIDC secret</td><td>Fernet, symmetric, authenticated</td><td>Separate key from the masking master key</td></tr>
+          <tr><td>Passwords and API keys</td><td>bcrypt</td><td>API keys are shown once</td></tr>
+          <tr><td>Database at rest</td><td>Your Postgres configuration</td><td>Decoy does not manage disk encryption</td></tr>
+          <tr><td>Key rotation</td><td>Manual, with a backup reminder</td><td>No KMS or external vault integration today</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Audit and evidence</p>
+        <h2>Records a reviewer can verify</h2>
+        <p class="muted">Every CLI run can write an evidence manifest: pipeline hash, input and output fingerprints, row counts, and the seed-protocol version, with no raw values. <code>decoy evidence verify</code> checks it against the files later.</p>
+        <p class="muted">The Platform appends every action to a hash-chained audit log that Postgres enforces as append-only. An integrity verifier walks the chain, and the log exports to CSV or JSON. Retention defaults to seven years and nothing is purged automatically.</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Access control</p>
+        <ul class="muted small">
+          <li>Four roles: admin, release manager, developer, user</li>
+          <li>Per-user permission revocation by an admin</li>
+          <li>Users see their own pipelines and jobs; admins see all</li>
+          <li>OIDC single sign-on or local accounts; no SAML</li>
+          <li>API keys inherit their owner's permissions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="compliance">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Compliance mapping</p>
+      <h2>From obligation to strategy</h2>
+      <p>How common de-identification requirements map onto Decoy strategies and Disguise templates. This is engineering guidance, not legal advice, and Decoy holds no certification for any framework listed.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Framework</th><th>Requirement</th><th>Strategies</th><th>Disguise</th></tr></thead>
+        <tbody>
+          <tr><td>HIPAA Safe Harbor</td><td>Remove the 18 identifier classes; generalise dates and ZIP codes</td><td><code>redact</code>, <code>date_shift</code>, <code>geo_generalize</code>, <code>text_redact</code>, <code>code_set</code></td><td><code>hipaa</code> (21 rules)</td></tr>
+          <tr><td>GDPR Art. 4(5)</td><td>Pseudonymisation with the key held separately</td><td><code>hash</code>, <code>fpe</code>, vault for reversibility</td><td><code>gdpr</code></td></tr>
+          <tr><td>PCI DSS 4.0</td><td>Render PAN unreadable; truncation or strong cryptography</td><td><code>fpe</code> with Luhn checksum, <code>truncate</code>, <code>hash</code></td><td><code>pci</code></td></tr>
+          <tr><td>CCPA / CPRA</td><td>De-identified data not reasonably linkable</td><td><code>bucketize</code>, <code>top_code</code>, <code>categorical</code>; marginal DP for generated data</td><td><code>ccpa</code></td></tr>
+          <tr><td>GLBA, FERPA, SOX, CPNI</td><td>Sector-specific identifier handling</td><td>Framework-specific rule sets</td><td><code>glba</code>, <code>ferpa</code>, <code>sox</code>, <code>cpni</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note note--raw" style="margin-top: var(--space-5)">
+      <strong>What we do not claim.</strong> No SOC 2 report, no HIPAA certification or BAA, no PCI assessment, no FIPS validation. Disguises encode a reading of each framework and are versioned so you can review them; your assessor decides whether the result meets your obligation.
+    </div>
+  </div>
+</section>
+
+<section class="section" id="disclosure">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Responsible disclosure</p>
+        <h2>Found something? Tell us first.</h2>
+        <p class="muted">Email <a href="mailto:{{ site.contacts.security }}">{{ site.contacts.security }}</a>. We acknowledge within three business days, keep you informed while we fix it, and follow a 90-day coordinated disclosure window. Fixes ship for the current and previous major release lines.</p>
+      </div>
+      <div class="card">
+        <h3>Licensing in one line</h3>
+        <p>{{ site.licenses }} The Platform licence key is recorded in the audit log for your records; it is not validated over the network. <a href="/pricing/#licenses">Details</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>

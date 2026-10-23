@@ -1,0 +1,173 @@
+---
+title: "Decoy Platform: Self-Hosted Team App for Masking and Synthetic Data"
+description: "Decoy Platform is a self-hosted web app on the Decoy engine: a visual job builder, shared run history, a tamper-evident audit log, role-based access, OIDC single sign-on, and S3, GCS, and Postgres sources. One Docker Compose deploy on your host."
+bodyClass: page-platform
+---
+<section class="hero hero--page">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">{{ site.products.platform }}</p>
+      <h1>The same engine, shared by the whole team</h1>
+      <p class="lede">A self-hosted web app for building pipelines together, running them against shared sources, reviewing what STORM found, and keeping an audit trail you can hand to a reviewer. Deployed with one Docker Compose file on a host you control.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary btn--lg" href="/pricing/">See pricing {% icon "arrow-right" %}</a>
+        <a class="btn btn--secondary btn--lg" href="mailto:{{ site.contacts.sales }}?subject=Decoy%20Platform%20pilot">Talk to us about a pilot</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="frame">
+      <picture>
+        <source srcset="/images/decoy/studio-builder.webp" type="image/webp">
+        <img src="/images/decoy/studio-builder.png" alt="Job Studio: the visual pipeline builder in Decoy Platform" width="1600" height="900" loading="eager">
+      </picture>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="studio">
+  <div class="container">
+    <div class="feature-row">
+      <div>
+        <p class="eyebrow">{{ site.products.builder }}</p>
+        <h3>Build the pipeline visually, keep it as YAML</h3>
+        <p>Upload or point at a source, let STORM profile it, pick a strategy per column with the same 23 strategies the CLI has, and save. The result is the same pipeline file the CLI runs, so nothing is locked inside the app.</p>
+        <ul>
+          <li>New-job wizard with files, layouts, and relationships</li>
+          <li>Strategy reference and Disguise templates in context</li>
+          <li>Runs list with per-job history and reports</li>
+        </ul>
+      </div>
+      <div class="frame">
+        <picture>
+          <source srcset="/images/decoy/studio-report.webp" type="image/webp">
+          <img src="/images/decoy/studio-report.png" alt="A run report in Decoy Platform" width="1600" height="900" loading="lazy">
+        </picture>
+      </div>
+    </div>
+
+    <div class="feature-row feature-row--flip" id="jobs">
+      <div>
+        <p class="eyebrow">Jobs and triggers</p>
+        <h3>Run on demand, from your scheduler, or from a webhook</h3>
+        <p>Every job is addressable over the API with a scoped key. Trigger it from your existing cron, CI, or orchestrator, or from a signed webhook. Email, Slack, and webhook alerts fire on success or failure.</p>
+        <ul>
+          <li><code>POST /api/jobs</code> starts a run; <code>GET</code> polls it</li>
+          <li>HMAC-signed inbound webhooks</li>
+          <li>Alert rules per job</li>
+        </ul>
+        <p class="small faint">In-app recurring schedules are not shipped; bring your own scheduler for now.</p>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>cron</span></div>
+<pre><span class="dim"># nightly refresh of the staging dataset</span>
+0 2 * * *  curl -fsS -X POST https://decoy.internal/api/jobs \
+  -H "Authorization: Bearer $DECOY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"pipeline_id": "cust-staging"}'</pre>
+      </div>
+    </div>
+
+    <div class="feature-row" id="audit">
+      <div>
+        <p class="eyebrow">Audit</p>
+        <h3>A log that proves it was not edited</h3>
+        <p>Every action is appended to a hash-chained audit log that Postgres will not let anyone update or delete. An integrity verifier walks the chain, and the whole log exports to CSV or JSON for a reviewer. Retention defaults to seven years and nothing is purged.</p>
+        <ul>
+          <li>Hash chain with append-only enforcement</li>
+          <li>Integrity verification and aggregations</li>
+          <li>Evidence manifest and masking report per run</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Reports</p>
+        <h3>What a run leaves behind</h3>
+        <ul class="muted small">
+          <li>Masking report: strategy per column, counts, warnings</li>
+          <li>Evidence manifest: pipeline hash, file fingerprints, row counts, no raw values</li>
+          <li>Sampled quality report and HTML compliance export</li>
+          <li>Structured JSON server logs; optional Prometheus metrics</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-row feature-row--flip" id="access">
+      <div>
+        <p class="eyebrow">Access</p>
+        <h3>Four roles, single sign-on, scoped keys</h3>
+        <p>Admin, release manager, developer, and user roles, with per-user permission revocation on top. Users see their own pipelines and jobs; admins see everything. Sign in with local accounts or OIDC (tested with Okta, Entra ID, Google Workspace, Keycloak, and Auth0). API keys are shown once, stored hashed, and inherit their owner's permissions.</p>
+        <p class="small faint">SAML-only identity providers are not supported.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card"><h4>admin</h4><p>Everything, including users, keys, SSO, storage</p></div>
+        <div class="card"><h4>release_manager</h4><p>Approve and run across the instance</p></div>
+        <div class="card"><h4>developer</h4><p>Build and run own pipelines</p></div>
+        <div class="card"><h4>user</h4><p>View assigned jobs and reports</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="connectors">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Connectors</p>
+      <h2>Where the data comes from and goes</h2>
+      <p>Shipped today versus on the roadmap, stated plainly.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source or target</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>File upload (CSV, Parquet)</td><td><span class="pill pill--accent">shipped</span></td><td>Fixed-width output is backend only</td></tr>
+          <tr><td>S3 and S3-compatible storage</td><td><span class="pill pill--accent">shipped</span></td><td>MinIO, Cloudflare R2, Wasabi, Backblaze B2, DigitalOcean Spaces, Ceph</td></tr>
+          <tr><td>Google Cloud Storage</td><td><span class="pill pill--accent">shipped</span></td><td>Source and target</td></tr>
+          <tr><td>PostgreSQL</td><td><span class="pill pill--accent">shipped</span></td><td>Read-only snapshot of tables into a dataset; write-back is on the roadmap</td></tr>
+          <tr><td>Snowflake, Redshift</td><td><span class="pill">roadmap</span></td><td>Via UNLOAD and COPY through object storage</td></tr>
+          <tr><td>MySQL, SQLite, Iceberg, Delta</td><td><span class="pill">roadmap</span></td><td>Later tier</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="self-host">
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <p class="eyebrow">Self-hosting</p>
+        <h2>One Compose file, one host, no phone home</h2>
+        <p class="muted">The Platform is one organisation per install: a Caddy front end, the application container (API, web UI, and worker), and Postgres 15, on Ubuntu 22.04 or 24.04 or RHEL 9. After the image is pulled it needs no outbound internet, so it runs in air-gapped networks. Credentials are encrypted at rest with Fernet; masking keys derive from a 32-byte master key you hold.</p>
+        <ul class="muted small">
+          <li>Minimum 4 vCPU, 8 GB RAM, 50 GB disk</li>
+          <li>Database encryption at rest is yours to configure</li>
+          <li>Kubernetes and Helm are not supported</li>
+        </ul>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>bash</span></div>
+<pre><span class="prompt">$</span> docker compose -f docker-compose.production.yml up -d
+<span class="dim">[+] Running 3/3</span>
+<span class="dim"> ✔ caddy     Started</span>
+<span class="dim"> ✔ postgres  Started</span>
+<span class="dim"> ✔ decoy     Started</span>
+<span class="prompt">$</span> curl -s https://decoy.internal/api/health
+<span class="ok">{"status":"ok"}</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>${{ site.pricing.platformMonthly }} a month per instance. Nothing per seat or per row.</h2>
+    <p class="lede">The CLI stays free for evaluation and for the developers who prefer a terminal. The Platform is for the team that needs to share, review, and prove.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary btn--lg" href="/pricing/">See pricing</a>
+      <a class="btn btn--secondary btn--lg" href="/security/">Security and data boundary</a>
+    </div>
+  </div>
+</section>

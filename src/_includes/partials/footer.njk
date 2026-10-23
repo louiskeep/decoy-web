@@ -1,0 +1,24 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/"><img src="/images/decoy/mark.png" alt="" width="28" height="28"><span>{{ site.name }}</span></a>
+        <p>{{ site.tagline }}. Runs on your machines; no data leaves your environment.</p>
+      </div>
+      {% for col in site.footer %}
+      <div>
+        <h4>{{ col.title }}</h4>
+        <ul>
+          {% for l in col.links %}
+          <li><a href="{{ l.href }}"{% if l.external %} rel="noopener"{% endif %}>{{ l.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {{ "" | year }} {{ site.name }}</span>
+      <span>{{ site.licenses }}</span>
+    </div>
+  </div>
+</footer>

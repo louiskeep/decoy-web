@@ -1,0 +1,183 @@
+---
+title: "Decoy: Self-Hosted Data Masking and Synthetic Data"
+description: "Decoy turns production data into safe, realistic, join-preserving data for dev, test, CI, and analytics. A CLI you run anywhere and a self-hosted platform your team shares."
+bodyClass: page-home
+jsonld: >-
+  {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://decoystorm.dev/#organization","name":"Decoy","url":"https://decoystorm.dev/","logo":"https://decoystorm.dev/images/decoy/mark.png","description":"Self-hosted data masking and synthetic data generation."},{"@type":"WebSite","@id":"https://decoystorm.dev/#website","name":"Decoy","url":"https://decoystorm.dev/","publisher":{"@id":"https://decoystorm.dev/#organization"},"inLanguage":"en-US"},{"@type":"SoftwareApplication","@id":"https://decoystorm.dev/#software","name":"Decoy","applicationCategory":"DeveloperApplication","applicationSubCategory":"Data masking and synthetic data generation","operatingSystem":"Linux, macOS, Windows","description":"Self-hosted data masking, synthetic data generation, and referentially intact subsetting driven by explicit YAML pipelines.","publisher":{"@id":"https://decoystorm.dev/#organization"},"offers":[{"@type":"Offer","name":"Decoy CLI","price":"0","priceCurrency":"USD"},{"@type":"Offer","name":"Decoy Platform","price":"499","priceCurrency":"USD","description":"Per self-hosted instance per month, billed annually."}]}]}
+---
+<section class="hero hero--split">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">Data masking and synthetic data</p>
+      <h1>Production-shaped data. None of the risk.</h1>
+      <p class="lede">Decoy masks, generates, and subsets your data so every environment gets realistic rows with joins intact and no PII. Deterministic by construction, explicit in YAML, and run entirely on your own machines.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified at launch</a>
+        <a class="btn btn--primary btn--lg launch-only" href="/cli/#install">{% icon "download" %} Download the CLI</a>
+        <a class="btn btn--secondary btn--lg" href="/how-it-works/">How it works {% icon "arrow-right" %}</a>
+        <span class="small muted">Free CLI, source-available. Platform from ${{ site.pricing.platformMonthly }}/month per instance.</span>
+      </div>
+    </div>
+    <div class="frame hero-visual" aria-label="Example of a customer table before and after masking">
+      <div class="terminal-bar"><i></i><i></i><i></i><span>customers.parquet · 2 of 23 strategies</span></div>
+      <div class="table-scroll"><table class="mask-table">
+        <thead><tr><th>id</th><th>email</th><th>ssn</th><th>dob</th></tr></thead>
+        <tbody>
+          <tr><td class="key">10482</td><td class="raw">maria.ortiz@example.com</td><td class="raw">612-44-9031</td><td class="raw">1987-03-12</td></tr>
+          <tr><td class="key">10483</td><td class="raw">d.nakamura@example.org</td><td class="raw">308-19-2210</td><td class="raw">1992-11-02</td></tr>
+          <tr><td class="key">10484</td><td class="raw">kwame.a@example.net</td><td class="raw">771-62-0048</td><td class="raw">1979-07-30</td></tr>
+          <tr><td colspan="4" class="faint" style="white-space: normal">decoy run pipeline.yaml &nbsp;·&nbsp; email: faker &nbsp;·&nbsp; ssn: fpe &nbsp;·&nbsp; dob: date_shift</td></tr>
+          <tr><td class="key">10482</td><td class="safe">lena.brooks@example.com</td><td class="safe">927-10-5583</td><td class="safe">1987-02-27</td></tr>
+          <tr><td class="key">10483</td><td class="safe">arjun.malik@example.org</td><td class="safe">145-73-8816</td><td class="safe">1992-11-19</td></tr>
+          <tr><td class="key">10484</td><td class="safe">sofia.lind@example.net</td><td class="safe">462-05-3190</td><td class="safe">1979-07-14</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="where-it-fits">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Where it fits</p>
+      <h2>One step in the pipeline you already run</h2>
+      <p>Point Decoy at files or object storage, describe the transform in YAML, and ship the output wherever lower environments read from. Nothing is sent to us. Nothing is inferred silently.</p>
+    </div>
+    <div class="flow" role="list">
+      <div class="flow-step flow-step--edge" role="listitem"><strong>Source</strong><span>CSV, Parquet, fixed-width, S3, GCS, Postgres snapshot</span></div>
+      <div class="flow-step" role="listitem"><strong>Scan</strong><span>STORM profiles every column and flags likely PII</span></div>
+      <div class="flow-step" role="listitem"><strong>Subset</strong><span>Pull a small slice with every foreign key intact</span></div>
+      <div class="flow-step" role="listitem"><strong>Mask or generate</strong><span>23 strategies, 34 providers, keyed and deterministic</span></div>
+      <div class="flow-step" role="listitem"><strong>Validate</strong><span>Residual PII, FK parity, distribution checks</span></div>
+      <div class="flow-step flow-step--safe" role="listitem"><strong>Evidence</strong><span>Hashed manifest of what ran, never raw values</span></div>
+      <div class="flow-step flow-step--edge" role="listitem"><strong>Target</strong><span>Local, S3, GCS, your dev and test databases</span></div>
+    </div>
+    <p class="small muted" style="margin-top: var(--space-4)"><a class="link-arrow" href="/how-it-works/">See the full walkthrough {% icon "arrow-right" %}</a></p>
+  </div>
+</section>
+
+<section class="section" id="two-ways">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">One engine, two ways to run it</p>
+      <h2>Built for the developer at the keyboard and the team that has to prove it</h2>
+    </div>
+    <div class="grid grid-2">
+      <article class="card card--door">
+        <div class="icon-badge">{% icon "terminal" %}</div>
+        <h3>{{ site.products.cli }}</h3>
+        <p>The whole engine in one command. Scaffold a pipeline, scan a file, run it, and gate CI on the exit code. No server, no account, no telemetry.</p>
+        <ul>
+          <li>{% icon "check" %} 23 masking strategies, 12 generation types, 34 synthetic providers</li>
+          <li>{% icon "check" %} Keyed, deterministic masking so joins survive across tables and runs</li>
+          <li>{% icon "check" %} FK-aware subsetting and STORM PII detection</li>
+          <li>{% icon "check" %} Six stable exit codes, JSON output, evidence manifests</li>
+          <li>{% icon "check" %} Free and source-available (BUSL-1.1) on an Apache-2.0 engine</li>
+        </ul>
+        <a class="link-arrow" href="/cli/">Explore the CLI {% icon "arrow-right" %}</a>
+      </article>
+      <article class="card card--door">
+        <div class="icon-badge">{% icon "layout" %}</div>
+        <h3>{{ site.products.platform }}</h3>
+        <p>A self-hosted web app on the same engine for teams that share pipelines, review findings together, and need an audit trail they can hand to a reviewer.</p>
+        <ul>
+          <li>{% icon "check" %} {{ site.products.builder }}: a visual builder and job history for every run</li>
+          <li>{% icon "check" %} Tamper-evident, hash-chained audit log with export</li>
+          <li>{% icon "check" %} Four roles, OIDC single sign-on, scoped API keys</li>
+          <li>{% icon "check" %} S3-compatible storage, GCS, and Postgres sources</li>
+          <li>{% icon "check" %} One Docker Compose deploy on your own host, air-gap capable</li>
+        </ul>
+        <a class="link-arrow" href="/platform/">Explore the Platform {% icon "arrow-right" %}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="proof">
+  <div class="container">
+    <div class="grid grid-3">
+      <div class="stat">
+        <div class="stat-value">1M<span class="muted">+</span></div>
+        <div class="stat-label">rows per second per hashed column on the native kernel</div>
+        <div class="stat-note">x86-64 Linux, single dev host; about 2.5x pandas wall-clock</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">100M</div>
+        <div class="stat-label">rows masked in about seven minutes within 450 MB</div>
+        <div class="stat-note">hash strategies, 8 threads, one host</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">0</div>
+        <div class="stat-label">orphaned rows after subsetting, by policy</div>
+        <div class="stat-note">composite and self-referencing keys supported</div>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top: var(--space-5)">Every figure comes from a published run with its conditions. <a href="/how-it-works/#performance">How we measure</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Why Decoy</p>
+      <h2>Safe data you can reason about</h2>
+    </div>
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="icon-badge">{% icon "key" %}</div>
+        <h3>Deterministic by construction</h3>
+        <p>Every keyed strategy derives its output from your secret and the source value with HKDF-SHA256. Same input, same output, in every table and every run, so foreign keys and historical joins still line up.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "file" %}</div>
+        <h3>Explicit, reviewable YAML</h3>
+        <p>The pipeline is a file you can diff, review, and version. STORM suggests a strategy per column and leaves a review comment; it never decides for you.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "shield" %}</div>
+        <h3>Evidence, not promises</h3>
+        <p>Each run can write a manifest with the pipeline hash, file fingerprints, and row counts, and a residual-PII check that fails the build with exit code 4. The platform adds a hash-chained audit log.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">{% icon "server" %}</div>
+        <h3>Your infrastructure only</h3>
+        <p>There is no hosted control plane. The CLI runs where you run it; the platform is one Compose stack on your host. The only outbound calls are the ones you configure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="pricing-teaser">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Pricing</p>
+      <h2>Priced per instance, not per row</h2>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">{{ site.products.cli }}</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-meta">Free and source-available. The full engine, locally.</div>
+        <a class="btn btn--secondary" href="/cli/">What the CLI does</a>
+      </div>
+      <div class="plan plan--featured">
+        <div class="plan-name">{{ site.products.platform }}</div>
+        <div class="plan-price">${{ site.pricing.platformMonthly }}<small>/month per instance</small></div>
+        <div class="plan-meta">Billed annually. No seats, no row counts, no connector fees.</div>
+        <a class="btn btn--primary" href="/pricing/">See pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Start with the CLI. Add the Platform when the team needs it.</h2>
+    <p class="lede">Mask a CSV in minutes, then run the same pipeline in CI, then share it with your team on the same engine.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">Get notified at launch</a>
+      <a class="btn btn--primary btn--lg launch-only" href="/cli/#install">Download the CLI</a>
+      <a class="btn btn--secondary btn--lg" href="/docs/start/quickstart">Read the quickstart</a>
+    </div>
+  </div>
+</section>

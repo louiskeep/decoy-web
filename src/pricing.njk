@@ -1,0 +1,125 @@
+---
+title: "Decoy Pricing: Free CLI and Self-Hosted Platform"
+description: "The Decoy CLI is free and source-available. Decoy Platform is $499 per month per self-hosted instance, billed annually, with no per-seat or per-row fees. Enterprise terms are scoped with you."
+theme: light
+bodyClass: page-pricing
+---
+<section class="hero hero--page">
+  <div class="container">
+    <div class="hero-copy">
+      <p class="eyebrow">Pricing</p>
+      <h1>Priced per instance, not per row</h1>
+      <p class="lede">The CLI is free. The Platform is one flat price per self-hosted instance. Nothing is metered by seat, row, column, or connector.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="plans">
+  <div class="container">
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">{{ site.products.cli }}</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-meta">Free and source-available (BUSL-1.1). The full engine, on your machine.</div>
+        <ul>
+          <li>{% icon "check" %} 23 masking strategies</li>
+          <li>{% icon "check" %} 12 generation types, 34 providers</li>
+          <li>{% icon "check" %} FK-aware subsetting</li>
+          <li>{% icon "check" %} STORM detection, 25 detectors</li>
+          <li>{% icon "check" %} 10 Disguise templates</li>
+          <li>{% icon "check" %} Evidence manifests, JSON reports, stable exit codes</li>
+          <li>{% icon "check" %} Community support on GitHub</li>
+        </ul>
+        <a class="btn btn--secondary prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">Get notified</a>
+        <a class="btn btn--secondary launch-only" href="/cli/#install">Download</a>
+      </div>
+      <div class="plan plan--featured">
+        <div class="plan-name">{{ site.products.platform }}</div>
+        <div class="plan-price">${{ site.pricing.platformMonthly }}<small>/month per instance</small></div>
+        <div class="plan-meta">Billed annually ($5,988/year). One instance is one deployment.</div>
+        <ul>
+          <li>{% icon "check" %} Everything in the CLI</li>
+          <li>{% icon "check" %} {{ site.products.builder }} visual builder and shared job history</li>
+          <li>{% icon "check" %} API and webhook triggers for your scheduler</li>
+          <li>{% icon "check" %} Four roles, OIDC single sign-on, API keys</li>
+          <li>{% icon "check" %} Hash-chained audit log with CSV and JSON export</li>
+          <li>{% icon "check" %} S3-compatible, GCS, and Postgres sources</li>
+          <li>{% icon "check" %} Email, Slack, and webhook alerts</li>
+          <li>{% icon "check" %} Email support, business hours</li>
+        </ul>
+        <a class="btn btn--primary" href="mailto:{{ site.contacts.sales }}?subject=Decoy%20Platform">Talk to us</a>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-meta">For organisations running several instances or with contractual requirements.</div>
+        <ul>
+          <li>{% icon "check" %} One instance per environment (dev, staging, prod), priced together</li>
+          <li>{% icon "check" %} BAA, DPA, SLA, and security review negotiated in contract</li>
+          <li>{% icon "check" %} Named contact and onboarding help</li>
+          <li>{% icon "check" %} Custom terms</li>
+        </ul>
+        <a class="btn btn--secondary" href="mailto:{{ site.contacts.sales }}?subject=Decoy%20Enterprise">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="support">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Support</p>
+      <h2>What support looks like at each level</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>CLI</th><th>Platform</th><th>Enterprise</th></tr></thead>
+        <tbody>
+          <tr><td>Channel</td><td>GitHub issues and discussions</td><td>Email, business hours</td><td>Named contact</td></tr>
+          <tr><td>Acknowledgement</td><td>Best effort</td><td>2 business days for outages, 5 for everything else</td><td>Written in the contract</td></tr>
+          <tr><td>Security reports</td><td colspan="3">{{ site.contacts.security }}, acknowledged within 3 business days, 90-day coordinated disclosure</td></tr>
+          <tr><td>Onboarding</td><td>Docs and quickstart</td><td>Docs and install guide</td><td>Guided</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="licenses">
+  <div class="container">
+    <div class="grid grid-3">
+      <div class="card"><h3>Engine: Apache-2.0</h3><p>The Python data-plane library both products import. Open source.</p></div>
+      <div class="card"><h3>CLI: BUSL-1.1</h3><p>Source-available. Free to use; the licence restricts offering it as a competing service. Converts to Apache-2.0 on its change date.</p></div>
+      <div class="card"><h3>Platform: commercial</h3><p>Licensed per instance under the subscription. A licence key is recorded in the audit log; the product does not phone home.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Common questions</p>
+      <h2>The honest answers</h2>
+    </div>
+    <div class="faq">
+      <details><summary>What counts as an instance?</summary><div class="faq-body">One deployment of the Platform: one Compose stack with its own database, serving one organisation. If you run separate dev, staging, and production deployments, each is an instance; the Enterprise tier prices them together.</div></details>
+      <details><summary>Is the CLI really free?</summary><div class="faq-body">Yes. It is free to download and run, with every engine capability included. It is source-available under BUSL-1.1, which is not an OSI open-source licence; the restriction is on offering Decoy itself as a hosted service to others.</div></details>
+      <details><summary>Is there a free trial of the Platform?</summary><div class="faq-body">Not a self-serve one. The CLI is the evaluation path for the engine; for the Platform we run scoped pilots. Write to us and we will set one up.</div></details>
+      <details><summary>What does self-hosting cost me?</summary><div class="faq-body">A Linux host with at least 4 vCPU, 8 GB of RAM, and 50 GB of disk, plus Postgres storage that grows with your audit log. There is no hosted option.</div></details>
+      <details><summary>Is Decoy certified for HIPAA, SOC 2, or PCI?</summary><div class="faq-body">No. Decoy holds no SOC 2 report and does not sign a BAA today. The Disguise templates and the compliance mapping on the <a href="/security/#compliance">security page</a> help teams preparing for those audits; they are not certifications.</div></details>
+      <details><summary>Do you offer SAML?</summary><div class="faq-body">No. Single sign-on is OIDC, tested with Okta, Entra ID, Google Workspace, Keycloak, and Auth0. Identity providers that only speak SAML are not supported.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Start with the free CLI</h2>
+    <p class="lede">Validate a config, scan a file, run a pipeline. When your team needs to share it, we are a message away.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">Get notified at launch</a>
+      <a class="btn btn--primary btn--lg launch-only" href="/cli/#install">Download the CLI</a>
+      <a class="btn btn--secondary btn--lg" href="/cli/">See what the CLI does</a>
+    </div>
+  </div>
+</section>

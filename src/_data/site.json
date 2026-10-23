@@ -1,0 +1,72 @@
+{
+  "name": "Decoy",
+  "url": "https://decoystorm.dev",
+  "tagline": "Self-hosted data masking and synthetic data generation",
+  "description": "Decoy turns production data into safe, realistic, join-preserving data for development, testing, CI, and analytics. A CLI you run anywhere and a self-hosted platform your team shares.",
+  "prelaunch": true,
+  "themeColor": "#07100f",
+  "github": "https://github.com/louiskeep/decoy",
+  "contacts": {
+    "support": "support@decoystorm.dev",
+    "security": "security@decoystorm.dev",
+    "sales": "support@decoystorm.dev"
+  },
+  "products": {
+    "cli": "Decoy CLI",
+    "platform": "Decoy Platform",
+    "builder": "Job Studio",
+    "engine": "Decoy Engine"
+  },
+  "licenses": "Engine Apache-2.0. CLI BUSL-1.1. Platform commercial.",
+  "pricing": {
+    "platformMonthly": 499,
+    "platformAnnual": 5988
+  },
+  "nav": [
+    { "label": "CLI", "href": "/cli/" },
+    { "label": "Platform", "href": "/platform/" },
+    { "label": "How it works", "href": "/how-it-works/" },
+    { "label": "Pricing", "href": "/pricing/" },
+    { "label": "Docs", "href": "/docs/" }
+  ],
+  "footer": [
+    {
+      "title": "Product",
+      "links": [
+        { "label": "CLI", "href": "/cli/" },
+        { "label": "Platform", "href": "/platform/" },
+        { "label": "How it works", "href": "/how-it-works/" },
+        { "label": "Pricing", "href": "/pricing/" },
+        { "label": "Security", "href": "/security/" }
+      ]
+    },
+    {
+      "title": "Docs",
+      "links": [
+        { "label": "Install", "href": "/docs/start/install" },
+        { "label": "Quickstart", "href": "/docs/start/quickstart" },
+        { "label": "CLI reference", "href": "/docs/reference/cli" },
+        { "label": "Masking strategies", "href": "/docs/reference/strategies" },
+        { "label": "Configuration", "href": "/docs/reference/configuration" },
+        { "label": "Limits", "href": "/docs/reference/limits" }
+      ]
+    },
+    {
+      "title": "Trust",
+      "links": [
+        { "label": "Security", "href": "/security/" },
+        { "label": "Compliance mapping", "href": "/security/#compliance" },
+        { "label": "Licensing", "href": "/pricing/#licenses" },
+        { "label": "Responsible disclosure", "href": "/security/#disclosure" }
+      ]
+    },
+    {
+      "title": "Contact",
+      "links": [
+        { "label": "GitHub", "href": "https://github.com/louiskeep/decoy", "external": true },
+        { "label": "Support", "href": "mailto:support@decoystorm.dev" },
+        { "label": "Security reports", "href": "mailto:security@decoystorm.dev" }
+      ]
+    }
+  ]
+}

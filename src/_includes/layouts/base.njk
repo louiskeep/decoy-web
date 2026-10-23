@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-default-theme="{{ theme or 'dark' }}"{% if site.prelaunch %} data-prelaunch{% endif %}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <link rel="canonical" href="{{ page.url | absoluteUrl(site.url) }}">
+  <link rel="alternate" hreflang="en" href="{{ page.url | absoluteUrl(site.url) }}">
+  <link rel="alternate" hreflang="x-default" href="{{ page.url | absoluteUrl(site.url) }}">
+  <meta name="robots" content="{% if noindex %}noindex, nofollow{% else %}index, follow, max-image-preview:large, max-snippet:-1{% endif %}">
+  <meta name="author" content="{{ site.name }}">
+  <meta name="theme-color" content="{{ site.themeColor }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ page.url | absoluteUrl(site.url) }}">
+  <meta property="og:image" content="{{ site.url }}/images/decoy/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ site.name }}: {{ site.tagline | lower }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description }}">
+  <meta name="twitter:image" content="{{ site.url }}/images/decoy/og.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/decoy/favicon-64.png">
+  <link rel="shortcut icon" href="/images/decoy/favicon.ico">
+  <link rel="manifest" href="/images/favicon/site.webmanifest">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/bricolage-grotesque-800.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/geist-variable.woff2">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>
+    // Resolve the theme before first paint: user choice, then the page default, then the OS.
+    (function () {
+      var d = document.documentElement, t = null;
+      try { t = localStorage.getItem("theme") || localStorage.getItem("mode"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = d.getAttribute("data-default-theme") || "dark";
+      d.setAttribute("data-theme", t);
+      try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("anim-on"); } catch (e) {}
+    })();
+  </script>
+  {% block head %}{% endblock %}
+  {% if jsonld %}<script type="application/ld+json">{{ jsonld | safe }}</script>{% endif %}
+</head>
+<body class="{{ bodyClass }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% include "partials/banner.njk" %}
+  {% include "partials/header.njk" %}
+  <main id="main">
+    {{ content | safe }}
+  </main>
+  {% include "partials/footer.njk" %}
+  <script src="/js/site.js" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

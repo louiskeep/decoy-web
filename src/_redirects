@@ -1,0 +1,18 @@
+# Old URLs from the pre-redesign site. Cloudflare Pages / Netlify syntax.
+/features            /cli/                301
+/features.html       /cli/                301
+/deployment          /platform/#self-host 301
+/deployment.html     /platform/#self-host 301
+/workflow            /how-it-works/       301
+/workflow.html       /how-it-works/       301
+/compliance          /security/#compliance 301
+/compliance.html     /security/#compliance 301
+/resources           /docs/               301
+/resources.html      /docs/               301
+/support             /pricing/#support    301
+/support.html        /pricing/#support    301
+/changelog           /                    302
+/changelog.html      /                    302
+/pricing.html        /pricing/            301
+/security.html       /security/           301
+/docs.html           /docs/               301

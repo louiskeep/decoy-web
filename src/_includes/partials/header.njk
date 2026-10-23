@@ -1,0 +1,29 @@
+<header class="header" id="top">
+  <div class="container">
+    <a class="brand" href="/" aria-label="{{ site.name }} home">
+      <img src="/images/decoy/mark.png" alt="" width="28" height="28">
+      <span>{{ site.name }}</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      {% for item in site.nav %}
+      <a href="{{ item.href }}"{% if page.url == item.href or (item.href != '/' and page.url.startsWith(item.href)) %} aria-current="page"{% endif %}>{{ item.label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="header-actions">
+      <a class="icon-btn" href="{{ site.github }}" aria-label="Decoy on GitHub" rel="noopener">{% icon "github" %}</a>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Toggle color theme">{% icon "sun", "icon-sun" %}{% icon "moon", "icon-moon" %}</button>
+      <a class="btn btn--primary cta prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">Get notified</a>
+      <a class="btn btn--primary cta launch-only" href="/cli/#install">{% icon "download" %} Download</a>
+      <button class="icon-btn nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">{% icon "menu", "icon-menu" %}{% icon "x", "icon-close" %}</button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="container">
+      {% for item in site.nav %}
+      <a href="{{ item.href }}"{% if page.url == item.href or (item.href != '/' and page.url.startsWith(item.href)) %} aria-current="page"{% endif %}>{{ item.label }}</a>
+      {% endfor %}
+      <a class="btn btn--primary prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">Get notified</a>
+      <a class="btn btn--primary launch-only" href="/cli/#install">Download the CLI</a>
+    </div>
+  </div>
+</header>
