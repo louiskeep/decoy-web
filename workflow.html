@@ -226,15 +226,18 @@
 				<div class="wf-sources" role="list" aria-label="Sources">
 					<div class="wf-node" role="listitem">
 						<div class="bento-title"><svg class="icon"><use href="#file-05"></use></svg><span>Files</span></div>
-						<p>CSV or Parquet, on your disk.</p>
+						<p>Local files on your disk.</p>
+						<div class="wf-chips"><span>CSV</span><span>Parquet</span><span>fixed-width</span></div>
 					</div>
 					<div class="wf-node" role="listitem">
 						<div class="bento-title"><svg class="icon"><use href="#cloud-01"></use></svg><span>Object storage</span></div>
-						<p>CSV or Parquet in Amazon S3 or Google Cloud Storage.</p>
+						<p>Amazon S3, Google Cloud Storage, or any S3-compatible store (MinIO, R2, Wasabi).</p>
+						<div class="wf-chips"><span>S3</span><span>GCS</span><span>S3-compatible</span></div>
 					</div>
 					<div class="wf-node" role="listitem">
 						<div class="bento-title"><svg class="icon"><use href="#database-01"></use></svg><span>Database</span></div>
-						<p>Export the tables you need to CSV or Parquet, then point Decoy at them.</p>
+						<p>Read a managed Postgres snapshot (preview), or export any database to CSV or Parquet.</p>
+						<div class="wf-chips"><span>Postgres (preview)</span><span>export to file</span></div>
 					</div>
 				</div>
 				<div class="wf-wire wf-wire--in" aria-hidden="true">
@@ -253,7 +256,14 @@
 					</div>
 				<div class="wf-node wf-decoy">
 					<div class="bento-title"><svg class="icon"><use href="#shield-tick"></use></svg><span>Decoy</span></div>
-					<p>Subset related tables, generate synthetic rows, and mask sensitive fields in one run. Configured relationships are preserved, so joins still hold.</p>
+					<div class="wf-stages" aria-label="Decoy pipeline stages">
+							<span class="wf-stage">Scan</span><span class="wf-stage-sep" aria-hidden="true">›</span>
+							<span class="wf-stage">Subset</span><span class="wf-stage-sep" aria-hidden="true">›</span>
+							<span class="wf-stage">Generate</span><span class="wf-stage-sep" aria-hidden="true">›</span>
+							<span class="wf-stage">Mask</span><span class="wf-stage-sep" aria-hidden="true">›</span>
+							<span class="wf-stage">Validate</span>
+						</div>
+						<p>One run, driven by YAML. Configured relationships are preserved, and every run can check FK parity, distribution integrity, and residual PII.</p>
 					<p class="wf-selfhost">Self-hosted: it runs in your environment, and no source or masked data is sent to Decoy.</p>
 				</div>
 				<div class="wf-wire wf-wire--out" aria-hidden="true">
@@ -268,8 +278,9 @@
 						</svg>
 					</div>
 				<div class="wf-node wf-target">
-					<div class="bento-title"><svg class="icon"><use href="#upload-cloud-01"></use></svg><span>Cloud bucket</span></div>
-					<p>Safe data written to S3 or Google Cloud Storage for dev, test, CI, and analytics. It can also write local files.</p>
+					<div class="bento-title"><svg class="icon"><use href="#upload-cloud-01"></use></svg><span>Cloud bucket or local</span></div>
+					<p>Safe data to S3, GCS, or local files, for dev, test, CI, and analytics.</p>
+						<div class="wf-chips"><span>CSV</span><span>Parquet</span></div>
 				</div>
 			</div>
 	</div>

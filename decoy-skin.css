@@ -342,6 +342,15 @@ body.home .welcome::before{
 .darkmode .wf-wire-lines path{ stroke:rgba(76,194,194,.32); }
 .darkmode .wf-wire-dots circle{ fill:#7fe9df; filter:drop-shadow(0 0 4px rgba(76,194,194,.9)); }
 @media (prefers-reduced-motion:reduce){ .wf-wire-dots{ display:none; } }
+/* capability chips + Decoy pipeline-stage pills inside the flow diagram */
+.wf-node .wf-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.wf-node .wf-chips span{ font-family:"JetBrainsMono-Regular",monospace; font-size:11px; line-height:1; color:var(--grey-40,#666); border:1px solid var(--main-codebox-border-color,rgba(13,13,13,.14)); border-radius:6px; padding:4px 7px; white-space:nowrap; }
+.darkmode .wf-node .wf-chips span{ color:var(--grey-60,#9a9a9a); border-color:rgba(255,255,255,.16); }
+.wf-stages{ display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin:10px 0 2px; }
+.wf-stage{ font-family:"SuisseIntl"; font-weight:600; font-size:11.5px; line-height:1; color:#00756e; background:var(--yellow-98,#f3fbfa); border:1px solid rgba(0,134,126,.28); border-radius:999px; padding:5px 10px; white-space:nowrap; }
+.wf-stage-sep{ color:#00867e; opacity:.55; font-size:13px; line-height:1; }
+.darkmode .wf-stage{ color:#9df1e9; background:rgba(76,194,194,.09); border-color:rgba(76,194,194,.3); }
+.darkmode .wf-stage-sep{ color:#4cc2c2; }
 @media (max-width:820px){
   .wf-sources{ width:100%; }
   .wf-flow--detailed .wf-decoy, .wf-flow--detailed .wf-target{ align-self:stretch; }
