@@ -297,11 +297,7 @@ html.darkmode{ --accent:#e6c254; --accent-text:#e6c254; --accent-tint:rgba(230,1
    fades downward into the black hero, so the top of the page
    bookends the teal footer at the bottom. Homepage only.
    ============================================================ */
-body.home header{ color:#fff;
-  background:
-    radial-gradient(rgba(255,255,255,.13) 1px, transparent 1.4px) 0 0 / 22px 22px,
-    linear-gradient(160deg,#00756e 0%,#00867e 55%,#0a9b92 100%);
-}
+body.home header{ background:var(--main-background-color,#fff); }
 /* The teal melts down into the black hero: the fade sits at the top
    of the hero (not the sticky header), so it scrolls away and leaves
    a clean teal bar when the page is scrolled. */
@@ -313,26 +309,8 @@ body.home .welcome::before{
   -webkit-mask-image:linear-gradient(180deg,#000,transparent);
   mask-image:linear-gradient(180deg,#000,transparent);
 }
-/* Knock the header's marks and text white, the way the footer does.
-   The base theme sets these dark in light mode (and the brand uses an
-   inline colour), so override with !important to win in both modes. */
-body.home header .decoyhome,
-body.home header .decoyhome .brand{ color:#fff !important; }
-body.home header .decoyhome .brand img{ filter:brightness(0) invert(1); }
-body.home header nav > div > a{ color:rgba(255,255,255,.9) !important; }
-body.home header nav > div > a:hover{ color:#fff !important; }
-body.home header .search_icon .icon,
-body.home header .mode .icon,
-body.home header .hamburger-inner,
-body.home header .hamburger-inner::before,
-body.home header .hamburger-inner::after{ color:#fff; }
-body.home header .search_icon .icon{ fill:#fff; }
-/* Buttons: the teal fill would vanish on teal, so invert it; the
-   ghost becomes a white outline. */
-body.home header .options .button.yellow{ background:#fff; color:#00756e; border-color:#fff; }
-body.home header .options .button.yellow:hover{ background:#eafaf8; color:#005f59; }
-body.home header .options .button.transparent{ border-color:rgba(255,255,255,.55); color:#fff; }
-body.home header .options .button.transparent:hover{ background:rgba(255,255,255,.12); border-color:#fff; color:#fff; }
+/* Homepage header uses the default light-mode marks (dark on light), like the
+   rest of the site, so the logo and nav stay readable on the light header. */
 
 /* ---- Workflow page (workflow.html) ---------------------------------- */
 .wf-flow{ list-style:none; margin:0; padding:0; display:flex; align-items:stretch; gap:14px; }
@@ -402,7 +380,7 @@ body.home header .options .button.transparent:hover{ background:rgba(255,255,255
 .darkmode .wf-note{ border-left-color:#4cc2c2; background:rgba(76,194,194,.08); }
 
 /* ============================================================
-   REDESIGN — premium dark home hero. The home hero was a white
+   REDESIGN: premium dark home hero. The home hero was a white
    slab under a teal header; make it a near-black teal-tinted
    ground with a teal glow and a brass gold accent, so the first
    impression matches the dark marketing grounds. Scoped to the
@@ -431,7 +409,7 @@ body.home .hero-shot .bar{ background:#0e1f1b; border-bottom-color:rgba(120,195,
 body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
 
 /* ============================================================
-   REDESIGN — deliberate placeholder states. Until real product
+   REDESIGN: deliberate placeholder states. Until real product
    screenshots land, the empty shot frames read as intentional
    "coming soon" cards (icon chip + label + subcaption) instead
    of a bare grey word on a gradient.
@@ -461,7 +439,7 @@ body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
 body.home .hero-shot .shot .ph::before{ color:#4cc2c2; background:#0e1f1b; border-color:rgba(120,195,183,.18); }
 
 /* ============================================================
-   REDESIGN — content pages added in this branch (resources,
+   REDESIGN: content pages added in this branch (resources,
    changelog, support, compliance). Shared building blocks.
    ============================================================ */
 .eyebrow-label{ font-family:"JetBrainsMono-Regular",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
@@ -538,7 +516,7 @@ table.cmp code{ font-family:"JetBrainsMono-Regular",monospace; font-size:12.5px;
 .darkmode .copyfield{ background:#161616; border-color:rgba(255,255,255,.16); }
 
 /* ============================================================
-   REDESIGN — footer columns. The base lays the nav columns out at
+   REDESIGN: footer columns. The base lays the nav columns out at
    a fixed width:20% each, which overflows once the brand block and
    four columns share the row. Make them flex and wrap so they fit
    at every width.
