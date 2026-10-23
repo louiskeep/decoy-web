@@ -219,26 +219,37 @@
 	<div class="wrap">
 		<div class="intro">
       <h2 class="display-3">One step in a pipeline you already run</h2>
-			<p>Point Decoy at a source, describe the run in YAML, and write the result where your consumers read it. The flow is the same on the command line and in Studio.</p>
+			<p>Point Decoy at your data, describe the run in YAML, and write the result to a cloud bucket your consumers read. The flow is the same on the command line and in Studio.</p>
 		</div>
 	</div>
 	<div class="wrap">
-		<ol class="wf-flow" aria-label="Data flows from your source, through Decoy, to your consumers">
-			<li class="wf-node">
-				<div class="bento-title"><svg class="icon"><use href="#database-01"></use></svg><span>Your source</span></div>
-				<p>Production tables or files, exported to CSV or Parquet, locally or in object storage.</p>
-			</li>
-			<li class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></li>
-			<li class="wf-node wf-decoy">
-				<div class="bento-title"><svg class="icon"><use href="#shield-tick"></use></svg><span>Decoy</span></div>
-				<p>Subset related tables, generate synthetic rows, and mask sensitive fields in one run, keeping keys and joins intact.</p>
-			</li>
-			<li class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></li>
-			<li class="wf-node">
-				<div class="bento-title"><svg class="icon"><use href="#code-browser"></use></svg><span>Your consumers</span></div>
-				<p>Dev and test environments, CI, analytics, and demos, working on safe data that behaves like the real thing.</p>
-			</li>
-		</ol>
+		<div class="wf-flow wf-flow--detailed" role="list" aria-label="Data flows from your sources, through Decoy, to a cloud bucket">
+				<div class="wf-sources" role="list" aria-label="Sources">
+					<div class="wf-node" role="listitem">
+						<div class="bento-title"><svg class="icon"><use href="#file-05"></use></svg><span>Files</span></div>
+						<p>CSV or Parquet, on your disk.</p>
+					</div>
+					<div class="wf-node" role="listitem">
+						<div class="bento-title"><svg class="icon"><use href="#cloud-01"></use></svg><span>Object storage</span></div>
+						<p>CSV or Parquet in Amazon S3 or Google Cloud Storage.</p>
+					</div>
+					<div class="wf-node" role="listitem">
+						<div class="bento-title"><svg class="icon"><use href="#database-01"></use></svg><span>Database</span></div>
+						<p>Export the tables you need to CSV or Parquet, then point Decoy at them.</p>
+					</div>
+				</div>
+				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
+				<div class="wf-node wf-decoy" role="listitem">
+					<div class="bento-title"><svg class="icon"><use href="#shield-tick"></use></svg><span>Decoy</span></div>
+					<p>Subset related tables, generate synthetic rows, and mask sensitive fields in one run. Configured relationships are preserved, so joins still hold.</p>
+					<p class="wf-selfhost">Self-hosted: it runs in your environment, and nothing is sent to Decoy.</p>
+				</div>
+				<div class="wf-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow-right"></use></svg></div>
+				<div class="wf-node wf-target" role="listitem">
+					<div class="bento-title"><svg class="icon"><use href="#upload-cloud-01"></use></svg><span>Cloud bucket</span></div>
+					<p>Safe data written to S3 or Google Cloud Storage for dev, test, CI, and analytics. It can also write local files.</p>
+				</div>
+			</div>
 	</div>
 </section>
 
@@ -246,10 +257,10 @@
 <section id="how" class="cap-tabs">
 	<div class="wrap">
 		<div class="intro">
-      <h2 class="display-3">How Decoy works</h2>
+      <h2 class="display-3">Ways to use Decoy</h2>
 			<p>Same engine everywhere. Drive it yourself on the command line, give a team the Studio app, or look at the engine that runs underneath both.</p>
 		</div>
-		<div class="cap-tablist" role="tablist" aria-label="How Decoy works">
+		<div class="cap-tablist" role="tablist" aria-label="Ways to use Decoy">
 			<button class="cap-tab" id="wf-tab-cli" role="tab" aria-selected="true" aria-controls="wf-panel-cli" tabindex="0">CLI</button>
 			<button class="cap-tab" id="wf-tab-platform" role="tab" aria-selected="false" aria-controls="wf-panel-platform" tabindex="-1">Platform</button>
 			<button class="cap-tab" id="wf-tab-engine" role="tab" aria-selected="false" aria-controls="wf-panel-engine" tabindex="-1">Engine</button>
@@ -330,8 +341,8 @@ pipeline:
 <section id="runtime">
 	<div class="wrap">
 		<div class="intro">
-      <h2 class="display-3">Throughput and runtime</h2>
-			<p>Decoy runs on your hardware, so runtime depends on the job and the box it runs on. These are the things that move it.</p>
+      <h2 class="display-3">Measured performance</h2>
+			<p>Decoy runs on your hardware, so runtime depends on the job and the box it runs on. Here is what we measured, with the method attached, and the things that move it.</p>
 		</div>
 	</div>
 	<div class="wrap">
@@ -350,24 +361,63 @@ pipeline:
 			</div>
 			<div class="wf-factor">
 				<div class="bento-title"><svg class="icon"><use href="#cloud-01"></use></svg><span>Data movement</span></div>
-				<p>Reading and writing CSV or Parquet, locally or across S3, GCS, and SFTP. On a database round trip, the export and load usually dominate.</p>
+				<p>Reading and writing CSV or Parquet, locally or across S3 and GCS. On a database round trip, the export and load usually dominate.</p>
 			</div>
 		</div>
 	</div>
 	<div class="wrap">
-		<!-- Benchmark note for review (Cam): a historical run exists in
-		     decoy-engine/tests/benchmark/calibration/results.md (2026-05-09,
-		     i7-1265U, hybrid engine, HIPAA-shaped Parquet; pipeline is
-		     source -> 10% row filter -> single hash-rule mask -> write; 10M
-		     rows in, ~1M actually masked; 5.47s whole-pipeline wall-clock).
-		     Held from publication: presenting it as throughput would overstate,
-		     because the run is filtered and the timing covers the whole pipeline,
-		     not the mask step. Decide the framing before we quote any number. -->
-		<div class="wf-measure">
-			<p class="wf-kicker">BENCHMARKS</p>
-			<p class="wf-headline">Numbers, with the method attached</p>
-			<p class="wf-caveat">A throughput number only means something next to the run that produced it: the pipeline, how many rows were actually processed, the hardware, the engine build, where timing started and stopped, and the date. We are finishing a benchmark suite that reports speed that way, across real workloads and data sizes. The figures will land here once they are clean enough to stand on their own. Until then, the factors above are what move your runtime.</p>
-		</div>
+		<figure class="wf-matrix-fig">
+				<figcaption class="wf-kicker">BENCHMARKS</figcaption>
+				<div class="wf-matrix-scroll">
+				<table class="wf-matrix">
+					<thead>
+						<tr>
+							<th scope="col">Run</th>
+							<th scope="col">Scale</th>
+							<th scope="col">Masking time</th>
+							<th scope="col">Full run</th>
+							<th scope="col">Where we measured</th>
+							<th scope="col">What it shows</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">Large job</th>
+							<td>about 100 million rows<span class="wf-sub">20M parent plus 80M linked child rows</span></td>
+							<td>about 7 minutes<span class="wf-sub">roughly 238,000 rows a second</span></td>
+							<td>about 9.4 minutes<span class="wf-sub">including generate and write</span></td>
+							<td>one 8-vCPU cloud VM<span class="wf-sub">one engine thread</span></td>
+							<td>every row masked; configured relationships preserved, 0 mismatches</td>
+						</tr>
+						<tr>
+							<th scope="row">Synthetic healthcare</th>
+							<td>about 1.4 million rows<span class="wf-sub">Synthea synthetic data, 3 linked tables</span></td>
+							<td>about 35 seconds<span class="wf-sub">roughly 40,000 rows a second</span></td>
+							<td class="wf-na">mask phase only</td>
+							<td>laptop-class box<span class="wf-sub">one thread</span></td>
+							<td>five masking strategies across linked tables</td>
+						</tr>
+						<tr>
+							<th scope="row">Engine path</th>
+							<td>1 million rows<span class="wf-sub">four columns</span></td>
+							<td>roughly 224,000 to 261,000 rows a second<span class="wf-sub">native engine</span></td>
+							<td class="wf-na">about 74,000 rows a second on the free pandas path</td>
+							<td>one devbox</td>
+							<td>why the native engine is faster for this job</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+				<figcaption class="wf-matrix-note">These are single runs on specific hardware, not guarantees; your runtime depends on your job and your box (see the factors above). The healthcare figures use Synthea synthetic data, not real patient records.</figcaption>
+			</figure>
+			<details class="wf-method">
+				<summary>Method and exact figures</summary>
+				<div class="wf-method-body">
+					<p><strong>Large job.</strong> 100,000,000 rows (20M parent, 80M child, one foreign-key chain, 1 percent configured orphan rate). Four keyed-hash columns, one redact, one passthrough, plus foreign-key carry. Decoy native engine, one native thread. One run: mask phase 419.7 s, which is 238,243 rows a second; worker wall 563.2 s including generate and write, about 177,600 rows a second. Peak memory 8,045 MB under an 8,192 MB ceiling on a 32 GB host, with no temporary spill. A full foreign-key scan of the 80M child rows found 0 mismatches, with 800,000 orphan rows present exactly as configured. GCP n2-standard-8, 2026-10-18.</p>
+					<p><strong>Synthetic healthcare.</strong> Synthea generates synthetic patients, not real records. A 108-patient sample was replicated to 1,414,464 rows across three linked tables. Configured transforms across five strategies (hash, format-preserving encryption, redact, date-shift, passthrough) plus foreign-key wiring; pandas path, one thread. Mask phase 34.9 s, which is 40,493 rows a second, excluding input read and output write. Demographics and clinical codes are retained by configuration; this run does not demonstrate de-identification or HIPAA compliance. Laptop-class devbox, 2026-10-18.</p>
+					<p><strong>Engine path.</strong> 1,000,000 rows, four columns (hash, redact, truncate, passthrough), seven seeded rounds. Pandas path about 74,000 rows a second; native engine about 224,000 on one thread and 261,000 on four. This is a measured comparison for this one workload, not a universal multiplier. Devbox, 2026-10-01.</p>
+				</div>
+			</details>
 	</div>
 </section>
 
