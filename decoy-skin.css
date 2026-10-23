@@ -274,6 +274,8 @@ html.darkmode{ --accent:#e6c254; --accent-text:#e6c254; --accent-tint:rgba(230,1
 /* "Explore / learn more" links and their arrows. */
 .bento-box .bento-link, .bento-box .bento-link:visited{ color:var(--accent-text); }
 .bento-box .bento-link:hover{ color:var(--accent); }
+/* A little more air between the capability cards on the grid layouts. */
+@media (min-width:641px){ .bento .bento-grid{ gap:clamp(24px,2.4vw,36px); } }
 .textbutton.arrow-right, .textbutton.arrow-right:visited{ color:var(--accent-text); }
 .textbutton.arrow-right:hover{ color:var(--accent); }
 
@@ -411,12 +413,16 @@ body.home .hero-shot .bar i{ background:rgba(146,170,163,.3); }
    the masked-data motif running behind both. Stacks back to centered on narrow
    screens (the base .welcome .wrap column layout). */
 @media (min-width:900px){
-  body.home section.welcome .wrap{ flex-direction:row; align-items:center; justify-content:space-between; gap:clamp(32px,5vw,72px); }
-  body.home .welcome .hero-content{ flex:0 1 46%; max-width:560px; align-items:flex-start; text-align:left; }
+  body.home section.welcome{ padding-top:0; padding-bottom:0; }
+  body.home section.welcome .wrap{ flex-direction:row; align-items:stretch; justify-content:space-between; gap:clamp(28px,4vw,56px); min-height:clamp(460px,46vw,640px); }
+  body.home .welcome .hero-content{ flex:0 1 auto; max-width:520px; align-self:center; align-items:flex-start; text-align:left; }
   body.home .welcome .hero-content h1,
   body.home .welcome .hero-content p{ text-align:left; }
   body.home .welcome .hero-buttons{ justify-content:flex-start; }
-  body.home .welcome .hero-shot{ flex:1 1 54%; width:auto; max-width:none; margin:0; margin-right:clamp(-80px,-4vw,-24px); }
+  /* Screenshot fills the entire right half of the viewport, flush to the edge. */
+  body.home .welcome .hero-shot{ flex:0 0 auto; width:50vw; max-width:none; margin:0; margin-right:calc(50% - 50vw); align-self:stretch; display:flex; flex-direction:column; border-radius:0; border:0; border-left:1px solid rgba(120,195,183,.18); box-shadow:none; }
+  body.home .welcome .hero-shot .shot{ aspect-ratio:auto; flex:1 1 auto; display:block; min-height:0; }
+  body.home .welcome .hero-shot .shot img{ width:100%; height:100%; object-fit:cover; object-position:left center; display:block; }
 }
 
 /* ============================================================
