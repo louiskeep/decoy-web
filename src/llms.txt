@@ -1,6 +1,14 @@
 # Decoy
 
-> Self-hosted data masking and synthetic data generation. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines you run yourself.
+> Decoy turns production data into safe, realistic, join-preserving data for development, testing, CI, and analytics. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines. One engine, two ways to run it: a free, source-available CLI you run anywhere, and a self-hosted Platform your team shares. Nothing is sent to Decoy.
+
+## Site
+- [Home](https://decoystorm.dev/): what Decoy is and where it fits in a pipeline.
+- [CLI](https://decoystorm.dev/cli/): 23 masking strategies, 12 generation types, 34 providers, FK-aware subsetting, STORM detection, CI exit codes, measured performance, install.
+- [Platform](https://decoystorm.dev/platform/): Job Studio builder, API and webhook triggers, hash-chained audit log, four roles with OIDC SSO, connectors, Docker Compose self-hosting.
+- [How it works](https://decoystorm.dev/how-it-works/): scan, subset, mask or generate, validate, evidence; what happens inside a run; performance with conditions.
+- [Pricing](https://decoystorm.dev/pricing/): CLI free; Platform $499 per month per self-hosted instance, billed annually; Enterprise custom.
+- [Security](https://decoystorm.dev/security/): data boundary, outbound connections, keys and encryption, audit, compliance mapping, responsible disclosure.
 
 ## Get started
 - [Install](https://decoystorm.dev/docs/start/install): Install the decoy CLI, check your environment with decoy doctor, and understand the license.

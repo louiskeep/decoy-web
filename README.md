@@ -18,14 +18,15 @@ and JS with no client-side framework.
 | `404.html` | `src/404.njk` | Not found |
 
 Old URLs (`/features`, `/deployment`, `/workflow`, `/compliance`, `/resources`, `/support`,
-`/changelog`) redirect via `src/_redirects`. The pre-redesign pages are kept in `legacy/` for
-reference while the remaining phases land; they are not built or published.
+`/changelog`) redirect via `src/_redirects`. The pre-redesign site is in git history before the
+Eleventy rebuild if a reference is ever needed.
 
 ## Develop
 
     npm install
     npm run dev        # serves dist/ on http://localhost:8099 with live reload
-    npm run check      # builds, then verifies every internal link and anchor resolves
+    npm run check      # snippet check, build, link and anchor check, banned-claim check
+    npm run patch-docs # after re-vendoring the docs export: repoint its header links
 
 ## Deploy
 
@@ -45,7 +46,14 @@ format; translate them if the host differs.
 - `src/css/site.css`: layout and components.
 - `src/js/site.js`: theme toggle, mobile nav, copy buttons, tabs. No dependencies.
 - `src/fonts/`: Bricolage Grotesque (display), Geist and Geist Mono (body and code), all OFL.
-- `scripts/check-links.mjs`: the link and anchor checker run by `npm run check`.
+- `src/_includes/snippets/`: every code sample on the site, inlined with `{% snippet "file" %}`.
+- `src/js/motion.js`: the GSAP motion layer, loaded only on pages with `motion: true`.
+  GSAP is vendored from npm into `/js/vendor/` (no third-party requests).
+- `scripts/check-snippets.mjs`: YAML samples parse; every `decoy <command>` in a code block is a
+  documented command.
+- `scripts/check-links.mjs`: every internal link and anchor resolves.
+- `scripts/check-claims.mjs`: no banned compliance or readiness claims in built pages.
+- `scripts/patch-docs-links.mjs`: repoints the vendored docs header after a re-vendor.
 
 ## Copy rules
 

@@ -5,8 +5,9 @@
   "scripts": {
     "build": "eleventy",
     "dev": "eleventy --serve --port 8099",
-    "check": "node scripts/check-snippets.mjs && eleventy && node scripts/check-links.mjs dist",
-    "clean": "rm -rf dist"
+    "check": "node scripts/check-snippets.mjs && eleventy && node scripts/check-links.mjs dist && node scripts/check-claims.mjs dist",
+    "clean": "rm -rf dist",
+    "patch-docs": "node scripts/patch-docs-links.mjs"
   },
   "repository": {
     "type": "git",

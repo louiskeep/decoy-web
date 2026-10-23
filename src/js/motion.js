@@ -27,6 +27,20 @@
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
 
+  // Fail-safes: nothing stays hidden if a trigger never fires (odd viewports, print).
+  const showAll = () => {
+    gsap.set("[data-reveal] > *, [data-reveal-self], .stage-cards .card, .audit-entry, .audit-verify, .t-line, .flow-step", { clearProps: "opacity,visibility,transform" });
+  };
+  window.addEventListener("beforeprint", showAll);
+  setTimeout(() => {
+    document.querySelectorAll("[data-reveal] > *, [data-reveal-self]").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0 && getComputedStyle(el).visibility === "hidden") {
+        gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.5, overwrite: true });
+      }
+    });
+  }, 5000);
+
   // Groups marked data-reveal stagger their children up on first entry.
   function reveal() {
     document.querySelectorAll("[data-reveal], [data-reveal-self]").forEach((group) => {
@@ -276,7 +290,9 @@
       const card = cards.find((c) => c.dataset.stage === step.dataset.stage);
       if (card) {
         // Previous card is fully out (i - 0.95 … i - 0.75) before this one comes in (i - 0.6 … i - 0.4).
-        tl.to(card, { autoAlpha: 1, y: 0, duration: 0.2, ease: "power2.out" }, Math.max(0, i - 0.6));
+        // The first stage card is visible from the start so the pinned area never looks empty.
+        if (i === 1) tl.set(card, { autoAlpha: 1, y: 0 }, 0);
+        else tl.to(card, { autoAlpha: 1, y: 0, duration: 0.2, ease: "power2.out" }, i - 0.6);
         if (i < steps.length - 1) tl.to(card, { autoAlpha: 0, y: -16, duration: 0.2, ease: "power2.in" }, i + 0.05);
       }
     });
