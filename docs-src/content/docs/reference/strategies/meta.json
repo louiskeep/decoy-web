@@ -1,0 +1,18 @@
+{
+  "title": "Strategies",
+  "pages": [
+    "index",
+    "---Common masking---",
+    "faker", "hash", "redact", "fpe", "passthrough",
+    "---Categories and generalization---",
+    "categorical", "shuffle", "truncate", "bucketize", "top-code",
+    "---Dates and geography---",
+    "date-shift", "bucket-perturb", "windowed-date", "geo-generalize",
+    "---Free text and domain codes---",
+    "text-redact", "text-mask", "code-set",
+    "---Derived values---",
+    "derived", "formula", "derived-aggregate",
+    "---Grouped and multicolumn---",
+    "group-key", "grouped-series", "joint-mask"
+  ]
+}

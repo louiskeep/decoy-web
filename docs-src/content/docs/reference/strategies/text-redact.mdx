@@ -1,0 +1,33 @@
+---
+title: text_redact
+description: Find PII in free text and redact it.
+---
+
+Detects spans in free text (pattern detectors plus optional NER) and replaces each
+with a fixed token, so the sensitive spans are removed rather than swapped for
+synthetic text. Use `text_mask` to replace spans with realistic values instead.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `detectors` | list of string | see inspect | Pattern detectors to run over the text |
+| `ner` | boolean or object | `false` | Enable NER (`true`), or `{ model, entities }` to configure it |
+| `ner.entities` | list of string | all | NER entity ids to keep: `person_name`, `location` |
+| `ner.model` | string | default | The NER model to load |
+| `token` | string | `[REDACTED]` | The fixed replacement for each span |
+| `label_token` | boolean | `false` | Tag the token with the detected type |
+
+For the full parameter set, run `decoy strategies inspect text_redact`. See also
+[Redact text with NER](/docs/how-to/redact-text-with-ner).
+
+## Example
+
+```yaml
+- name: free_text
+  strategy: text_redact
+  provider_config:
+    ner:
+      entities: [person_name]
+    label_token: true
+```

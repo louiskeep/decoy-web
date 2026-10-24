@@ -1,0 +1,27 @@
+---
+title: Configuration
+description: The shape of a Decoy pipeline YAML, top to bottom.
+---
+
+A pipeline is one YAML file with `version: 1`. Every `decoy run` reads one. These
+are its top-level keys; follow the links for the detail of each.
+
+## Keys
+
+| Key | Required | Description |
+| --- | --- | --- |
+| `version` | yes | Must be `1` |
+| `global_settings` | yes | Run-wide settings, including the `seed`. See [Global settings](/docs/reference/configuration/global-settings) |
+| `tables` | yes | The tables to mask or generate, and their columns. See [Strategies](/docs/reference/strategies) and [Providers](/docs/reference/providers) |
+| `targets` | yes | Named outputs, keyed by table. See [Connectors and formats](/docs/reference/connectors) |
+| `sources` | for mask tables | Named inputs, keyed by table (generate tables have no source). See [Connectors and formats](/docs/reference/connectors) |
+| `relationships` | no | Foreign keys to preserve across tables. See [Relationships](/docs/reference/relationships) |
+| `subset` | no | A referentially intact slice of the inputs. See [Subset a dataset](/docs/how-to/subset-a-dataset) |
+| `namespaces` | no | Declared namespaces for keyed strategies |
+| `run_storm` | no | Run a STORM scan on the output (default `false`) |
+| `validators` | no | Job-level validators run after masking |
+| `quarantine` | no | Hold back rows that fail a rule |
+
+For the complete field-by-field schema (useful for editor validation), see
+[Configuration schema](/docs/reference/configuration/schema). For a full runnable
+pipeline, see [Quickstart](/docs/start/quickstart).

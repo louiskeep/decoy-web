@@ -1,0 +1,72 @@
+---
+title: Subset a dataset
+description: Pull a small, referentially intact slice of related tables.
+---
+
+Seeds pick starting rows in a root table. Decoy follows the foreign keys you
+declared and pulls only the related rows, under a row budget, so the slice still
+joins. Subsetting reads Parquet and runs before masking.
+
+## The subset block
+
+Add a `subset:` block to a pipeline that already declares its `relationships:`.
+This keeps EU customers and just their orders:
+
+```yaml
+subset:
+  seeds:
+    - table: customers
+      mode: filter
+      predicates:
+        - { column: region, op: eq, value: EU }
+  budget:
+    max_total_rows: 100000
+```
+
+Run it:
+
+```console
+$ decoy subset pipeline.yaml --dry-run      # projected row counts, writes nothing
+$ decoy subset pipeline.yaml --out slice/   # writes filtered Parquet + a manifest
+```
+
+## Seed modes
+
+Every seed picks rows one of three ways:
+
+```yaml
+# filter: rows matching predicates
+- table: customers
+  mode: filter
+  predicates:
+    - { column: region, op: eq, value: EU }
+    - { column: active, op: eq, value: true }
+
+# sample: a fraction (or a fixed count) of rows, over a key
+- table: customers
+  mode: sample
+  key_columns: [customer_id]
+  fraction: 0.1
+
+# keys: exact key tuples
+- table: customers
+  mode: keys
+  key_columns: [customer_id]
+  keys: [[1001], [1002], [1003]]
+```
+
+Predicate `op` values: `eq`, `ne`, `lt`, `le`, `gt`, `ge`, `in`, `is_null`, `is_not_null`.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `seeds` | list | required, min 1 | Starting rows; each is a filter, sample, or keys seed |
+| `budget.max_total_rows` | integer | none | Cap on total rows across all tables |
+| `budget.max_table_seed_multiple` | number | none | Cap each table at this multiple of its seed count |
+| `edge_directions` | map | both | Per-edge `both`, `downward`, `upward`, or `none` |
+| `allow_dangling` | boolean | `false` | Allow child rows whose parent was not pulled |
+
+The sources for every subsetted or related table must be `format: parquet`
+(subsetting does not run on CSV). For the full pipeline shape (sources, tables,
+targets), see [Quickstart](/docs/start/quickstart).

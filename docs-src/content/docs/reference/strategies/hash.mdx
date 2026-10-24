@@ -1,0 +1,21 @@
+---
+title: hash
+description: Replace a value with a keyed, deterministic digest.
+---
+
+Hashes the value with the job secret (`global_settings.mask_secret_ref`), so the
+same input always maps to the same digest within a namespace and stays joinable.
+Set `truncate` to keep a shorter hex prefix.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `truncate` | integer | full digest | Keep the first N hex characters |
+| `namespace` | string | per-table default | Binds the key; same namespace gives the same digest |
+
+For the full parameter set, run `decoy strategies inspect hash`.
+
+## Example
+
+<StrategyExample id="mask.hash" />

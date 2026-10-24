@@ -1,0 +1,48 @@
+---
+title: Unmask data
+description: Recover original values from a masked file.
+---
+
+Two kinds of column can be reversed: `fpe` columns (format-preserving encryption
+is a keyed bijection, so they reverse from the config's seed and namespace alone)
+and columns you marked `vault: true` (reversed with the vault file the mask run
+wrote). Every other strategy is one-way and passes through unchanged.
+
+## Reverse fpe columns
+
+`fpe` columns need only the config the mask run used:
+
+```console
+$ decoy unmask pipeline.yaml masked.csv
+```
+
+This writes `masked.unmasked.csv`. Use `--output` to choose the path, and
+`--table` when the config masks more than one table.
+
+## Reverse vaulted columns
+
+To reverse a one-way column, mark it `vault: true` and write a vault at mask time:
+
+```yaml
+tables:
+  - name: accounts
+    columns:
+      - name: email
+        strategy: faker
+        provider: person_email
+        vault: true
+```
+
+```console
+$ decoy run pipeline.yaml --vault vault.bin      # mask, and record the vault
+$ decoy unmask pipeline.yaml masked.csv --vault vault.bin
+```
+
+The vault is decrypted under the config's seed, so keep both the config and the
+vault file safe.
+
+## What does not reverse
+
+`hash`, `redact`, `faker` (without `vault: true`), and the other one-way
+strategies cannot be reversed. `decoy unmask` passes them through unchanged and
+marks them `irreversible` in its report (add `--json` to see it).

@@ -1,0 +1,27 @@
+---
+title: derived
+description: Compute a value from an expression over the row.
+---
+
+Evaluates a closed-grammar expression over the row's columns (slicing, concat,
+arithmetic), so a masked column can be built from its siblings. The grammar is
+fixed and validated at config time, not arbitrary code.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `expression` | string | required | The expression to evaluate, referencing sibling columns |
+| `null_propagation` | string | see inspect | How nulls in inputs flow to the output |
+| `bounds` | object | none | Optional numeric bounds on the result |
+
+For the full parameter set, run `decoy strategies inspect derived`.
+
+## Example
+
+```yaml
+- name: masked_id
+  strategy: derived
+  provider_config:
+    expression: "first_name[0:1] + last_name"
+```

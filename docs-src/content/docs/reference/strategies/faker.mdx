@@ -1,0 +1,32 @@
+---
+title: faker
+description: Replace with a realistic value from a named provider.
+---
+
+Draws a synthetic replacement from a named provider (names, emails, phone
+numbers, addresses). With `deterministic: true` and a namespace, the same input
+maps to the same synthetic value.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `provider` | string | required | The provider to draw from, for example `person_email` |
+| `deterministic` | boolean | `false` | Map the same input to the same output |
+| `namespace` | string | per-table default | Binds the mapping when deterministic |
+
+See [providers](/docs/reference/providers) for the 34 providers. For the full
+parameter set, run `decoy strategies inspect faker`.
+
+## Example
+
+```yaml
+- name: email
+  strategy: faker
+  provider: person_email
+```
+
+| Before | After |
+| --- | --- |
+| `dana.reyes@example.com` | `lnixon@example.org` |
+| `marcus.lin@example.com` | `josephwilson@example.org` |

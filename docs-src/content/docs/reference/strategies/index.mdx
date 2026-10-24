@@ -1,0 +1,49 @@
+---
+title: Masking strategies
+description: The 23 mask strategies, grouped by what they do.
+---
+
+Each column names one strategy. `decoy strategies list` prints the registry; each
+page below has its settings and a runnable example. To pick one for a field, see
+[Choose a masking strategy](/docs/how-to/choose-a-masking-strategy).
+
+## Common masking
+
+- [`faker`](/docs/reference/strategies/faker) replaces with a realistic value from a provider.
+- [`hash`](/docs/reference/strategies/hash) replaces with a keyed, deterministic digest.
+- [`redact`](/docs/reference/strategies/redact) replaces every value with a fixed placeholder.
+- [`fpe`](/docs/reference/strategies/fpe) encrypts in place, keeping the format; reversible with the key.
+- [`passthrough`](/docs/reference/strategies/passthrough) leaves the value unchanged.
+
+## Categories and generalization
+
+- [`categorical`](/docs/reference/strategies/categorical) remaps values onto a fixed set of categories.
+- [`shuffle`](/docs/reference/strategies/shuffle) reorders a column's values across rows.
+- [`truncate`](/docs/reference/strategies/truncate) keeps the first or last N characters.
+- [`bucketize`](/docs/reference/strategies/bucketize) rounds numbers into fixed-width bins.
+- [`top_code`](/docs/reference/strategies/top-code) collapses the rare tail of a numeric column into a label.
+
+## Dates and geography
+
+- [`date_shift`](/docs/reference/strategies/date-shift) shifts a date by a deterministic, bounded offset.
+- [`bucket_perturb`](/docs/reference/strategies/bucket-perturb) snaps a date to a position in its week, month, or quarter.
+- [`windowed_date`](/docs/reference/strategies/windowed-date) moves a date to a random point in a window.
+- [`geo_generalize`](/docs/reference/strategies/geo-generalize) generalizes a location through a cascade of grid levels.
+
+## Free text and domain codes
+
+- [`text_redact`](/docs/reference/strategies/text-redact) finds PII in free text and redacts it.
+- [`text_mask`](/docs/reference/strategies/text-mask) finds PII in free text and replaces it.
+- [`code_set`](/docs/reference/strategies/code-set) swaps a code for another valid code from the same set.
+
+## Derived values
+
+- [`derived`](/docs/reference/strategies/derived) computes a value from an expression over the row.
+- [`formula`](/docs/reference/strategies/formula) computes a value from an expression over the cell.
+- [`derived_aggregate`](/docs/reference/strategies/derived-aggregate) replaces a value with an aggregate across rows.
+
+## Grouped and multicolumn
+
+- [`group_key`](/docs/reference/strategies/group-key) gives every row in a group the same deterministic key.
+- [`grouped_series`](/docs/reference/strategies/grouped-series) generates a per-group sequence.
+- [`joint_mask`](/docs/reference/strategies/joint-mask) masks correlated columns together from a reference table.

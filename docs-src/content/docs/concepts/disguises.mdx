@@ -1,0 +1,58 @@
+---
+title: Disguises
+description: What a Disguise is, and what it is not.
+---
+
+A Disguise is a named, regulation-shaped bundle of masking defaults. It gives
+you a starting pipeline for a common compliance shape, such as HIPAA Safe
+Harbor identifiers or PCI cardholder data, instead of a blank YAML file.
+
+## What a Disguise is
+
+Each Disguise is a template: a set of column-pattern-to-strategy defaults
+tuned for a specific regulation or use case. `decoy templates show hipaa`
+dumps a ready-to-edit pipeline that maps the identifier categories a HIPAA
+Safe Harbor review commonly cares about (names, dates, geographic
+subdivisions, medical record numbers, and the rest) onto strategies like
+`faker`, `date_shift`, `fpe`, and `redact`. You pick the Disguise, inspect
+the generated YAML, and tune it to your actual columns before running it.
+
+Bundled starting points ship today for a generic default, HIPAA, PCI DSS, and
+GDPR shapes, alongside a bare-bones minimal template. Browse what's
+available with `decoy templates list` and preview one with
+`decoy templates show <name>`.
+
+## What a Disguise is not
+
+**It is not automatic classification.** A Disguise does not scan your data
+and decide which template applies, and it does not apply itself. You choose
+a Disguise the same way you choose any other starting template: by name,
+because you know your data is HIPAA-shaped or PCI-shaped. This is the same
+disguises-as-presets stance that shapes STORM (see
+[STORM](/docs/concepts/storm)): the tool surfaces defaults and findings, and
+a person decides what to run.
+
+**It is not a compliance certification.** A Disguise named `hipaa` encodes
+one engineering-team's reasonable reading of a common identifier set. Running
+it does not, by itself, make a dataset HIPAA-compliant, GDPR-compliant, or
+compliant with any other regime. Whether a masked dataset satisfies a
+regulation as applied to your actual data is a determination for you and
+your counsel, not a claim this tool makes.
+
+**It is not a fixed, uneditable bundle.** Every Disguise resolves to plain
+pipeline YAML. Nothing stops you from deleting a column entry your data
+doesn't have, swapping a strategy, or adding columns the template didn't
+anticipate. Treat the output of `decoy templates show` as a draft, not a
+final answer.
+
+## Why bundles exist at all
+
+Writing a masking pipeline column by column from scratch is slow, and it's
+easy to forget an identifier category a regulation actually cares about. A
+Disguise front-loads that knowledge into a template so the first draft of
+your pipeline already covers the common cases; you're editing toward
+correctness for your data, not starting from an empty file.
+
+See `decoy explain disguises` for the command-line summary, and
+[how to scan for PII](/docs/how-to/scan-for-pii) for the recipe that pairs a
+STORM scan with picking a Disguise.

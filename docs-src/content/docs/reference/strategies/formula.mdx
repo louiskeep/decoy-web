@@ -1,0 +1,27 @@
+---
+title: formula
+description: Compute a value from an expression over the cell.
+---
+
+Evaluates a Python expression over the cell's `value`. The scope is just `value`
+plus a small set of safe builtins (`str`, `int`, `float`, `len`, `round`, `abs`,
+`min`, `max`, `re`, `randint`, `choice`, `random`). It cannot reference other
+columns; use [derived](/docs/reference/strategies/derived) for expressions over
+sibling columns.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `formula` | string | required | A Python expression over `value` |
+
+For the full parameter set, run `decoy strategies inspect formula`.
+
+## Example
+
+```yaml
+- name: score
+  strategy: formula
+  provider_config:
+    formula: "round(value, -1)"
+```

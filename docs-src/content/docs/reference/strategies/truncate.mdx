@@ -1,0 +1,32 @@
+---
+title: truncate
+description: Keep the first or last N characters.
+---
+
+Keeps the first N characters, or the last N with `keep: tail`. The rest is
+dropped. No keying and no namespace. Use it for ZIP-to-N-digits generalization or
+a "keep last 4" identifier mask.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `length` | integer | required | Number of characters to keep |
+| `keep` | string | `head` | `head` keeps the first N, `tail` keeps the last N |
+
+For the full parameter set, run `decoy strategies inspect truncate`.
+
+## Example
+
+```yaml
+- name: zip
+  strategy: truncate
+  provider_config:
+    length: 3
+```
+
+| Before | After |
+| --- | --- |
+| `94107` | `941` |
+| `73301` | `733` |
+| `10001` | `100` |

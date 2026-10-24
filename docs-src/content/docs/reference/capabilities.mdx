@@ -1,0 +1,53 @@
+---
+title: Feature support and limits
+description: What Decoy supports today, with links to the detailed reference.
+---
+
+A compact index of what the engine supports, each linking to the page that
+documents it in full. Counts are for engine 0.7.0.
+
+## Support matrix
+
+| Area | What | Reference |
+| --- | --- | --- |
+| Masking strategies | 23 | [Strategies](/docs/reference/strategies) |
+| Generation types | 12 | [Generate synthetic data](/docs/how-to/generate-synthetic-data) |
+| Synthetic providers | 34 | [Providers](/docs/reference/providers) |
+| Compliance disguises | 10 | [Disguises](/docs/concepts/disguises) |
+| STORM detectors | 25 | [STORM](/docs/concepts/storm) |
+| Code sets | 4 (ICD-10, HCPCS, NDC, MCC) | [Healthcare code sets](/docs/how-to/work-with-healthcare-code-sets) |
+| Connectors | file, S3, GCS, SFTP | [Connectors and formats](/docs/reference/connectors) |
+| Formats | CSV, Parquet, fixed-width (read only) | [Connectors and formats](/docs/reference/connectors) |
+| Foreign keys | all shapes, four orphan policies | [Relationships](/docs/reference/relationships) |
+| Differential privacy | generate mode, per-column marginals | [Differential privacy](/docs/concepts/differential-privacy) |
+| Determinism and keys | seed plus optional masking secret | [Determinism](/docs/concepts/determinism), [Keys and the vault](/docs/concepts/keys-and-vault) |
+
+## Execution routes
+
+Decoy picks a route automatically from the dataset size and available memory.
+
+| Route | RAM use | Best for |
+| --- | --- | --- |
+| In-memory (pandas) | Full dataset | &lt;1 GB |
+| Polars native | Full dataset plus overhead | &lt;2 GB, prefer speed |
+| Sequential | Per-table chunked | 1 to 10 GB |
+| Out-of-core (DuckDB) | Configurable cap, spills to disk | 10 GB and up |
+
+## Validation and safety
+
+- Fail-closed: configuration errors are rejected at compile time, not run time.
+- Schema validation with descriptive errors.
+- Referential-integrity checks: FK cycles, dangling references, and invalid
+  masking topologies are caught before any data is written.
+- DP budget enforcement: declared epsilon/delta ceilings are checked.
+
+## Limits
+
+See [Security, privacy, and compliance limits](/docs/reference/limits) for what
+Decoy does not cover (masked output carries no DP guarantee; DP is per-column
+marginals on generated data only; composite FKs are not sampled tuple-wise).
+
+## Version
+
+Decoy engine 0.7.0 (released 2026-10-01). The `decoy` CLI is source-available
+under BUSL-1.1.

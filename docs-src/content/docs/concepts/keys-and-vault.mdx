@@ -1,0 +1,103 @@
+---
+title: Keys and the vault
+description: How Decoy sources the secret behind masking, and how the token vault makes a one-way mask reversible.
+---
+
+Decoy has two independent keyed-determinism mechanisms. They do not share a
+secret, and setting one has no effect on the other.
+
+## Two separate keys
+
+**Synthetic generation** (`generate_columns:` tables) is deterministic by
+default: the same seed produces the same generated output within one run,
+but that output is not portable across machines. Passing `--master-key`
+(a 32-byte hex value) plus `--key-label` makes generation portable: the same
+key and label produce bitwise-identical generated output anywhere, and a
+different label produces different output because the label is itself a
+namespace.
+
+**Masking** (`mask:` strategies) is keyed separately, off a `mask_secret_ref`
+you configure in the pipeline YAML or pass with `--mask-secret`:
+
+```yaml
+global_settings:
+  seed: 42
+  mask_secret_ref: "env:DECOY_MASK_SECRET"
+```
+
+Keyed masking strategies (`fpe`, `hash`, `date_shift`, and others) draw a
+`mask_key` from this reference, never from `--master-key` and never from the
+plain seed. The engine resolves the reference from the named environment
+variable or file at run time, decodes it to raw bytes, and never logs or
+serializes the secret itself.
+
+## Why masking has its own key
+
+The run seed makes output reproducible, but a seed is not a confidentiality
+secret: it is often stored in the same config file as the rest of the
+pipeline. If keyed masking derived its protection from the seed alone, anyone
+who could read the config could reconstruct the masking. Splitting the two
+means the pipeline shape (which columns get which strategy) can be reviewed
+and version-controlled openly, while the thing that actually protects
+re-identification is a secret you hold separately.
+
+Before a mask secret is configured, keyed masking still runs so you can
+iterate locally, falling back to the run seed. That fallback output is
+reproducible but not re-identification-safe: anyone holding the config can
+reproduce the mapping. A real deployment should configure a mask secret. At
+general availability, a keyed strategy with no resolved secret is rejected
+outright rather than silently falling back, so a production run can't ship
+unkeyed by accident.
+
+## The unmask model
+
+Some strategies are reversible from the config alone. `fpe` (format-preserving
+encryption) is a bijection: the same key that produced a masked value can run
+it backward, so `decoy unmask` on an `fpe` column needs only the same
+mask secret and namespace that produced it, not a stored mapping.
+
+Most strategies are one-way (`faker`, `hash`, `redact`, and the rest). To make
+a one-way column reversible, mark it `vault: true` in the YAML and pass a
+vault path on the run:
+
+```bash
+decoy run pipeline.yaml --vault vault.bin
+```
+
+The vault is an encrypted file recording each vaulted column's
+source-to-masked mapping at mask time. Recover originals with:
+
+```bash
+decoy unmask pipeline.yaml masked.csv --vault vault.bin --table customers -o recovered.csv
+```
+
+The vault's own encryption key derives from the same `mask_key` as the rest
+of the run, so unlocking the vault requires the mask secret (or, in the
+no-secret fallback, the seed) that produced it. Vault creation is opt-in
+twice over: a column has to declare `vault: true`, and the operator has to
+pass `--vault PATH`. A masking run never writes a vault otherwise.
+
+## Handling rules
+
+- Store the vault and the masked output separately. The masked output is the
+  artifact that's safe to share; the vault is the thing that un-shares it.
+- The vault grows with the data it protects, unlike a key or a seed. Treat it
+  with the same handling the source data itself requires.
+- `vault: true` is rejected on `fpe` columns, since those are already
+  reversible from the config and key alone; a vault entry would be redundant.
+- Pooled strategies can map two different source values to the same masked
+  value. Those ambiguous entries are dropped at write time rather than
+  guessed at on unmask, so a round trip is exact only for collision-free
+  strategies such as `hash` under a namespace.
+
+## What this is not
+
+Neither the master key nor the mask secret is a key-management service.
+Decoy reads bytes from an environment variable or a file reference; rotation
+policy, per-tenant secret storage, and audit trails around who accessed a
+key are the deploying organization's responsibility, not something the CLI
+provides.
+
+See `decoy explain keys` and `decoy explain vault` for the command-line
+walkthrough, and [determinism](/docs/concepts/determinism) for how these keys
+fit into the seed protocol.

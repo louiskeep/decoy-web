@@ -1,0 +1,22 @@
+{
+  "title": "Guides",
+  "pages": [
+    "---Discover and mask sensitive data---",
+    "scan-for-pii",
+    "choose-a-masking-strategy",
+    "mask-a-csv",
+    "use-parquet",
+    "mask-a-folder-with-foreign-keys",
+    "---Build safer test datasets---",
+    "subset-a-dataset",
+    "generate-synthetic-data",
+    "use-differential-privacy",
+    "---Handle specialized data---",
+    "redact-text-with-ner",
+    "work-with-healthcare-code-sets",
+    "handle-high-cardinality-categories",
+    "---Operationalize---",
+    "use-decoy-in-ci",
+    "unmask-data"
+  ]
+}

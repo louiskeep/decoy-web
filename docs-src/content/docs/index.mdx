@@ -1,0 +1,37 @@
+---
+title: Decoy documentation
+description: Data masking and synthetic data tooling for local files, YAML pipelines, and STORM-assisted review.
+---
+
+Decoy is a CLI-first toolkit for masking sensitive data and generating
+synthetic replacements in local files and YAML-defined pipelines. You point it
+at a file or folder, it profiles the data, you review what it found, and you
+run a pipeline that produces a masked or synthetic output you can inspect
+before it goes anywhere else.
+
+## What ships today
+
+- 23 masking strategies for field-level, reviewable transforms.
+- 12 synthetic generation column types, plus statistical fitting for
+  whole-table generation.
+- 34 synthetic value providers (names, emails, identifiers, and composites)
+  for the `faker` strategy, distinct from Decoy's I/O connectors
+  (file, S3, GCS, SFTP).
+
+Every run is explicit: pipelines are plain YAML, strategies are picked per
+field, and STORM profiling only ever suggests a strategy for you to confirm,
+it never classifies or applies anything on its own.
+
+## Where to go next
+
+- **[Get started](/docs/start/install)**: install the CLI and mask your first
+  file.
+- **[Guides](/docs/how-to/mask-a-csv)**: task recipes for masking, synthetic
+  generation, foreign keys, subsetting, Parquet, and CI.
+- **[Concepts](/docs/concepts/determinism)**: how determinism, keys, STORM,
+  disguises, and differential privacy work.
+- **[Reference](/docs/reference/configuration)**: the configuration schema, every
+  masking strategy and provider, connectors, and the CLI.
+
+The `decoy` CLI is source-available under the Business Source License 1.1
+(BUSL-1.1).

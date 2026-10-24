@@ -1,0 +1,30 @@
+---
+title: windowed_date
+description: Move a date to a random point in a window.
+---
+
+Shifts each date to a random offset within a window relative to an anchor. Unlike
+`date_shift`, the output lands in a bounded window rather than keeping a fixed
+per-value offset. `distribution` biases where in the window the date falls.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `anchor` | string | required | The reference date the window is measured from |
+| `min_days` | integer | `0` | Earliest offset from the anchor |
+| `max_days` | integer | required | Latest offset from the anchor |
+| `distribution` | string | `uniform` | `uniform`, `early`, or `late` bias within the window |
+
+For the full parameter set, run `decoy strategies inspect windowed_date`.
+
+## Example
+
+```yaml
+- name: discharge_date
+  strategy: windowed_date
+  provider_config:
+    anchor: admit_date
+    min_days: 1
+    max_days: 14
+```

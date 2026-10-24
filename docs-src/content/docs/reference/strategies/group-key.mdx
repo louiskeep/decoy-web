@@ -1,0 +1,28 @@
+---
+title: group_key
+description: Give every row in a group the same deterministic key.
+---
+
+Derives one keyed value per group and gives it to every row in that group, so
+rows that shared a value still share one after masking. The key is deterministic
+for a given group within a namespace.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `group_by` | string | required | The single column that partitions rows into groups |
+| `length` | integer | `16` | Output hex length, even, 8 to 64 |
+| `prefix` | string | `""` | Constant prefix on every key |
+
+For the full parameter set, run `decoy strategies inspect group_key`.
+
+## Example
+
+```yaml
+- name: household_key
+  strategy: group_key
+  provider_config:
+    group_by: household_id
+    prefix: "HH-"
+```

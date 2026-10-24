@@ -1,0 +1,101 @@
+---
+title: Install
+description: Install the decoy CLI, check your environment with decoy doctor, and understand the license.
+---
+
+## Requirements
+
+- Python 3.10, 3.11, or 3.12.
+- Git and a source checkout of [`decoy`](https://github.com/louiskeep/decoy)
+  and [`decoy-engine`](https://github.com/louiskeep/decoy-engine). `decoy`
+  (the CLI) depends on `decoy-engine` (the data-plane library); both install
+  together.
+
+<Callout type="info" title="decoy is not on public PyPI yet">
+  `pip install decoy-cli` is the install command you will use once Decoy
+  reaches general availability (the console script stays `decoy`; the
+  PyPI distribution is named `decoy-cli`). Today, install from source as
+  described below.
+</Callout>
+
+## Install from source
+
+This is the install path that works right now: clone both repos and install
+each in editable mode into a virtual environment.
+
+```bash
+git clone https://github.com/louiskeep/decoy-engine
+git clone https://github.com/louiskeep/decoy
+
+python -m venv .venv
+source .venv/bin/activate    # PowerShell: .venv\Scripts\Activate.ps1
+
+pip install -e ./decoy-engine
+pip install -e ./decoy
+```
+
+The console script is `decoy`, even though the PyPI distribution name will
+be `decoy-cli` at general availability (the import package and CLI stay
+short; `decoy-cli` on the index just says plainly what the package is).
+
+## Check the install
+
+Verify the CLI can see its runtime dependencies with `decoy doctor`:
+
+```bash
+decoy doctor
+```
+
+```
+Decoy environment health:
+
+ Check          Kind   Status   Note
+ ─────────────────────────────────────
+ python         info   pass     3.11.2
+ decoy-cli      info   pass     0.1.0
+ decoy_engine   hard   pass     0.4.0
+ pyarrow        soft   pass     24.0.0
+ polars         soft   pass     1.42.0
+ lark           soft   pass     1.3.1
+ stdnum         soft   pass     2.2
+
+All checks passed.
+```
+
+`doctor` exits `0` when every hard requirement is present. A missing hard
+requirement (`decoy_engine` itself) is a non-zero exit; missing soft
+requirements print a warning but do not fail the check, since each one gates
+a specific feature (Arrow/Parquet support, the Polars execution adapter,
+derived-column expressions, checksum-based ID validation) rather than the
+CLI as a whole. `decoy doctor --json` emits the same report as JSON for CI
+or support tooling; `decoy doctor --quiet` runs silently and reports health
+only through its exit code.
+
+Confirm the version directly with:
+
+```bash
+decoy --version
+```
+
+```
+decoy 0.1.0
+```
+
+## License
+
+`decoy` is source-available under the Business Source License 1.1
+(BUSL-1.1). The source is readable, and non-commercial and
+internal-business use is permitted under the license's Additional Use
+Grant; running a competing commercial service on top of it is restricted.
+Full terms, including the change-date conversion clause, are in the
+`LICENSE.md` file in your checkout.
+
+The CLI runs entirely locally: there is no server, no account, and no
+telemetry phone-home. Input and output data stay on your machine unless a
+pipeline's own `targets:` say otherwise.
+
+## Next
+
+Continue to [Quickstart](/docs/start/quickstart) to run your first masked
+file, or jump to [Demo](/docs/start/demo) for a zero-setup walkthrough on
+bundled sample data.

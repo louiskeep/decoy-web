@@ -1,0 +1,21 @@
+---
+title: redact
+description: Replace every value with a fixed placeholder.
+---
+
+Replaces every non-null value with a fixed string, `REDACTED` by default. No
+keying and no namespace. Use it when a column should disappear from view, not be
+replaced with a plausible value.
+
+## Settings
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| (placeholder) | string | `REDACTED` | The fixed replacement string |
+
+For the placeholder option name and the full parameter set, run
+`decoy strategies inspect redact`.
+
+## Example
+
+<StrategyExample id="mask.redact" />

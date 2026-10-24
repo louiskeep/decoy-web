@@ -1,0 +1,88 @@
+---
+title: Determinism
+description: The seed protocol behind reproducible masking and generation.
+---
+
+Decoy is deterministic by design: the same inputs produce the same masked or
+generated output. That's what makes a masked dataset reproducible, makes
+joins stable across tables after masking, and makes a run auditable.
+
+## The guarantee
+
+Every deterministic column routes through one primitive: derive a value from
+a `(key material, namespace, source value)` triple using a keyed hash. The
+same triple always produces the same output, across processes, across days,
+and across engine versions, as long as the underlying seed protocol version
+hasn't changed. From that primitive, the engine builds the higher-level
+mappings that pick a faker pool position, a categorical bucket, or a
+domain-typed value.
+
+## Two levels of "same output"
+
+There are two reproducibility scopes, and they answer different questions.
+
+**Same seed, same machine.** Set `global_settings.seed` in the pipeline
+YAML. With a fixed seed, the same config plus the same input produces the
+same output on repeated local runs. This is the baseline: run it twice,
+get the same file twice.
+
+**Same key, any machine.** A bare seed reproduces per input, but it is not a
+confidentiality secret and it does not by itself guarantee bitwise-identical
+output across every keyed path on a different machine. For masking that is
+also re-identification-safe and portable, configure a mask secret (see
+[keys and the vault](/docs/concepts/keys-and-vault)); for generation, use
+`--master-key` with a `--key-label`. The same key and label always produce
+bitwise-identical output, wherever the run happens.
+
+Masking and generation determinism are keyed independently. `job_seed`
+drives reproducibility for generation and for the no-secret masking
+fallback. Actual re-identification-protecting masking draws from a separate
+`mask_key`, so setting one does not change the other.
+
+## What is deterministic
+
+- Keyed masking strategies in deterministic mode: `faker`, `hash`, `fpe`,
+  `date_shift`, `categorical`, `shuffle`. The same source value and the same
+  namespace always produce the same masked value.
+- Strategies that are deterministic by construction, because they're a pure
+  function of their input and config: `bucketize`, `redact`, `text_redact`,
+  `truncate`, `formula`.
+- Foreign-key remapping: a masked join stays byte-stable across runs.
+- Generation in seeded mode: the same seed produces the same synthetic
+  table.
+
+## What is not deterministic
+
+- Non-deterministic mode is opt-in for `faker`, `categorical`, and
+  `shuffle`, which can draw from an unseeded source when you explicitly ask
+  for that. Two runs will differ; that's the point of turning it on.
+- Profiling without a seed falls back to system entropy for its sampling. On
+  a table larger than the sampling cap, that makes the profile, and
+  therefore anything compiled from it, non-deterministic. Always set a seed
+  for a reproducible profile; the CLI warns when one is missing.
+- Anything outside the keyed primitives: wall-clock timings, log ordering
+  under concurrency, and other run metadata are not part of the output
+  contract. Only the masked or generated table values are.
+
+## Namespaces scope determinism
+
+The namespace is what ties columns together or keeps them apart. Two columns
+in the same namespace map identical source values to identical outputs,
+which is how a foreign key stays joined after both sides are masked. Two
+columns in different namespaces are independent even if they happen to share
+values. A keyed strategy without a namespace is a wiring error the engine
+rejects outright, rather than silently picking one for you.
+
+## Renaming a column changes its output
+
+Some keyed strategies (notably `fpe`) fold the column name itself into their
+derivation, so that two same-namespace columns with different names produce
+independent ciphertexts instead of the same one. A side effect: renaming a
+masked column and re-running the pipeline changes that column's masked
+values. If you need to unmask against the original run, do it before the
+rename, or treat the rename as a deliberate re-keying event.
+
+See `decoy explain substrate` for how the pandas and polars execution paths
+relate to reproducibility, and
+[keys and the vault](/docs/concepts/keys-and-vault) for how the mask secret
+and the seed fit together.

@@ -1,0 +1,31 @@
+---
+title: date_shift
+description: Shift dates by a deterministic, bounded offset.
+---
+
+`date_shift` moves dates by a deterministic, bounded offset, for HIPAA-style date
+generalization. By default the offset is keyed by the date value, so the same
+source date always maps to the same shifted date under the same key, namespace, and
+settings, and two different dates can get different offsets. To keep the spacing
+inside one entity's timeline, anchor the offset to the entity with `group_by`
+(below), so every date for that entity moves by the same amount.
+
+## Settings
+
+Set under `provider_config` on a mask column.
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `min_days` | integer | `-365` | Earliest shift, in days |
+| `max_days` | integer | `365` | Latest shift, in days |
+| `namespace` | string | per-table default | Binds the offset; the same namespace gives the same date the same shift |
+| `deterministic` | boolean | `false` | Column-level flag; `date_shift` is keyed, so repeat runs match regardless |
+| `group_by` | string | unset | Anchor the offset per entity: every row sharing this column's value shifts by the same amount, so intervals within the entity are preserved |
+
+## Examples
+
+<StrategyExample id="mask.date_shift" />
+
+The example above has no `group_by`, so each distinct date gets its own offset. To
+shift a whole entity's timeline by the same amount (so a patient's dates keep their
+intervals), set `group_by` to the entity key under `provider_config`.

@@ -1,0 +1,43 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+next.user-config.*
+
+# Environment variables
+.env*.local
+
+# Common ignores
+node_modules
+.next/
+.DS_Store
+package-lock.json
+
+# Dev log files written when pnpm dev runs unattached
+next-dev.err.log
+next-dev.out.log
+codex-next-dev.err.log
+codex-next-dev.out.log
+codex-next-dev-*.err.log
+codex-next-dev-*.out.log
+next-env.d.ts
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+
+# fumadocs-mdx codegen (rebuilt from content/docs + source.config.ts on dev/build)
+.source
+
+# Generated CLI reference pages (rebuilt from content/docs/cli/_source/cli-reference.md
+# by scripts/build-cli-mdx.mjs on prebuild/predev). The hand-written intro partial is
+# the one .mdx file in this folder that stays committed.
+content/docs/reference/cli/*.mdx
+!content/docs/reference/cli/_index-intro.mdx
+.gstack/
+out/
+
+# Generated docs index (rebuilt from frontmatter on prebuild/predev)
+public/llms.txt

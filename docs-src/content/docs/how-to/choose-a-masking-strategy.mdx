@@ -1,0 +1,39 @@
+---
+title: Choose a masking strategy
+description: Pick the right strategy for each column.
+---
+
+Start from what the column is and what you need to keep. [Scan for
+PII](/docs/how-to/scan-for-pii) first to see what is sensitive, then pick a
+strategy per field. For a regulated dataset, a [disguise](/docs/concepts/disguises)
+gives you a reviewed starting point you can adjust.
+
+## By what you need
+
+| You need | Use | Page |
+| --- | --- | --- |
+| Keep it joinable, not readable | `hash` | [hash](/docs/reference/strategies/hash) |
+| Keep the exact format (cards, SSNs) | `fpe` | [fpe](/docs/reference/strategies/fpe) |
+| A realistic replacement | `faker` | [faker](/docs/reference/strategies/faker) |
+| Remove it entirely | `redact` | [redact](/docs/reference/strategies/redact) |
+| Leave an already-safe column | `passthrough` | [passthrough](/docs/reference/strategies/passthrough) |
+| Generalize a number or age | `bucketize`, `top_code` | [bucketize](/docs/reference/strategies/bucketize) |
+| Generalize a location | `geo_generalize` | [geo_generalize](/docs/reference/strategies/geo-generalize) |
+| Shift dates, keep spacing | `date_shift` | [date_shift](/docs/reference/strategies/date-shift) |
+| Remap to a set of categories | `categorical` | [categorical](/docs/reference/strategies/categorical) |
+| Break the link to the rest of the row | `shuffle` | [shuffle](/docs/reference/strategies/shuffle) |
+| PII inside free text | `text_redact`, `text_mask` | [text_redact](/docs/reference/strategies/text-redact) |
+| A valid code from a standard set | `code_set` | [code_set](/docs/reference/strategies/code-set) |
+| The same value for everyone in a group | `group_key` | [group_key](/docs/reference/strategies/group-key) |
+| Correlated columns kept consistent | `joint_mask` | [joint_mask](/docs/reference/strategies/joint-mask) |
+
+## Keyed vs one-way
+
+A **keyed** strategy (`hash`, `fpe`, `date_shift`, and others) maps the same input
+to the same output within a `namespace`, so joins survive and the column stays
+consistent across tables. A **one-way** strategy (`redact`, `faker` without a
+vault) cannot be reversed. If you need to reverse later, see
+[Unmask data](/docs/how-to/unmask-data).
+
+For the full catalog grouped by kind, see the [strategy
+reference](/docs/reference/strategies).
