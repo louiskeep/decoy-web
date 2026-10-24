@@ -26,7 +26,7 @@ Eleventy rebuild if a reference is ever needed.
     npm install
     npm run dev        # serves the marketing site on http://localhost:8099 with live reload
     npm run build:all  # marketing site + the docs export, combined into dist/
-    npm run check      # build:all, then snippet, link/anchor, and banned-claim checks
+    npm run check      # snippet check, then build:all, then link/anchor and banned-claim checks
 
 ## Deploy
 
