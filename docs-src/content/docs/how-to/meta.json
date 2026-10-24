@@ -10,7 +10,6 @@
     "---Build safer test datasets---",
     "subset-a-dataset",
     "generate-synthetic-data",
-    "use-differential-privacy",
     "---Handle specialized data---",
     "redact-text-with-ner",
     "work-with-healthcare-code-sets",

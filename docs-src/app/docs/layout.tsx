@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       }}
       githubUrl="https://github.com/louiskeep/decoy"
       links={[
-        { text: 'Features', url: `${SITE}/features`, external: true },
+        { text: 'Features', url: `${SITE}/cli/`, external: true },
         { text: 'Pricing', url: `${SITE}/pricing`, external: true },
         { text: 'Security', url: `${SITE}/security`, external: true },
       ]}

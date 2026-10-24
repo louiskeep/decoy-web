@@ -23,7 +23,6 @@
 - [Mask a folder with foreign keys](https://trydecoy.com/docs/how-to/mask-a-folder-with-foreign-keys): Mask two related tables in one run so the join between them survives.
 - [Subset a dataset](https://trydecoy.com/docs/how-to/subset-a-dataset): Pull a small, referentially intact slice of related tables.
 - [Generate synthetic data](https://trydecoy.com/docs/how-to/generate-synthetic-data): Build a synthetic table from a column spec, then fit a real table's shape and sample from it instead.
-- [Use differential privacy](https://trydecoy.com/docs/how-to/use-differential-privacy): Step-by-step recipe for generating differentially private synthetic data with epsilon/delta budgets.
 - [Redact text with NER detection](https://trydecoy.com/docs/how-to/redact-text-with-ner): Activate named-entity recognition to detect and redact person names and locations in free text.
 - [Work with healthcare code sets](https://trydecoy.com/docs/how-to/work-with-healthcare-code-sets): Use ICD-10, HCPCS, NDC, and custom code set columns for masking and generation.
 - [Handle high-cardinality categorical data](https://trydecoy.com/docs/how-to/handle-high-cardinality-categories): Generate and preserve columns with thousands of distinct categories like diagnosis codes or SKUs.
