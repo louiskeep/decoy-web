@@ -1,4 +1,4 @@
-/* Base, layout, and components for decoystorm.dev. Tokens live in tokens.css. */
+/* Base, layout, and components for trydecoy.com. Tokens live in tokens.css. */
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 88px; }

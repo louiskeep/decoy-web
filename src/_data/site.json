@@ -1,15 +1,15 @@
 {
   "name": "Decoy",
-  "url": "https://decoystorm.dev",
+  "url": "https://trydecoy.com",
   "tagline": "Self-hosted data masking and synthetic data generation",
   "description": "Decoy turns production data into safe, realistic, join-preserving data for development, testing, CI, and analytics. A CLI you run anywhere and a self-hosted platform your team shares.",
   "prelaunch": true,
   "themeColor": "#07100f",
   "github": "https://github.com/louiskeep/decoy",
   "contacts": {
-    "support": "support@decoystorm.dev",
-    "security": "security@decoystorm.dev",
-    "sales": "support@decoystorm.dev"
+    "support": "support@trydecoy.com",
+    "security": "security@trydecoy.com",
+    "sales": "support@trydecoy.com"
   },
   "products": {
     "cli": "Decoy CLI",
@@ -64,8 +64,8 @@
       "title": "Contact",
       "links": [
         { "label": "GitHub", "href": "https://github.com/louiskeep/decoy", "external": true },
-        { "label": "Support", "href": "mailto:support@decoystorm.dev" },
-        { "label": "Security reports", "href": "mailto:security@decoystorm.dev" }
+        { "label": "Support", "href": "mailto:support@trydecoy.com" },
+        { "label": "Security reports", "href": "mailto:security@trydecoy.com" }
       ]
     }
   ]

@@ -1,7 +1,7 @@
 # Decoy website
 
 Marketing site for Decoy (self-hosted data masking and synthetic data generation), served at
-https://decoystorm.dev. Built with Eleventy from `src/`; the output in `dist/` is plain HTML, CSS,
+https://trydecoy.com. Built with Eleventy from `src/`; the output in `dist/` is plain HTML, CSS,
 and JS with no client-side framework.
 
 ## Pages

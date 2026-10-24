@@ -3,110 +3,110 @@
 > Decoy turns production data into safe, realistic, join-preserving data for development, testing, CI, and analytics. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines. One engine, two ways to run it: a free, source-available CLI you run anywhere, and a self-hosted Platform your team shares. Nothing is sent to Decoy.
 
 ## Site
-- [Home](https://decoystorm.dev/): what Decoy is and where it fits in a pipeline.
-- [CLI](https://decoystorm.dev/cli/): 23 masking strategies, 12 generation types, 34 providers, FK-aware subsetting, STORM detection, CI exit codes, measured performance, install.
-- [Platform](https://decoystorm.dev/platform/): Job Studio builder, API and webhook triggers, hash-chained audit log, four roles with OIDC SSO, connectors, Docker Compose self-hosting.
-- [How it works](https://decoystorm.dev/how-it-works/): scan, subset, mask or generate, validate, evidence; what happens inside a run; performance with conditions.
-- [Pricing](https://decoystorm.dev/pricing/): CLI free; Platform $499 per month per self-hosted instance, billed annually; Enterprise custom.
-- [Security](https://decoystorm.dev/security/): data boundary, outbound connections, keys and encryption, audit, compliance mapping, responsible disclosure.
+- [Home](https://trydecoy.com/): what Decoy is and where it fits in a pipeline.
+- [CLI](https://trydecoy.com/cli/): 23 masking strategies, 12 generation types, 34 providers, FK-aware subsetting, STORM detection, CI exit codes, measured performance, install.
+- [Platform](https://trydecoy.com/platform/): Job Studio builder, API and webhook triggers, hash-chained audit log, four roles with OIDC SSO, connectors, Docker Compose self-hosting.
+- [How it works](https://trydecoy.com/how-it-works/): scan, subset, mask or generate, validate, evidence; what happens inside a run; performance with conditions.
+- [Pricing](https://trydecoy.com/pricing/): CLI free; Platform $499 per month per self-hosted instance, billed annually; Enterprise custom.
+- [Security](https://trydecoy.com/security/): data boundary, outbound connections, keys and encryption, audit, compliance mapping, responsible disclosure.
 
 ## Get started
-- [Install](https://decoystorm.dev/docs/start/install): Install the decoy CLI, check your environment with decoy doctor, and understand the license.
-- [Quickstart](https://decoystorm.dev/docs/start/quickstart): From a CSV to a masked CSV with the decoy CLI, using a scaffolded pipeline, config validation, and a run.
-- [Demo](https://decoystorm.dev/docs/start/demo): Run the bundled decoy demo to see a scan-then-mask walkthrough on sample data, no config or input file required.
+- [Install](https://trydecoy.com/docs/start/install): Install the decoy CLI, check your environment with decoy doctor, and understand the license.
+- [Quickstart](https://trydecoy.com/docs/start/quickstart): From a CSV to a masked CSV with the decoy CLI, using a scaffolded pipeline, config validation, and a run.
+- [Demo](https://trydecoy.com/docs/start/demo): Run the bundled decoy demo to see a scan-then-mask walkthrough on sample data, no config or input file required.
 
 ## Guides
-- [Scan for PII](https://decoystorm.dev/docs/how-to/scan-for-pii): Profile a dataset with STORM, review what it found, and turn the findings into an explicit masking pipeline.
-- [Choose a masking strategy](https://decoystorm.dev/docs/how-to/choose-a-masking-strategy): Pick the right strategy for each column.
-- [Mask a CSV](https://decoystorm.dev/docs/how-to/mask-a-csv): Mask one CSV file with a mix of value-keyed and one-way strategies, and prove the keyed strategy is deterministic.
-- [Use Parquet files](https://decoystorm.dev/docs/how-to/use-parquet): Read and write Parquet instead of CSV.
-- [Mask a folder with foreign keys](https://decoystorm.dev/docs/how-to/mask-a-folder-with-foreign-keys): Mask two related tables in one run so the join between them survives.
-- [Subset a dataset](https://decoystorm.dev/docs/how-to/subset-a-dataset): Pull a small, referentially intact slice of related tables.
-- [Generate synthetic data](https://decoystorm.dev/docs/how-to/generate-synthetic-data): Build a synthetic table from a column spec, then fit a real table's shape and sample from it instead.
-- [Use differential privacy](https://decoystorm.dev/docs/how-to/use-differential-privacy): Step-by-step recipe for generating differentially private synthetic data with epsilon/delta budgets.
-- [Redact text with NER detection](https://decoystorm.dev/docs/how-to/redact-text-with-ner): Activate named-entity recognition to detect and redact person names and locations in free text.
-- [Work with healthcare code sets](https://decoystorm.dev/docs/how-to/work-with-healthcare-code-sets): Use ICD-10, HCPCS, NDC, and custom code set columns for masking and generation.
-- [Handle high-cardinality categorical data](https://decoystorm.dev/docs/how-to/handle-high-cardinality-categories): Generate and preserve columns with thousands of distinct categories like diagnosis codes or SKUs.
-- [Use Decoy in CI](https://decoystorm.dev/docs/how-to/use-decoy-in-ci): Run decoy non-interactively, gate a build on its exit code, and keep the evidence artifact.
-- [Unmask data](https://decoystorm.dev/docs/how-to/unmask-data): Recover original values from a masked file.
+- [Scan for PII](https://trydecoy.com/docs/how-to/scan-for-pii): Profile a dataset with STORM, review what it found, and turn the findings into an explicit masking pipeline.
+- [Choose a masking strategy](https://trydecoy.com/docs/how-to/choose-a-masking-strategy): Pick the right strategy for each column.
+- [Mask a CSV](https://trydecoy.com/docs/how-to/mask-a-csv): Mask one CSV file with a mix of value-keyed and one-way strategies, and prove the keyed strategy is deterministic.
+- [Use Parquet files](https://trydecoy.com/docs/how-to/use-parquet): Read and write Parquet instead of CSV.
+- [Mask a folder with foreign keys](https://trydecoy.com/docs/how-to/mask-a-folder-with-foreign-keys): Mask two related tables in one run so the join between them survives.
+- [Subset a dataset](https://trydecoy.com/docs/how-to/subset-a-dataset): Pull a small, referentially intact slice of related tables.
+- [Generate synthetic data](https://trydecoy.com/docs/how-to/generate-synthetic-data): Build a synthetic table from a column spec, then fit a real table's shape and sample from it instead.
+- [Use differential privacy](https://trydecoy.com/docs/how-to/use-differential-privacy): Step-by-step recipe for generating differentially private synthetic data with epsilon/delta budgets.
+- [Redact text with NER detection](https://trydecoy.com/docs/how-to/redact-text-with-ner): Activate named-entity recognition to detect and redact person names and locations in free text.
+- [Work with healthcare code sets](https://trydecoy.com/docs/how-to/work-with-healthcare-code-sets): Use ICD-10, HCPCS, NDC, and custom code set columns for masking and generation.
+- [Handle high-cardinality categorical data](https://trydecoy.com/docs/how-to/handle-high-cardinality-categories): Generate and preserve columns with thousands of distinct categories like diagnosis codes or SKUs.
+- [Use Decoy in CI](https://trydecoy.com/docs/how-to/use-decoy-in-ci): Run decoy non-interactively, gate a build on its exit code, and keep the evidence artifact.
+- [Unmask data](https://trydecoy.com/docs/how-to/unmask-data): Recover original values from a masked file.
 
 ## Concepts
-- [Determinism](https://decoystorm.dev/docs/concepts/determinism): The seed protocol behind reproducible masking and generation.
-- [Keys and the vault](https://decoystorm.dev/docs/concepts/keys-and-vault): How Decoy sources the secret behind masking, and how the token vault makes a one-way mask reversible.
-- [STORM](https://decoystorm.dev/docs/concepts/storm): What STORM does, and why it suggests rather than decides.
-- [Disguises](https://decoystorm.dev/docs/concepts/disguises): What a Disguise is, and what it is not.
-- [Differential privacy in Decoy](https://decoystorm.dev/docs/concepts/differential-privacy): Marginal differential privacy on generated synthetic data using typed carriers and configurable epsilon/delta budgets.
+- [Determinism](https://trydecoy.com/docs/concepts/determinism): The seed protocol behind reproducible masking and generation.
+- [Keys and the vault](https://trydecoy.com/docs/concepts/keys-and-vault): How Decoy sources the secret behind masking, and how the token vault makes a one-way mask reversible.
+- [STORM](https://trydecoy.com/docs/concepts/storm): What STORM does, and why it suggests rather than decides.
+- [Disguises](https://trydecoy.com/docs/concepts/disguises): What a Disguise is, and what it is not.
+- [Differential privacy in Decoy](https://trydecoy.com/docs/concepts/differential-privacy): Marginal differential privacy on generated synthetic data using typed carriers and configurable epsilon/delta budgets.
 
 ## Reference
-- [Feature support and limits](https://decoystorm.dev/docs/reference/capabilities): What Decoy supports today, with links to the detailed reference.
+- [Feature support and limits](https://trydecoy.com/docs/reference/capabilities): What Decoy supports today, with links to the detailed reference.
 
 ## Configuration
-- [Configuration](https://decoystorm.dev/docs/reference/configuration): The shape of a Decoy pipeline YAML, top to bottom.
-- [Global settings](https://decoystorm.dev/docs/reference/configuration/global-settings): Run-wide settings under global_settings.
-- [Configuration schema](https://decoystorm.dev/docs/reference/configuration/schema): The complete field-by-field pipeline schema, for editor validation.
+- [Configuration](https://trydecoy.com/docs/reference/configuration): The shape of a Decoy pipeline YAML, top to bottom.
+- [Global settings](https://trydecoy.com/docs/reference/configuration/global-settings): Run-wide settings under global_settings.
+- [Configuration schema](https://trydecoy.com/docs/reference/configuration/schema): The complete field-by-field pipeline schema, for editor validation.
 
 ## Strategies
-- [Masking strategies](https://decoystorm.dev/docs/reference/strategies): The 23 mask strategies, grouped by what they do.
-- [faker](https://decoystorm.dev/docs/reference/strategies/faker): Replace with a realistic value from a named provider.
-- [hash](https://decoystorm.dev/docs/reference/strategies/hash): Replace a value with a keyed, deterministic digest.
-- [redact](https://decoystorm.dev/docs/reference/strategies/redact): Replace every value with a fixed placeholder.
-- [fpe](https://decoystorm.dev/docs/reference/strategies/fpe): Encrypt in place while preserving the format.
-- [passthrough](https://decoystorm.dev/docs/reference/strategies/passthrough): Leave the value unchanged.
-- [categorical](https://decoystorm.dev/docs/reference/strategies/categorical): Remap values onto a fixed set of categories.
-- [shuffle](https://decoystorm.dev/docs/reference/strategies/shuffle): Shuffle a column to break row identity.
-- [truncate](https://decoystorm.dev/docs/reference/strategies/truncate): Keep the first or last N characters.
-- [bucketize](https://decoystorm.dev/docs/reference/strategies/bucketize): Round numbers into fixed-width bins.
-- [top_code](https://decoystorm.dev/docs/reference/strategies/top-code): Collapse the rare tail of a numeric column into a label.
-- [date_shift](https://decoystorm.dev/docs/reference/strategies/date-shift): Shift dates by a deterministic, bounded offset.
-- [bucket_perturb](https://decoystorm.dev/docs/reference/strategies/bucket-perturb): Snap a date to a deterministic position in its week, month, or quarter.
-- [windowed_date](https://decoystorm.dev/docs/reference/strategies/windowed-date): Move a date to a random point in a window.
-- [geo_generalize](https://decoystorm.dev/docs/reference/strategies/geo-generalize): Generalize a location through a cascade of coarser levels.
-- [text_redact](https://decoystorm.dev/docs/reference/strategies/text-redact): Find PII in free text and redact it.
-- [text_mask](https://decoystorm.dev/docs/reference/strategies/text-mask): Find PII in free text and replace it.
-- [code_set](https://decoystorm.dev/docs/reference/strategies/code-set): Replace a code with another valid code from the same set.
-- [derived](https://decoystorm.dev/docs/reference/strategies/derived): Compute a value from an expression over the row.
-- [formula](https://decoystorm.dev/docs/reference/strategies/formula): Compute a value from an expression over the cell.
-- [derived_aggregate](https://decoystorm.dev/docs/reference/strategies/derived-aggregate): Replace a value with an aggregate across rows.
-- [group_key](https://decoystorm.dev/docs/reference/strategies/group-key): Give every row in a group the same deterministic key.
-- [grouped_series](https://decoystorm.dev/docs/reference/strategies/grouped-series): Generate a per-group sequence.
-- [joint_mask](https://decoystorm.dev/docs/reference/strategies/joint-mask): Mask correlated columns together from a reference table.
-- [Synthetic data providers](https://decoystorm.dev/docs/reference/providers): The named value sources for the faker strategy and generation type.
-- [Foreign keys and relationships](https://decoystorm.dev/docs/reference/relationships): Keep foreign keys joinable after masking, across every FK shape.
+- [Masking strategies](https://trydecoy.com/docs/reference/strategies): The 23 mask strategies, grouped by what they do.
+- [faker](https://trydecoy.com/docs/reference/strategies/faker): Replace with a realistic value from a named provider.
+- [hash](https://trydecoy.com/docs/reference/strategies/hash): Replace a value with a keyed, deterministic digest.
+- [redact](https://trydecoy.com/docs/reference/strategies/redact): Replace every value with a fixed placeholder.
+- [fpe](https://trydecoy.com/docs/reference/strategies/fpe): Encrypt in place while preserving the format.
+- [passthrough](https://trydecoy.com/docs/reference/strategies/passthrough): Leave the value unchanged.
+- [categorical](https://trydecoy.com/docs/reference/strategies/categorical): Remap values onto a fixed set of categories.
+- [shuffle](https://trydecoy.com/docs/reference/strategies/shuffle): Shuffle a column to break row identity.
+- [truncate](https://trydecoy.com/docs/reference/strategies/truncate): Keep the first or last N characters.
+- [bucketize](https://trydecoy.com/docs/reference/strategies/bucketize): Round numbers into fixed-width bins.
+- [top_code](https://trydecoy.com/docs/reference/strategies/top-code): Collapse the rare tail of a numeric column into a label.
+- [date_shift](https://trydecoy.com/docs/reference/strategies/date-shift): Shift dates by a deterministic, bounded offset.
+- [bucket_perturb](https://trydecoy.com/docs/reference/strategies/bucket-perturb): Snap a date to a deterministic position in its week, month, or quarter.
+- [windowed_date](https://trydecoy.com/docs/reference/strategies/windowed-date): Move a date to a random point in a window.
+- [geo_generalize](https://trydecoy.com/docs/reference/strategies/geo-generalize): Generalize a location through a cascade of coarser levels.
+- [text_redact](https://trydecoy.com/docs/reference/strategies/text-redact): Find PII in free text and redact it.
+- [text_mask](https://trydecoy.com/docs/reference/strategies/text-mask): Find PII in free text and replace it.
+- [code_set](https://trydecoy.com/docs/reference/strategies/code-set): Replace a code with another valid code from the same set.
+- [derived](https://trydecoy.com/docs/reference/strategies/derived): Compute a value from an expression over the row.
+- [formula](https://trydecoy.com/docs/reference/strategies/formula): Compute a value from an expression over the cell.
+- [derived_aggregate](https://trydecoy.com/docs/reference/strategies/derived-aggregate): Replace a value with an aggregate across rows.
+- [group_key](https://trydecoy.com/docs/reference/strategies/group-key): Give every row in a group the same deterministic key.
+- [grouped_series](https://trydecoy.com/docs/reference/strategies/grouped-series): Generate a per-group sequence.
+- [joint_mask](https://trydecoy.com/docs/reference/strategies/joint-mask): Mask correlated columns together from a reference table.
+- [Synthetic data providers](https://trydecoy.com/docs/reference/providers): The named value sources for the faker strategy and generation type.
+- [Foreign keys and relationships](https://trydecoy.com/docs/reference/relationships): Keep foreign keys joinable after masking, across every FK shape.
 
 ## Connectors
-- [Connectors and formats](https://decoystorm.dev/docs/reference/connectors): The file, S3, and GCS backends a Decoy pipeline can name as a source or target.
-- [S3](https://decoystorm.dev/docs/reference/connectors/s3): Pipeline YAML shape and credentials for an S3 (or S3-compatible) source or target.
-- [GCS](https://decoystorm.dev/docs/reference/connectors/gcs): Pipeline YAML shape and credentials for a Google Cloud Storage source or target.
-- [SFTP](https://decoystorm.dev/docs/reference/connectors/sftp): Current status of the SFTP connector, what exists, and what a pipeline cannot do with it yet.
+- [Connectors and formats](https://trydecoy.com/docs/reference/connectors): The file, S3, and GCS backends a Decoy pipeline can name as a source or target.
+- [S3](https://trydecoy.com/docs/reference/connectors/s3): Pipeline YAML shape and credentials for an S3 (or S3-compatible) source or target.
+- [GCS](https://trydecoy.com/docs/reference/connectors/gcs): Pipeline YAML shape and credentials for a Google Cloud Storage source or target.
+- [SFTP](https://trydecoy.com/docs/reference/connectors/sftp): Current status of the SFTP connector, what exists, and what a pipeline cannot do with it yet.
 
 ## CLI reference
-- [CLI reference](https://decoystorm.dev/docs/reference/cli): Generated, per-command reference for the decoy CLI, kept in sync with the CLI itself.
-- [decoy catalog](https://decoystorm.dev/docs/reference/cli/catalog): LOCAL metadata catalog for datasets, runs, and evidence.
-- [decoy checksums](https://decoystorm.dev/docs/reference/cli/checksums): List the engine's registered checksum schemes.
-- [decoy compile](https://decoystorm.dev/docs/reference/cli/compile): Compile a pipeline config and run plan-compile checks.
-- [decoy demo](https://decoystorm.dev/docs/reference/cli/demo): Walk through scan -> mask on a bundled sample dataset.
-- [decoy doctor](https://decoystorm.dev/docs/reference/cli/doctor): Check engine and dependency health.
-- [decoy evidence](https://decoystorm.dev/docs/reference/cli/evidence): Show and verify local run evidence manifests.
-- [decoy explain](https://decoystorm.dev/docs/reference/cli/explain): Explain a Decoy concept in plain English.
-- [decoy fit](https://decoystorm.dev/docs/reference/cli/fit): Fit a distribution-snapshot/v1 artifact for statistical generation.
-- [decoy info](https://decoystorm.dev/docs/reference/cli/info): Print the Decoy CLI banner with quick-start hints.
-- [decoy init](https://decoystorm.dev/docs/reference/cli/init): Scaffold a starter pipeline YAML through a short Q&A.
-- [decoy jobs](https://decoystorm.dev/docs/reference/cli/jobs): LOCAL run history from the DuckDB catalog.
-- [decoy plan](https://decoystorm.dev/docs/reference/cli/plan): Compile a pipeline config into a versioned plan artifact.
-- [decoy preflight](https://decoystorm.dev/docs/reference/cli/preflight): Local pre-run readiness checks for a pipeline config.
-- [decoy profile](https://decoystorm.dev/docs/reference/cli/profile): Profile a source dataset: shape, field stats, PII candidates (as suggestions).
-- [decoy project](https://decoystorm.dev/docs/reference/cli/project): Manage a local .decoy/ workspace.
-- [decoy providers](https://decoystorm.dev/docs/reference/cli/providers): Enumerate and inspect the engine's registered generation providers.
-- [decoy report](https://decoystorm.dev/docs/reference/cli/report): Render, summarize, and compare local evidence manifests.
-- [decoy run](https://decoystorm.dev/docs/reference/cli/run): Run a decoy pipeline from a YAML config.
-- [decoy schema](https://decoystorm.dev/docs/reference/cli/schema): Print the PipelineConfig JSON Schema to stdout.
-- [decoy storm](https://decoystorm.dev/docs/reference/cli/storm): Dataset analysis -- the STORM event.
-- [decoy strategies](https://decoystorm.dev/docs/reference/cli/strategies): Enumerate and inspect the engine's registered mask strategies.
-- [decoy subset](https://decoystorm.dev/docs/reference/cli/subset): Cut a referentially-complete FK-aware subset of a relational dataset.
-- [decoy templates](https://decoystorm.dev/docs/reference/cli/templates): Browse and dump bundled starter pipeline templates.
-- [decoy unmask](https://decoystorm.dev/docs/reference/cli/unmask): Recover fpe-masked columns from a masked file using the pipeline config.
-- [decoy validate](https://decoystorm.dev/docs/reference/cli/validate): Validate a pipeline config (`config`) or check distribution fidelity between a source and an output (`distribution`).
-- [decoy validators](https://decoystorm.dev/docs/reference/cli/validators): List the engine's registered job-level validators.
-- [decoy vault](https://decoystorm.dev/docs/reference/cli/vault): Vault inspection utilities.
-- [Exit codes](https://decoystorm.dev/docs/reference/exit-codes): Why the exit-code contract is a design commitment, not an afterthought.
-- [Security, privacy, and compliance limits](https://decoystorm.dev/docs/reference/limits): The honest boundary around what Decoy guarantees, so you don't rely on a promise it doesn't make.
+- [CLI reference](https://trydecoy.com/docs/reference/cli): Generated, per-command reference for the decoy CLI, kept in sync with the CLI itself.
+- [decoy catalog](https://trydecoy.com/docs/reference/cli/catalog): LOCAL metadata catalog for datasets, runs, and evidence.
+- [decoy checksums](https://trydecoy.com/docs/reference/cli/checksums): List the engine's registered checksum schemes.
+- [decoy compile](https://trydecoy.com/docs/reference/cli/compile): Compile a pipeline config and run plan-compile checks.
+- [decoy demo](https://trydecoy.com/docs/reference/cli/demo): Walk through scan -> mask on a bundled sample dataset.
+- [decoy doctor](https://trydecoy.com/docs/reference/cli/doctor): Check engine and dependency health.
+- [decoy evidence](https://trydecoy.com/docs/reference/cli/evidence): Show and verify local run evidence manifests.
+- [decoy explain](https://trydecoy.com/docs/reference/cli/explain): Explain a Decoy concept in plain English.
+- [decoy fit](https://trydecoy.com/docs/reference/cli/fit): Fit a distribution-snapshot/v1 artifact for statistical generation.
+- [decoy info](https://trydecoy.com/docs/reference/cli/info): Print the Decoy CLI banner with quick-start hints.
+- [decoy init](https://trydecoy.com/docs/reference/cli/init): Scaffold a starter pipeline YAML through a short Q&A.
+- [decoy jobs](https://trydecoy.com/docs/reference/cli/jobs): LOCAL run history from the DuckDB catalog.
+- [decoy plan](https://trydecoy.com/docs/reference/cli/plan): Compile a pipeline config into a versioned plan artifact.
+- [decoy preflight](https://trydecoy.com/docs/reference/cli/preflight): Local pre-run readiness checks for a pipeline config.
+- [decoy profile](https://trydecoy.com/docs/reference/cli/profile): Profile a source dataset: shape, field stats, PII candidates (as suggestions).
+- [decoy project](https://trydecoy.com/docs/reference/cli/project): Manage a local .decoy/ workspace.
+- [decoy providers](https://trydecoy.com/docs/reference/cli/providers): Enumerate and inspect the engine's registered generation providers.
+- [decoy report](https://trydecoy.com/docs/reference/cli/report): Render, summarize, and compare local evidence manifests.
+- [decoy run](https://trydecoy.com/docs/reference/cli/run): Run a decoy pipeline from a YAML config.
+- [decoy schema](https://trydecoy.com/docs/reference/cli/schema): Print the PipelineConfig JSON Schema to stdout.
+- [decoy storm](https://trydecoy.com/docs/reference/cli/storm): Dataset analysis -- the STORM event.
+- [decoy strategies](https://trydecoy.com/docs/reference/cli/strategies): Enumerate and inspect the engine's registered mask strategies.
+- [decoy subset](https://trydecoy.com/docs/reference/cli/subset): Cut a referentially-complete FK-aware subset of a relational dataset.
+- [decoy templates](https://trydecoy.com/docs/reference/cli/templates): Browse and dump bundled starter pipeline templates.
+- [decoy unmask](https://trydecoy.com/docs/reference/cli/unmask): Recover fpe-masked columns from a masked file using the pipeline config.
+- [decoy validate](https://trydecoy.com/docs/reference/cli/validate): Validate a pipeline config (`config`) or check distribution fidelity between a source and an output (`distribution`).
+- [decoy validators](https://trydecoy.com/docs/reference/cli/validators): List the engine's registered job-level validators.
+- [decoy vault](https://trydecoy.com/docs/reference/cli/vault): Vault inspection utilities.
+- [Exit codes](https://trydecoy.com/docs/reference/exit-codes): Why the exit-code contract is a design commitment, not an afterthought.
+- [Security, privacy, and compliance limits](https://trydecoy.com/docs/reference/limits): The honest boundary around what Decoy guarantees, so you don't rely on a promise it doesn't make.
