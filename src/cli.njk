@@ -40,8 +40,73 @@ motion: true
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">Masking</p>
-      <h2>23 strategies, each labelled by what it promises</h2>
-      <p>Every strategy is tagged as anonymisation, pseudonymisation, synthetic replacement, or passthrough. Keyed strategies are deterministic: the same secret and the same input always produce the same output.</p>
+      <h2>Mask related tables and keep the joins</h2>
+      <p>Keyed strategies are deterministic: the same secret and the same value always produce the same output. Declare a shared <code>namespace</code> on the keys that link two tables, and the foreign key masks to the same value on both sides, so the join still works. Amber is the real value; teal is the masked output.</p>
+    </div>
+
+    <div class="mask-scenario" data-reveal>
+      <h3>Healthcare: patients and their encounters</h3>
+      <p class="muted">Identifiers are removed or generalised, dates are shifted, diagnosis codes are swapped for other valid ICD-10 codes, and the patient key is hashed the same way on both tables.</p>
+      <div class="mask-pair">
+        <div class="table-scroll"><table class="mask-table">
+          <caption>patients &middot; source, then masked</caption>
+          <thead><tr><th class="fk">patient_id</th><th>name</th><th>ssn</th><th>dob</th><th>zip</th></tr></thead>
+          <tbody>
+            <tr><td class="key fk">1001</td><td class="raw">Maria Gomez</td><td class="raw">521-44-9087</td><td class="raw">1984-03-12</td><td class="raw">02139</td></tr>
+            <tr><td class="key fk">1002</td><td class="raw">David Chen</td><td class="raw">308-19-2210</td><td class="raw">1991-08-05</td><td class="raw">60614</td></tr>
+            <tr class="mask-divider"><td colspan="5">patient_id: hash (keyed) &middot; name: faker &middot; ssn: redact &middot; dob: date_shift &middot; zip: geo_generalize</td></tr>
+            <tr><td class="safe fk">p_8f3a</td><td class="safe">Olivia Carter</td><td class="safe">&bull;&bull;&bull;-&bull;&bull;-&bull;&bull;&bull;&bull;</td><td class="safe">1984-07-02</td><td class="safe">021&bull;&bull;</td></tr>
+            <tr><td class="safe fk">p_2c71</td><td class="safe">Liam Novak</td><td class="safe">&bull;&bull;&bull;-&bull;&bull;-&bull;&bull;&bull;&bull;</td><td class="safe">1991-05-20</td><td class="safe">606&bull;&bull;</td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-scroll"><table class="mask-table">
+          <caption>encounters &middot; source, then masked</caption>
+          <thead><tr><th>encounter_id</th><th class="fk">patient_id</th><th>diagnosis</th><th>admit_date</th></tr></thead>
+          <tbody>
+            <tr><td class="key">55012</td><td class="key fk">1001</td><td class="raw">E11.9</td><td class="raw">2024-02-20</td></tr>
+            <tr><td class="key">55013</td><td class="key fk">1002</td><td class="raw">I10</td><td class="raw">2024-03-04</td></tr>
+            <tr class="mask-divider"><td colspan="4">encounter_id: passthrough &middot; patient_id: hash (same namespace) &middot; diagnosis: code_set &middot; admit_date: date_shift</td></tr>
+            <tr><td class="key">55012</td><td class="safe fk">p_8f3a</td><td class="safe">E11.8</td><td class="safe">2024-06-11</td></tr>
+            <tr><td class="key">55013</td><td class="safe fk">p_2c71</td><td class="safe">I15</td><td class="safe">2024-06-23</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <p class="join-note">{% icon "link" %}<span><strong>The join survives.</strong> <code>patient_id</code> 1001 becomes <code>p_8f3a</code> on both tables, so every encounter still points to the right (now anonymous) patient. Diagnosis codes stay valid ICD-10, and the shifted dates keep each stay's duration.</span></p>
+    </div>
+
+    <div class="mask-scenario" data-reveal>
+      <h3>Banking: accounts and their transactions</h3>
+      <p class="muted">A different trade-off: the IBAN keeps a valid format through format-preserving encryption, transaction amounts pass through untouched so analytics still add up, and the account key links the two tables.</p>
+      <div class="mask-pair">
+        <div class="table-scroll"><table class="mask-table">
+          <caption>accounts &middot; source, then masked</caption>
+          <thead><tr><th class="fk">account_id</th><th>holder</th><th>iban</th><th>opened</th></tr></thead>
+          <tbody>
+            <tr><td class="key fk">90012</td><td class="raw">James Lee</td><td class="raw">GB29 NWBK 6016 1331 9268 19</td><td class="raw">2019-06-01</td></tr>
+            <tr><td class="key fk">90013</td><td class="raw">Priya Shah</td><td class="raw">GB94 BARC 2010 1530 0934 59</td><td class="raw">2021-01-14</td></tr>
+            <tr class="mask-divider"><td colspan="4">account_id: hash (keyed) &middot; holder: faker &middot; iban: fpe (format-preserving) &middot; opened: date_shift</td></tr>
+            <tr><td class="safe fk">a_41d9</td><td class="safe">Noah Bennett</td><td class="safe">GB29 NWBK 8847 2290 1174 55</td><td class="safe">2019-09-18</td></tr>
+            <tr><td class="safe fk">a_7b02</td><td class="safe">Emma Dufour</td><td class="safe">GB94 BARC 7730 8841 2205 61</td><td class="safe">2021-04-02</td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-scroll"><table class="mask-table">
+          <caption>transactions &middot; source, then masked</caption>
+          <thead><tr><th>txn_id</th><th class="fk">account_id</th><th>amount</th><th>posted</th><th>counterparty</th></tr></thead>
+          <tbody>
+            <tr><td class="key">7781</td><td class="key fk">90012</td><td class="raw">1,250.00</td><td class="raw">2024-01-09</td><td class="raw">ACME LTD</td></tr>
+            <tr><td class="key">7782</td><td class="key fk">90013</td><td class="raw">89.50</td><td class="raw">2024-01-10</td><td class="raw">Globex Inc</td></tr>
+            <tr class="mask-divider"><td colspan="5">txn_id: passthrough &middot; account_id: hash (same namespace) &middot; amount: passthrough &middot; posted: date_shift &middot; counterparty: faker</td></tr>
+            <tr><td class="key">7781</td><td class="safe fk">a_41d9</td><td class="safe">1,250.00</td><td class="safe">2024-04-17</td><td class="safe">Harbor Freight Co</td></tr>
+            <tr><td class="key">7782</td><td class="safe fk">a_7b02</td><td class="safe">89.50</td><td class="safe">2024-04-18</td><td class="safe">Meridian Supply</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <p class="join-note">{% icon "link" %}<span><strong>The join survives.</strong> <code>account_id</code> 90012 becomes <code>a_41d9</code> on both tables, so transactions stay tied to their account. Amounts pass through unchanged, so totals and trends still hold, while names and account numbers no longer identify anyone.</span></p>
+    </div>
+
+    <div class="section-head" data-reveal style="margin-top: var(--space-7)">
+      <h3>The full set: 23 strategies, labelled by what they promise</h3>
+      <p>Every strategy is tagged as anonymisation, pseudonymisation, synthetic replacement, or passthrough.</p>
     </div>
     <div class="legend" aria-label="Strategy categories">
       <span><i data-kind="anon"></i>Anonymisation</span><span><i data-kind="pseudo"></i>Pseudonymisation (keyed)</span><span><i data-kind="synth"></i>Synthetic replacement</span><span><i data-kind="pass"></i>Passthrough</span>
@@ -92,6 +157,38 @@ motion: true
           <li><strong class="tag-safe">statistical, windowed_date</strong> for fitted snapshots and time windows</li>
         </ul>
       </div>
+    </div>
+    <div class="generation-demo" data-reveal>
+      <h3>One YAML, a whole referentially intact set</h3>
+      <p class="muted">No input data. A child column of <code>type: reference</code> draws its key from a generated parent, so every <code>orders.customer_id</code> is a real <code>customers.customer_id</code>. One document builds both tables, with the foreign key enforced.</p>
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>generate.yaml</span></div>
+<pre><span class="t-line dim">version: 1</span>
+<span class="t-line dim">global_settings: {seed: 42}</span>
+<span class="t-line dim">sources: {}</span>
+<span class="t-line">&nbsp;</span>
+<span class="t-line">tables:</span>
+<span class="t-line">  - name: <span class="safe">customers</span>          <span class="dim"># parent</span></span>
+<span class="t-line">    row_count: 1000</span>
+<span class="t-line">    generate_columns:</span>
+<span class="t-line">      - {name: customer_id, type: sequence, start: 100000}</span>
+<span class="t-line">      - {name: first_name, type: faker, faker_type: first_name}</span>
+<span class="t-line">      - {name: segment, type: categorical, categories: [retail, sme, enterprise]}</span>
+<span class="t-line">  - name: <span class="safe">orders</span>             <span class="dim"># child, points at customers</span></span>
+<span class="t-line">    row_count: 5000</span>
+<span class="t-line">    generate_columns:</span>
+<span class="t-line">      - {name: order_id, type: sequence, start: 1}</span>
+<span class="t-line">      - name: customer_id      <span class="dim"># the foreign key</span></span>
+<span class="t-line">        <span class="safe">type: reference</span></span>
+<span class="t-line">        <span class="safe">reference_table: customers</span></span>
+<span class="t-line">        <span class="safe">reference_column: customer_id</span></span>
+<span class="t-line">      - {name: status, type: categorical, categories: [placed, shipped, returned]}</span>
+<span class="t-line">&nbsp;</span>
+<span class="t-line dim">targets:</span>
+<span class="t-line dim">  customers: {type: file, format: csv, path: ./out/customers.csv}</span>
+<span class="t-line dim">  orders:    {type: file, format: csv, path: ./out/orders.csv}</span></pre>
+      </div>
+      <p class="join-note">{% icon "link" %}<span><strong>Referentially complete.</strong> 1,000 customers and 5,000 orders, every order tied to a generated customer. No orphans, no real data in, and you can subset or re-run it deterministically from the same seed.</span></p>
     </div>
   </div>
 </section>

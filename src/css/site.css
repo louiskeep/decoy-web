@@ -276,6 +276,23 @@ html[data-prelaunch] .launch-only { display: none; }
 .mask-table .safe { color: var(--safe); }
 .mask-table .key { color: var(--fg-muted); }
 
+/* CLI worked masking scenarios + generation demo */
+.mask-scenario { margin-top: var(--space-6); }
+.mask-scenario > h3 { margin-bottom: var(--space-2); }
+.mask-scenario > p.muted { margin-bottom: var(--space-4); max-width: 72ch; }
+.mask-pair { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 940px) { .mask-pair { grid-template-columns: 1fr 1fr; align-items: start; } }
+.mask-pair .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.mask-table caption { caption-side: top; text-align: left; font-family: var(--font-sans); font-size: var(--text-xs); color: var(--fg-muted); padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--line); }
+.mask-table th.fk, .mask-table td.fk { background: var(--accent-soft); }
+.mask-table .mask-divider td { white-space: normal; background: var(--bg-2); color: var(--fg-muted); font-size: 0.68rem; line-height: 1.5; }
+.join-note { display: flex; gap: 0.55em; align-items: flex-start; margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-muted); max-width: 78ch; }
+.join-note .icon { flex: none; width: 1.05em; height: 1.05em; margin-top: 0.15em; color: var(--safe); }
+.join-note strong { color: var(--fg); }
+.generation-demo { margin-top: var(--space-6); }
+.generation-demo > h3 { margin-bottom: var(--space-2); }
+.generation-demo > p.muted { margin-bottom: var(--space-4); max-width: 78ch; }
+
 /* Motion gating: motion.js (phase 2) animates from these start states only when html.anim-on. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
