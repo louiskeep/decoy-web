@@ -144,8 +144,13 @@ noisy threshold reduce it for you:
 ```console
 $ decoy fit claims.csv --output claims.snapshot.json \
     --epsilon 1.0 --delta 1e-6 \
-    --dp-text diagnosis_code
+    --dp-text diagnosis_code \
+    --dp-allow-omit
 ```
+
+`--dp-allow-omit` lets the DP release cover `diagnosis_code` alone and leave
+the other `claims.csv` columns out. Without it, every source column must be
+declared with a carrier or the fit refuses.
 
 A `--dp-text` release keeps only the categories whose noisy count clears the
 threshold and drops the rest, so a 74,000-category column comes back as the

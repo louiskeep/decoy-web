@@ -31,10 +31,17 @@ $ decoy fit patients.csv --output patients.snapshot.json \
     --epsilon 1.0 --delta 1e-6 \
     --dp-number age:0:120 \
     --dp-text diagnosis_code \
-    --dp-flag readmitted
+    --dp-flag readmitted \
+    --dp-allow-omit
 OK patients.snapshot.json
   dps-marginal/v3; epsilon_total=1.0, delta_total=1e-6
 ```
+
+`--dp-allow-omit` is here on purpose: the source has a `patient_id` column that
+is not declared as a carrier, because the pipeline mints it as a sequence
+rather than sampling it from the snapshot. Without the flag, an undeclared
+source column is a usage error that lists the columns, so a column you forgot
+to protect can never slip through silently.
 
 Carrier flags:
 

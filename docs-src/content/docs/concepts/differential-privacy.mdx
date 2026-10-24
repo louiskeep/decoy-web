@@ -120,8 +120,13 @@ $ decoy fit patients.csv --output patients.snapshot.json \
     --epsilon 1.0 --delta 1e-6 \
     --dp-number age:0:120 \
     --dp-text diagnosis_code \
-    --dp-flag readmitted
+    --dp-flag readmitted \
+    --dp-allow-omit
 ```
+
+`--dp-allow-omit` is needed because `patient_id` is generated as a sequence
+below rather than fitted, so it is not declared as a carrier. Without it, an
+undeclared source column is a usage error, not a silent omission.
 
 Then declare the ceiling in the pipeline and sample the snapshot with
 `type: statistical` columns:
@@ -172,9 +177,9 @@ Key points:
 - **Each statistical column names its snapshot and source column.** The budget
   is set when you fit, not in the generate step.
 - **`allow_real_categories: true` and `high_cardinality: true` are rejected**
-  under `global_settings.dp`, because both would release real observed
-  vocabulary instead of the certified label set and silently void the
-  guarantee.
+  under `global_settings.dp`, because both would release the full observed
+  vocabulary instead of only the thresholded labels a DP fit is allowed to
+  emit, and silently void the guarantee.
 
 ## What the guarantee covers
 
