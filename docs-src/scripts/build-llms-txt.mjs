@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from '
 import { join } from 'node:path'
 
 const DOCS = 'content/docs'
-const BASE = 'https://decoystorm.dev/docs'
+const BASE = 'https://trydecoy.com/docs'
 
 function frontmatter(file) {
   const text = readFileSync(file, 'utf8')

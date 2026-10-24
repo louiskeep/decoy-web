@@ -13,7 +13,7 @@ it doesn't make.
 ## It provides a formal privacy guarantee in exactly one place
 
 Masked outputs carry no differential privacy, no epsilon, and no
-mathematical bound on re-identification risk. STORM's re-identification-risk
+mathematical bound on re-identification risk. The scan's re-identification-risk
 score is a heuristic diagnostic to help you assess a dataset; it is not a
 proof.
 
@@ -71,15 +71,15 @@ stakes warrant.
 Decoy validates a config against its schema and runs what the config says.
 It does not know which columns in your data are actually sensitive. If a
 config leaves a sensitive column on `passthrough`, or masks the wrong
-column, the run succeeds and the output leaks. Use STORM to find candidate
+column, the run succeeds and the output leaks. Use the scan to find candidate
 PII and use post-mask integrity checks to look for residual identifiers, but
 the mapping from your data's actual sensitivities to a correct config is
-yours to get right; see [STORM](/docs/concepts/storm) for how that review
+yours to get right; see [the scan](/docs/concepts/scan) for how that review
 step is meant to work.
 
-## The STORM classifier does not de-identify anything
+## The column classifier does not de-identify anything
 
-STORM's column classifier detects which semantic type a column is likely to
+The scan's column classifier detects which semantic type a column is likely to
 contain (SSN, email, a diagnosis code, and so on). It does not mask, redact,
 transform, or remove any values. A column classified as `ssn` still contains
 SSNs in the clear until a masking step in your pipeline explicitly

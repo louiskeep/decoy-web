@@ -15,7 +15,7 @@ decoy demo
 
 ```
 [1/3] Writing sample dataset...
-[2/3] Scanning with STORM...
+[2/3] Scanning for PII...
 [3/3] Running V2 masking pipeline...
 
 ╭─ decoy demo ─────────────────────────────────────────────────────────╮
@@ -57,14 +57,14 @@ C001,Alice,Anderson,alice@example.com,111-22-3333,1990-01-15,10001,F
 C002,Bob,Brown,bob@example.com,222-33-4444,1985-05-20,90210,M
 ```
 
-**[2/3] Scanning with STORM.** STORM profiles the file column by column and
+**[2/3] Scanning for PII.** The scan profiles the file column by column and
 writes its findings to `decoy_demo/scan.json`: inferred type, distinct
 count, format pattern, and any PII detector matches, per column. This is
-the same profiling step `decoy storm analyze` runs on your own files, and
+the same profiling step `decoy scan` runs on your own files, and
 the same step `decoy init your_file.csv` runs before scaffolding a
-column-aware pipeline. On your own data, STORM's findings are suggestions
+column-aware pipeline. On your own data, the scan's findings are suggestions
 you review before anything runs, never an automatic classification; see
-[STORM](/docs/concepts/storm). The demo skips that review step so the
+[the scan](/docs/concepts/scan). The demo skips that review step so the
 walkthrough completes in one command, using a pipeline Decoy scaffolds for
 you (`decoy_demo/pipeline.yaml`) from the scan.
 
@@ -98,8 +98,8 @@ produces, so it is a second, worked example alongside the one in
 
 - [Quickstart](/docs/start/quickstart) runs the same shape of pipeline
   against your own file, with the config-validate-run flow spelled out.
-- [Scan for PII](/docs/how-to/scan-for-pii) covers `storm analyze` on your
+- [Scan for PII](/docs/how-to/scan-for-pii) covers `decoy scan` on your
   own data and reviewing its findings before you build a pipeline from
   them.
-- [STORM](/docs/concepts/storm) explains why STORM's output is always a
+- [The scan](/docs/concepts/scan) explains why the scan's output is always a
   suggestion you confirm, never an automatic classification.

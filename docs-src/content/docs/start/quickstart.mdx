@@ -76,11 +76,11 @@ targets:
 On your own data, point `sources.people.path` at your file and edit the
 `columns:` list to match: pick a [strategy](/docs/reference/cli/strategies) per column
 you want to change, and leave the rest as `passthrough`. If you scaffold with
-`decoy init your_file.csv` instead of a preset, STORM profiles the file first
+`decoy init your_file.csv` instead of a preset, the scan profiles the file first
 and writes a column-aware pipeline with a `# REVIEW:` comment above every
 strategy it inferred, so you can read and confirm each one before running it,
 the same "suggestions, not classification" review step described in
-[STORM](/docs/concepts/storm).
+[the scan](/docs/concepts/scan).
 
 ## 3. Validate the config
 
@@ -143,7 +143,7 @@ output, run after run.
 ## Next
 
 - Try [Demo](/docs/start/demo) for a zero-setup walkthrough on bundled
-  sample data, including a STORM scan step.
+  sample data, including a scan step.
 - See the [how-to guides](/docs/how-to/mask-a-csv) for masking recipes that
   build on this one: foreign-key-aware folders, synthetic generation, and
   CI usage.

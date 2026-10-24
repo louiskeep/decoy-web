@@ -94,25 +94,25 @@ $ head -c 400 evidence.json
       "fingerprint": "sha256:213f3ed0dbb9b1089388c3e5d1d36b0f...
 ```
 
-Upload `evidence.json` as a build artifact and a later `decoy evidence
+Upload `evidence.json` as a build artifact and a later `decoy report
 verify` run can confirm nothing drifted between the run and whatever
 consumed its output.
 
 ## 3. Gate on the exit code, not on parsed output
 
 <Callout type="warn" title="Exit 4 means findings, not a crash">
-`decoy validate distribution` and `decoy storm integrity` both use exit code
+`decoy report fidelity` and `decoy report integrity` both use exit code
 `4` (`EXIT_FINDINGS`) for a clean run that found a real problem in the data,
 distinct from `1` (bad input/usage) and `3` (the CLI itself broke). Treating
 4 the same as 1 or 3 in a CI script throws away that distinction.
 </Callout>
 
-`decoy validate distribution` recomputes fidelity between a pre-mask source
+`decoy report fidelity` recomputes fidelity between a pre-mask source
 and its output. In `report` mode (the default) it always exits 0, recording
 the score without failing anything:
 
 ```console
-$ decoy validate distribution customers.csv customers_masked.csv --config pipeline.yaml
+$ decoy report fidelity customers.csv customers_masked.csv --config pipeline.yaml
 PASS grade A  overall_score 0.997
            Marginal fidelity
                                         
@@ -135,7 +135,7 @@ Set `--mode fail` plus a threshold to make a real gate. Here `--min-score
 purpose and exits `4`:
 
 ```console
-$ decoy validate distribution customers.csv customers_masked.csv --config pipeline.yaml --mode fail --min-score 0.999
+$ decoy report fidelity customers.csv customers_masked.csv --config pipeline.yaml --mode fail --min-score 0.999
 FAIL grade A  overall_score 0.997
            Policy violations
                                         
@@ -146,14 +146,14 @@ $ echo $?
 4
 ```
 
-`decoy storm integrity` uses the same convention: 0 clean, `4` on any
+`decoy report integrity` uses the same convention: 0 clean, `4` on any
 fail-severity finding (residual PII, a broken FK, a policy mismatch), `1`
 for missing/unreadable files, `3` for an unexpected crash. A build step that
 wants to treat "the CLI ran fine but the data has a problem" differently
 from "the CLI blew up" branches on the exit code directly:
 
 ```bash
-decoy storm integrity masked.csv --source source.csv --config pipeline.yaml
+decoy report integrity masked.csv --source source.csv --config pipeline.yaml
 case $? in
   0) echo "clean" ;;
   4) echo "findings: fail the build" ; exit 1 ;;
@@ -171,5 +171,5 @@ the job without any special-casing.
 - Why exit code `4` exists as its own value instead of folding into `1`:
   see [exit codes](/docs/reference/exit-codes).
 - The full per-command exit-code table: [CLI reference](/docs/reference/cli).
-- Turning STORM findings into the pipeline you are validating here: see
+- Turning scan findings into the pipeline you are validating here: see
   [scan for PII](/docs/how-to/scan-for-pii).

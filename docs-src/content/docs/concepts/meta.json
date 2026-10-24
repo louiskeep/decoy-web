@@ -1,4 +1,4 @@
 {
   "title": "Concepts",
-  "pages": ["determinism", "keys-and-vault", "storm", "disguises", "differential-privacy"]
+  "pages": ["determinism", "keys-and-vault", "scan", "disguises", "differential-privacy"]
 }

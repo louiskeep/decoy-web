@@ -33,7 +33,7 @@
 ## Concepts
 - [Determinism](https://trydecoy.com/docs/concepts/determinism): The seed protocol behind reproducible masking and generation.
 - [Keys and the vault](https://trydecoy.com/docs/concepts/keys-and-vault): How Decoy sources the secret behind masking, and how the token vault makes a one-way mask reversible.
-- [Scan](https://trydecoy.com/docs/concepts/storm): What the scan does, and why it suggests rather than decides.
+- [Scan](https://trydecoy.com/docs/concepts/scan): What the scan does, and why it suggests rather than decides.
 - [Disguises](https://trydecoy.com/docs/concepts/disguises): What a Disguise is, and what it is not.
 - [Differential privacy in Decoy](https://trydecoy.com/docs/concepts/differential-privacy): Marginal differential privacy on generated synthetic data using typed carriers and configurable epsilon/delta budgets.
 
@@ -81,32 +81,20 @@
 
 ## CLI reference
 - [CLI reference](https://trydecoy.com/docs/reference/cli): Generated, per-command reference for the decoy CLI, kept in sync with the CLI itself.
-- [decoy catalog](https://trydecoy.com/docs/reference/cli/catalog): LOCAL metadata catalog for datasets, runs, and evidence.
-- [decoy checksums](https://trydecoy.com/docs/reference/cli/checksums): List the engine's registered checksum schemes.
-- [decoy compile](https://trydecoy.com/docs/reference/cli/compile): Compile a pipeline config and run plan-compile checks.
-- [decoy demo](https://trydecoy.com/docs/reference/cli/demo): Walk through scan -> mask on a bundled sample dataset.
-- [decoy doctor](https://trydecoy.com/docs/reference/cli/doctor): Check engine and dependency health.
-- [decoy evidence](https://trydecoy.com/docs/reference/cli/evidence): Show and verify local run evidence manifests.
-- [decoy explain](https://trydecoy.com/docs/reference/cli/explain): Explain a Decoy concept in plain English.
-- [decoy fit](https://trydecoy.com/docs/reference/cli/fit): Fit a distribution-snapshot/v1 artifact for statistical generation.
-- [decoy info](https://trydecoy.com/docs/reference/cli/info): Print the Decoy CLI banner with quick-start hints.
-- [decoy init](https://trydecoy.com/docs/reference/cli/init): Scaffold a starter pipeline YAML through a short Q&A.
-- [decoy jobs](https://trydecoy.com/docs/reference/cli/jobs): LOCAL run history from the DuckDB catalog.
-- [decoy plan](https://trydecoy.com/docs/reference/cli/plan): Compile a pipeline config into a versioned plan artifact.
-- [decoy preflight](https://trydecoy.com/docs/reference/cli/preflight): Local pre-run readiness checks for a pipeline config.
-- [decoy profile](https://trydecoy.com/docs/reference/cli/profile): Profile a source dataset: shape, field stats, PII candidates (as suggestions).
-- [decoy project](https://trydecoy.com/docs/reference/cli/project): Manage a local .decoy/ workspace.
-- [decoy providers](https://trydecoy.com/docs/reference/cli/providers): Enumerate and inspect the engine's registered generation providers.
-- [decoy report](https://trydecoy.com/docs/reference/cli/report): Render, summarize, and compare local evidence manifests.
 - [decoy run](https://trydecoy.com/docs/reference/cli/run): Run a decoy pipeline from a YAML config.
-- [decoy schema](https://trydecoy.com/docs/reference/cli/schema): Print the PipelineConfig JSON Schema to stdout.
-- [decoy scan](https://trydecoy.com/docs/reference/cli/scan): Dataset analysis: profile columns and detect likely PII.
-- [decoy strategies](https://trydecoy.com/docs/reference/cli/strategies): Enumerate and inspect the engine's registered mask strategies.
-- [decoy subset](https://trydecoy.com/docs/reference/cli/subset): Cut a referentially-complete FK-aware subset of a relational dataset.
-- [decoy templates](https://trydecoy.com/docs/reference/cli/templates): Browse and dump bundled starter pipeline templates.
 - [decoy unmask](https://trydecoy.com/docs/reference/cli/unmask): Recover fpe-masked columns from a masked file using the pipeline config.
-- [decoy validate](https://trydecoy.com/docs/reference/cli/validate): Validate a pipeline config (`config`) or check distribution fidelity between a source and an output (`distribution`).
-- [decoy validators](https://trydecoy.com/docs/reference/cli/validators): List the engine's registered job-level validators.
-- [decoy vault](https://trydecoy.com/docs/reference/cli/vault): Vault inspection utilities.
+- [decoy fit](https://trydecoy.com/docs/reference/cli/fit): Fit a distribution-snapshot artifact for statistical generation.
+- [decoy init](https://trydecoy.com/docs/reference/cli/init): Scaffold a starter pipeline YAML through a short Q&A.
+- [decoy demo](https://trydecoy.com/docs/reference/cli/demo): Walk through scan then mask on a bundled sample dataset.
+- [decoy explain](https://trydecoy.com/docs/reference/cli/explain): Explain a Decoy concept in plain English.
+- [decoy info](https://trydecoy.com/docs/reference/cli/info): Print the Decoy CLI banner with quick-start hints.
+- [decoy schema](https://trydecoy.com/docs/reference/cli/schema): Print the PipelineConfig JSON Schema to stdout.
+- [decoy list](https://trydecoy.com/docs/reference/cli/list): List the contents of one engine registry: strategies, providers, checksums, validators, templates, or disguises.
+- [decoy show](https://trydecoy.com/docs/reference/cli/show): Show detail for one reference item: a strategy, provider, template, or the config schema.
+- [decoy doctor](https://trydecoy.com/docs/reference/cli/doctor): Check engine and dependency health.
+- [decoy subset](https://trydecoy.com/docs/reference/cli/subset): Cut a referentially-complete FK-aware subset of a relational dataset.
+- [decoy validate](https://trydecoy.com/docs/reference/cli/validate): Pre-run validation gate: config, compile, and preflight checks.
+- [decoy scan](https://trydecoy.com/docs/reference/cli/scan): Profile a dataset for PII and re-identification risk.
+- [decoy report](https://trydecoy.com/docs/reference/cli/report): The post-run evidence surface: show, render, verify, fidelity, integrity, diff, and vault.
 - [Exit codes](https://trydecoy.com/docs/reference/exit-codes): Why the exit-code contract is a design commitment, not an afterthought.
 - [Security, privacy, and compliance limits](https://trydecoy.com/docs/reference/limits): The honest boundary around what Decoy guarantees, so you don't rely on a promise it doesn't make.
