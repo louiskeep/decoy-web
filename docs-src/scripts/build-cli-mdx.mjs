@@ -26,11 +26,13 @@ const sourcePath = resolve(
   process.env.CLI_MDX_SOURCE || 'content/docs/reference/cli/_source/cli-reference.md'
 )
 
-// "Group count below an expected floor" guard (spec Section 4.3). 27 groups exist
-// today; the floor is set well below that so ordinary command additions never trip
-// it, but a parse that yields a handful of groups (e.g. from a header-format change)
-// still fails loudly instead of silently shipping a truncated reference.
-const MIN_GROUPS = 20
+// "Group count below an expected floor" guard (spec Section 4.3). 15 top-level
+// groups exist today (the CLI consolidated: storm folded into scan, many former
+// top-level commands became subcommands of report/validate/list/show). The floor
+// sits below that so ordinary command changes never trip it, but a parse that
+// yields a handful of groups (e.g. from a header-format change) still fails
+// loudly instead of silently shipping a truncated reference.
+const MIN_GROUPS = 12
 
 function fail(message) {
   console.error(`[build-cli-mdx] ${message}`)
