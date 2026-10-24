@@ -12,7 +12,7 @@ below is real output.
 
 ## 1. Fail fast: validate before you run
 
-`decoy validate config` and `decoy preflight` both catch problems before a
+`decoy validate config` and `decoy validate preflight` both catch problems before a
 run starts, but they check different things. `validate config` is
 schema-only (unknown provider, bad strategy name, malformed YAML) - it does
 not catch every runtime constraint, such as a `hash` column missing its
@@ -25,14 +25,14 @@ local-only.
 ```console
 $ decoy validate config pipeline.yaml
 OK pipeline.yaml
-$ decoy preflight pipeline.yaml
+$ decoy validate preflight pipeline.yaml
 OK pipeline.yaml
 ```
 
 For a step that needs structured output instead of a human-readable line:
 
 ```console
-$ decoy preflight pipeline.yaml --json
+$ decoy validate preflight pipeline.yaml --json
 {"command": "preflight", "status": "ok", "config": "pipeline.yaml", "checks": [{"name": "yaml.syntax", "status": "pass", "message": "YAML syntax is valid."}, {"name": "schema.valid", "status": "pass", "message": "Pipeline schema is valid."}, {"name": "config.plan_checks", "status": "pass", "message": "Profile-free plan-compile checks passed."}, {"name": "source.customers.exists", "status": "pass", "message": "Source file exists and is readable: ./customers.csv", "location": "sources.customers.path"}], "fail_count": 0, "warn_count": 0, "pass_count": 4}
 ```
 

@@ -10,7 +10,7 @@ Harbor identifiers or PCI cardholder data, instead of a blank YAML file.
 ## What a Disguise is
 
 Each Disguise is a template: a set of column-pattern-to-strategy defaults
-tuned for a specific regulation or use case. `decoy templates show hipaa`
+tuned for a specific regulation or use case. `decoy show template hipaa`
 dumps a ready-to-edit pipeline that maps the identifier categories a HIPAA
 Safe Harbor review commonly cares about (names, dates, geographic
 subdivisions, medical record numbers, and the rest) onto strategies like
@@ -19,8 +19,8 @@ the generated YAML, and tune it to your actual columns before running it.
 
 Bundled starting points ship today for a generic default, HIPAA, PCI DSS, and
 GDPR shapes, alongside a bare-bones minimal template. Browse what's
-available with `decoy templates list` and preview one with
-`decoy templates show <name>`.
+available with `decoy list templates` and preview one with
+`decoy show template <name>`.
 
 ## What a Disguise is not
 
@@ -42,7 +42,7 @@ your counsel, not a claim this tool makes.
 **It is not a fixed, uneditable bundle.** Every Disguise resolves to plain
 pipeline YAML. Nothing stops you from deleting a column entry your data
 doesn't have, swapping a strategy, or adding columns the template didn't
-anticipate. Treat the output of `decoy templates show` as a draft, not a
+anticipate. Treat the output of `decoy show template` as a draft, not a
 final answer.
 
 ## Why bundles exist at all
