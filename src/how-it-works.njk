@@ -27,37 +27,165 @@ motion: true
       <div class="flow-step flow-step--edge" role="listitem" data-stage="target"><strong>Target</strong><span>Local, S3, GCS, dev and test databases</span></div>
     </div>
 
-    <div class="grid grid-3 stage-cards" data-reveal>
-      <div class="card" data-stage="scan">
-        <div class="icon-badge">{% icon "scan" %}</div>
-        <h3>Scan</h3>
-        <p>The scan runs 25 value detectors over every column, tags findings by domain, and writes a draft pipeline with a review comment on each suggestion. It suggests; you decide.</p>
-      </div>
-      <div class="card" data-stage="subset">
-        <div class="icon-badge">{% icon "link" %}</div>
-        <h3>Subset</h3>
-        <p>Declare relationships once. Subsetting walks them to a fixpoint under a fan-out budget, and the same declarations keep joins intact when masking.</p>
-      </div>
-      <div class="card" data-stage="mask">
-        <div class="icon-badge">{% icon "key" %}</div>
-        <h3>Mask or generate</h3>
-        <p>Each column gets one of 23 masking strategies or 12 generation types. Keyed strategies derive output from your secret and the source value, so results are stable across tables and runs.</p>
-      </div>
-      <div class="card" data-stage="validate">
-        <div class="icon-badge">{% icon "shield" %}</div>
-        <h3>Validate</h3>
-        <p>After the run, an integrity check looks for residual PII, confirms foreign-key parity, and compares distributions. Findings fail the build with exit code 4.</p>
-      </div>
-      <div class="card" data-stage="evidence">
-        <div class="icon-badge">{% icon "file" %}</div>
-        <h3>Evidence</h3>
-        <p>An evidence manifest records the pipeline hash, file fingerprints, and row counts, never a raw value. The Platform appends every action to a hash-chained audit log.</p>
-      </div>
-      <div class="card" data-stage="target">
-        <div class="icon-badge">{% icon "box" %}</div>
-        <h3>Target</h3>
-        <p>Write CSV or Parquet locally or to object storage, and load it wherever lower environments read from. Nothing is sent to Decoy at any stage.</p>
-      </div>
+    <div class="stage-cards" data-reveal>
+      <article class="card stage-card" data-stage="source">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "database" %}</div>
+            <div><span class="stage-number">01 / 07</span><h3>Bring the data to Decoy</h3></div>
+          </div>
+          <p>Choose a local CSV or Parquet file, an object in S3 or GCS, or a read-only PostgreSQL snapshot in the Platform. Decoy reads inside your environment; there is no hosted Decoy control plane in the data path.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>The source is resolved and checked before the transformation starts.</dd></div>
+            <div><dt>Best fit</dt><dd>Teams that already export production data to files or object storage for lower environments.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual source-map" role="img" aria-label="Local files, object storage, and a PostgreSQL snapshot feeding a Decoy run inside the customer's environment">
+          <div class="source-list">
+            <span>{% icon "file" %}<b>Local files</b><small>CSV · Parquet</small></span>
+            <span>{% icon "cloud" %}<b>Object storage</b><small>S3 · GCS</small></span>
+            <span>{% icon "database" %}<b>PostgreSQL</b><small>read-only snapshot</small></span>
+          </div>
+          <div class="stage-arrow" aria-hidden="true"><span></span></div>
+          <div class="decoy-node"><img src="/images/decoy/mark.png" alt="" width="42" height="42"><strong>Decoy</strong><small>your infrastructure</small></div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="scan">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "scan" %}</div>
+            <div><span class="stage-number">02 / 07</span><h3>Find the columns that need a decision</h3></div>
+          </div>
+          <p>The scan profiles every column, runs 25 value detectors, groups findings by domain, and proposes a draft strategy. It makes the first pass faster without silently deciding policy for you.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>Likely identity, contact, financial, health, and location data is surfaced for review.</dd></div>
+            <div><dt>Best fit</dt><dd>Unknown datasets, inherited schemas, and a first masking policy that needs human review.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual scan-result" aria-label="Example scan findings for a customer table">
+          <div class="mini-toolbar"><span>customers.csv</span><span class="status-quiet">25 detectors</span></div>
+          <div class="scan-row scan-row--head"><span>column</span><span>finding</span><span>suggestion</span></div>
+          <div class="scan-row"><code>email</code><span><i class="risk-dot"></i>contact</span><strong>faker</strong></div>
+          <div class="scan-row"><code>ssn</code><span><i class="risk-dot"></i>identity</span><strong>fpe</strong></div>
+          <div class="scan-row"><code>dob</code><span><i class="risk-dot"></i>identity</span><strong>date_shift</strong></div>
+          <div class="scan-review">3 suggestions · review required</div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="subset">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "link" %}</div>
+            <div><span class="stage-number">03 / 07</span><h3>Cut the volume, keep the relationships</h3></div>
+          </div>
+          <p>Start with a useful slice, then follow declared foreign keys until every retained child still points to a retained parent. A fan-out budget keeps the subset bounded.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>Related tables close to a referentially complete subset instead of becoming disconnected samples.</dd></div>
+            <div><dt>Best fit</dt><dd>Fast local databases, compact integration fixtures, and representative CI datasets.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual relation-map" role="img" aria-label="A subset retaining 1,000 customers, 5,000 orders, and 12,400 order items with no orphaned foreign keys">
+          <div class="relation-node relation-node--root"><span>customers</span><strong>1,000</strong><small>seed rows</small></div>
+          <div class="relation-line relation-line--one" aria-hidden="true"></div>
+          <div class="relation-node"><span>orders</span><strong>5,000</strong><small>customer_id intact</small></div>
+          <div class="relation-line relation-line--two" aria-hidden="true"></div>
+          <div class="relation-node"><span>order_items</span><strong>12,400</strong><small>order_id intact</small></div>
+          <div class="relation-proof">{% icon "check" %} 0 orphaned rows</div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="mask">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "key" %}</div>
+            <div><span class="stage-number">04 / 07</span><h3>Transform each column deliberately</h3></div>
+          </div>
+          <p>Assign one of 23 masking strategies or generate new rows from 12 generation types. Keyed strategies use your secret so the same source value maps to the same safe value across tables and runs.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>Identifiers, names, dates, free text, codes, and categories each get a strategy suited to their role.</dd></div>
+            <div><dt>Best fit</dt><dd>Staging and test data that must stay realistic enough for joins, workflows, and regressions.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual mask-preview">
+          <div class="mini-toolbar"><span>customers.parquet</span><span class="status-quiet">before → after</span></div>
+          <div class="mask-preview-grid mask-preview-grid--head"><span>column</span><span>source</span><span>safe output</span></div>
+          <div class="mask-preview-grid"><code>email</code><span class="raw">maria@acme.com</span><span class="safe">lena@example.net</span></div>
+          <div class="mask-preview-grid"><code>ssn</code><span class="raw">612-44-9031</span><span class="safe">927-10-5583</span></div>
+          <div class="mask-preview-grid"><code>dob</code><span class="raw">1987-03-12</span><span class="safe">1987-02-27</span></div>
+          <div class="strategy-strip"><span>faker</span><span>fpe</span><span>date_shift</span></div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="validate">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "shield" %}</div>
+            <div><span class="stage-number">05 / 07</span><h3>Fail before unsafe data moves on</h3></div>
+          </div>
+          <p>Validation checks the pipeline before a run. The integrity report then looks for residual PII, foreign-key drift, and distribution changes in the output. Findings can stop CI with exit code 4.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>Configuration, output safety, relational integrity, and fidelity are checked at explicit gates.</dd></div>
+            <div><dt>Best fit</dt><dd>Automated refresh jobs where unsafe or structurally broken output must never publish quietly.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual check-report" aria-label="Validation report with configuration, residual PII, foreign keys, and distribution checks passing">
+          <div class="mini-toolbar"><span>integrity report</span><span class="status-pass">exit 0</span></div>
+          <div class="check-row"><span>{% icon "check" %} config</span><strong>valid</strong></div>
+          <div class="check-row"><span>{% icon "check" %} residual PII</span><strong>0 findings</strong></div>
+          <div class="check-row"><span>{% icon "check" %} foreign keys</span><strong>parity held</strong></div>
+          <div class="check-row"><span>{% icon "check" %} distributions</span><strong>within policy</strong></div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="evidence">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "file" %}</div>
+            <div><span class="stage-number">06 / 07</span><h3>Leave a record that can be checked later</h3></div>
+          </div>
+          <p>The CLI can write an evidence manifest with the pipeline hash, file fingerprints, and row counts without storing raw values. The Platform also records actions in an append-only, hash-chained audit log.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>The run produces an artifact for verification; shared Platform activity gets an accountable history.</dd></div>
+            <div><dt>Best fit</dt><dd>Change review, audit preparation, incident investigation, and proving which pipeline produced a dataset.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual evidence-preview" aria-label="Evidence manifest linked to a hash-chained Platform audit entry">
+          <div class="manifest-sheet">
+            <span><b>pipeline_fingerprint</b><code>sha256:8f3a…91d2</code></span>
+            <span><b>row_counts</b><code>customers · 1M → 1M</code></span>
+            <span><b>output_fingerprints</b><code>customers · sha256:42b7…</code></span>
+            <span><b>manifest_hash</b><code>sha256:50ec…</code></span>
+          </div>
+          <div class="evidence-link" aria-hidden="true"></div>
+          <div class="audit-stamp"><span>audit #4817</span><strong>job.run · ok</strong><small>prev 9c1e…b2 → e07a…41</small></div>
+        </div>
+      </article>
+
+      <article class="card stage-card" data-stage="target">
+        <div class="stage-copy">
+          <div class="stage-heading">
+            <div class="icon-badge">{% icon "box" %}</div>
+            <div><span class="stage-number">07 / 07</span><h3>Publish safe data to the systems that need it</h3></div>
+          </div>
+          <p>Write CSV or Parquet locally or to supported object storage, then let your existing delivery process load the result into development, test, CI, or analytics environments. Decoy does not receive the source or output.</p>
+          <dl class="stage-details">
+            <div><dt>What happens</dt><dd>The validated output lands at an explicit destination after the run and its evidence are complete.</dd></div>
+            <div><dt>Best fit</dt><dd>Repeatable lower-environment refreshes without replacing your warehouse, ETL, or scheduler.</dd></div>
+          </dl>
+        </div>
+        <div class="stage-visual target-map" role="img" aria-label="Validated Decoy output delivered as local files or object storage for development, testing, CI, and analytics">
+          <div class="target-origin"><span>{% icon "check" %}</span><strong>validated output</strong><small>CSV · Parquet</small></div>
+          <div class="target-lines" aria-hidden="true"></div>
+          <div class="target-grid">
+            <span><b>Local</b><small>files</small></span>
+            <span><b>S3 / GCS</b><small>object storage</small></span>
+            <span><b>Dev + test</b><small>refresh jobs</small></span>
+            <span><b>CI + analytics</b><small>safe fixtures</small></span>
+          </div>
+          <p>{% icon "shield" %} Nothing is sent to Decoy</p>
+        </div>
+      </article>
     </div>
     </div>
   </div>

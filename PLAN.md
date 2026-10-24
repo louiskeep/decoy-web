@@ -76,6 +76,7 @@ Mask/generate, Validate, Evidence, Target. This track adds a detailed lower
 section per stage.
 
 **W4. Design the per-node deep-dive pattern.**
+- Status: implemented 2026-10-24. All seven stages use one responsive panel pattern with an explanatory visual, what-happens detail, and best-fit use case.
 - What: one reusable section layout for a stage = a visual, a "what it does"
   explanation, a "why it matters" line, and one concrete worked example. Decide
   whether all seven stages get the treatment (recommended) or only the transform
@@ -87,6 +88,7 @@ section per stage.
 - Depends-on: W1.
 
 **W5. Author per-node content with verified samples.**
+- Status: in progress. All seven stages now have concrete copy and representative samples; wiring the sample values into the snippet-verification system remains.
 - What: copy plus a concrete before/after example per stage (scan findings, an
   FK-intact subset slice, a mask input to output, a validate finding, an evidence
   manifest excerpt, a target write). Use the repo's existing snippet-verification
@@ -98,6 +100,7 @@ section per stage.
 - Depends-on: W4; consumes W2 truth.
 
 **W6. Build the per-node visuals.**
+- Status: implemented 2026-10-24 for responsive HTML/CSS visuals. Real CLI captures remain under W7.
 - What: per-stage visual (CSS/SVG diagram or before/after table) plus CLI
   terminal captures where a stage has terminal output. Theme-consistent,
   responsive, sized to avoid layout shift.
@@ -109,6 +112,7 @@ section per stage.
 ### Track 4 — Screenshots and media
 
 **W7. CLI / terminal captures (now).**
+- Status: planned. Capture briefs and page placements are recorded in `VISUAL-ASSET-PLAN.md`.
 - What: capture CLI output (scan, run, validate, evidence) as consistent,
   theme-matched terminal images or recordings for the cli and how-it-works pages.
 - Why: screenshots the request calls for; the CLI is stable and screenshottable
@@ -118,6 +122,7 @@ section per stage.
 - Depends-on: W1.
 
 **W8. Platform (Job Studio) screenshots (deferred slice).**
+- Status: two current screens are present; replacement and additional capture briefs are recorded in `VISUAL-ASSET-PLAN.md` for the release-candidate UI.
 - What: capture real Job Studio screenshots from a stable Platform UI; use
   placeholders until then.
 - Why: deferred by decision; the UI is not settled enough to screenshot now.

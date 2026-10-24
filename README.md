@@ -51,6 +51,8 @@ translate them if the host differs.
 - `src/_includes/snippets/`: every code sample on the site, inlined with `{% snippet "file" %}`.
 - `src/js/motion.js`: the GSAP motion layer, loaded only on pages with `motion: true`.
   GSAP is vendored from npm into `/js/vendor/` (no third-party requests).
+- `VISUAL-ASSET-PLAN.md`: page-by-page inventory and capture briefs for CLI, Platform, data-flow,
+  and evidence visuals.
 - `scripts/check-snippets.mjs`: YAML samples parse; every `decoy <command>` in a code block is a
   documented command.
 - `scripts/check-links.mjs`: every internal link and anchor resolves.

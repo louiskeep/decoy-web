@@ -9,12 +9,13 @@
 
   const mm = gsap.matchMedia();
   mm.add(
-    { motionOK: "(prefers-reduced-motion: no-preference)", desktop: "(min-width: 900px)" },
+    { motionOK: "(prefers-reduced-motion: no-preference)", desktop: "(min-width: 1100px) and (min-height: 820px)" },
     (ctx) => {
       const { motionOK, desktop } = ctx.conditions;
       if (!motionOK) return;
 
-      const pinned = desktop && pinnedPipeline();
+      const pipelineCleanup = desktop ? pinnedPipeline() : null;
+      const pinned = Boolean(pipelineCleanup);
       reveal();
       hero();
       heroMaskTable();
@@ -22,6 +23,10 @@
       countUp();
       auditChain();
       flowStrips(pinned);
+
+      return () => {
+        if (pipelineCleanup) pipelineCleanup();
+      };
     }
   );
 
@@ -259,14 +264,30 @@
   // How it works, desktop: pin the pipeline and scrub the packet and stage cards with scroll.
   function pinnedPipeline() {
     const pipe = document.querySelector("[data-pipeline]");
-    if (!pipe) return false;
+    if (!pipe) return null;
     const flow = pipe.querySelector("[data-flow]");
     const steps = Array.from(flow.querySelectorAll(".flow-step"));
     const cards = Array.from(pipe.querySelectorAll(".card[data-stage]"));
-    if (steps.length < 2) return false;
+    if (steps.length < 2) return null;
     pipe.classList.add("pipeline-stage--pinned");
     const grid = pipe.querySelector(".stage-cards");
-    if (grid) grid.removeAttribute("data-reveal"); // the scrub owns these cards
+    let measureCards = null;
+    if (grid) {
+      grid.removeAttribute("data-reveal"); // the scrub owns these cards
+      measureCards = () => {
+        const tallest = Math.max(...cards.map((card) => card.scrollHeight));
+        grid.style.height = `${Math.ceil(tallest)}px`;
+      };
+      measureCards();
+      if (pipe.getBoundingClientRect().height + 120 > window.innerHeight) {
+        pipe.classList.remove("pipeline-stage--pinned");
+        grid.style.removeProperty("height");
+        grid.setAttribute("data-reveal", "");
+        return null;
+      }
+      window.addEventListener("load", measureCards, { once: true });
+      ScrollTrigger.addEventListener("refreshInit", measureCards);
+    }
     const packet = addPacket(flow);
     gsap.set(cards, { autoAlpha: 0, y: 20 });
 
@@ -274,7 +295,7 @@
       scrollTrigger: {
         trigger: pipe,
         start: "top 120px",
-        end: () => "+=" + steps.length * 260,
+        end: () => "+=" + steps.length * 340,
         pin: true,
         scrub: 0.5,
         anticipatePin: 1,
@@ -284,18 +305,27 @@
     });
     const first = stepPoint(steps[0]);
     gsap.set(packet, { x: first.x, y: first.y, autoAlpha: 1 });
+    const firstCard = cards.find((card) => card.dataset.stage === steps[0].dataset.stage);
+    if (firstCard) gsap.set(firstCard, { autoAlpha: 1, y: 0 });
     steps.forEach((step, i) => {
       const p = stepPoint(step);
-      if (i > 0) tl.to(packet, { x: p.x, y: p.y, duration: 1, ease: "none" }, i - 1);
+      if (i > 0) tl.to(packet, { x: p.x, y: p.y, duration: 0.72, ease: "power1.inOut" }, i - 1);
       const card = cards.find((c) => c.dataset.stage === step.dataset.stage);
-      if (card) {
-        // Previous card is fully out (i - 0.95 … i - 0.75) before this one comes in (i - 0.6 … i - 0.4).
-        // The first stage card is visible from the start so the pinned area never looks empty.
-        if (i === 1) tl.set(card, { autoAlpha: 1, y: 0 }, 0);
-        else tl.to(card, { autoAlpha: 1, y: 0, duration: 0.2, ease: "power2.out" }, i - 0.6);
-        if (i < steps.length - 1) tl.to(card, { autoAlpha: 0, y: -16, duration: 0.2, ease: "power2.in" }, i + 0.05);
-      }
+      if (!card || i === 0) return;
+      const previous = cards.find((c) => c.dataset.stage === steps[i - 1].dataset.stage);
+      if (previous) tl.to(previous, { autoAlpha: 0, y: -14, duration: 0.16, ease: "power2.in" }, i - 0.2);
+      tl.to(card, { autoAlpha: 1, y: 0, duration: 0.24, ease: "power3.out" }, i - 0.02);
     });
-    return true;
+    return () => {
+      pipe.classList.remove("pipeline-stage--pinned");
+      activate(steps, -1);
+      packet.remove();
+      if (grid) {
+        grid.style.removeProperty("height");
+        grid.setAttribute("data-reveal", "");
+        window.removeEventListener("load", measureCards);
+        ScrollTrigger.removeEventListener("refreshInit", measureCards);
+      }
+    };
   }
 })();
