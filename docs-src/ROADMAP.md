@@ -186,6 +186,58 @@ approved not-applicable reason). Canary on redact, hash or fpe, and joint_mask
 before the full rollout. MDX references a stable case ID only; pages never
 duplicate input, output, or settings values.
 
+### Idea 4: How-it-works performance section (plan first, via Codex)
+
+The `/how-it-works` page needs a performance section that answers "how fast is
+Decoy, and will my job fit on my box" with numbers a reader can trust. This item
+is a **plan task, not a build task**: get Codex to produce the implementation
+plan (engine repo gate chain, since it reaches into benchmarks) before any page
+work starts. Added 2026-10-24 on Cam's direction.
+
+What the plan must decide, in order:
+
+1. **Which benchmarks exist vs must be run.** The only committed dated benchmark
+   is `decoy-engine/tests/benchmark/calibration/results.md` (2026-05-09, one
+   laptop): mask only, 1M to 10M measured, 25M to 100M extrapolated, and framed
+   around the old Polars-hybrid path, not the current Rust-first engine. Every
+   number on the page traces to a dated benchmark file (repo rule), so the plan
+   names the runs that must happen first: per operation, per scale, per engine
+   path, on a pinned fixture and hardware. Cloud runs for 50M+ are a separate
+   budgeted action (see the GCP bench memory).
+2. **The matrix shape** (recommendation to hand Codex as the seed, below).
+3. **Honest provenance.** Each row links its dated benchmark file and the exact
+   hardware; extrapolated cells are labeled, not presented as measured; numbers
+   older than one engine release carry a "last measured on" note.
+
+Recommended matrix (seed for the plan, Codex to confirm or revise):
+
+- **Primary table, operation x scale.** Rows are the operations with distinct
+  throughput profiles (mask, generate, subset, scan, DP fit); columns are row
+  counts (1M, 10M, 100M). Each cell carries two numbers that answer different
+  questions: sustained **throughput** (rows/sec, the hardware-neutral
+  comparator) and **wall-clock** (the concrete "how long will it take"). A
+  trailing column gives **peak RAM** at a reference scale, because RAM, not CPU,
+  is the ceiling that decides what box or instance class a job needs.
+- **Secondary view, the "why".** A smaller companion table or toggle for the two
+  axes that explain the headline numbers and let a reader map them to their own
+  setup: **engine path** (Rust native fast-path vs pandas fallback, by
+  operation) and **I/O format** (CSV vs Parquet vs direct DB roundtrip, since
+  I/O dominates at a DB boundary: a 1M DB-to-DB roundtrip is roughly a minute,
+  almost all of it I/O).
+- **One honest floor.** A single stated sustained single-thread floor (about 20k
+  rows/sec) as the conservative "never slower than" anchor, so the headline
+  bests are not mistaken for guarantees.
+
+Not recommended: a cell per strategy (23 strategies x scales is noise, not
+signal; strategy cost collapses into a few bands, keyed as heavy FPE/hash vs
+light redact/passthrough, which belongs in a note not a grid), and any
+third gridded axis (hardware, column count) that turns a readable 2D table into
+an unreadable cube. Keep those as row annotations or a secondary table.
+
+Blocked: publishing any measured number is blocked on the benchmark runs the
+plan identifies; the layout and the matrix component are not blocked and can be
+built against placeholder data behind a claim-review gate.
+
 ## Execution order
 
 Work the slices in this order (web loop):
