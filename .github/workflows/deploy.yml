@@ -36,10 +36,13 @@ jobs:
         with:
           node-version: "20"
 
-      # Build the combined site: Eleventy marketing -> dist/, then the Fumadocs
-      # docs export assembled into dist/docs (see scripts/build-docs.sh).
+      # Build the combined site and validate it. `check` runs the full combined
+      # build (eleventy + the Fumadocs export assembled into dist/docs, see
+      # scripts/build-docs.sh) and then the snippet, link, and claim checks, so a
+      # broken site fails the deploy instead of shipping. dist/ is left built for
+      # the upload step.
       - run: npm ci
-      - run: npm run build:all
+      - run: npm run check
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

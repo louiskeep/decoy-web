@@ -9,12 +9,12 @@ and JS with no client-side framework.
 | URL | Source | Purpose |
 |---|---|---|
 | `/` | `src/index.njk` | Home: positioning, pipeline strip, CLI and Platform doors, proof, pricing teaser |
-| `/cli/` | `src/cli.njk` | Developer product page: strategies, generation, subsetting, STORM, CI, performance, install |
+| `/cli/` | `src/cli.njk` | Developer product page: strategies, generation, subsetting, scan, CI, performance, install |
 | `/platform/` | `src/platform.njk` | Team product page: Job Studio, triggers, audit, access, connectors, self-hosting |
 | `/how-it-works/` | `src/how-it-works.njk` | Pipeline walkthrough, inside a run, CLI/Platform/Engine, performance |
 | `/pricing/` | `src/pricing.njk` | Tiers, support, licences, FAQ (light theme) |
 | `/security/` | `src/security.njk` | Data boundary, keys, audit, compliance mapping, disclosure (light theme) |
-| `/docs/…` | `docs/`, `_next/`, `api/`, `docs.html` | Vendored Fumadocs export; do not edit by hand |
+| `/docs/…` | `docs-src/` (Fumadocs) | Built by `scripts/build-docs.sh` into `dist/docs`; edit docs under `docs-src/content/` |
 | `404.html` | `src/404.njk` | Not found |
 
 Old URLs (`/features`, `/deployment`, `/workflow`, `/compliance`, `/resources`, `/support`,
@@ -24,15 +24,17 @@ Eleventy rebuild if a reference is ever needed.
 ## Develop
 
     npm install
-    npm run dev        # serves dist/ on http://localhost:8099 with live reload
-    npm run check      # snippet check, build, link and anchor check, banned-claim check
-    npm run patch-docs # after re-vendoring the docs export: repoint its header links
+    npm run dev        # serves the marketing site on http://localhost:8099 with live reload
+    npm run build:all  # marketing site + the docs export, combined into dist/
+    npm run check      # build:all, then snippet, link/anchor, and banned-claim checks
 
 ## Deploy
 
-Build command `npm run build`, publish directory `dist/`. Any static host works (Cloudflare Pages,
-Netlify, Vercel, S3 + CDN). `src/_headers` and `src/_redirects` use the Cloudflare Pages / Netlify
-format; translate them if the host differs.
+Deployed to GitHub Pages by `.github/workflows/deploy.yml` on push to `main`: it runs `npm run check`
+(which builds the combined marketing + docs site into `dist/`) and publishes `dist/`. `src/CNAME`
+binds the custom domain (trydecoy.com). Any other static host works with `npm run build:all` and
+publish `dist/`. `src/_headers` and `src/_redirects` use the Cloudflare Pages / Netlify format;
+translate them if the host differs.
 
 ## Structure
 
@@ -53,7 +55,8 @@ format; translate them if the host differs.
   documented command.
 - `scripts/check-links.mjs`: every internal link and anchor resolves.
 - `scripts/check-claims.mjs`: no banned compliance or readiness claims in built pages.
-- `scripts/patch-docs-links.mjs`: repoints the vendored docs header after a re-vendor.
+- `scripts/build-docs.sh`: builds the `docs-src/` Fumadocs export and assembles it into `dist/docs`.
+- `docs-src/`: the Fumadocs docs project (content under `docs-src/content/`); `scripts/sync-cli-reference.mjs` syncs the CLI reference from the decoy repo.
 
 ## Copy rules
 

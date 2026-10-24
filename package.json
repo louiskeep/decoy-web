@@ -8,8 +8,7 @@
     "build:all": "npm run clean && eleventy && npm run build:docs",
     "dev": "eleventy --serve --port 8099",
     "check": "node scripts/check-snippets.mjs && npm run build:all && node scripts/check-links.mjs dist && node scripts/check-claims.mjs dist",
-    "clean": "rm -rf dist",
-    "patch-docs": "node scripts/patch-docs-links.mjs"
+    "clean": "rm -rf dist"
   },
   "repository": {
     "type": "git",
