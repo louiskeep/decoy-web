@@ -1,0 +1,119 @@
+---
+title: Mask related tables
+description: Mask two related tables in one run so the join between them survives.
+---
+
+When a parent table and a child table share a key, masking them separately
+breaks the join: `customers.customer_id` and `orders.customer_id` would each
+get remapped independently, and no order would point at the right customer
+anymore. This recipe masks both tables in one run and keeps the join intact.
+
+## Prerequisites
+
+- A `customers.csv` (`customer_id, first_name, last_name, email, phone, city,
+  state, account_tier`) and an `orders.csv` (`order_id, customer_id,
+  order_date, total_amount, status`) with `orders.customer_id` referencing
+  `customers.customer_id`.
+
+## 1. Declare the relationship
+
+`pipeline.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 7
+sources:
+  customers:
+    type: file
+    format: csv
+    path: ./customers.csv
+  orders:
+    type: file
+    format: csv
+    path: ./orders.csv
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: hash
+        namespace: customer_identity
+      - name: email
+        strategy: faker
+        provider: person_email
+      - name: phone
+        strategy: redact
+  - name: orders
+    columns:
+      - name: customer_id
+        strategy: from_parent
+relationships:
+  - parent: {table: customers, columns: [customer_id]}
+    children:
+      - {table: orders, columns: [customer_id]}
+    orphan_policy: preserve
+    namespace: customer_identity
+targets:
+  customers:
+    type: file
+    format: csv
+    path: ./out/customers.csv
+  orders:
+    type: file
+    format: csv
+    path: ./out/orders.csv
+```
+
+Three things bind the two tables together:
+
+- The parent key uses a deterministic strategy and namespace.
+- The child key uses `strategy: from_parent`. The relationship coordinator
+  copies the matching masked parent value.
+- The `relationships` block names the parent, child, and shared namespace.
+- `orphan_policy` says what to do with a child row whose key has no matching
+  parent. `preserve` leaves the orphan's key as-is; the other options are
+  `remap`, `warn`, and `fail`. See
+  [Orphan policies](/docs/reference/relationships/orphan-policies) for the
+  complete contract.
+
+You do not order the tables yourself: the engine builds an ordering from the
+`relationships` block so the parent is masked before its children.
+
+## 2. Validate and run
+
+```console
+$ decoy validate pipeline.yaml
+$ decoy run pipeline.yaml
+
+╭─ decoy run ──────────────────────────────────────────────────────────────────╮
+│ Pipeline  pipeline.yaml                                                      │
+│ Mode      mask                                                               │
+╰────────────────────────────────────────────────────────────────────────────╯
+```
+
+Inspect both output files. Each masked `orders.customer_id` must equal the
+masked `customers.customer_id` for its source parent.
+
+## 3. Verify the relationship
+
+Make sure that every masked child key still has a masked parent key:
+
+```python
+import csv
+
+parents = {row["customer_id"] for row in csv.DictReader(open("out/customers.csv"))}
+children = {row["customer_id"] for row in csv.DictReader(open("out/orders.csv"))}
+assert children <= parents
+```
+
+See [Output integrity](/docs/reference/validation/output-integrity) for the
+post-run detector and relationship checks.
+
+## Next
+
+- Look up composite, self-referential, and multi-hop shapes in
+  [Relationship reference](/docs/reference/relationships).
+- Read [Subset a dataset](/docs/cli/data/subset-a-dataset) to create a smaller
+  referentially complete dataset.
+- Gating a folder mask like this one in a pipeline: see
+  [use Decoy in CI](/docs/cli/automation/use-decoy-in-ci).

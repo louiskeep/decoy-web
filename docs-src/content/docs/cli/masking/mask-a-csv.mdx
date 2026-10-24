@@ -5,8 +5,7 @@ description: Mask one CSV file with a mix of value-keyed and one-way strategies,
 
 This recipe masks a single CSV: a synthetic replacement for `email`, a
 one-way redaction for `phone`, and a deterministic keyed hash for
-`customer_id` that stays stable across runs. It was run end to end against
-`decoy` CLI 0.1.0 (engine 0.4.0); every command block below is real output.
+`customer_id` that stays stable across runs.
 
 ## Prerequisites
 
@@ -150,8 +149,8 @@ secret and the seed relate, and the full strategy catalog on the
 ## Next
 
 - Masking more than one table with a shared key: see
-  [mask a folder with foreign keys](/docs/how-to/mask-a-folder-with-foreign-keys).
+  [mask a folder with foreign keys](/docs/cli/masking/mask-related-tables).
 - Recovering a `vault: true` or `fpe` column later: `decoy unmask` (see the
   [CLI reference](/docs/reference/cli)).
 - Wiring this into a pipeline that gates on the result: see
-  [use Decoy in CI](/docs/how-to/use-decoy-in-ci).
+  [use Decoy in CI](/docs/cli/automation/use-decoy-in-ci).

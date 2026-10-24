@@ -25,6 +25,14 @@ function resolve(href) {
   let [p, hash] = href.split("#");
   if (p === "") return { file: null, hash };
   if (!p.startsWith("/")) return null;
+  // Static exports URL-encode dynamic route directory names in HTML (for
+  // example, [[...slug]] becomes %5B%5B...slug%5D%5D). The filesystem keeps
+  // the decoded name, as does a static host after parsing the request URL.
+  try {
+    p = decodeURIComponent(p);
+  } catch {
+    return { file: path.join(root, p), hash };
+  }
   p = p.replace(/\/$/, "/index.html");
   if (!path.extname(p)) {
     // Fumadocs export: /docs/foo -> docs/foo.html; marketing: /cli -> cli/index.html

@@ -1,4 +1,4 @@
 {
   "title": "Documentation",
-  "pages": ["start", "how-to", "concepts", "reference"]
+  "pages": ["start", "cli", "platform", "concepts", "reference", "technical-reference"]
 }

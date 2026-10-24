@@ -1,0 +1,27 @@
+---
+title: Data profiling
+description: Learn what a Decoy profile reports and why a user must review its suggestions.
+---
+
+Data profiling examines a source before a pipeline runs. It reports table
+shape, field statistics, and possible sensitive fields.
+
+## Suggestions, not classifications
+
+Detection uses field names, patterns, value shape, and statistical signals.
+These signals can be incomplete or ambiguous. A user decides which policy and
+strategy apply to each field.
+
+Profiling does not mask, redact, or generate data. It supplies information for
+the pipeline review.
+
+## Before and after a run
+
+Use `decoy scan` before a run. This command does not expose raw cell values
+in its output.
+
+After a run, use output-integrity checks to detect possible residual sensitive
+data and relationship failures. Use distribution integrity to measure utility.
+These checks test different properties.
+
+Read [Scan your data](/docs/cli/discover/profile-data) for the procedure.

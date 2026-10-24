@@ -1,0 +1,36 @@
+---
+title: One-to-one and one-to-many relationships
+description: Configure a parent key that one or many child rows reference.
+---
+
+One-to-one and one-to-many relationships use the same configuration. The data
+determines how many child rows reference each parent row.
+
+```yaml
+relationships:
+  - parent: { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders, columns: [customer_id] }
+    orphan_policy: preserve
+    namespace: customer_identity
+```
+
+Use `customer_identity` for the parent key and the relationship. Configure the
+columns like this:
+
+```yaml
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: hash
+        namespace: customer_identity
+  - name: orders
+    columns:
+      - name: customer_id
+        strategy: from_parent
+```
+
+The relationship coordinator gives each matched child the masked parent value.
+
+Use this shape for a one-to-one profile table or a one-to-many orders table.

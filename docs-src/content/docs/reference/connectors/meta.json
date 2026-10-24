@@ -1,4 +1,4 @@
 {
   "title": "Connectors",
-  "pages": ["index", "s3", "gcs", "sftp"]
+  "pages": ["s3", "gcs", "sftp"]
 }

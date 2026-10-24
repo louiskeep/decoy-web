@@ -1,0 +1,24 @@
+---
+title: Mask healthcare codes
+description: Replace one healthcare code column with valid values from a code set.
+---
+
+Use the `code_set` strategy for a diagnosis, procedure, drug, or merchant code:
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  provider_config:
+    code_set: icd10
+    chapter_preserve: true
+```
+
+Validate and run the pipeline:
+
+```bash
+decoy validate pipeline.yaml
+decoy run pipeline.yaml
+```
+
+Read [Healthcare code sets](/docs/reference/generation/healthcare-code-sets)
+for shipped corpus names, customer corpus requirements, and version pinning.

@@ -1,0 +1,48 @@
+---
+title: Generate with differential privacy
+description: Fit one private snapshot and use it to generate synthetic rows.
+---
+
+Fit a private snapshot from explicitly bounded columns:
+
+```bash
+decoy fit patients.csv \
+  --output patients.dp.json \
+  --epsilon 1.0 --delta 0.000001 \
+  --dp-number age:0:120 \
+  --dp-text diagnosis_code
+```
+
+Reference the snapshot in the generation pipeline:
+
+```yaml
+global_settings:
+  seed: 42
+  dp:
+    epsilon: 1.0
+    delta: 0.000001
+tables:
+  - name: patients
+    row_count: 1000
+    generate_columns:
+      - name: age
+        type: statistical
+        snapshot_file: ./patients.dp.json
+      - name: diagnosis_code
+        type: statistical
+        snapshot_file: ./patients.dp.json
+```
+
+The `dp` block is required. It makes the compiler verify the snapshot and
+enforce the pipeline's composed budget ceiling.
+
+Then validate and run:
+
+```bash
+decoy validate pipeline.yaml
+decoy run pipeline.yaml --mode generate
+```
+
+Read [Differentially private generation](/docs/reference/generation/differential-privacy)
+for carrier types and budget rules. Read [Differential privacy](/docs/concepts/differential-privacy)
+before you choose epsilon or describe the guarantee.

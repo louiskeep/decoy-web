@@ -26,12 +26,9 @@ const sourcePath = resolve(
   process.env.CLI_MDX_SOURCE || 'content/docs/reference/cli/_source/cli-reference.md'
 )
 
-// "Group count below an expected floor" guard (spec Section 4.3). 15 top-level
-// groups exist today (the CLI consolidated: storm folded into scan, many former
-// top-level commands became subcommands of report/validate/list/show). The floor
-// sits below that so ordinary command changes never trip it, but a parse that
-// yields a handful of groups (e.g. from a header-format change) still fails
-// loudly instead of silently shipping a truncated reference.
+// "Group count below an expected floor" guard (spec Section 4.3). The streamlined
+// CLI has 15 top-level groups today. Keep the floor below that so intentional
+// consolidation does not look like truncation, while a broken parse still fails.
 const MIN_GROUPS = 12
 
 function fail(message) {
@@ -299,8 +296,11 @@ const indexBody = [introPartial, '## Command map', rootBody].join('\n\n')
 
 writeFileSync(resolve(outDir, 'index.mdx'), `${indexFrontmatter}\n${indexBody.trim()}\n`)
 
-// --- Emit meta.json: index first, then commands alphabetically -------------------
-const metaPages = ['index', ...groupSections.map((g) => g.name).sort((a, b) => a.localeCompare(b))]
+// --- Emit meta.json: commands alphabetically -------------------------------------
+// Fumadocs discovers index.mdx as the folder landing page automatically. Listing
+// it here turns the folder heading into a disclosure-only control instead of a
+// link to /docs/reference/cli.
+const metaPages = groupSections.map((g) => g.name).sort((a, b) => a.localeCompare(b))
 writeFileSync(
   resolve(outDir, 'meta.json'),
   `${JSON.stringify({ title: 'CLI reference', pages: metaPages }, null, 2)}\n`

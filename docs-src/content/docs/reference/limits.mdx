@@ -13,41 +13,32 @@ it doesn't make.
 ## It provides a formal privacy guarantee in exactly one place
 
 Masked outputs carry no differential privacy, no epsilon, and no
-mathematical bound on re-identification risk. The scan's re-identification-risk
-score is a heuristic diagnostic to help you assess a dataset; it is not a
-proof.
+mathematical bound on re-identification risk. A profile risk score is a
+heuristic diagnostic. It is not a proof.
 
 The one formal mechanism is `decoy fit --epsilon`: a distribution snapshot's
 counts are released with per-count noise under differential privacy, exact
-quantiles and means are removed, and numeric values are binned over a domain
-you declare. Read that scope narrowly:
+quantiles and means are removed, and min/max collapse to histogram-edge
+resolution. Read that scope narrowly:
 
-- The requested `(epsilon, delta)` is the budget for the whole fit, covering
-  every declared column together. The fit allocates and composes its internal
-  queries so the total spend stays within that epsilon. It is not a per-column
-  multiplier, and there is no `(k + 1) * epsilon` growth across columns.
-- Across a pipeline, distinct DP releases compose: their budgets add up and
-  are checked against the `global_settings.dp` ceiling, and a release shared
-  by several columns is charged once. Exceeding the ceiling fails the compile
-  with `dp_budget_exceeded`.
-- A numeric column's domain is data-independent: it is the `LO:HI` you pass to
-  `--dp-number`, not the real min and max, and values outside it clamp to the
-  bounds. A categorical column is different: the labels it releases are real
-  observed strings, but only the ones whose noisy count clears a threshold. The
-  rare tail is suppressed, which is what makes the selection private.
-  `allow_real_categories`, which would release the full observed vocabulary
-  with no suppression, is rejected under a DP generate.
-- Joint (multi-column) distributions are not covered by `--epsilon`.
-  `--joint` and `condition_on` are rejected under DP: there is no composition
-  accounting for a joint table in this build.
-- Generated data carries the guarantee only when it is sampled solely from
-  verified DP releases: sampling is post-processing, which differential privacy
-  preserves. The snapshot itself still samples deterministically. Masking is
-  entirely outside this mechanism and inherits nothing.
+- The privacy budget is per column histogram. A snapshot of several columns
+  composes sequentially, so releasing k columns spends roughly `(k + 1) *
+  epsilon` of total budget.
+- Bin edges and category labels stay data-dependent: the histogram range
+  comes from the real min and max, and categorical top values can carry real
+  category strings when explicitly allowed. A fully data-independent release
+  is a known follow-up, not current behavior.
+- Joint (multi-column) distributions are not covered by `--epsilon` in the
+  current version; there is no composition accounting for releasing
+  marginals and a joint table under one budget yet.
+- Nothing downstream of the snapshot inherits the guarantee. Generation
+  samples deterministically from the noisy artifact, and masking is entirely
+  outside this mechanism.
 
-If your use case requires a formal privacy guarantee over masked output, Decoy
-does not supply it: differential privacy in Decoy is the `--epsilon` fit and
-generation from it, not a property of masked data.
+If your use case requires a formal privacy guarantee over the masked or
+generated data itself, Decoy alone does not supply it. Differential privacy
+in Decoy is scoped to the `--epsilon` snapshot path described above; it is
+not a property of masked output in general.
 
 ## It does not certify legal or regulatory compliance
 
@@ -79,19 +70,17 @@ stakes warrant.
 Decoy validates a config against its schema and runs what the config says.
 It does not know which columns in your data are actually sensitive. If a
 config leaves a sensitive column on `passthrough`, or masks the wrong
-column, the run succeeds and the output leaks. Use the scan to find candidate
-PII and use post-mask integrity checks to look for residual identifiers, but
-the mapping from your data's actual sensitivities to a correct config is
-yours to get right; see [the scan](/docs/concepts/scan) for how that review
-step is meant to work.
+column, the run succeeds and the output leaks. Use data profiling to find
+possible sensitive fields. Then use output-integrity checks to find possible
+residual identifiers. You remain responsible for the final configuration.
+See [Data profiling](/docs/concepts/profiling) for this review model.
 
-## The column classifier does not de-identify anything
+## Data profiling does not de-identify anything
 
-The scan's column classifier detects which semantic type a column is likely to
-contain (SSN, email, a diagnosis code, and so on). It does not mask, redact,
-transform, or remove any values. A column classified as `ssn` still contains
-SSNs in the clear until a masking step in your pipeline explicitly
-transforms it.
+The profiler reports the semantic type that a column can contain. Examples
+include an SSN, an email address, or a diagnosis code. Profiling does not mask,
+redact, transform, or remove values. A flagged column still contains source
+values until a pipeline transforms it.
 
 The classifier is an advisory signal, not a ground truth. It can have false
 negatives (PII columns it misses) and false positives (non-PII columns it

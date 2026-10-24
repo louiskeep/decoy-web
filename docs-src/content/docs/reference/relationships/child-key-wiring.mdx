@@ -1,0 +1,39 @@
+---
+title: Child-key wiring
+description: Choose how a foreign-key child receives the masked parent value.
+---
+
+For normal masking, use `from_parent` on each child-key column. The
+relationship coordinator owns the child mapping.
+
+```yaml
+tables:
+  - name: customers
+    columns:
+      - name: customer_id
+        strategy: hash
+        namespace: customer_identity
+  - name: orders
+    columns:
+      - name: customer_id
+        strategy: from_parent
+relationships:
+  - parent: { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders, columns: [customer_id] }
+    orphan_policy: fail
+    namespace: customer_identity
+```
+
+The parent strategy creates the masked identity. A matched child receives that
+exact value. Do not add a provider or namespace to a `from_parent` column.
+
+Some bounded execution routes can mask a child key from its own source value.
+That form requires matching parent and child strategies, settings, namespaces,
+and data types. It also has narrower topology support. Use it only when the
+execution guidance for that route requires it. Run
+`decoy validate pipeline.yaml` after each change.
+
+For generated tables, use a generation column with `type: reference`,
+`reference_table`, and `reference_column`. Generated reference graphs must be
+acyclic.

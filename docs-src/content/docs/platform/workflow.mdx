@@ -1,0 +1,44 @@
+---
+title: The platform workflow
+description: Follow a managed pipeline from data connection through review and automation.
+draft: true
+---
+
+The platform adds shared controls around the same pipeline that the CLI runs.
+
+## 1. Connect the data
+
+Create or select a saved connector. Make sure that the platform can read the
+source and write to the target.
+
+## 2. Profile the source
+
+Run a profile before you select strategies. Review possible sensitive fields
+and data-shape findings.
+
+## 3. Build the pipeline
+
+Create the pipeline in the editor or import reviewed YAML. Select a strategy for
+each sensitive field. Declare relationships between tables.
+
+## 4. Run preflight checks
+
+Platform preflight checks the pipeline, connector access, secrets, permissions,
+source selection, and target readiness.
+
+## 5. Run and monitor the job
+
+Start one manual job. Monitor its job log and terminal status. Do not add a
+schedule until the manual run produces the expected output.
+
+## 6. Review the result
+
+Review integrity findings, distribution quality, evidence, and approvals. Fix
+the pipeline when a finding violates the release policy.
+
+## 7. Automate the reviewed pipeline
+
+Add a schedule, trigger, or external API call only after the reviewed manual run
+succeeds.
+
+{/* Held until the platform launch under DOCS-PLAN.md. */}

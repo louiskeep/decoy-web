@@ -1,4 +1,4 @@
 {
-  "title": "Get started",
-  "pages": ["install", "quickstart", "demo"]
+  "title": "Start here",
+  "pages": ["install", "demo", "quickstart", "generate"]
 }

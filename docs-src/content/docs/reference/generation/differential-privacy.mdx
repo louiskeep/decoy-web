@@ -1,0 +1,51 @@
+---
+title: Differentially private generation
+description: Fit and use a private distribution snapshot with an explicit epsilon and delta budget.
+---
+
+`decoy fit --epsilon` creates a `dps-marginal/v3` snapshot. The privacy budget
+applies to the declared numeric, flag, and text carriers in that release.
+
+```bash
+decoy fit patients.csv \
+  --output patients.dp.json \
+  --epsilon 1.0 \
+  --delta 0.000001 \
+  --dp-number age:0:120 \
+  --dp-text diagnosis_code
+```
+
+Every DP numeric column needs a data-independent lower and upper bound. Declare
+boolean columns with `--dp-flag` and categorical text with `--dp-text`. By
+default, the fit fails when the source contains an undeclared column. Use
+`--dp-allow-omit` only when that omission is intentional.
+
+Reference the snapshot from a statistical generation column:
+
+```yaml
+global_settings:
+  seed: 42
+  dp:
+    epsilon: 1.0
+    delta: 0.000001
+tables:
+  - name: patients
+    row_count: 1000
+    generate_columns:
+      - name: age
+        type: statistical
+        snapshot_file: ./patients.dp.json
+      - name: diagnosis_code
+        type: statistical
+        snapshot_file: ./patients.dp.json
+```
+
+The `dp` block declares an enforced ceiling. The compiler composes the spend of
+each distinct DP release used by the pipeline and rejects an over-budget plan.
+
+Do not set `allow_real_categories` or `high_cardinality` for a DP-backed
+column. Those settings can release observed labels and are rejected.
+
+The fit uses one budget across its released marginals. It does not create a
+joint-distribution guarantee. Read [Differential privacy](/docs/concepts/differential-privacy)
+for the guarantee and its limits.

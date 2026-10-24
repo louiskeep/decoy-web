@@ -1,7 +1,5 @@
-This is the generated reference for every `decoy` command, kept in sync with the
-CLI itself. Each command group below documents its own arguments and options;
-commands that only read or write a local `.decoy/` workspace say so in their own
-description.
+This is the generated reference for every `decoy` command. It stays in sync with
+the CLI. Each command group documents its arguments and options.
 
 ## Exit codes
 
@@ -12,13 +10,13 @@ CI pipelines can branch on it without parsing output.
 | --- | --- |
 | `0` | OK. The command completed successfully. |
 | `1` | Usage error. Bad arguments, a malformed config, or similar. |
-| `2` | Deprecated-invocation or warning-gate exit. The legacy `forge` console command exits `2` without running anything, printing a message to invoke `decoy` instead; `decoy validate config --fail-on-warning` and `decoy validate preflight --fail-on-warning` also exit `2` when an advisory warning fires (for example an output target that already exists). |
+| `2` | Deprecated invocation or warning-gate exit. The legacy `forge` command exits `2`. `decoy validate config --fail-on-warning` and `decoy validate preflight --fail-on-warning` also use this code. |
 | `3` | Runtime error. The command started but failed while running. |
-| `4` | Findings. The command completed but surfaced something that needs review, for example a scan finding PII, or a distribution-fidelity check landing below policy (`decoy report fidelity --mode fail` also uses `4` for its own warning/fail verdicts). |
+| `4` | Findings. The command completed but found something to review. Examples include scan findings, failed integrity checks, and fidelity below policy. |
 
-Exit code `2` is narrower than the findings split above: it covers the
-legacy `forge` shim, which exits `2` without running anything, plus the
-`--fail-on-warning` gate on `validate config` and `preflight`.
+Renamed commands can print a migration warning and still exit `0` when the
+underlying command succeeds. Exit code `2` covers the legacy `forge` shim and
+the `--fail-on-warning` validation gate.
 
-See [Use decoy in CI](/docs/how-to/use-decoy-in-ci) for how to branch on these
+See [Use decoy in CI](/docs/cli/automation/use-decoy-in-ci) for how to branch on these
 codes in a pipeline, including why exit code `4` is not the same as a failure.

@@ -1,0 +1,89 @@
+---
+title: The CLI workflow
+description: Learn which Decoy commands to run, in which order, and what each checkpoint proves.
+---
+
+A normal Decoy run has five stages. The same stages apply to masking and
+generation.
+
+```text
+scan -> configure -> validate -> run -> report
+```
+
+## 1. Inspect the environment and data
+
+Run `decoy doctor` after installation. Run `decoy scan` when you have a
+source file.
+
+```bash
+decoy doctor
+decoy scan customers.csv --show-fields
+```
+
+The scan reports possible sensitive fields. It does not classify the data
+or change the file.
+
+## 2. Create the pipeline configuration
+
+Use `decoy init` to create a reviewed starting point:
+
+```bash
+decoy init customers.csv --output pipeline.yaml
+```
+
+Read every `# REVIEW:` comment. Change each suggested strategy that does not
+match your data or policy.
+
+For generation, start from a generation template or write `generate_columns`
+directly.
+
+## 3. Validate the pipeline
+
+Validate the configuration before each run:
+
+```bash
+decoy validate pipeline.yaml
+```
+
+This command runs the configuration, compile, and local preflight checks. It
+checks source access and target overwrite risk before the run.
+
+Use `decoy validate config` or `decoy validate preflight` when you need only
+one validation layer. Platform preflight also checks permissions, secrets,
+saved connectors, and server policies.
+
+Use this optional command to inspect the compiled work:
+
+```bash
+decoy validate compile pipeline.yaml --explain
+```
+
+## 4. Run the pipeline
+
+```bash
+decoy run pipeline.yaml --evidence-out evidence.json
+```
+
+Inspect the output before you share or automate it.
+
+## 5. Report on the result
+
+Use distribution integrity when the output must preserve analytical shape:
+
+```bash
+decoy report fidelity customers.csv customers.masked.csv \
+  --config pipeline.yaml --mode warn --report-out distribution.json
+```
+
+Then verify that the evidence manifest still matches the files:
+
+```bash
+decoy report verify evidence.json
+```
+
+These checks answer different questions. Distribution integrity measures data
+utility. Evidence verification detects file drift. Neither check proves that
+all sensitive data is removed.
+
+See [Validation reference](/docs/reference/validation) for the complete decision
+guide.

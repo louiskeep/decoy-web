@@ -1,4 +1,4 @@
 {
   "title": "Configuration",
-  "pages": ["index", "global-settings", "schema"]
+  "pages": ["global-settings", "schema"]
 }

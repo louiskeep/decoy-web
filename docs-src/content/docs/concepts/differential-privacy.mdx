@@ -1,257 +1,66 @@
 ---
 title: Differential privacy in Decoy
-description: Marginal differential privacy on generated synthetic data using typed carriers and configurable epsilon/delta budgets.
-draft: false
+description: Understand Decoy's fit-wide privacy budget and generated-data guarantee.
 ---
 
-Decoy can give you a formal **differential privacy** guarantee in one specific
-place: a distribution snapshot fitted with `decoy fit --epsilon`, and the
-synthetic data generated from it. This page explains what that guarantee is,
-where the budget lives, and what it does not cover.
+Decoy can fit a differentially private marginal snapshot and generate rows from
+it. The guarantee uses add-or-remove-one-row adjacency.
 
-It comes in two steps, and the privacy budget appears in both:
+## Two required declarations
 
-1. **Fit a DP snapshot.** `decoy fit --epsilon --delta`, with each column
-   declared as a typed carrier, releases a `dps-marginal/v3` artifact instead
-   of the exact snapshot. The counts in that artifact are noised under
-   differential privacy.
-2. **Generate against a budget ceiling.** In the pipeline, `global_settings.dp`
-   declares that the generated output must be DP and sets an enforced
-   `(epsilon, delta)` ceiling. At compile time Decoy verifies every statistical
-   column was fitted with DP and that the total spend stays under the ceiling.
+The fit command declares the release budget and the allowed data carriers:
 
-## The guarantee
-
-The fit reads your source once and releases, under differential privacy:
-
-- A noisy row count.
-- For each numeric column, a noisy histogram over a domain you declare.
-- For each categorical column, a noisy count per category, with rare
-  categories dropped by a noisy threshold.
-
-The guarantee is defined under the **add-or-remove-one-row** model: the
-released counts are indistinguishable, up to the `(epsilon, delta)` budget,
-between two datasets that differ by one row. OpenDP builds and certifies each
-noisy measurement, and the `dp_accounting` library composes those certificates
-into the fit's total spend. Decoy does not invent its own noise formula.
-
-**This is a mathematical bound on the released statistics, not anonymization.**
-Differential privacy bounds what the published counts can reveal about any one
-row. It does not promise the output is scrubbed of all risk, and it is the
-right tool only when you want a budgeted, measured limit on disclosure from a
-column's distribution.
-
-## When to use it
-
-Use a DP fit when:
-
-- You need to generate synthetic data and share or publish it outside the
-  team that holds the source.
-- You want a formal, parameterized privacy guarantee rather than
-  security through obscurity.
-
-Do not rely on Decoy's DP for:
-
-- Masked output. Masking carries no DP guarantee and is outside this mechanism.
-- Dates or free text. These cannot be DP carriers (see the carrier list below).
-- Preserving the source distribution exactly. DP adds noise, which lowers
-  fidelity.
-
-## Typed carriers: what a DP fit can release
-
-Every column in a DP fit is declared as one of three carriers, and only these
-three are eligible:
-
-- **`number`** (`--dp-number COL:LO:HI`): a numeric column, binned over the
-  data-independent domain `[LO, HI]` **you** supply. Values outside the domain
-  clamp to the bounds. The domain is not read from the data, because reading
-  the real min and max would itself leak at zero budget.
-- **`text`** (`--dp-text COL`): a categorical string column, released as noisy
-  per-category counts. Categories whose noisy count falls under the threshold
-  are dropped.
-- **`flag`** (`--dp-flag COL`): a boolean column.
-
-Every source column must be declared with a carrier, or the fit refuses. Pass
-`--dp-allow-omit` to deliberately leave undeclared columns out of the release.
-Dates (`--parse-dates`) and joint tables (`--joint`) are not compatible with
-`--epsilon`.
-
-## Epsilon and delta: the privacy budget
-
-The guarantee is parameterized by two numbers:
-
-**Epsilon (ε)** sets how much noise is added. Smaller epsilon means more noise
-and stronger privacy; larger epsilon means less noise and higher fidelity.
-Typical values run from about 0.1 to 10.
-
-- ε = 0.1: very strong privacy, low fidelity.
-- ε = 1: a common middle choice.
-- ε = 10: weak privacy, high fidelity.
-
-**Delta (δ)** is the small probability that the guarantee does not hold. Use a
-small positive number below 1, typically 1e-6 or smaller. A common rule is to
-keep delta below 1/n, where n is your row count.
-
-### The budget is per release, not per column
-
-The requested `(epsilon, delta)` is the budget for the **whole fit**, covering
-every declared column together. Internally the fit schedules one noisy query
-for the row count, one per numeric column, and two per categorical column, then
-allocates and composes them so the total spend stays within the epsilon you
-asked for. You do not pay a separate epsilon for each column, and the spend does
-not grow by a per-column multiplier.
-
-What composes is **distinct releases**. Each fit mints one release with its own
-identity. When a pipeline's generated columns draw from several independent DP
-fits, their budgets add up and are checked against the `global_settings.dp`
-ceiling. Columns that share a single release are charged once. If the composed
-spend exceeds the declared ceiling, the pipeline fails to compile with
-`dp_budget_exceeded`.
-
-## Configuration
-
-A DP pipeline has two parts: the fit command that produces the snapshot, and
-the pipeline YAML that declares the ceiling and samples from it.
-
-Fit the snapshot with a carrier for each column:
-
-```console
-$ decoy fit patients.csv --output patients.snapshot.json \
-    --epsilon 1.0 --delta 1e-6 \
-    --dp-number age:0:120 \
-    --dp-text diagnosis_code \
-    --dp-flag readmitted \
-    --dp-allow-omit
+```bash
+decoy fit patients.csv \
+  --output patients.dp.json \
+  --epsilon 1.0 --delta 0.000001 \
+  --dp-number age:0:120 \
+  --dp-text diagnosis_code
 ```
 
-`--dp-allow-omit` is needed because `patient_id` is generated as a sequence
-below rather than fitted, so it is not declared as a carrier. Without it, an
-undeclared source column is a usage error, not a silent omission.
+This is one fit-wide `(epsilon, delta)` request. Decoy's accountant composes the
+internal measurements and records the resulting `epsilon_total` and
+`delta_total` in the snapshot.
 
-Then declare the ceiling in the pipeline and sample the snapshot with
-`type: statistical` columns:
+The generation pipeline declares the maximum composed budget it accepts:
 
 ```yaml
-version: 1
-
 global_settings:
   seed: 42
   dp:
     epsilon: 1.0
-    delta: 1e-6
-
-sources: {}
-
-tables:
-  - name: patients
-    row_count: 1000
-    generate_columns:
-      - name: patient_id
-        type: sequence
-        start: 10000
-      - name: age
-        type: statistical
-        snapshot_file: ./patients.snapshot.json
-        source_column: age
-      - name: diagnosis_code
-        type: statistical
-        snapshot_file: ./patients.snapshot.json
-        source_column: diagnosis_code
-      - name: readmitted
-        type: statistical
-        snapshot_file: ./patients.snapshot.json
-        source_column: readmitted
-
-targets:
-  patients:
-    type: file
-    format: csv
-    path: ./patients_synthetic.csv
+    delta: 0.000001
 ```
 
-Key points:
-
-- **`global_settings.dp` holds only `epsilon` and `delta`.** It is the
-  enforced ceiling for the generated output. The per-column domains and
-  carriers are declared at fit time, not here.
-- **Each statistical column names its snapshot and source column.** The budget
-  is set when you fit, not in the generate step.
-- **`allow_real_categories: true` and `high_cardinality: true` are rejected**
-  under `global_settings.dp`, because both would release the full observed
-  vocabulary instead of only the thresholded labels a DP fit is allowed to
-  emit, and silently void the guarantee.
+This block is an enforced ceiling, not a label. The compiler verifies each
+distinct DP release by its release ID. It rejects the pipeline when the composed
+snapshot spend exceeds either ceiling.
 
 ## What the guarantee covers
 
-The formal guarantee applies to:
+The guarantee covers the fitted marginal release and deterministic
+post-processing from it, including synthetic sampling. It does not cover:
 
-- The released per-column counts: numeric histograms and categorical counts.
-- Synthetic rows sampled from the noisy snapshot.
+- masking existing rows;
+- joint or conditional distributions;
+- dates, free text, or undeclared source columns;
+- schema and column names, which are treated as public metadata;
+- multiple records that belong to one person as one privacy unit.
 
-It does **not** cover:
+The privacy unit is one row. A person with many rows can contribute more than
+one unit.
 
-- Column names or the schema. These are treated as public metadata.
-- Foreign-key structure. Also public structure.
-- Masked output. Masking is entirely outside the DP boundary.
-- Conditional or joint generation (`condition_on`), which is rejected under DP
-  because joint distributions are not released privately in this build.
-- Dates and free text, which are not eligible carriers.
+## Budget and utility
 
-## What the guarantee does not mean
+Lower epsilon usually adds more noise and reduces fidelity. Delta is the
+approximate-DP failure parameter. Choose both values through your privacy
+review; Decoy does not select an organizationally safe budget for you.
 
-**DP does not mean zero leakage.** It means bounded leakage. An attacker with
-the synthetic data learns something, but only up to the epsilon budget.
+Multiple distinct DP snapshots in one pipeline compose. Reusing one release in
+several columns does not create a new release ID, but consuming another DP
+snapshot adds its recorded spend to the pipeline ceiling check.
 
-**DP is not anonymization.** Privacy and utility trade off. More noise makes
-the output safer to publish and less faithful to the source. You still review
-the output and decide whether it is safe for your use.
-
-**DP in Decoy measures by row, not by person.** The guarantee covers removing
-one row. If one person has fifty rows (claims, lab results), removing that
-person is a fifty-row change, far beyond the one-row guarantee. For
-multi-record data, per-person privacy is weaker than the per-row epsilon
-suggests. Decoy's unit is the row.
-
-## Comparing to a non-DP fit
-
-A plain `decoy fit` (no `--epsilon`) captures exact quantiles and counts with
-no noise: no privacy guarantee, generally higher fidelity, and faster, because
-there is no OpenDP measurement to run. A DP fit trades that fidelity and speed
-for the formal bound.
-
-A recurring misconception: DP is not what makes the output resemble the source.
-Fitting does. DP is what makes the resemblance safe to publish.
-
-## When fidelity drops
-
-Turning on DP normally lowers fidelity against the same fit without it. The main
-reasons:
-
-- Noise is added to histogram counts and category counts.
-- Rare categories are dropped when their noisy count falls under the threshold.
-- Lower epsilon (more noise) pushes the output further from the source.
-
-To improve fidelity under DP you can raise epsilon (weaker guarantee), raise
-delta (higher failure probability), release fewer columns, or narrow a numeric
-domain so each bin covers less range.
-
-## Usage in practice
-
-1. **Plan your budget.** Decide epsilon and delta from your sensitivity and use
-   case. Consult your privacy or security team for a high-stakes release.
-2. **Declare carriers at fit time.** Give every column a `--dp-number`,
-   `--dp-text`, or `--dp-flag`, and a data-independent domain for each numeric
-   column.
-3. **Set the ceiling and generate.** Put the matching `(epsilon, delta)` in
-   `global_settings.dp` and sample the snapshot with statistical columns.
-4. **Review and test.** Check that the output is useful for your downstream
-   task. DP adds noise, so utility may be lower than a non-DP fit.
-5. **Publish with the budget in hand.** Once fidelity is acceptable, the
-   synthetic data carries the `(epsilon, delta)` guarantee.
-
-## See also
-
-- [Use differential privacy](/docs/how-to/use-differential-privacy): step-by-step recipe
-- [Generate synthetic data](/docs/how-to/generate-synthetic-data): the non-DP generation recipe
-- [Determinism](/docs/concepts/determinism): how seeds and keys affect reproducibility
-- [Security, privacy, and compliance limits](/docs/reference/limits): the honest boundaries of all Decoy guarantees
+DP is not anonymization and does not certify an output for unrestricted
+publication. Read [Differentially private generation](/docs/reference/generation/differential-privacy)
+for the exact configuration and [Security, privacy, and compliance limits](/docs/reference/limits)
+for the boundary of the claim.

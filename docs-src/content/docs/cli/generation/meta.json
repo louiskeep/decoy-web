@@ -1,0 +1,4 @@
+{
+  "title": "Generate data",
+  "pages": ["generate-synthetic-data", "use-differential-privacy", "high-cardinality-data", "healthcare-code-sets"]
+}

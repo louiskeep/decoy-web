@@ -1,0 +1,85 @@
+---
+title: Distribution integrity
+description: Decide when and how to compare the statistical shape of source and output data.
+---
+
+Distribution integrity measures data utility. It compares a source dataset with
+a masked or generated output. It does not search for residual sensitive data.
+
+## Use distribution integrity when
+
+- Tests depend on realistic numeric or categorical distributions.
+- A masking strategy must preserve an approved amount of analytical utility.
+- A generated dataset must resemble a fitted source distribution.
+- CI must detect an unexpected change in output quality.
+- You change a strategy, provider, seed protocol, or generation configuration.
+
+Do not use distribution integrity as a privacy certificate. A close statistical
+match can still contain sensitive values.
+
+## Report without enforcement
+
+The default mode records a report and exits successfully:
+
+```bash
+decoy report fidelity source.csv output.csv \
+  --config pipeline.yaml \
+  --report-out distribution.json
+```
+
+Use this mode while you establish a baseline.
+
+## Warn or fail on thresholds
+
+Set a minimum grade:
+
+```bash
+decoy report fidelity source.csv output.csv \
+  --config pipeline.yaml \
+  --mode warn \
+  --min-grade B \
+  --report-out distribution.json
+```
+
+Use `--mode fail` to return exit code `4` when the output misses the policy.
+Use `--fail-on-warning` when warnings must also block CI.
+
+Set a score instead of a grade when the policy requires an exact threshold:
+
+```bash
+decoy report fidelity source.csv output.csv \
+  --config pipeline.yaml \
+  --mode fail \
+  --min-score 0.85
+```
+
+## Masking and generation
+
+Masking expects row-count parity by default. Add `--generate` when the output is
+synthetic and can contain a different number of rows:
+
+```bash
+decoy report fidelity source.csv synthetic.csv \
+  --generate --mode warn --min-grade B
+```
+
+## Joint distributions
+
+Add `--joint` for column pairs whose relationship matters:
+
+```bash
+decoy report fidelity source.csv output.csv \
+  --joint age,income \
+  --joint state,plan_type
+```
+
+A good marginal score does not prove that cross-column relationships survived.
+Use joint checks for relationships that affect tests or analysis.
+
+## Strategy-aware checks
+
+Pass `--config` when the pipeline intentionally changes a distribution. The
+configuration lets Decoy apply strategy-specific expectations.
+
+Without `--config`, the command uses default policy checks. Those defaults can
+flag intended loss from strategies such as `redact`, `bucketize`, or `hash`.

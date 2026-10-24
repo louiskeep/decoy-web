@@ -6,6 +6,14 @@ import { join } from 'node:path'
 
 const DOCS = 'content/docs'
 const BASE = 'https://trydecoy.com/docs'
+const SITE_PAGES = [
+  '- [Home](https://trydecoy.com/): Product overview and paths into the CLI and platform.',
+  '- [CLI](https://trydecoy.com/cli/): Local masking, generation, subsetting, validation, and automation.',
+  '- [Platform](https://trydecoy.com/platform/): Shared jobs, connectors, access controls, and self-hosted operations.',
+  '- [How it works](https://trydecoy.com/how-it-works/): The end-to-end Decoy workflow and execution model.',
+  '- [Pricing](https://trydecoy.com/pricing/): Available editions, support, and licensing.',
+  '- [Security](https://trydecoy.com/security/): Data boundaries, keys, audit records, and security practices.',
+]
 
 function frontmatter(file) {
   const text = readFileSync(file, 'utf8')
@@ -66,7 +74,8 @@ function section(dir) {
 function sectionWithHeading(dir) {
   const m = meta(dir)
   const title = m?.title || dir.split('/').pop()
-  return [``, `## ${title}`, ...section(dir)]
+  const index = pageLine(dir, 'index')
+  return [``, `## ${title}`, ...(index ? [index] : []), ...section(dir)]
 }
 
 const rootMeta = meta(DOCS)
@@ -74,6 +83,9 @@ const out = [
   '# Decoy',
   '',
   '> Self-hosted data masking and synthetic data generation. Mask sensitive fields, generate synthetic rows, and subset related tables through explicit YAML pipelines you run yourself.',
+  '',
+  '## Site',
+  ...SITE_PAGES,
 ]
 for (const entry of rootMeta.pages) {
   const sub = join(DOCS, entry)

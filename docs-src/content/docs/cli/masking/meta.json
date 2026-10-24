@@ -1,0 +1,4 @@
+{
+  "title": "Mask data",
+  "pages": ["mask-a-csv", "choose-a-strategy", "mask-related-tables", "redact-free-text", "unmask-data"]
+}

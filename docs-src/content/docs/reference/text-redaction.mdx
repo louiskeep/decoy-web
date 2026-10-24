@@ -1,0 +1,34 @@
+---
+title: Text redaction
+description: Configure pattern and named-entity detection for free-text masking.
+---
+
+`text_redact` finds sensitive spans and replaces them with fixed tokens. Put
+the settings under `provider_config`.
+
+| Setting | Type | Purpose |
+| --- | --- | --- |
+| `detectors` | list | Select pattern detectors. |
+| `ner` | boolean or object | Enable named-entity recognition. |
+| `ner.entities` | list | Keep only `person_name`, `location`, or both. |
+| `ner.model` | string | Select the installed NER model. |
+| `token` | string | Set the replacement token. |
+| `label_token` | boolean | Include the detected type in the token. |
+
+```yaml
+- name: clinical_note
+  strategy: text_redact
+  provider_config:
+    detectors: [email, phone]
+    ner:
+      entities: [person_name, location]
+    token: "[REDACTED]"
+    label_token: true
+```
+
+Install the engine NER extra and the selected model before you enable `ner`.
+Pattern detectors work without NER.
+
+Use `text_mask` when the output needs realistic replacement values. Read
+[text_redact](/docs/reference/strategies/text-redact) and
+[text_mask](/docs/reference/strategies/text-mask) for their strategy settings.

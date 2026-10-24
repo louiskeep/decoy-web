@@ -15,7 +15,7 @@ export default function (eleventyConfig) {
   for (const f of ["gsap", "ScrollTrigger", "SplitText"]) {
     eleventyConfig.addPassthroughCopy({ [`node_modules/gsap/dist/${f}.min.js`]: `js/vendor/${f}.min.js` });
   }
-  for (const f of ["CNAME", "_headers", "_redirects", "robots.txt", "llms.txt", "sitemap.xml", "decoy-mark.png", "decoy-favicon-32.png"]) {
+  for (const f of ["CNAME", "_headers", "_redirects", "robots.txt", "sitemap.xml", "decoy-mark.png", "decoy-favicon-32.png"]) {
     eleventyConfig.addPassthroughCopy(`src/${f}`);
   }
 

@@ -16,9 +16,9 @@ are its top-level keys; follow the links for the detail of each.
 | `targets` | yes | Named outputs, keyed by table. See [Connectors and formats](/docs/reference/connectors) |
 | `sources` | for mask tables | Named inputs, keyed by table (generate tables have no source). See [Connectors and formats](/docs/reference/connectors) |
 | `relationships` | no | Foreign keys to preserve across tables. See [Relationships](/docs/reference/relationships) |
-| `subset` | no | A referentially intact slice of the inputs. See [Subset a dataset](/docs/how-to/subset-a-dataset) |
+| `subset` | no | A referentially intact slice of the inputs. See [Subset a dataset](/docs/cli/data/subset-a-dataset) |
 | `namespaces` | no | Declared namespaces for keyed strategies |
-| `run_storm` | no | Run a scan on the output (default `false`) |
+| `run_storm` | no | Run the legacy-named output-integrity check (default `false`) |
 | `validators` | no | Job-level validators run after masking |
 | `quarantine` | no | Hold back rows that fail a rule |
 

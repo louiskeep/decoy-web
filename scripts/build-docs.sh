@@ -29,3 +29,8 @@ cp docs-src/out/docs.html dist/docs/index.html
 cp docs-src/out/docs.html dist/docs.html
 cp -r docs-src/out/_next dist/_next
 cp -r docs-src/out/api dist/api
+cp docs-src/out/llms.txt dist/llms.txt
+# Keep the marketing redirects from Eleventy, then add only docs migrations.
+# The docs export also redirects "/" to "/docs" for standalone previews; that
+# rule must not replace the combined site's marketing home page.
+grep '^/docs' docs-src/out/_redirects >> dist/_redirects

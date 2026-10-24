@@ -1,0 +1,29 @@
+---
+title: Handle high-cardinality categories
+description: Choose a safe generation path for columns with many distinct labels.
+---
+
+Use a known public code corpus when one exists. This example masks diagnosis
+codes without retaining the source vocabulary:
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  provider_config:
+    code_set: icd10
+```
+
+Use statistical generation only when releasing the observed labels is
+acceptable:
+
+```yaml
+- name: product_code
+  type: statistical
+  snapshot_file: ./products.snapshot.json
+  high_cardinality: true
+  allow_real_categories: true
+```
+
+The second form requires a snapshot fitted with full-vocabulary retention. Read
+[High-cardinality categories](/docs/reference/generation/high-cardinality) for
+the fit limitation and disclosure tradeoff.

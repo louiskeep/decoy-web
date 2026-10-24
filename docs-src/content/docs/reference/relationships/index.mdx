@@ -1,0 +1,37 @@
+---
+title: Foreign keys and relationships
+description: Look up relationship shapes, namespace rules, and orphan behavior for masking and subsetting.
+---
+
+Declare each masking relationship under `relationships:`. Give the parent key
+a deterministic strategy and namespace. Use `strategy: from_parent` on the
+child key unless a specialized execution route requires self-masking.
+
+## Choose the relationship shape
+
+| Source shape | Reference |
+| --- | --- |
+| One parent and one child table | [One-to-one and one-to-many](/docs/reference/relationships/one-to-one-and-one-to-many) |
+| A junction table with two parent keys | [Many-to-many and junction tables](/docs/reference/relationships/many-to-many) |
+| A key that uses two or more columns | [Composite keys](/docs/reference/relationships/composite-keys) |
+| A row that references another row in the same table | [Self-referential relationships](/docs/reference/relationships/self-referential) |
+| Multiple children or a multi-hop chain | [Multi-table relationships](/docs/reference/relationships/multi-table) |
+| Diamonds, cycles, generated parents, or large jobs | [Topology and execution limits](/docs/reference/relationships/topology-and-limits) |
+| Child keys without a matching parent | [Orphan policies](/docs/reference/relationships/orphan-policies) |
+
+## Relationship fields
+
+| Field | Type | Requirement | Description |
+| --- | --- | --- | --- |
+| `parent.table` | string | required | Table that owns the key. |
+| `parent.columns` | list of string | required | Key columns on the parent. |
+| `children` | list | at least one | Tables and columns that reference the parent. |
+| `orphan_policy` | enum | required | Action for a child key without a parent. |
+| `namespace` | string | optional | Shared deterministic namespace for the linked keys. |
+
+Null keys remain null. They are not orphans.
+
+Read [Child-key wiring](/docs/reference/relationships/child-key-wiring) before
+you choose a strategy for a foreign-key column.
+
+For one complete example, read [Mask related tables](/docs/cli/masking/mask-related-tables).

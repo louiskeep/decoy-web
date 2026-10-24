@@ -10,7 +10,7 @@
     "predev": "node scripts/build-cli-mdx.mjs && node scripts/build-llms-txt.mjs",
     "dev": "next dev",
     "prebuild": "node scripts/build-cli-mdx.mjs && node scripts/build-llms-txt.mjs",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "sync:cli-ref": "node scripts/sync-cli-reference.mjs",
     "build:cli-mdx": "node scripts/build-cli-mdx.mjs",

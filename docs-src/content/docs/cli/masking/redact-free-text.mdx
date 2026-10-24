@@ -1,0 +1,28 @@
+---
+title: Redact sensitive free text
+description: Remove pattern and named-entity matches from one text column.
+---
+
+Use `text_redact` when fixed replacement tokens are acceptable:
+
+```yaml
+- name: clinical_note
+  strategy: text_redact
+  provider_config:
+    detectors: [email, phone]
+    ner:
+      entities: [person_name, location]
+    token: "[REDACTED]"
+```
+
+Install the engine NER extra and its model before you enable `ner`. Then
+validate and run:
+
+```bash
+decoy validate pipeline.yaml
+decoy run pipeline.yaml
+```
+
+Read [Text redaction](/docs/reference/text-redaction) for the settings. Use
+[text_mask](/docs/reference/strategies/text-mask) when realistic replacement
+values are required.

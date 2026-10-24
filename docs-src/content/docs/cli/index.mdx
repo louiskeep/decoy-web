@@ -1,0 +1,40 @@
+---
+title: CLI user guide
+description: Use Decoy from the command line, from source inspection through output verification.
+---
+
+The CLI user guide follows the order of a real Decoy run. Start with the
+[CLI workflow](/docs/cli/workflow) if you do not know which command comes next.
+
+## Discover your data
+
+Use `decoy scan` before you write a pipeline. The profile shows the table
+shape, field statistics, and possible sensitive fields. You make the final
+decision for each field.
+
+- [Scan your data](/docs/cli/discover/profile-data)
+
+## Mask existing data
+
+Start with one CSV. Add relationships, free-text handling, and reversible
+masking only when the dataset needs them.
+
+- [Mask a CSV](/docs/cli/masking/mask-a-csv)
+- [Choose a masking strategy](/docs/cli/masking/choose-a-strategy)
+- [Mask related tables](/docs/cli/masking/mask-related-tables)
+
+## Generate synthetic data
+
+Generate rows from declared column rules. Use statistical generation when the
+output must resemble a source distribution.
+
+- [Generate synthetic data](/docs/cli/generation/generate-synthetic-data)
+- [Use differential privacy](/docs/cli/generation/use-differential-privacy)
+
+## Prepare and automate
+
+- [Subset a dataset](/docs/cli/data/subset-a-dataset)
+- [Use Parquet files](/docs/cli/data/use-parquet)
+- [Use Decoy in CI](/docs/cli/automation/use-decoy-in-ci)
+
+For flags and complete option lists, use the [CLI reference](/docs/reference/cli).

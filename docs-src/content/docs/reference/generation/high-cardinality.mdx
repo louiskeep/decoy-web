@@ -1,0 +1,27 @@
+---
+title: High-cardinality categories
+description: Decide when a statistical generator can retain a large observed vocabulary.
+---
+
+`high_cardinality: true` tells a statistical generation column to use a full
+vocabulary retained in its distribution snapshot.
+
+```yaml
+- name: product_code
+  type: statistical
+  snapshot_file: ./products.snapshot.json
+  high_cardinality: true
+  allow_real_categories: true
+```
+
+Both settings are required. They explicitly allow the output and snapshot to
+contain real category labels. Do not use them for private labels or free text.
+
+The snapshot must already mark the source column as high-cardinality and retain
+its full vocabulary. The current `decoy fit` command does not expose that fit
+option. Create the artifact through the engine API, or omit
+`high_cardinality: true` and use the normal fitted representation.
+
+Use [code-set masking](/docs/reference/strategies/code-set) for a known public
+domain such as diagnosis or product codes. Use a synthetic provider when the
+output does not need the observed vocabulary.

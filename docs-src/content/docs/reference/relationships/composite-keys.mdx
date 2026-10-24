@@ -1,0 +1,27 @@
+---
+title: Composite keys
+description: Configure a relationship whose identity uses two or more columns.
+---
+
+List the key columns in the same order on the parent and child.
+
+```yaml
+relationships:
+  - parent: { table: orders, columns: [order_id, region] }
+    children:
+      - { table: order_lines, columns: [order_id, region] }
+    orphan_policy: preserve
+    namespace: order_identity
+```
+
+The parent and child lists must have the same number of columns. Each position
+must describe the same part of the key.
+
+Use `from_parent` on the matching child columns. A partial-null composite key
+is treated as null, not as an orphan.
+
+Do not use separate namespaces for the columns in one composite identity. Use
+the relationship namespace to bind the tuple. Out-of-core execution supports a
+composite child only when the compiler can lower the complete tuple as one
+composite foreign-key group. It rejects independent scalar masking of a
+composite child component.

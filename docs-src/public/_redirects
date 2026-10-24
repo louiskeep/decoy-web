@@ -1,1 +1,17 @@
 /    /docs/    302
+/docs/how-to    /docs/cli    301
+/docs/how-to/scan-for-pii    /docs/cli/discover/profile-data    301
+/docs/how-to/choose-a-masking-strategy    /docs/cli/masking/choose-a-strategy    301
+/docs/how-to/mask-a-csv    /docs/cli/masking/mask-a-csv    301
+/docs/how-to/mask-a-folder-with-foreign-keys    /docs/cli/masking/mask-related-tables    301
+/docs/how-to/redact-text-with-ner    /docs/cli/masking/redact-free-text    301
+/docs/how-to/unmask-data    /docs/cli/masking/unmask-data    301
+/docs/how-to/generate-synthetic-data    /docs/cli/generation/generate-synthetic-data    301
+/docs/how-to/use-differential-privacy    /docs/cli/generation/use-differential-privacy    301
+/docs/how-to/handle-high-cardinality-categories    /docs/cli/generation/high-cardinality-data    301
+/docs/how-to/work-with-healthcare-code-sets    /docs/cli/generation/healthcare-code-sets    301
+/docs/how-to/subset-a-dataset    /docs/cli/data/subset-a-dataset    301
+/docs/how-to/use-parquet    /docs/cli/data/use-parquet    301
+/docs/how-to/use-decoy-in-ci    /docs/cli/automation/use-decoy-in-ci    301
+/docs/concepts/storm    /docs/concepts/profiling    301
+/docs/concepts/scan    /docs/concepts/profiling    301

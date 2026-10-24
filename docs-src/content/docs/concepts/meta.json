@@ -1,4 +1,4 @@
 {
   "title": "Concepts",
-  "pages": ["determinism", "keys-and-vault", "scan", "disguises", "differential-privacy"]
+  "pages": ["how-decoy-works", "masking-and-generation", "profiling", "determinism", "keys-and-vault", "disguises", "differential-privacy"]
 }

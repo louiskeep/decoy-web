@@ -1,0 +1,33 @@
+---
+title: Healthcare code sets
+description: Select a shipped or customer code corpus and preserve its required structure.
+---
+
+Use the `code_set` masking strategy to replace a code with another valid code.
+Put its settings under `provider_config`.
+
+| Setting | Use |
+| --- | --- |
+| `code_set` | Select `icd10`, `hcpcs`, `ndc`, or `mcc`. |
+| `chapter_preserve` | Keep an ICD replacement in the source chapter. |
+| `corpus_source` | Use `shipped` or `customer:/absolute/path`. |
+| `corpus_source_version` | Require a specific corpus release. |
+
+```yaml
+- name: diagnosis_code
+  strategy: code_set
+  provider_config:
+    code_set: icd10
+    chapter_preserve: true
+    corpus_source: shipped
+```
+
+A customer corpus needs a string `code` column. It also needs a `chapter`
+column when `chapter_preserve` is true. Decoy validates the corpus before it
+changes output data.
+
+Code mapping is deterministic within one corpus version. Adding or removing
+corpus rows can change the mapping. Pin `corpus_source_version` when repeatable
+output across corpus updates is required.
+
+See [code_set](/docs/reference/strategies/code-set) for the strategy summary.

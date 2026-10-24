@@ -1,0 +1,20 @@
+---
+title: Validation and integrity
+description: Select the check that answers your configuration, readiness, privacy, utility, or evidence question.
+---
+
+Decoy checks different properties at different stages. No single check proves
+that an output is safe and useful.
+
+| Question | Command | Stage |
+| --- | --- | --- |
+| Is the pipeline configuration valid? | `decoy validate config` | Before a run |
+| Are local files readable and targets ready? | `decoy validate preflight` | Before a run |
+| What work will the pipeline compile? | `decoy validate compile --explain` | Before a run |
+| Did masking leave possible sensitive values or break relationships? | Output integrity | After a masking run |
+| Did the output preserve the required analytical shape? | `decoy report fidelity` | After a run |
+| Do the current files match the evidence manifest? | `decoy report verify` | After a run or during an audit |
+
+Read [Distribution integrity](/docs/reference/validation/distribution-integrity)
+and [Output integrity](/docs/reference/validation/output-integrity) for the
+post-run checks.

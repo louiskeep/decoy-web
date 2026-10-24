@@ -1,151 +1,118 @@
 ---
-title: Quickstart
-description: From a CSV to a masked CSV with the decoy CLI, using a scaffolded pipeline, config validation, and a run.
+title: Mask your first CSV
+description: Scan one CSV, review its pipeline, validate the run, and verify the masked output.
 ---
 
-This walks through the shortest real path: a CSV with sensitive columns in,
-a masked CSV out, using a scaffolded pipeline instead of hand-writing YAML
-from scratch. It assumes `decoy` is installed; see [Install](/docs/start/install)
-if it is not.
+This tutorial uses the complete Decoy workflow on one small file. It assumes
+that Decoy is installed. See [Install](/docs/start/install) if the `decoy`
+command is not available.
 
-## 1. A CSV to mask
+## 1. Create a source file
 
-Start with a small file, `input.csv`:
+Save this file as `customers.csv`:
 
 ```csv
-first_name,last_name,email,ssn,account_status
-Ada,Lovelace,ada@example.com,123-45-6789,active
-Alan,Turing,alan@example.com,987-65-4321,closed
+customer_id,name,email,status
+C001,Ada Lovelace,ada@example.com,active
+C002,Alan Turing,alan@example.com,closed
 ```
 
-## 2. Scaffold a pipeline
-
-`decoy init` writes a starter `pipeline.yaml` for you. It normally runs as a
-short interactive Q&A; the fastest path for a first look is a bundled
-preset:
+## 2. Scan the data
 
 ```bash
-decoy init --preset minimal --output pipeline.yaml --json
+decoy scan customers.csv --show-fields
 ```
 
-```json
-{"command": "init", "status": "ok", "out": "pipeline.yaml", "preset": "minimal", "rule_count": 6}
+Review the possible sensitive fields. A scan is a suggestion. You decide
+which fields require masking.
+
+## 3. Create a pipeline
+
+```bash
+decoy init customers.csv --output pipeline.yaml
 ```
 
-The `minimal` preset scaffolds the smallest sensible pipeline: name and email
-swapped for synthetic values, SSN redacted, everything else passed through.
-It already points at `./input.csv` and `./output.csv`, which matches the file
-above, so nothing needs editing for this walkthrough:
+This command scans the file and creates a column-aware pipeline. The file
+contains a `# REVIEW:` comment for each suggested strategy.
+
+Open `pipeline.yaml`. Make sure that the source and target paths are correct.
+Then review every column rule. Do not run an unreviewed suggestion against real
+data.
+
+For this tutorial, use these column rules:
 
 ```yaml
-version: 1
-
-global_settings:
-  seed: 42
-
-sources:
-  people:
-    type: file
-    format: csv
-    path: ./input.csv
-
 tables:
-  - name: people
+  - name: data
     columns:
-      - name: first_name
+      - name: customer_id
+        strategy: hash
+        namespace: customer_identity
+      - name: name
         strategy: faker
-        provider: person_first_name
-      - name: last_name
-        strategy: faker
-        provider: person_last_name
+        provider: person_full_name
       - name: email
         strategy: faker
         provider: person_email
-      - name: ssn
-        strategy: redact
-      - name: account_status
+      - name: status
         strategy: passthrough
-
-targets:
-  people:
-    type: file
-    format: csv
-    path: ./output.csv
 ```
 
-On your own data, point `sources.people.path` at your file and edit the
-`columns:` list to match: pick a [strategy](/docs/reference/strategies) per column
-you want to change, and leave the rest as `passthrough`. If you scaffold with
-`decoy init your_file.csv` instead of a preset, the scan profiles the file first
-and writes a column-aware pipeline with a `# REVIEW:` comment above every
-strategy it inferred, so you can read and confirm each one before running it,
-the same "suggestions, not classification" review step described in
-[the scan](/docs/concepts/scan).
-
-## 3. Validate the config
-
-Check the YAML against the engine's pipeline schema before touching any
-data:
+## 4. Validate the pipeline
 
 ```bash
-decoy validate config pipeline.yaml
+decoy validate pipeline.yaml
 ```
 
-```
-OK pipeline.yaml
-```
+Validation runs the configuration, compile, and local preflight checks. It
+checks that the source is readable and reports target overwrite risk.
 
-`validate config` exits `0` on a well-formed config and non-zero on a parse
-or schema error (an unknown provider, a bad strategy name, malformed YAML),
-so it is a fast pre-flight check to run in CI before `decoy run`. It checks
-config well-formedness, not every runtime constraint: a strategy that needs
-a `namespace` (like `hash`) but doesn't have one still passes `validate
-config` and is only caught when you `decoy run` it.
-
-## 4. Run the pipeline
+If you want to inspect the compiled work, run:
 
 ```bash
-decoy run pipeline.yaml
+decoy validate compile pipeline.yaml --explain
 ```
 
-```
-╭─ decoy run ────────────────────────────────────────────────────────────────╮
-│ Pipeline  pipeline.yaml                                                    │
-│ Mode      mask                                                             │
-│ Elapsed   3.41s                                                            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
-
-## 5. Inspect the output
+## 5. Run the pipeline
 
 ```bash
-cat output.csv
+decoy run pipeline.yaml --evidence-out evidence.json
 ```
 
-```csv
-first_name,last_name,email,ssn,account_status
-Christian,Salinas,lnixon@example.org,REDACTED,active
-Benjamin,Miller,josephwilson@example.org,REDACTED,closed
+Open the target CSV from `pipeline.yaml`. The identifiers, names, and email
+addresses now contain masked values. The `status` values remain unchanged.
+
+## 6. Verify the output
+
+Check for residual sensitive data, relationship failures, and policy findings:
+
+```bash
+decoy report integrity output.csv \
+  --source customers.csv --config pipeline.yaml --output integrity.json
 ```
 
-Names and emails were replaced with synthetic values from the `faker`
-strategy's providers, `ssn` was redacted to a constant, and
-`account_status` passed through unchanged. Because `global_settings.seed`
-is fixed, the same config against the same input always produces this same
-output, run after run.
+Replace `output.csv` with the target path from your pipeline.
 
-<Callout type="info" title="Deterministic across machines">
-  A fixed `seed` is deterministic on one box across runs. For output that
-  is also stable across different machines, mask with a shared secret
-  instead: see [Keys and vault](/docs/concepts/keys-and-vault).
-</Callout>
+Measure how much the output distribution changed:
+
+```bash
+decoy report fidelity customers.csv output.csv \
+  --config pipeline.yaml --mode warn --report-out distribution.json
+```
+
+Then make sure that the evidence manifest still matches the files:
+
+```bash
+decoy report verify evidence.json
+```
+
+Distribution integrity measures utility. Evidence verification detects file
+drift. Neither check certifies that the output is safe to publish.
 
 ## Next
 
-- Try [Demo](/docs/start/demo) for a zero-setup walkthrough on bundled
-  sample data, including a scan step.
-- See the [how-to guides](/docs/how-to/mask-a-csv) for masking recipes that
-  build on this one: foreign-key-aware folders, synthetic generation, and
-  CI usage.
-- Browse [Strategies](/docs/reference/strategies) for the full list of mask
-  strategies this pipeline could use.
+- Read [The CLI workflow](/docs/cli/workflow) for the purpose of each command.
+- Read [Choose a masking strategy](/docs/cli/masking/choose-a-strategy) before
+  you add more columns.
+- Read [Distribution integrity](/docs/reference/validation/distribution-integrity)
+  to select thresholds and enforcement modes.

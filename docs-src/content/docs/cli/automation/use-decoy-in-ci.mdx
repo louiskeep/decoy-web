@@ -1,0 +1,46 @@
+---
+title: Use Decoy in CI
+description: Validate, run, and gate a pipeline without parsing human output.
+---
+
+Use the combined validation gate before the run. Write structured output and an
+evidence manifest during the run:
+
+```yaml
+# GitHub Actions excerpt
+- name: Validate and mask
+  run: |
+    decoy validate pipeline.yaml --json
+    decoy run pipeline.yaml --json --evidence-out evidence.json
+    decoy report integrity masked.csv \
+      --source source.csv --config pipeline.yaml --output integrity.json
+    decoy report verify evidence.json
+```
+
+Add a fidelity policy when utility must meet a threshold:
+
+```bash
+decoy report fidelity source.csv masked.csv \
+  --config pipeline.yaml --mode fail --min-grade B \
+  --report-out fidelity.json
+```
+
+`--json` writes structured results to standard output. Progress and errors go
+to standard error. Use `--quiet` instead when the exit code is sufficient.
+
+Do not reduce every nonzero result to the same cause. Exit code `4` means the
+command completed and found a data or policy issue. Usage and runtime errors use
+different codes.
+
+```bash
+decoy report integrity masked.csv --source source.csv --config pipeline.yaml
+case $? in
+  0) echo "clean" ;;
+  4) echo "findings"; exit 1 ;;
+  *) echo "tool or usage error"; exit 1 ;;
+esac
+```
+
+Archive the evidence and report JSON files as CI artifacts. Read
+[Validation and integrity](/docs/reference/validation) to choose checks and
+[Exit codes](/docs/reference/exit-codes) for the full contract.

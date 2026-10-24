@@ -1,0 +1,4 @@
+{
+  "title": "CLI user guide",
+  "pages": ["workflow", "discover", "masking", "generation", "data", "automation"]
+}

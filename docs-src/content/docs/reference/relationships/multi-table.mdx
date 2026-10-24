@@ -1,0 +1,39 @@
+---
+title: Multi-table relationships
+description: Configure multiple child tables and multi-hop relationship chains.
+---
+
+## Multiple child tables
+
+Add one child entry for each table that references the parent.
+
+```yaml
+relationships:
+  - parent: { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders, columns: [customer_id] }
+      - { table: tickets, columns: [customer_id] }
+    orphan_policy: preserve
+    namespace: customer_identity
+```
+
+## Multi-hop chains
+
+Add one relationship entry for each edge in the chain.
+
+```yaml
+relationships:
+  - parent: { table: customers, columns: [customer_id] }
+    children:
+      - { table: orders, columns: [customer_id] }
+    orphan_policy: preserve
+    namespace: customer_identity
+  - parent: { table: orders, columns: [order_id] }
+    children:
+      - { table: order_lines, columns: [order_id] }
+    orphan_policy: preserve
+    namespace: order_identity
+```
+
+Each identity has its own namespace. Decoy derives the processing order from
+the relationship graph.

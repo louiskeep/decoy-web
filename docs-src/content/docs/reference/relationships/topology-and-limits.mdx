@@ -1,0 +1,46 @@
+---
+title: Topology and execution limits
+description: Check advanced relationship shapes before you select an execution route.
+---
+
+Decoy supports chains, fan-out, junction tables, self-references, composite
+keys, and multi-parent or diamond graphs. The execution routes do not support
+every shape equally.
+
+| Shape | Default guidance |
+| --- | --- |
+| Chain or fan-out | Use `from_parent`; let automatic routing order the tables. |
+| Junction table | Declare one relationship for each parent key. |
+| Same child key with multiple parents | The first declared parent wins. Avoid this shape when possible. |
+| Self-reference | Use automatic, full-frame, or sequential execution. |
+| Composite key | Keep columns in the same order and use `from_parent` for the complete child tuple. |
+| Cross-table cycle | Use automatic routing. It requires a full-frame route that fits memory. |
+
+Forced out-of-core execution rejects self-references, multi-parent child keys,
+cross-table cycles, and composite keys that compile as independent scalar child
+work. Automatic routing can select a supported route or reject the job before
+output is published.
+
+## Nullable keys
+
+A null child key is not an orphan. For a composite key, any null component
+makes the complete key null. The orphan policy does not apply to that row.
+
+## Generated parents and children
+
+Use `type: reference` for a generated child column. Set `reference_table` and
+`reference_column` to a generated parent. The generation reference graph must
+be acyclic.
+
+Mixed mask-and-generate relationship jobs use the resident full-frame route.
+They do not use bounded sequential or out-of-core execution.
+
+## Subsetting
+
+Subsetting uses the declared relationship graph to compute closure before
+masking. Choose `edge_directions` and `allow_dangling` for the subset contract.
+These settings do not change the masking orphan policy.
+
+Run `decoy validate pipeline.yaml` before every advanced relationship job. Use
+`decoy validate preflight pipeline.yaml` to check route capacity and local file
+readiness.

@@ -4,7 +4,7 @@ description: Pick the right strategy for each column.
 ---
 
 Start from what the column is and what you need to keep. [Scan for
-PII](/docs/how-to/scan-for-pii) first to see what is sensitive, then pick a
+PII](/docs/cli/discover/profile-data) first to see what is sensitive, then pick a
 strategy per field. For a regulated dataset, a [disguise](/docs/concepts/disguises)
 gives you a reviewed starting point you can adjust.
 
@@ -33,7 +33,7 @@ A **keyed** strategy (`hash`, `fpe`, `date_shift`, and others) maps the same inp
 to the same output within a `namespace`, so joins survive and the column stays
 consistent across tables. A **one-way** strategy (`redact`, `faker` without a
 vault) cannot be reversed. If you need to reverse later, see
-[Unmask data](/docs/how-to/unmask-data).
+[Unmask data](/docs/cli/masking/unmask-data).
 
 For the full catalog grouped by kind, see the [strategy
 reference](/docs/reference/strategies).

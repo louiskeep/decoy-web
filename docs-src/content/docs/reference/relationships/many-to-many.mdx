@@ -1,0 +1,45 @@
+---
+title: Many-to-many and junction tables
+description: Preserve both foreign keys in a table that joins two parents.
+---
+
+A junction table has one foreign key for each parent. Declare one relationship
+for each edge.
+
+```yaml
+tables:
+  - name: users
+    columns:
+      - name: user_id
+        strategy: hash
+        namespace: user_identity
+  - name: groups
+    columns:
+      - name: group_id
+        strategy: hash
+        namespace: group_identity
+  - name: memberships
+    columns:
+      - name: user_id
+        strategy: from_parent
+      - name: group_id
+        strategy: from_parent
+relationships:
+  - parent: { table: users, columns: [user_id] }
+    children:
+      - { table: memberships, columns: [user_id] }
+    orphan_policy: fail
+    namespace: user_identity
+  - parent: { table: groups, columns: [group_id] }
+    children:
+      - { table: memberships, columns: [group_id] }
+    orphan_policy: fail
+    namespace: group_identity
+```
+
+Each edge can use its own orphan policy. A row with a missing user can fail even
+when its group key is valid.
+
+This shape differs from two parents targeting the same child column. That
+multi-parent shape is ambiguous and uses the first declared parent. Prefer a
+separate child column for each parent when the source model allows it.

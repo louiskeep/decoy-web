@@ -1,0 +1,37 @@
+---
+title: Execution model
+description: Understand how Decoy validates, compiles, runs, and records a pipeline.
+---
+
+The CLI and platform use the same pipeline model. The caller supplies a pipeline
+configuration and an execution context. The engine owns data processing.
+
+## Execution stages
+
+1. The caller loads the pipeline configuration.
+2. The schema rejects unknown or invalid fields.
+3. Decoy profiles declared sources when the plan requires source information.
+4. The compiler creates an immutable execution plan.
+5. Compile-time checks reject invalid strategies, providers, and relationships.
+6. The selected execution adapter reads the sources and applies the plan.
+7. Decoy writes the targets and returns run metadata.
+8. Optional post-run checks measure integrity and distribution fidelity.
+
+## Mask mode
+
+Mask mode reads source rows. It applies ordered table transforms before
+column-level masking. Relationship rules bind keys across tables.
+
+## Generate mode
+
+Generate mode creates rows from `generate_columns`. It can use declared rules,
+providers, reference pools, formulas, or fitted statistical snapshots.
+
+## CLI and platform boundary
+
+The CLI owns local command input, terminal output, and local evidence files. The
+platform owns shared connectors, authorization, managed jobs, schedules,
+reviews, and operational records.
+
+The engine does not decide access policy or scheduling policy. Callers supply
+those controls.

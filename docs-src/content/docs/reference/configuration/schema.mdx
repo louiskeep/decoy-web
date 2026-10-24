@@ -30,7 +30,7 @@ A pipeline config (`PipelineConfig`) has these top-level keys:
 | `relationships` | no | list of `RelationshipConfig` | Foreign-key edges between tables (parent, children, orphan policy). |
 | `targets` | yes | map of name to target | `type: file`, `s3`, or `gcs`. At least one required. |
 | `namespaces` | no | map of name to `NamespaceConfig` | Explicit namespace declarations, mostly informational; most namespaces are declared implicitly by column config. |
-| `run_storm` | no | boolean, default `false` | Run a scan as part of this pipeline. |
+| `run_storm` | no | boolean, default `false` | Run the legacy-named output-integrity check. |
 | `validators` | no | list of `ValidatorEntry` | Post-run checks: `luhn`, `fk_intact`, `leak_check`, `regex_match`, and others. |
 | `quarantine` | no | `QuarantineConfig` or `null` | Route rows that fail a wired trigger to a side file instead of failing the run. |
 | `subset` | no | `SubsetConfig` or `null` | FK-aware referential subsetting (`decoy subset`). |

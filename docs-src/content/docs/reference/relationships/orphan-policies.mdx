@@ -1,0 +1,16 @@
+---
+title: Orphan policies
+description: Select what Decoy does when a child key has no matching parent.
+---
+
+An orphan is a non-null child key without a matching parent key.
+
+| Value | Result | Use when |
+| --- | --- | --- |
+| `preserve` | Keep the source child key. | You must retain the unexplained value. |
+| `remap` | Create a masked value with the parent strategy. | The output can contain a masked orphan. |
+| `warn` | Keep the key and emit one aggregated warning. | The run can continue, but operators must review the finding. |
+| `fail` | Stop with `orphan_fk_violation`. | Every child key must resolve to a parent. |
+
+Use `fail` when referential completeness is a release requirement. Use `warn`
+while you assess an unfamiliar source dataset.

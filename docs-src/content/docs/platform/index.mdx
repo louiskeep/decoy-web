@@ -1,11 +1,20 @@
 ---
-title: Self-hosting the platform
-description: Deploy and operate the Decoy platform.
-draft: true
+title: Platform user guide
+description: Understand what the platform adds to the Decoy pipeline workflow.
 ---
 
-{/* Internal note: seeds from decoy-platform/docs/public/content-map.md,
-    Tutorial section, "Self-host the platform" row. Platform is held; publish
-    at platform co-release, not with the CLI-first docs tree. */}
+The Decoy platform runs the same pipeline model as the CLI. It adds shared
+connectors, managed jobs, authorization, reviews, schedules, notifications, and
+operational records.
 
-Platform documentation is not published yet.
+Use the CLI for local development, test fixtures, and CI. Use the platform when
+a team needs shared data access and managed operations.
+
+## Platform workflow
+
+```text
+connect -> profile -> configure -> preflight -> run -> review -> automate
+```
+
+Start with the platform workflow. Read the scheduling guide after a manual run
+succeeds.

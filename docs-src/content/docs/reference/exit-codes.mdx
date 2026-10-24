@@ -44,7 +44,7 @@ differently.
 Exit code `2` is not part of that three-way split; it is a narrower,
 deprecated-invocation-and-warning-gate code. The legacy `forge` shim uses
 it to signal "wrong binary, no-op." `validate config --fail-on-warning` and
-`preflight --fail-on-warning` also use it, deliberately, to let CI opt into
+`validate preflight --fail-on-warning` also use it, deliberately, to let CI opt into
 treating advisory warnings (like an output target that already exists) as
 build failures without conflating them with the schema/usage errors that
 own exit `1`.
@@ -81,4 +81,4 @@ pipeline without also shipping a wrapper that scrapes stdout to figure out
 what happened.
 
 See the [CLI reference](/docs/reference/cli) for the full table, and
-[using Decoy in CI](/docs/how-to/use-decoy-in-ci) for the complete recipe.
+[using Decoy in CI](/docs/cli/automation/use-decoy-in-ci) for the complete recipe.

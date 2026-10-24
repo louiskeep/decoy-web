@@ -1,0 +1,34 @@
+---
+title: Output integrity
+description: Check masked output for possible residual sensitive data, relationship failures, and policy findings.
+---
+
+Output integrity checks masking results. It reports possible residual sensitive
+data, foreign-key preservation, and policy findings.
+
+Use `decoy report integrity` after a masking run.
+
+```bash
+decoy report integrity masked.csv \
+  --source source.csv \
+  --config pipeline.yaml \
+  --output integrity.json
+```
+
+The command exits with `0` when it finds no blocking result. It exits with `4`
+when it reports findings that require review.
+
+## Use output integrity when
+
+- A masking run must not leave detected sensitive patterns.
+- The dataset contains declared foreign-key relationships.
+- CI must block on residual-data findings.
+- You change masking rules for a sensitive field.
+
+## What it does not prove
+
+The check uses detectors and declared policy. It cannot prove that all sensitive
+data is absent. It also does not measure analytical fidelity.
+
+Run [Distribution integrity](/docs/reference/validation/distribution-integrity)
+when the output must preserve statistical utility.

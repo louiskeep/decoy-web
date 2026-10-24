@@ -1,0 +1,66 @@
+---
+title: Generate synthetic data
+description: Generate a table from declared columns or from a fitted distribution snapshot.
+---
+
+## Generate from a column specification
+
+Create `generate.yaml`:
+
+```yaml
+version: 1
+global_settings:
+  seed: 42
+sources: {}
+tables:
+  - name: employees
+    row_count: 1000
+    generate_columns:
+      - name: employee_id
+        type: sequence
+        start: 1000
+      - name: first_name
+        type: faker
+        faker_type: first_name
+      - name: department
+        type: categorical
+        categories: [Engineering, Sales, Support]
+        weights: [0.5, 0.3, 0.2]
+targets:
+  employees:
+    type: file
+    format: csv
+    path: ./employees.csv
+```
+
+Validate and run it:
+
+```bash
+decoy validate generate.yaml
+decoy run generate.yaml --mode generate
+```
+
+## Generate from a fitted distribution
+
+Fit a snapshot from a source CSV:
+
+```bash
+decoy fit customers.csv --output customers.snapshot.json
+```
+
+Then point a statistical column at that snapshot:
+
+```yaml
+- name: age
+  type: statistical
+  snapshot_file: ./customers.snapshot.json
+  source_column: age
+```
+
+Categorical snapshots contain observed labels. Add
+`allow_real_categories: true` only when releasing those labels is acceptable.
+Use `decoy fit --joint a,b` when a column uses `condition_on`.
+
+Read [Generation reference](/docs/reference/generation) for privacy,
+high-cardinality, and code-set details. Use `decoy list providers` and
+`decoy show provider <name>` to inspect synthetic providers.

@@ -47,44 +47,41 @@ Rules:
 - Strategy reference is one page per strategy (DuckDB-granular), best for search
   and AI retrieval.
 
-## Information architecture (final, Codex-reviewed 2026-10-22)
+## Information architecture (revised 2026-10-24)
 
-Four top-level sections (Diataxis: learn, do, understand, look up):
+The public navigation follows the product workflow first. Diataxis still
+governs page purpose, but its four labels are not the primary sidebar.
 
 ```
-Get started    install, quickstart, demo
-Guides         the recipe cookbook (task-oriented how-tos)
-Concepts       determinism, keys & vault, STORM, disguises, DP, limits
-Reference      Configuration (yaml-schema -> folder, post-reorg)
-               Masking strategies   (one page per strategy)
-               Synthetic data providers  (catalog, post-reorg)
-               Connectors and formats
-               Relationships
-               CLI reference        (generated per-command)
-               Feature support and limits   (renamed from Capabilities)
+Start here           install, demo, first masked CSV, first generated dataset
+CLI user guide       inspect, configure, validate, preflight, run, verify
+Platform user guide  connect, profile, build, run, review, schedule (held draft)
+Concepts             product model, masking vs generation, profiling, keys, DP
+Reference            commands, config, strategies, validation, FK shapes, formats
+Technical reference  execution model; API, scheduler, evidence, and sizing later
 llms.txt       AI-parseable index, generated from frontmatter
 ```
 
-Connectors and CLI reference are nested UNDER Reference (they are lookup
-material), not top-level. Chrome links back to the marketing site at the root.
-Docs mount at /docs.
+The CLI and platform guides teach workflows. Reference pages hold complete
+variants. A guide shows one or two representative examples, then links to the
+relevant lookup page. Generated CLI pages stay under Reference. Technical
+internals stay in the final family.
 
-When Studio docs arrive, split the nav by surface and centralize shared material:
-`Get started / Command line (Guides+Reference) / Decoy Studio (Guides+Reference) /
-Concepts / Engine reference`. Shared strategies, providers, config, connectors,
-relationships live in Engine reference, not under a single implicit surface.
+The name STORM is deprecated in public guidance. Use scan, data profiling, or
+output integrity. Preserve `run_storm` only when the current schema identifier
+must remain exact.
 
 ## Sources of truth
 
 - Capability counts and lists: `decoy-engine/docs/capability-matrix.md`
   (generated, drift-guarded). Current: 23 mask strategies, 12 generation
-  strategies, 34 providers, 25 STORM detectors, 10 disguises, 6 connectors.
+  strategies, 34 providers, 25 profile detectors, 10 disguises, 6 connectors.
 - Platform "what works today": `decoy-platform/docs/product/capabilities.md`
   (Shipped / Engine-API / Legacy / Placeholder labels).
 - What to document, per surface: `decoy-platform/docs/public/content-map.md`
   (Diataxis), `manifest.yaml` (page list), `gaps.md` (launch-blocking gaps).
 - CLI commands: the generated reference at
-  `content/docs/cli/_source/cli-reference.md` (vendored from the real CLI). This
+  `content/docs/reference/cli/_source/cli-reference.md` (vendored from the real CLI). This
   is authoritative for CLI verbs; the engine repo's `docs/cli.md` is stale.
 
 ## CLI / engine gaps (do first, publishable now)
@@ -95,22 +92,23 @@ product gaps.
 | Capability | State in docs | Action |
 | --- | --- | --- |
 | Install, Quickstart, Demo | good | keep |
-| Generation, DP, STORM, disguises | good, has examples | keep |
+| Generation, DP, profiling, disguises | good, has examples | keep |
 | S3 / GCS connectors | good, has examples | keep (SFTP stays "not wired"; DB is V2) |
 | Mask strategies | reference is prose-heavy | restyle to template; add per-strategy settings |
 | FK / relationships | only single-column 1:N shown | add 1:1, composite-key, self-referential, multi-parent YAML examples |
 | Subset | `decoy subset` command documented; no runnable `subset:` YAML | add a subset recipe: seeds (sample/filter/keys), budget, edge_directions, allow_dangling; note Parquet-only |
 | Parquet | named in format enums only | add one end-to-end Parquet read/write example |
-| Templates | `init` / `templates` documented | add a page showing actual `decoy templates show <name>` contents. BLOCKED: needs real CLI output (no decoy-cli repo or template files locally; do not fabricate) |
+| Templates | `init`, `list templates`, and `show template` documented | add a page showing actual `decoy show template <name>` contents. |
 | `reference/yaml-schema.mdx` | raw JSON-Schema dump | restyle to settings tables + examples per config object |
 | `reference/capabilities.mdx` | prose/tables, no examples | restyle, or repurpose as a "what's supported today" index |
-| Version skew | capabilities.mdx says 0.7.0; how-to/CLI pages say CLI 0.1.0 / engine 0.4.0 | PARTIAL. Fixed the stale `0.2.0` removal claim in scan-for-pii. The "captured against CLI 0.1.0 / engine 0.4.0" tags are honest provenance on real output; bumping them without re-running would falsify the claim (CLI-blocked, needs a re-capture). The generated CLI-reference `0.2.0` removal targets come from the vendored CLI help (CLI-side fix). |
+| Version skew | generated CLI and authored guides must describe the same command surface | DONE. Synced the vendored reference to `e61baed` and updated guides to `scan`, `validate`, `list`/`show`, and `report`. |
 
 FK shapes to show (all supported, deterministic, byte-stable):
 1:1, 1:N, composite keys (`columns: [a, b]`), self-referential
 (`employees.manager_id -> employees.id`), multi-parent / multi-child, multi-hop
 chains (A->B->C). Null FK passes through. `orphan_policy`: preserve, remap,
-warn, fail. Keys bound by shared `namespace` on parent, child, and relationship.
+warn, fail. The parent owns the namespace. A normal child key uses
+`strategy: from_parent`.
 
 Subset facts to show: `subset:` block, `seeds` with modes sample/filter/keys,
 predicate ops (eq/ne/lt/le/gt/ge/in/is_null/is_not_null), `budget`
@@ -126,7 +124,7 @@ Publish-worthy (shipped and wired today):
 - Job Studio (default editor, partial YAML parity) and the HiFi graph builder (legacy)
 - Connectors UI: files, S3, GCS, SFTP (saved connectors, test, browse/import)
 - Jobs: run, stream (SSE), cancel, history, lineage, fidelity, quarantine records
-- STORM UI + FORECAST (disguise recommendations, create pipeline from scan)
+- Profile UI + FORECAST (disguise recommendations, create pipeline from scan)
 - Notifications: email, Slack, webhook; alert rules; test-fire
 - Auth: first-user setup, login, sessions, invites, API keys; OIDC SSO; 4-role RBAC (admin, release_manager, developer, user)
 - Data-access grants (allow/mask/forbid by user/role/connector/schema/table)
@@ -144,7 +142,7 @@ Do NOT document as GA (in-dev / disabled / deferred):
 - ML advisory column classification (merged but off, no UI)
 - Workflow execution (disabled this release)
 - In-platform schedule creation (410'd; external cron calls POST /api/jobs)
-- Cloud STORM scan (V2), platform database connectors (V2)
+- Cloud data scan (V2), platform database connectors (V2)
 - Reversible tokenization vault (V2)
 - Admission-control enforcement (measurement-only, default off)
 - Studio FK add/edit and the fixed-width layout picker (read-only / not wired)
@@ -152,8 +150,8 @@ Do NOT document as GA (in-dev / disabled / deferred):
 
 Platform pages from content-map (Diataxis):
 - Tutorials: quickstart (install to first masked file); self-host the platform
-- How-tos: author a YAML pipeline; mask with the right strategy; preserve FK/relationships; apply a compliance disguise; profile with STORM; back up/restore keys; deploy/run/operate; verify an SFTP host key
-- Reference: CLI command ref (generated), YAML JSON-schema, platform API ref (generated OpenAPI), connectors and formats, "what Decoy supports today", known limits and support, glossary; per-surface: admin, alerts, auth, capabilities, cloud-target lifecycle, composites, data-tables, disguises, files, fixed-width-layouts, folders, health, jobs, pipeline-variables, pipelines, profile, storm, strategies, text-redact, tokenization
+- How-tos: author a YAML pipeline; mask with the right strategy; preserve FK/relationships; apply a compliance disguise; scan data; back up/restore keys; deploy/run/operate; verify an SFTP host key
+- Reference: CLI commands, YAML schema, platform API, connectors and formats, support limits, and per-surface product references
 - Explanation: how Decoy works; disguises and regulations; deterministic masking and keys; security architecture; why vs adjacent tools
 
 gaps.md launch-blocking (author before launch): per-connector setup guides
@@ -174,7 +172,7 @@ troubleshooting/FAQ.
    page shipped.
 2. Per-strategy pages, one page each under `reference/strategies/`. DONE (23/23,
    all user-facing mask strategies). Params verified from the engine handlers;
-   each page points to `decoy strategies inspect <name>` for the complete set.
+   each page points to `decoy show strategy <name>` for the complete set.
    Follow-up (CLI-blocked): add verified before/after output for the pages that
    currently show config-only examples (needs a real CLI run).
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
@@ -190,7 +188,7 @@ troubleshooting/FAQ.
 
 - 2026-10-22, Codex final pre-merge review. Verdict FIX-FIRST, 3 blockers, all
   fixed: (1) a reorg bug, sync-cli-reference.mjs still wrote the old
-  content/docs/cli/_source path; (2) connector claims contradicted themselves
+  content/docs/reference/cli/_source path; (2) connector claims contradicted themselves
   (capabilities said S3/GCS/SFTP read-write and claimed fixed-width output, vs
   the connectors page saying the CLI moves only type:file and fixed-width is
   input-only) -- reconciled to the CLI reality; (3) the DP concept page
@@ -211,7 +209,7 @@ Applied Codex's within-section ordering so sections read as a progression, not
 authoring order:
 - Guides grouped by outcome (Discover and mask / Build safer test datasets /
   Handle specialized data / Operationalize).
-- Concepts ordered foundational-first (determinism, keys, storm, disguises, DP).
+- Concepts ordered foundational-first (determinism, keys, profiling, disguises, DP).
 - Reference ordered capabilities, configuration, strategies, providers,
   relationships, connectors, cli, exit-codes, limits.
 - Strategies grouped (Common masking, Categories/generalization, Dates/geography,
@@ -220,7 +218,7 @@ authoring order:
   categorical data"); it was config/examples, not a concept.
 
 Codex new-guide suggestions: DONE `choose-a-masking-strategy` (decision table
-bridging STORM findings to the strategy pages) and `unmask-data` (FPE reverses
+bridging scan findings to the strategy pages) and `unmask-data` (FPE reverses
 from the config; vault:true columns reverse with the vault file; everything else
 one-way, verified against the generated unmask CLI reference). DONE: refactored
 `strategies/index` from the before/after gallery into a concise categorized index
@@ -259,13 +257,9 @@ the reorg:
 
 Captured from Cam 2026-10-22, not for this pass:
 
-1. "Intended workflow" guide (own page, top-level). An end-to-end A-Z that walks
-   each tool/step in order and says where it is meant to be used and what it does:
-   pre-STORM scan the files, configure the YAML (optionally from STORM output),
-   configure a generate job off a mask table, compile the job, run it, post-check.
-   Include a visual node-based view of the flow so a user can learn to run Decoy
-   without reading everything. The goal: give context up front so users see the
-   simple path and know which advanced features they can ignore.
+1. DONE: "The CLI workflow" now walks through inspect, configure, validate,
+   preflight, run, and verify. Start here uses the same sequence for the first
+   masking and generation tutorials.
 2. In-browser demo on the marketing site: a playable Decoy CLI walkthrough and a
    platform walkthrough, both running a basic A-Z workflow on a sample healthcare
    dataset.

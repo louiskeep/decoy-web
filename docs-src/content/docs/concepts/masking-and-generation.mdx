@@ -1,0 +1,34 @@
+---
+title: Masking and generation
+description: Learn when to transform source data and when to create new synthetic rows.
+---
+
+Masking and generation produce test data in different ways.
+
+## Masking
+
+Masking reads source rows and transforms selected values. It is useful when the
+output must preserve row structure, relationships, and reviewed source
+properties.
+
+Masking can preserve joins with deterministic namespaces. It can also preserve
+specific formats or ranges. The exact guarantee depends on the selected
+strategy.
+
+## Generation
+
+Generation creates new rows from declared rules or fitted distributions. It is
+useful when a test does not require source-row identity.
+
+A generation pipeline can use sequences, categories, formulas, providers, and
+statistical snapshots. Differential privacy applies only to supported
+generation workflows.
+
+## Choose a workflow
+
+Use masking when tests depend on source shape or relationships. Use generation
+when new rows are sufficient. Use both only when the product workflow and
+review policy require both outputs.
+
+Start with [Mask your first CSV](/docs/start/quickstart) or
+[Generate your first dataset](/docs/start/generate).

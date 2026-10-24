@@ -1,4 +1,4 @@
 {
   "title": "Reference",
-  "pages": ["capabilities", "configuration", "strategies", "providers", "relationships", "connectors", "cli", "exit-codes", "limits"]
+  "pages": ["cli", "configuration", "strategies", "providers", "generation", "text-redaction", "validation", "relationships", "connectors", "exit-codes", "capabilities", "limits"]
 }

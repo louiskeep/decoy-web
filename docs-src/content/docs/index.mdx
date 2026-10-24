@@ -1,37 +1,40 @@
 ---
 title: Decoy documentation
-description: Data masking and synthetic data tooling for local files, YAML pipelines, and scan-assisted review.
+description: Learn the Decoy workflow, complete a safe first run, and look up exact commands and configuration.
 ---
 
-Decoy is a CLI-first toolkit for masking sensitive data and generating
-synthetic replacements in local files and YAML-defined pipelines. You point it
-at a file or folder, it profiles the data, you review what it found, and you
-run a pipeline that produces a masked or synthetic output you can inspect
-before it goes anywhere else.
+Decoy masks sensitive data and generates synthetic test data. The CLI runs local
+pipeline configurations. The platform adds shared operations, governance, and
+scheduling.
 
-## What ships today
+## New to Decoy?
 
-- 23 masking strategies for field-level, reviewable transforms.
-- 12 synthetic generation column types, plus statistical fitting for
-  whole-table generation.
-- 34 synthetic value providers (names, emails, identifiers, and composites)
-  for the `faker` strategy, distinct from Decoy's I/O connectors
-  (file, S3, GCS, SFTP).
+Follow the [Start here](/docs/start) path. It takes you from installation to a
+reviewed output:
 
-Every run is explicit: pipelines are plain YAML, strategies are picked per
-field, and the scan only ever suggests a strategy for you to confirm,
-it never classifies or applies anything on its own.
+```text
+install -> demo -> scan -> configure -> validate -> run -> report
+```
 
-## Where to go next
+## Choose your goal
 
-- **[Get started](/docs/start/install)**: install the CLI and mask your first
-  file.
-- **[Guides](/docs/how-to/mask-a-csv)**: task recipes for masking, synthetic
-  generation, foreign keys, subsetting, Parquet, and CI.
-- **[Concepts](/docs/concepts/determinism)**: how determinism, keys, the scan,
-  disguises, and differential privacy work.
-- **[Reference](/docs/reference/configuration)**: the configuration schema, every
-  masking strategy and provider, connectors, and the CLI.
+- **[Mask existing data](/docs/start/quickstart)**: scan a CSV, review a
+  pipeline, and create a masked copy.
+- **[Generate synthetic data](/docs/start/generate)**: create new rows from a
+  generation configuration.
+- **[Use the CLI](/docs/cli)**: follow the complete command workflow and common
+  task guides.
+- **Use the platform**: add shared connectors, managed runs, access controls,
+  schedules, reviews, and operational records. Platform guides remain private
+  until the platform release.
+- **[Look up a detail](/docs/reference)**: find a command, configuration field,
+  strategy, provider, relationship type, or validation method.
+
+## Learn how Decoy works
+
+Read [How Decoy works](/docs/concepts/how-decoy-works) for the product model.
+Read [Technical reference](/docs/technical-reference) for execution and platform
+internals.
 
 The `decoy` CLI is source-available under the Business Source License 1.1
 (BUSL-1.1).

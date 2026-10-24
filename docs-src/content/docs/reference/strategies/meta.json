@@ -1,7 +1,6 @@
 {
   "title": "Strategies",
   "pages": [
-    "index",
     "---Common masking---",
     "faker", "hash", "redact", "fpe", "passthrough",
     "---Categories and generalization---",

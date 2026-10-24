@@ -1,0 +1,33 @@
+---
+title: Self-referential relationships
+description: Configure a key that references another row in the same table.
+---
+
+A self-referential relationship uses the same table for the parent and child.
+An employee-manager relationship is a common example.
+
+```yaml
+relationships:
+  - parent: { table: employees, columns: [employee_id] }
+    children:
+      - { table: employees, columns: [manager_id] }
+    orphan_policy: preserve
+    namespace: employee_identity
+```
+
+Use a deterministic strategy on `employee_id`. Use `from_parent` on
+`manager_id`:
+
+```yaml
+tables:
+  - name: employees
+    columns:
+      - name: employee_id
+        strategy: hash
+        namespace: employee_identity
+      - name: manager_id
+        strategy: from_parent
+```
+
+Null manager keys remain null. A self-reference can run in full-frame or
+sequential execution. Forced out-of-core execution does not support this shape.

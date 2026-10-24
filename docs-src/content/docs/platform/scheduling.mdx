@@ -1,0 +1,27 @@
+---
+title: Schedule a pipeline
+description: Automate a reviewed platform pipeline without hiding its validation and review steps.
+draft: true
+---
+
+Schedule only a pipeline that completed a successful manual run. A schedule
+selects when the platform creates a new job. It does not bypass permissions,
+preflight checks, or job policy.
+
+## Before you schedule
+
+1. Run the pipeline manually.
+2. Review the output and integrity findings.
+3. Make sure that runtime secrets and connectors remain available.
+4. Select notification rules for failures and findings.
+5. Record the expected owner and review path.
+
+## During scheduled operation
+
+Monitor job history, failures, cancellations, and evidence. Pause the schedule
+when the source shape or pipeline policy changes.
+
+Scheduler leases, retries, admission, concurrency, and recovery belong in
+Technical reference. They are not part of this user procedure.
+
+{/* Held until the platform launch under DOCS-PLAN.md. */}

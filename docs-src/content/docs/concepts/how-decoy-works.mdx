@@ -1,0 +1,51 @@
+---
+title: How Decoy works
+description: Understand the shared workflow behind masking and synthetic data generation.
+---
+
+Decoy turns a reviewed pipeline configuration into a reproducible data job. The
+configuration states what Decoy reads, what it changes, and where it writes the
+result.
+
+## The workflow
+
+```text
+source or generation rules
+          |
+          v
+       profile
+          |
+          v
+reviewed pipeline configuration
+          |
+          v
+validate and preflight
+          |
+          v
+     compile and run
+          |
+          v
+ output, quality report, evidence
+```
+
+Each stage has a different purpose. Profiling provides information. The
+pipeline records the user's decisions. Validation rejects invalid work. The run
+creates the output. Post-run checks measure specific output properties.
+
+## CLI and platform
+
+The CLI runs local files from a local pipeline configuration. It is suitable
+for development, test fixtures, and CI jobs.
+
+The platform uses the same pipeline model. It adds saved connectors, access
+controls, shared job history, reviews, schedules, triggers, and operational
+records.
+
+## Review stays explicit
+
+Decoy can suggest possible sensitive fields and starter strategies. These
+suggestions are not final classifications. A user reviews the configuration
+before a run.
+
+This boundary keeps the decision visible. It also makes the pipeline suitable
+for source control and review.
