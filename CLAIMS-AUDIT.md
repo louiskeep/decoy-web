@@ -150,7 +150,25 @@ This feeds roadmap Idea 4 (the how-it-works performance matrix): the redesign
 must publish only numbers that reflect the default production route (or label
 the fast-path ones honestly), carry dates, and cite a committed benchmark.
 
+## License claims (2026-10-24)
+
+Verified against the actual LICENSE files. All confirmed:
+
+- Engine Apache-2.0 -> `decoy-engine/LICENSE` (Apache License 2.0). The site also
+  calls the engine the shared data-plane both products import; correct.
+- CLI BUSL-1.1 -> `decoy/LICENSE.md` (Business Source License 1.1). "Converts to
+  Apache-2.0 on its change date" -> Change License = Apache 2.0, Change Date
+  2030-05-10. The restriction ("offering Decoy itself as a hosted service") ->
+  Additional Use Grant "Competing Use = offering the Licensed Work to third
+  parties as a hosted or managed data-masking or synthetic-data service."
+- Platform commercial -> `decoy-platform/LICENSE-COMMERCIAL.md` (proprietary,
+  per-subscription).
+
+- L (low): `decoy/LICENSE.md` carries `TODO(counsel): Finalize the "Competing
+  Use" definition before v1.0.0`. The site states the restriction as settled;
+  it is counsel-pending. Expected pre-GA, no change needed now, but the
+  license text must be finalized before the CLI's public v1.0.0.
+
 ## Still not audited
 
-- License claims (Engine Apache-2.0, CLI BUSL-1.1, Platform commercial).
-- Home-page copy beyond the STORM references and the stat tiles.
+- Home-page copy beyond the STORM references, the stat tiles, and the license line.
