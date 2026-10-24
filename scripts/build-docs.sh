@@ -14,8 +14,11 @@ here="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$here/docs-src"
 # Publish the docs tree in this build. The gate (lib/docs/publish-gate.ts) hides
 # every /docs route by default under NODE_ENV=production, so without this the
-# deploy would ship an empty /docs (all routes 404, empty search index).
-export DOCS_PUBLISHED=true
+# deploy would ship an empty /docs (all routes 404, empty search index). Default
+# to publishing (the combined site exists to serve the docs), but respect an
+# explicit DOCS_PUBLISHED from the caller so the gate can still withhold the tree
+# on purpose rather than being forced open unconditionally.
+export DOCS_PUBLISHED="${DOCS_PUBLISHED:-true}"
 pnpm install --frozen-lockfile
 pnpm build
 

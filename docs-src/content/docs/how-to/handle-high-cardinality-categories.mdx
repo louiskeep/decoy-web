@@ -135,8 +135,8 @@ targets:
 
 High cardinality and differential privacy pull against each other. A DP fit
 rejects `high_cardinality: true` and `allow_real_categories: true` outright,
-because both release the real observed vocabulary instead of the certified
-label set that a DP release is allowed to emit.
+because both release the full observed vocabulary instead of only the
+thresholded labels a DP fit is allowed to emit.
 
 What you can do instead is fit the column as a DP text carrier and let the
 noisy threshold reduce it for you:
