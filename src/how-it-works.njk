@@ -126,22 +126,47 @@ motion: true
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">Performance</p>
-      <h2>What runtime depends on</h2>
-      <p>Four things: row count, the strategy mix (hash is cheap, FPE and free-text are not), the hardware, and how far the data has to move. The figures below are single-host developer runs with their conditions; they are not a benchmark against anyone.</p>
+      <h2>How fast, and will it fit on your box</h2>
+      <p>Speed depends on the operation, the row count, the strategy mix (hash is cheap; FPE and free text are not), and the hardware. This matrix reports each core operation at 1M, 10M, and 100M rows: sustained throughput, end-to-end wall time, and peak memory. Every number is measured on the default <code>decoy run</code> path, so until the benchmarks land the cells read Not measured rather than an estimate.</p>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Workload</th><th>Result</th><th>Conditions</th></tr></thead>
+        <caption class="small muted" style="text-align: left; caption-side: bottom; padding: var(--space-3) 1rem 0">
+          {% if performance.measured_on %}Measured on {{ performance.measured_on }}, {{ performance.hardware }}, engine {{ performance.engine_version }}.{% else %}Benchmarks pending. Every cell fills from the default <code>decoy run</code> path with its date, hardware, engine version, and route.{% endif %} Throughput is end-to-end rows per second; wall is the full command time; peak memory is the maximum observed. 100M is a linear projection from the measured sizes, labeled where shown.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Operation</th>
+            {% for scale in performance.scales %}<th scope="col">{{ scale }}</th>{% endfor %}
+            <th scope="col">Peak memory</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td>Hash strategy, per column</td><td>About 1.04M rows/s</td><td>Native kernel, x86-64 Linux; about 235k rows/s on pandas</td></tr>
-          <tr><td>1M rows, four strategies</td><td>1.27 s</td><td>4 threads; 10.7 s on pandas; byte-identical output</td></tr>
-          <tr><td>100M rows, hash strategies</td><td>About 430 s, 447 MB peak</td><td>8 threads, one host</td></tr>
-          <tr><td>Mixed generate + mask, 10M rows</td><td>About 176k rows/s, 2.0 GB peak</td><td>4 vCPU, 12 GiB</td></tr>
-          <tr><td>Pure generation, 10M rows</td><td>About 14k rows/s, 226 MB peak</td><td>Python path; native generation in progress</td></tr>
+          {% for op in performance.operations %}
+          <tr>
+            <th scope="row">
+              {{ op.operation }}
+              <span class="small muted" style="display: block; font-weight: 400; text-transform: none; letter-spacing: 0">{{ op.detail }}</span>
+              {% if op.route %}<span class="small muted" style="display: block; font-weight: 400; text-transform: none; letter-spacing: 0">Route: {{ op.route }}</span>{% endif %}
+            </th>
+            {% for cell in op.cells %}
+            <td>
+              {% if cell.throughput or cell.wall %}
+                {% if cell.throughput %}<strong>{{ cell.throughput }}</strong>{% endif %}
+                {% if cell.wall %}<span class="small muted" style="display: block">{{ cell.wall }}</span>{% endif %}
+                {% if cell.projected %}<span class="small muted" style="display: block">projected (linear)</span>{% endif %}
+              {% else %}
+                <span class="small muted">Not measured</span>
+              {% endif %}
+            </td>
+            {% endfor %}
+            <td>{% if op.peak_ram %}{{ op.peak_ram }}{% else %}<span class="small muted">Not measured</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
-    <p class="small muted" style="margin-top: var(--space-4)">Reproduced from the engine's published capacity records. Linux x86-64 only; no performance evidence is published yet for Windows, macOS, or ARM64.</p>
+    <p class="small muted" style="margin-top: var(--space-4)">The numbers are measured on the default run path (the route a normal <code>decoy run</code> takes), on Linux x86-64. No performance evidence is published yet for Windows, macOS, or ARM64.</p>
   </div>
 </section>
 

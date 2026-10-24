@@ -1,0 +1,70 @@
+{
+  "status": "pending_benchmarks",
+  "measured_on": null,
+  "hardware": null,
+  "engine_version": null,
+  "note": "Values are pending real default-route benchmarks. Each cell will carry throughput and end-to-end wall time, measured on the default `decoy run` path, with its date, hardware, engine version, and the execution route that produced it. A cell with no qualifying measurement reads \"Not measured\" rather than an estimate.",
+  "scales": ["1M rows", "10M rows", "100M rows"],
+  "operations": [
+    {
+      "operation": "Mask",
+      "detail": "hash, redact, truncate, passthrough on a mixed four-column table",
+      "denominator": "input rows",
+      "route": null,
+      "cells": [
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null, "projected": true }
+      ],
+      "peak_ram": null
+    },
+    {
+      "operation": "Generate",
+      "detail": "pure synthetic generation from a column spec",
+      "denominator": "output rows",
+      "route": null,
+      "cells": [
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null, "projected": true }
+      ],
+      "peak_ram": null
+    },
+    {
+      "operation": "Subset",
+      "detail": "referentially intact slice of two related tables",
+      "denominator": "source rows scanned",
+      "route": null,
+      "cells": [
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null, "projected": true }
+      ],
+      "peak_ram": null
+    },
+    {
+      "operation": "Scan",
+      "detail": "full PII and re-identification-risk scan over the whole input",
+      "denominator": "input rows",
+      "route": null,
+      "cells": [
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null, "projected": true }
+      ],
+      "peak_ram": null
+    },
+    {
+      "operation": "DP fit",
+      "detail": "differentially private snapshot over numeric, text, and flag carriers",
+      "denominator": "input rows",
+      "route": null,
+      "cells": [
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null },
+        { "throughput": null, "wall": null, "projected": true }
+      ],
+      "peak_ram": null
+    }
+  ]
+}
