@@ -319,8 +319,28 @@ motion: true
         <p class="muted">The CLI reads and writes CSV, Parquet, and fixed-width files on local disk, and masks folders of related tables in one run. Chunked streaming handles files larger than memory for CSV and Parquet with value-keyed strategies.</p>
         <p class="muted">Object storage and databases are a Platform feature today; the CLI tells you so at validation rather than failing mid-run. Databases round-trip through an export. <a href="/docs/reference/limits">Full list of limits</a>.</p>
       </div>
-      <div class="note note--raw">
-        <strong>What we do not claim.</strong> Masked output carries no differential-privacy guarantee. Free-text detection is best effort. Disguises are templates, not certifications. The engine's own <a href="/docs/reference/capabilities">feature support and limits</a> page is the source of truth.
+      <div class="terminal">
+        <div class="terminal-bar"><i></i><i></i><i></i><span>pipeline.yaml</span></div>
+<pre><span class="t-line dim">sources:</span>
+<span class="t-line">  customers:                  <span class="dim"># CSV</span></span>
+<span class="t-line">    type: file</span>
+<span class="t-line">    format: <span class="safe">csv</span></span>
+<span class="t-line">    path: ./customers.csv</span>
+<span class="t-line">&nbsp;</span>
+<span class="t-line">  accounts:                   <span class="dim"># Parquet, better for large or relational data</span></span>
+<span class="t-line">    type: file</span>
+<span class="t-line">    format: <span class="safe">parquet</span></span>
+<span class="t-line">    path: ./accounts.parquet</span>
+<span class="t-line">&nbsp;</span>
+<span class="t-line">  ledger:                     <span class="dim"># fixed-width, with an explicit layout</span></span>
+<span class="t-line">    type: file</span>
+<span class="t-line">    format: <span class="safe">fixed_width</span></span>
+<span class="t-line">    path: ./ledger.txt</span>
+<span class="t-line">    layout:</span>
+<span class="t-line">      columns:</span>
+<span class="t-line">        - {name: acct,   start: 0,  width: 8,  type: str}</span>
+<span class="t-line">        - {name: amount, start: 8,  width: 12, type: float, align: right}</span>
+<span class="t-line">        - {name: posted, start: 20, width: 10, type: str}</span></pre>
       </div>
     </div>
   </div>
