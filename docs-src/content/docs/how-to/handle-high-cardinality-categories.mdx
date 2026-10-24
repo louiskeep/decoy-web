@@ -133,22 +133,27 @@ targets:
 
 ## Interaction with differential privacy
 
-Under differential privacy, high-cardinality columns are not fully supported. DP measures counts per category, and with 74,000 categories, the privacy budget is consumed rapidly by composition.
+High cardinality and differential privacy pull against each other. A DP fit
+rejects `high_cardinality: true` and `allow_real_categories: true` outright,
+because both release the real observed vocabulary instead of the certified
+label set that a DP release is allowed to emit.
 
-If you need DP protection on high-cardinality columns, declare a reduced subset of categories in your `column_schema`:
+What you can do instead is fit the column as a DP text carrier and let the
+noisy threshold reduce it for you:
 
-```yaml
-global_settings:
-  dp:
-    epsilon: 1.0
-    delta: 1e-6
-    column_schema:
-      diagnosis_code:
-        kind: categorical
-        domain: ["I10", "E11", "J44", ...]  # Top 100 codes, not all 74k
+```console
+$ decoy fit claims.csv --output claims.snapshot.json \
+    --epsilon 1.0 --delta 1e-6 \
+    --dp-text diagnosis_code
 ```
 
-This is a tradeoff: you protect the most common categories but lose privacy guarantees on rare ones. Use this approach when privacy is a requirement but high-cardinality coverage is not critical.
+A `--dp-text` release keeps only the categories whose noisy count clears the
+threshold and drops the rest, so a 74,000-category column comes back as the
+common codes alone. You do not list a subset by hand; the threshold does the
+reduction. The tradeoff is built in: the frequent categories survive with a
+budgeted guarantee, and the long tail does not appear. Use this when a formal
+privacy guarantee matters more than covering every rare value. For the full
+mechanism, see [Differential privacy in Decoy](/docs/concepts/differential-privacy).
 
 ## Troubleshooting
 

@@ -1,29 +1,60 @@
 ---
 title: Use differential privacy
 description: Step-by-step recipe for generating differentially private synthetic data with epsilon/delta budgets.
-draft: true
+draft: false
 ---
 
-This recipe generates synthetic data with a formal differential privacy guarantee. It walks through configuration, the privacy budget tradeoffs, and how to check the output.
+This recipe generates synthetic data with a formal differential privacy
+guarantee. You fit a DP snapshot from a real table, then generate against an
+enforced budget ceiling. For the concepts behind it, see
+[Differential privacy in Decoy](/docs/concepts/differential-privacy).
 
 ## 1. Prepare your source data
 
 Start with a CSV you want to generate from:
 
 ```csv
-patient_id,age,diagnosis_code,admission_date,notes
-1,45,I10,2024-01-15,Hypertension follow-up
-2,67,E11,2024-02-20,Diabetes management
-3,52,J44,2024-03-10,COPD exacerbation
+patient_id,age,diagnosis_code,readmitted
+1,45,I10,0
+2,67,E11,1
+3,52,J44,0
 ```
 
-## 2. Declare your DP configuration
+## 2. Fit a differentially private snapshot
 
-Create a pipeline with `global_settings.dp` and a `column_schema` that declares:
+`decoy fit --epsilon` releases a `dps-marginal/v3` artifact instead of the
+exact snapshot. Select DP mode with `--epsilon`, pass the required `--delta`,
+and declare every column as a typed carrier:
 
-- Which columns get DP protection
-- Their type (numeric or categorical)
-- Their domain (min/max for numeric, actual categories for categorical)
+```console
+$ decoy fit patients.csv --output patients.snapshot.json \
+    --epsilon 1.0 --delta 1e-6 \
+    --dp-number age:0:120 \
+    --dp-text diagnosis_code \
+    --dp-flag readmitted
+OK patients.snapshot.json
+  dps-marginal/v3; epsilon_total=1.0, delta_total=1e-6
+```
+
+Carrier flags:
+
+- `--dp-number COL:LO:HI` declares a numeric column and its **data-independent**
+  domain. You supply `LO:HI`; the engine does not read the real min and max,
+  because that would leak at zero budget. Values outside the domain clamp to
+  the bounds.
+- `--dp-text COL` declares a categorical string column. Rare categories drop
+  under a noisy threshold.
+- `--dp-flag COL` declares a boolean column.
+
+Every source column must get a carrier, or the fit refuses. Pass
+`--dp-allow-omit` to deliberately leave a column out of the release.
+`--epsilon` is incompatible with `--parse-dates` and `--joint`.
+
+## 3. Declare the budget ceiling and generate
+
+In the pipeline, `global_settings.dp` sets the enforced `(epsilon, delta)`
+ceiling for the generated output. It holds only those two keys. Sample the
+snapshot with `type: statistical` columns:
 
 ```yaml
 version: 1
@@ -33,39 +64,28 @@ global_settings:
   dp:
     epsilon: 1.0
     delta: 1e-6
-    column_schema:
-      age:
-        kind: numeric
-        domain: [0, 120]
-      diagnosis_code:
-        kind: categorical
-        domain: ["I10", "E11", "J44", "F32", "K21"]
 
-sources:
-  patients:
-    type: file
-    format: csv
-    path: ./patients.csv
+sources: {}
 
 tables:
   - name: patients
-    row_count: 1000  # How many synthetic rows to generate
+    row_count: 1000
     generate_columns:
       - name: patient_id
         type: sequence
         start: 10000
       - name: age
         type: statistical
-        allow_real_categories: false
+        snapshot_file: ./patients.snapshot.json
+        source_column: age
       - name: diagnosis_code
         type: statistical
-        allow_real_categories: false
-      - name: admission_date
-        type: faker
-        faker_type: date
-      - name: notes
-        type: faker
-        faker_type: text
+        snapshot_file: ./patients.snapshot.json
+        source_column: diagnosis_code
+      - name: readmitted
+        type: statistical
+        snapshot_file: ./patients.snapshot.json
+        source_column: readmitted
 
 targets:
   patients:
@@ -74,92 +94,89 @@ targets:
     path: ./patients_synthetic.csv
 ```
 
-**Key decisions:**
+Decisions that matter:
 
-- **`epsilon: 1.0`**: Moderate privacy with reasonable fidelity. Start here for most use cases.
-- **`delta: 1e-6`**: Failure probability. Typical choice; smaller is stronger but may degrade fidelity.
-- **`column_schema`**: List only columns you want DP coverage for. Omit columns that are not sensitive or that you want to generate without DP (e.g., dates, free text).
-- **`allow_real_categories: false`**: Prevents releasing actual category names. Set to true only if your category labels are public and non-sensitive.
+- **`epsilon: 1.0`** is a common middle choice: moderate privacy, usable
+  fidelity. Start here and adjust.
+- **`delta: 1e-6`** is the failure probability. Keep it a small positive number
+  below 1, typically below 1/n for n rows.
+- The ceiling must cover the fit's spend. If the DP releases a pipeline
+  consumes compose to more than this, the compile fails (step 4).
 
-## 3. Validate and run
+## 4. Validate and run
 
 ```console
-$ decoy validate pipeline.yaml
+$ decoy validate config pipeline.yaml
 OK pipeline.yaml
 
-$ decoy fit patients.csv --output patients.snapshot.json
-OK patients.snapshot.json
-  100 rows; columns: age (numeric), diagnosis_code (categorical)
-
-$ decoy run pipeline.yaml
+$ decoy run pipeline.yaml --mode generate
 ╭─ decoy run ──────────────────────────────────────────────────────────────────╮
 │ Pipeline  pipeline.yaml                                                      │
 │ Mode      generate                                                           │
 │ Rows      1000                                                               │
 │ Elapsed   3.24s                                                              │
-╰────────────────────────────────────────────────────────────────────────────╯
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The output is 1,000 rows of synthetic data, generated from the DP snapshot.
+The output is 1,000 rows of synthetic data sampled from the noisy snapshot. If
+the composed spend of the DP releases exceeds the declared ceiling, the compile
+fails with `dp_budget_exceeded` before any row is written.
 
-## 4. Inspect the output
+## 5. Inspect the output
 
 ```console
-$ wc -l patients_synthetic.csv
-1001 patients_synthetic.csv
-
-$ head -5 patients_synthetic.csv
-patient_id,age,diagnosis_code,admission_date,notes
-10000,42,I10,2024-05-08,Lorem ipsum dolor sit amet
-10001,71,E11,2024-06-15,Consectetur adipiscing elit
-10002,49,J44,2024-07-22,Sed do eiusmod tempor incididunt
+$ head -4 patients_synthetic.csv
+patient_id,age,diagnosis_code,readmitted
+10000,42,I10,0
+10001,71,E11,1
+10002,49,J44,0
 ```
 
-## 5. Measure utility and adjust
+## 6. Measure utility and adjust
 
-Check whether the synthetic data is useful for your downstream task (testing, model training, analysis). Compare key statistics against the source:
+Check whether the synthetic data is useful for your downstream task, and
+compare key statistics against the source. Under DP the counts carry noise, so
+expect the marginals to track the source approximately rather than exactly: a
+column's mean and category frequencies land near the source values, not on
+them.
 
-**Source statistics:**
-- Age: mean=54, min=45, max=78
-- Diagnosis codes: I10 (40%), E11 (35%), J44 (25%)
+If fidelity is too low you can:
 
-**Synthetic statistics (with ε=1.0):**
-- Age: mean=53, min=41, max=82
-- Diagnosis codes: I10 (38%), E11 (37%), J44 (25%)
+- **Raise epsilon** (weaker privacy, better fidelity): try 2.0 or 3.0.
+- **Raise delta** (higher failure probability, better fidelity): try 1e-5, and
+  accept the higher risk.
+- **Release fewer columns**, or **narrow a numeric domain** so each bin covers
+  less range.
 
-If fidelity is too low, you can:
+## 7. How the budget composes
 
-- **Increase epsilon** (weaker privacy, better fidelity): try 2.0 or 3.0
-- **Increase delta** (higher failure probability, better fidelity): try 1e-5 (but accept higher risk)
-- **Reduce the column count** (lower composition cost): drop non-critical columns
+The requested `(epsilon, delta)` is the budget for the **whole fit**, covering
+every declared column together. The fit allocates its internal queries (one row
+count, one per numeric column, two per categorical column) and composes them so
+the total spend stays within the epsilon you asked for. You do not pay a
+separate epsilon per column, and there is no `(k + 1) * epsilon` growth.
 
-If fidelity is acceptable, you now have synthetic data with a formal privacy guarantee.
+What composes across a pipeline is distinct **releases**. Each `decoy fit`
+mints one release. When a pipeline draws statistical columns from several
+independent DP fits, their budgets add up and are checked against the
+`global_settings.dp` ceiling. Columns sharing one release are charged once. So
+to stay under a total budget, plan the epsilon of each independent fit, not a
+per-column figure.
 
-## 6. Privacy budget composition
+## 8. Constraints and limitations
 
-Each column in your `column_schema` composes the privacy cost. If you declare k columns and set epsilon=1.0, the total spend is approximately:
-
-```
-total_epsilon = (k + 1) * 1.0
-```
-
-For 5 DP columns with epsilon=1.0, total epsilon ≈ 6.0. This is your absolute privacy budget across all released columns.
-
-To stay within a total budget (e.g., 10):
-
-- With 5 columns: use epsilon=10/6 ≈ 1.67 per column
-- With 10 columns: use epsilon=10/11 ≈ 0.91 per column
-- With 2 columns: use epsilon=10/3 ≈ 3.33 per column
-
-## 7. Constraints and limitations
-
-- **Numeric and categorical only.** Dates, free text, and complex types are generated without DP protection. Declare them as non-DP types.
-- **No conditional generation.** `condition_on` is rejected under DP because joint distributions are not private. All columns are independent.
-- **Domain must be known upfront.** You declare age domain as [0, 120], diagnosis codes as a fixed list. The engine does not infer these from the data.
-- **Epsilon is enforced.** If you exceed the declared epsilon/delta budget, the job fails with an error.
+- **Three carriers only.** Numeric (`--dp-number`), categorical text
+  (`--dp-text`), and boolean (`--dp-flag`). Dates and free text are not
+  eligible; generate them with non-DP types outside this mechanism.
+- **No conditional or joint generation.** `condition_on` and `--joint` are
+  rejected under DP. All DP columns are released as independent marginals.
+- **Domains are declared, not inferred.** You pass each numeric column's
+  `LO:HI`. The engine does not read it from the data.
+- **The ceiling is enforced.** If the composed spend exceeds the declared
+  `(epsilon, delta)`, the pipeline fails to compile.
 
 ## Next steps
 
-- [Differential privacy in Decoy](/docs/concepts/differential-privacy): detailed explanation of the guarantee and its limits
-- [Generate synthetic data](/docs/how-to/generate-synthetic-data): full recipe for non-DP synthetic generation
+- [Differential privacy in Decoy](/docs/concepts/differential-privacy): the guarantee and its limits
+- [Generate synthetic data](/docs/how-to/generate-synthetic-data): the non-DP generation recipe
 - [Security, privacy, and compliance limits](/docs/reference/limits): honest boundaries of all Decoy guarantees

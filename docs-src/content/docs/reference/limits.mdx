@@ -19,19 +19,26 @@ proof.
 
 The one formal mechanism is `decoy fit --epsilon`: a distribution snapshot's
 counts are released with per-count noise under differential privacy, exact
-quantiles and means are removed, and min/max collapse to histogram-edge
-resolution. Read that scope narrowly:
+quantiles and means are removed, and numeric values are binned over a domain
+you declare. Read that scope narrowly:
 
-- The privacy budget is per column histogram. A snapshot of several columns
-  composes sequentially, so releasing k columns spends roughly `(k + 1) *
-  epsilon` of total budget.
-- Bin edges and category labels stay data-dependent: the histogram range
-  comes from the real min and max, and categorical top values can carry real
-  category strings when explicitly allowed. A fully data-independent release
-  is a known follow-up, not current behavior.
-- Joint (multi-column) distributions are not covered by `--epsilon` in the
-  current version; there is no composition accounting for releasing
-  marginals and a joint table under one budget yet.
+- The requested `(epsilon, delta)` is the budget for the whole fit, covering
+  every declared column together. The fit allocates and composes its internal
+  queries so the total spend stays within that epsilon. It is not a per-column
+  multiplier, and there is no `(k + 1) * epsilon` growth across columns.
+- Across a pipeline, distinct DP releases compose: their budgets add up and
+  are checked against the `global_settings.dp` ceiling, and a release shared
+  by several columns is charged once. Exceeding the ceiling fails the compile
+  with `dp_budget_exceeded`.
+- The release is data-independent. A numeric column's domain is the `LO:HI`
+  you pass to `--dp-number`, not the real min and max, and a categorical
+  column releases the certified label set, not real observed strings
+  (`allow_real_categories` is rejected under a DP generate). Values outside a
+  numeric domain clamp to the bounds; rare categories drop under a noisy
+  threshold.
+- Joint (multi-column) distributions are not covered by `--epsilon`.
+  `--joint` and `condition_on` are rejected under DP: there is no composition
+  accounting for a joint table in this build.
 - Nothing downstream of the snapshot inherits the guarantee. Generation
   samples deterministically from the noisy artifact, and masking is entirely
   outside this mechanism.

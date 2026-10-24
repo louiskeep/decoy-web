@@ -4,50 +4,127 @@ description: Marginal differential privacy on generated synthetic data using typ
 draft: false
 ---
 
-Decoy supports **marginal differential privacy** when you generate synthetic data. This page explains what that means, what it guarantees, and what it does not cover.
+Decoy can give you a formal **differential privacy** guarantee in one specific
+place: a distribution snapshot fitted with `decoy fit --epsilon`, and the
+synthetic data generated from it. This page explains what that guarantee is,
+where the budget lives, and what it does not cover.
 
-## What differential privacy does in Decoy
+It comes in two steps, and the privacy budget appears in both:
 
-When you run `decoy fit --epsilon` (or set `global_settings.dp` in a pipeline), the engine:
+1. **Fit a DP snapshot.** `decoy fit --epsilon --delta`, with each column
+   declared as a typed carrier, releases a `dps-marginal/v3` artifact instead
+   of the exact snapshot. The counts in that artifact are noised under
+   differential privacy.
+2. **Generate against a budget ceiling.** In the pipeline, `global_settings.dp`
+   declares that the generated output must be DP and sets an enforced
+   `(epsilon, delta)` ceiling. At compile time Decoy verifies every statistical
+   column was fitted with DP and that the total spend stays under the ceiling.
 
-1. Reads your source data once
-2. Measures a distribution snapshot for each declared typed carrier (numeric, categorical, or flag columns) with noise added to protect column statistics
-3. Generates synthetic rows by sampling from the noisy snapshot
-4. Provides a formal privacy guarantee under the *add-or-remove-one-row* model
+## The guarantee
 
-The budget `(epsilon, delta)` bounds the per-column marginal snapshot: the measured statistics are indistinguishable, up to that budget, between two runs on datasets that differ by one row. Decoy measures each column's marginal independently; it does not account for a joint guarantee over the whole synthetic table, and the generated rows are a deterministic sample from the noisy snapshot. See [Security, privacy, and compliance limits](/docs/reference/limits) for exactly what the generated output does and does not inherit.
+The fit reads your source once and releases, under differential privacy:
 
-**This is not obfuscation or anonymization.** Differential privacy is a mathematical guarantee on the measured statistics. It is the right tool when you want a budgeted, measured bound on what a column's published distribution can reveal about any one row.
+- A noisy row count.
+- For each numeric column, a noisy histogram over a domain you declare.
+- For each categorical column, a noisy count per category, with rare
+  categories dropped by a noisy threshold.
+
+The guarantee is defined under the **add-or-remove-one-row** model: the
+released counts are indistinguishable, up to the `(epsilon, delta)` budget,
+between two datasets that differ by one row. OpenDP builds and certifies each
+noisy measurement, and the `dp_accounting` library composes those certificates
+into the fit's total spend. Decoy does not invent its own noise formula.
+
+**This is a mathematical bound on the released statistics, not anonymization.**
+Differential privacy bounds what the published counts can reveal about any one
+row. It does not promise the output is scrubbed of all risk, and it is the
+right tool only when you want a budgeted, measured limit on disclosure from a
+column's distribution.
 
 ## When to use it
 
-Use differential privacy if:
-- You need to generate synthetic data and publish it or share it externally
-- You want a formal privacy guarantee, not just security through obscurity
-- Your data contains sensitive attributes you want to protect
+Use a DP fit when:
+
+- You need to generate synthetic data and share or publish it outside the
+  team that holds the source.
+- You want a formal, parameterized privacy guarantee rather than
+  security through obscurity.
 
 Do not rely on Decoy's DP for:
-- Masked output (masking carries no DP guarantee)
-- Healthcare free-text or dates (DP does not cover these column types)
-- Perfectly preserving the original distribution (DP adds noise, reducing fidelity)
+
+- Masked output. Masking carries no DP guarantee and is outside this mechanism.
+- Dates or free text. These cannot be DP carriers (see the carrier list below).
+- Preserving the source distribution exactly. DP adds noise, which lowers
+  fidelity.
+
+## Typed carriers: what a DP fit can release
+
+Every column in a DP fit is declared as one of three carriers, and only these
+three are eligible:
+
+- **`number`** (`--dp-number COL:LO:HI`): a numeric column, binned over the
+  data-independent domain `[LO, HI]` **you** supply. Values outside the domain
+  clamp to the bounds. The domain is not read from the data, because reading
+  the real min and max would itself leak at zero budget.
+- **`text`** (`--dp-text COL`): a categorical string column, released as noisy
+  per-category counts. Categories whose noisy count falls under the threshold
+  are dropped.
+- **`flag`** (`--dp-flag COL`): a boolean column.
+
+Every source column must be declared with a carrier, or the fit refuses. Pass
+`--dp-allow-omit` to deliberately leave undeclared columns out of the release.
+Dates (`--parse-dates`) and joint tables (`--joint`) are not compatible with
+`--epsilon`.
 
 ## Epsilon and delta: the privacy budget
 
-Your privacy guarantee is parameterized by two numbers:
+The guarantee is parameterized by two numbers:
 
-**Epsilon (ε)**: Controls privacy loss per column. Think of it as "how much noise should we add?" Smaller epsilon means more noise (stronger privacy), higher epsilon means less noise (better fidelity). Typical values range from 0.1 to 10.
+**Epsilon (ε)** sets how much noise is added. Smaller epsilon means more noise
+and stronger privacy; larger epsilon means less noise and higher fidelity.
+Typical values run from about 0.1 to 10.
 
-- ε = 0.1: very strong privacy, but low fidelity (noisy output)
-- ε = 1: moderate privacy with reasonable fidelity (common choice)
-- ε = 10: weak privacy, high fidelity
+- ε = 0.1: very strong privacy, low fidelity.
+- ε = 1: a common middle choice.
+- ε = 10: weak privacy, high fidelity.
 
-**Delta (δ)**: The failure probability. A small constant (typically 1e-6 or 1e-9), delta represents the chance that the guarantee is violated. In most cases, use a delta smaller than 1/n, where n is your dataset size.
+**Delta (δ)** is the small probability that the guarantee does not hold. Use a
+small positive number below 1, typically 1e-6 or smaller. A common rule is to
+keep delta below 1/n, where n is your row count.
 
-When you generate multiple columns, the privacy budget **composes**. Releasing k columns with a total budget of epsilon spends roughly `(k + 1) * epsilon` across the entire release. This is the primary limit on DP-supported workloads.
+### The budget is per release, not per column
+
+The requested `(epsilon, delta)` is the budget for the **whole fit**, covering
+every declared column together. Internally the fit schedules one noisy query
+for the row count, one per numeric column, and two per categorical column, then
+allocates and composes them so the total spend stays within the epsilon you
+asked for. You do not pay a separate epsilon for each column, and the spend does
+not grow by a per-column multiplier.
+
+What composes is **distinct releases**. Each fit mints one release with its own
+identity. When a pipeline's generated columns draw from several independent DP
+fits, their budgets add up and are checked against the `global_settings.dp`
+ceiling. Columns that share a single release are charged once. If the composed
+spend exceeds the declared ceiling, the pipeline fails to compile with
+`dp_budget_exceeded`.
 
 ## Configuration
 
-In your pipeline YAML:
+A DP pipeline has two parts: the fit command that produces the snapshot, and
+the pipeline YAML that declares the ceiling and samples from it.
+
+Fit the snapshot with a carrier for each column:
+
+```console
+$ decoy fit patients.csv --output patients.snapshot.json \
+    --epsilon 1.0 --delta 1e-6 \
+    --dp-number age:0:120 \
+    --dp-text diagnosis_code \
+    --dp-flag readmitted
+```
+
+Then declare the ceiling in the pipeline and sample the snapshot with
+`type: statistical` columns:
 
 ```yaml
 version: 1
@@ -57,35 +134,28 @@ global_settings:
   dp:
     epsilon: 1.0
     delta: 1e-6
-    column_schema:
-      # Declare the columns you want DP protection for
-      age:
-        kind: numeric
-        domain: [0, 120]
-      diagnosis_code:
-        kind: categorical
-        domain: ["A00", "A01", "B12", ...]  # list actual categories
 
-sources:
-  patients:
-    type: file
-    format: csv
-    path: ./patients.csv
+sources: {}
 
 tables:
   - name: patients
+    row_count: 1000
     generate_columns:
       - name: patient_id
         type: sequence
-        start: 1
+        start: 10000
       - name: age
         type: statistical
-        allow_real_categories: false
+        snapshot_file: ./patients.snapshot.json
+        source_column: age
       - name: diagnosis_code
         type: statistical
-        allow_real_categories: false
-      - name: notes
-        type: sequence  # not DP-covered; use non-DP types for free text
+        snapshot_file: ./patients.snapshot.json
+        source_column: diagnosis_code
+      - name: readmitted
+        type: statistical
+        snapshot_file: ./patients.snapshot.json
+        source_column: readmitted
 
 targets:
   patients:
@@ -96,74 +166,87 @@ targets:
 
 Key points:
 
-- **`column_schema` is required.** You declare each typed carrier (numeric, categorical, or flag column) you want DP protection for, with its type and domain (min/max for numeric, category list for categorical). Inferring the domain from the data itself leaks information at zero budget.
-- **`allow_real_categories: false`** prevents the engine from releasing actual category names from your data. When set to false, high-frequency categories are generalized.
-- **Numeric and categorical only.** Dates, free text, and complex types are not supported under DP; use non-DP generation types for these.
+- **`global_settings.dp` holds only `epsilon` and `delta`.** It is the
+  enforced ceiling for the generated output. The per-column domains and
+  carriers are declared at fit time, not here.
+- **Each statistical column names its snapshot and source column.** The budget
+  is set when you fit, not in the generate step.
+- **`allow_real_categories: true` and `high_cardinality: true` are rejected**
+  under `global_settings.dp`, because both would release real observed
+  vocabulary instead of the certified label set and silently void the
+  guarantee.
 
 ## What the guarantee covers
 
 The formal guarantee applies to:
-- Per-column marginal distributions (histograms and counts)
-- Synthetic rows generated from the noisy snapshot
 
-The guarantee does **not** cover:
-- Column names or schema (considered public metadata)
-- Foreign key relationships (public structural info)
-- Masked output (masking is outside the DP boundary)
-- Conditional generation (`condition_on` is rejected under DP because joint distributions are not private)
-- Dates and free text (rejected at compile time)
+- The released per-column counts: numeric histograms and categorical counts.
+- Synthetic rows sampled from the noisy snapshot.
+
+It does **not** cover:
+
+- Column names or the schema. These are treated as public metadata.
+- Foreign-key structure. Also public structure.
+- Masked output. Masking is entirely outside the DP boundary.
+- Conditional or joint generation (`condition_on`), which is rejected under DP
+  because joint distributions are not released privately in this build.
+- Dates and free text, which are not eligible carriers.
 
 ## What the guarantee does not mean
 
-**DP does not mean zero information leakage.** It means bounded leakage. An attacker with the synthetic data learns something, but only up to the epsilon budget.
+**DP does not mean zero leakage.** It means bounded leakage. An attacker with
+the synthetic data learns something, but only up to the epsilon budget.
 
-**DP is not anonymization.** Privacy and utility are a tradeoff. Adding noise makes the output safer to publish but less faithful to the source. You still need to review the synthetic output and decide if it is safe for your use case.
+**DP is not anonymization.** Privacy and utility trade off. More noise makes
+the output safer to publish and less faithful to the source. You still review
+the output and decide whether it is safe for your use.
 
-**DP in Decoy measures by row, not person.** If a person in your source has fifty rows (claim records, lab results), removing one person removes fifty rows. The DP guarantee covers removing one row, not one person. For healthcare multi-record scenarios, this means the per-person privacy is weaker than the per-row epsilon suggests: removing a fifty-row person is a fifty-row change, far beyond the one-row guarantee. Decoy's configuration treats rows as the unit.
+**DP in Decoy measures by row, not by person.** The guarantee covers removing
+one row. If one person has fifty rows (claims, lab results), removing that
+person is a fifty-row change, far beyond the one-row guarantee. For
+multi-record data, per-person privacy is weaker than the per-row epsilon
+suggests. Decoy's unit is the row.
 
-## Comparing to non-DP generation
+## Comparing to a non-DP fit
 
-Without `global_settings.dp`:
-- Snapshot columns sample from observed distributions without noise
-- No formal privacy guarantee, but generally better fidelity
-- Faster (no measurement overhead)
+A plain `decoy fit` (no `--epsilon`) captures exact quantiles and counts with
+no noise: no privacy guarantee, generally higher fidelity, and faster, because
+there is no OpenDP measurement to run. A DP fit trades that fidelity and speed
+for the formal bound.
 
-With `global_settings.dp`:
-- Snapshot columns sample from noisy distributions
-- Formal epsilon/delta guarantee
-- Lower expected fidelity (noise trades accuracy for privacy)
-- Slower (OpenDP measurement and post-processing adds time)
-
-A recurring misconception: **DP is not what makes output resemble the source.** Fitting does. DP is what makes the resemblance safe to publish.
+A recurring misconception: DP is not what makes the output resemble the source.
+Fitting does. DP is what makes the resemblance safe to publish.
 
 ## When fidelity drops
 
-Turning on DP normally reduces expected fidelity compared to the same fit without DP. The main reasons:
+Turning on DP normally lowers fidelity against the same fit without it. The main
+reasons:
 
-- Noise is added to histogram counts and quantiles to achieve the privacy guarantee
-- Categorical tail mass (rare values) is redistributed or collapsed into an `__other__` category
-- Low epsilon (more noise) pushes the output further from the source distribution
+- Noise is added to histogram counts and category counts.
+- Rare categories are dropped when their noisy count falls under the threshold.
+- Lower epsilon (more noise) pushes the output further from the source.
 
-To improve fidelity under DP, you can:
-- Increase epsilon (weaker privacy guarantee, better fidelity)
-- Increase delta (higher failure probability, better fidelity)
-- Reduce the number of columns (lower composition cost)
-- Simplify the domains (fewer categories to measure)
+To improve fidelity under DP you can raise epsilon (weaker guarantee), raise
+delta (higher failure probability), release fewer columns, or narrow a numeric
+domain so each bin covers less range.
 
 ## Usage in practice
 
-1. **Plan your privacy budget.** Decide on epsilon and delta based on your sensitivity and use case. (Consult your privacy or security team if this is a high-stakes release.)
-
-2. **Declare your column schema.** List every column you want DP protection for, its type, and its domain.
-
-3. **Run the fit and generation.** The engine measures the snapshot with noise, then generates synthetic data.
-
-4. **Review and test.** Check that the synthetic output is useful for your downstream task (analysis, testing, training models). DP adds noise, so utility may be lower than non-DP generation.
-
-5. **Publish with confidence.** Once you are satisfied with fidelity, the synthetic data carries a formal privacy guarantee.
+1. **Plan your budget.** Decide epsilon and delta from your sensitivity and use
+   case. Consult your privacy or security team for a high-stakes release.
+2. **Declare carriers at fit time.** Give every column a `--dp-number`,
+   `--dp-text`, or `--dp-flag`, and a data-independent domain for each numeric
+   column.
+3. **Set the ceiling and generate.** Put the matching `(epsilon, delta)` in
+   `global_settings.dp` and sample the snapshot with statistical columns.
+4. **Review and test.** Check that the output is useful for your downstream
+   task. DP adds noise, so utility may be lower than a non-DP fit.
+5. **Publish with the budget in hand.** Once fidelity is acceptable, the
+   synthetic data carries the `(epsilon, delta)` guarantee.
 
 ## See also
 
-- [Generate synthetic data](/docs/how-to/generate-synthetic-data): full recipe for synthetic generation
-- [Determinism](/docs/concepts/determinism): how seeds and keys affect reproducibility under DP
-- [Security, privacy, and compliance limits](/docs/reference/limits): honest boundaries of all Decoy guarantees
+- [Use differential privacy](/docs/how-to/use-differential-privacy): step-by-step recipe
+- [Generate synthetic data](/docs/how-to/generate-synthetic-data): the non-DP generation recipe
+- [Determinism](/docs/concepts/determinism): how seeds and keys affect reproducibility
+- [Security, privacy, and compliance limits](/docs/reference/limits): the honest boundaries of all Decoy guarantees
