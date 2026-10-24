@@ -4,12 +4,9 @@ import path from "node:path";
 const ICON_DIR = path.join(import.meta.dirname, "src/_includes/icons");
 
 export default function (eleventyConfig) {
-  // Static assets copied verbatim. The vendored Fumadocs export (docs/, _next/, api/) lives at the
-  // repo root because its absolute /_next and /api/search paths cannot move.
-  eleventyConfig.addPassthroughCopy({ docs: "docs", _next: "_next", api: "api" });
-  // The export's own index page: served as /docs on clean-URL hosts and as /docs/ by directory.
-  eleventyConfig.addPassthroughCopy({ "docs.html": "docs.html" });
-  eleventyConfig.addPassthroughCopy({ "docs.html": "docs/index.html" });
+  // Docs are no longer vendored into this repo. The Fumadocs project in docs-src/
+  // builds a static export whose out/docs, out/_next, and out/api the deploy step
+  // copies into dist, so /docs is served from one combined publish.
   eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/css");

@@ -1,8 +1,11 @@
 name: Deploy site to GitHub Pages
 
-# Builds the Eleventy site and publishes dist/ to GitHub Pages on every push to
-# main. The CNAME file in src/ (passed through to dist/) binds the site to the
-# custom domain; configure the domain's DNS and Pages custom-domain setting once.
+# Builds the combined site and publishes it to GitHub Pages on every push to
+# main. Two builds feed one publish:
+#   - the Eleventy marketing site (npm, repo root) -> dist/
+#   - the Fumadocs docs project (pnpm, docs-src/, static export) -> dist/docs/
+# The CNAME file (passed through to dist/) binds the site to the custom domain;
+# configure the domain's DNS and the Pages custom-domain setting once.
 on:
   push:
     branches: [main]
@@ -24,12 +27,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "9"
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: npm
+
+      # Marketing site (Eleventy) -> dist/
       - run: npm ci
       - run: npm run build
+
+      # Docs (Fumadocs static export, basePath /docs) -> dist/docs/
+      - name: Build docs
+        working-directory: docs-src
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+      # Mirror the export's own layout: docs pages under /docs, the docs index
+      # at both /docs/ and /docs.html (clean-URL variant), assets at /_next, and
+      # the static search route at /api. The "/" redirect page is left out so it
+      # does not shadow the marketing home page.
+      - name: Assemble docs into the site
+        run: |
+          cp -r docs-src/out/docs dist/docs
+          cp docs-src/out/docs.html dist/docs/index.html
+          cp docs-src/out/docs.html dist/docs.html
+          cp -r docs-src/out/_next dist/_next
+          cp -r docs-src/out/api dist/api
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
