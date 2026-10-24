@@ -23,6 +23,32 @@ custom ones. Accuracy is the chronic risk on this surface, so the program below
 is built around a single generated source of truth rather than hand-typed
 examples.
 
+## Reality update (2026-10-24): consolidation changed the deploy model
+
+The sections below were written on 2026-10-22, before the site and docs were
+consolidated. What changed, and what is now authoritative for the deploy model:
+
+- **One repo, one build.** The docs project was imported into `decoy-site`
+  under `docs-src/`; the combined build (`npm run build:all`) produces the
+  marketing site at the root and the docs under `/docs` in a single `dist/`.
+  The "two branches of one remote" and "build a separate Cloudflare project for
+  the docs" framing below is superseded.
+- **Domain is `trydecoy.com`** (registered at Squarespace), not decoystorm.dev.
+  Every site URL, canonical, sitemap, and llms.txt entry uses it.
+- **Deploy is GitHub Pages**, not Cloudflare Pages. A merge to `main` triggers
+  `.github/workflows/deploy.yml` (which runs `npm run check` then publishes).
+  Going live still needs Cam to enable Pages (Settings > Pages > Source = GitHub
+  Actions) and point DNS at Squarespace (A records to GitHub Pages IPs, `www`
+  CNAME to the Pages host). So merge is the publish trigger; it is still Cam's.
+- **Launch work lives on `feat/web-launch`.** The consolidation (Track 1), the
+  STORM-to-scan rename, the docs-currency pass, and the differential-privacy
+  doc rewrite are done there (GO from the cross-model gate; build green; held
+  for Cam's merge and DP sanity-check). This supersedes the "done / merge-ready"
+  snapshot below for those tracks.
+
+The program framing below (proof-manifest-v2 foundation, the three ideas, and
+the Cam-gated "leave decoy-engine alone" pause) still stands as written.
+
 ## Where we stopped and how to resume (paused 2026-10-22)
 
 Cam paused the program here as a clean stopping point. The docs work is finished
@@ -188,11 +214,21 @@ duplicate input, output, or settings values.
 
 ### Idea 4: How-it-works performance section (plan first, via Codex)
 
-The `/how-it-works` page needs a performance section that answers "how fast is
-Decoy, and will my job fit on my box" with numbers a reader can trust. This item
-is a **plan task, not a build task**: get Codex to produce the implementation
-plan (engine repo gate chain, since it reaches into benchmarks) before any page
-work starts. Added 2026-10-24 on Cam's direction.
+`/how-it-works` (and `/cli`) already carry a flat five-row performance table,
+and `/index` three stat tiles. This item redesigns that into a performance
+section that answers "how fast is Decoy, and will my job fit on my box" with a
+matrix a reader can trust and whose every number traces to a dated benchmark.
+It is a **plan task, not a build task**: get Codex to produce the implementation
+plan before any page work starts, and the page build itself waits for Cam's
+one-page-at-a-time live review. Added 2026-10-24 on Cam's direction.
+
+A traceability audit of the existing numbers runs first (W3): the current table
+cites figures like 1.04M rows/s per hashed column, 100M masked in ~430s/447MB,
+and ~14k rows/s pure generation. Some trace to engine docs (native
+supported-matrix, phase-1 throughput records, the b6a-bench-2026-10-02 records);
+the repo rule wants each one anchored to a dated benchmark file, so the audit
+confirms source, date, hardware, and staleness per claim before the matrix
+reuses any of them.
 
 What the plan must decide, in order:
 
