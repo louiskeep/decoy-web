@@ -46,7 +46,7 @@ jsonld: >-
     </div>
     <div class="flow" data-flow role="list">
       <div class="flow-step flow-step--edge" role="listitem"><strong>Source</strong><span>CSV, Parquet, fixed-width, S3, GCS, Postgres snapshot</span></div>
-      <div class="flow-step" role="listitem"><strong>Scan</strong><span>STORM profiles every column and flags likely PII</span></div>
+      <div class="flow-step" role="listitem"><strong>Scan</strong><span>Profiles every column and flags likely PII</span></div>
       <div class="flow-step" role="listitem"><strong>Subset</strong><span>Pull a small slice with every foreign key intact</span></div>
       <div class="flow-step" role="listitem"><strong>Mask or generate</strong><span>23 strategies, 34 providers, keyed and deterministic</span></div>
       <div class="flow-step" role="listitem"><strong>Validate</strong><span>Residual PII, FK parity, distribution checks</span></div>
@@ -71,7 +71,7 @@ jsonld: >-
         <ul>
           <li>{% icon "check" %} 23 masking strategies, 12 generation types, 34 synthetic providers</li>
           <li>{% icon "check" %} Keyed, deterministic masking so joins survive across tables and runs</li>
-          <li>{% icon "check" %} FK-aware subsetting and STORM PII detection</li>
+          <li>{% icon "check" %} FK-aware subsetting and PII scanning</li>
           <li>{% icon "check" %} Six stable exit codes, JSON output, evidence manifests</li>
           <li>{% icon "check" %} Free and source-available (BUSL-1.1) on an Apache-2.0 engine</li>
         </ul>
@@ -132,7 +132,7 @@ jsonld: >-
       <div class="card">
         <div class="icon-badge">{% icon "file" %}</div>
         <h3>Explicit, reviewable YAML</h3>
-        <p>The pipeline is a file you can diff, review, and version. STORM suggests a strategy per column and leaves a review comment; it never decides for you.</p>
+        <p>The pipeline is a file you can diff, review, and version. The scan suggests a strategy per column and leaves a review comment; it never decides for you.</p>
       </div>
       <div class="card">
         <div class="icon-badge">{% icon "shield" %}</div>

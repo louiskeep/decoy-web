@@ -36,27 +36,10 @@ jobs:
         with:
           node-version: "20"
 
-      # Marketing site (Eleventy) -> dist/
+      # Build the combined site: Eleventy marketing -> dist/, then the Fumadocs
+      # docs export assembled into dist/docs (see scripts/build-docs.sh).
       - run: npm ci
-      - run: npm run build
-
-      # Docs (Fumadocs static export, basePath /docs) -> dist/docs/
-      - name: Build docs
-        working-directory: docs-src
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm build
-      # Mirror the export's own layout: docs pages under /docs, the docs index
-      # at both /docs/ and /docs.html (clean-URL variant), assets at /_next, and
-      # the static search route at /api. The "/" redirect page is left out so it
-      # does not shadow the marketing home page.
-      - name: Assemble docs into the site
-        run: |
-          cp -r docs-src/out/docs dist/docs
-          cp docs-src/out/docs.html dist/docs/index.html
-          cp docs-src/out/docs.html dist/docs.html
-          cp -r docs-src/out/_next dist/_next
-          cp -r docs-src/out/api dist/api
+      - run: npm run build:all
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

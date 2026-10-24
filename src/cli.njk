@@ -9,7 +9,7 @@ motion: true
     <div class="hero-copy">
       <p class="eyebrow">{{ site.products.cli }}</p>
       <h1 data-split>The whole engine, in your terminal</h1>
-      <p class="lede">Scaffold a pipeline from a real file, let STORM suggest a strategy per column, run it, and gate your build on the exit code. Every capability of the engine is in the free CLI; nothing is held back for the platform.</p>
+      <p class="lede">Scaffold a pipeline from a real file, let the scan suggest a strategy per column, run it, and gate your build on the exit code. Every capability of the engine is in the free CLI; nothing is held back for the platform.</p>
       <div class="hero-actions">
         <a class="btn btn--primary btn--lg prelaunch-only" href="mailto:{{ site.contacts.support }}?subject=Notify%20me%20when%20Decoy%20launches">{% icon "mail" %} Get notified at launch</a>
         <a class="btn btn--primary btn--lg launch-only" href="#install">{% icon "download" %} Download</a>
@@ -20,7 +20,7 @@ motion: true
       <div class="terminal-bar"><i></i><i></i><i></i><span>bash</span></div>
 <pre><span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy init customers.csv</span></span>
 <span class="t-line dim">wrote pipeline.yaml (7 columns, 5 REVIEW comments)</span>
-<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy storm analyze customers.csv</span></span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy scan customers.csv</span></span>
 <span class="t-line"><span class="dim">email      CONTACT   </span><span class="raw">email_address</span><span class="dim">    0.99</span></span>
 <span class="t-line"><span class="dim">ssn        IDENTITY  </span><span class="raw">us_ssn</span><span class="dim">           0.98</span></span>
 <span class="t-line"><span class="dim">dob        IDENTITY  </span><span class="raw">date_of_birth</span><span class="dim">    0.97</span></span>
@@ -106,8 +106,8 @@ motion: true
       </div>
       <div class="card" id="detection">
         <p class="eyebrow">Detection</p>
-        <h3>STORM finds it, you decide</h3>
-        <p>STORM profiles every column with 25 value detectors and tags each finding with a domain: identity, financial, health, contact, location. After a run, <code>decoy storm integrity</code> checks the output for residual PII and FK parity and returns exit code 4 on findings. An optional spaCy model adds person and location detection in free text.</p>
+        <h3>The scan finds it, you decide</h3>
+        <p><code>decoy scan</code> profiles every column with 25 value detectors and tags each finding with a domain: identity, financial, health, contact, location. After a run, <code>decoy report integrity</code> checks the output for residual PII and FK parity and returns exit code 4 on findings. An optional spaCy model adds person and location detection in free text.</p>
       </div>
     </div>
   </div>
@@ -148,7 +148,7 @@ motion: true
     <div class="section-head" data-reveal>
       <p class="eyebrow">CI</p>
       <h2>Made to run unattended</h2>
-      <p><code>--json</code> writes results to stdout and progress to stderr. <code>--quiet</code> leaves only the exit code. <code>--evidence-out</code> records what ran without recording a single raw value, and <code>decoy evidence verify</code> checks it later.</p>
+      <p><code>--json</code> writes results to stdout and progress to stderr. <code>--quiet</code> leaves only the exit code. <code>--evidence-out</code> records what ran without recording a single raw value, and <code>decoy report verify</code> checks it later.</p>
     </div>
     <div class="table-wrap">
       <table>
@@ -157,7 +157,7 @@ motion: true
           <tr><td><code>0</code></td><td>OK</td><td>Run completed, checks passed</td></tr>
           <tr><td><code>1</code></td><td>Usage</td><td>Bad flags or arguments</td></tr>
           <tr><td><code>3</code></td><td>Runtime</td><td>Unreadable input, strategy error, I/O failure</td></tr>
-          <tr><td><code>4</code></td><td>Findings</td><td>Residual PII, FK parity or policy violations from <code>storm integrity</code></td></tr>
+          <tr><td><code>4</code></td><td>Findings</td><td>Residual PII, FK parity or policy violations from <code>report integrity</code></td></tr>
           <tr><td><code>5</code></td><td>Capacity</td><td><code>preflight</code> estimates the job cannot fit on this host</td></tr>
         </tbody>
       </table>

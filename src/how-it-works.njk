@@ -19,7 +19,7 @@ motion: true
     <div class="pipeline-stage" data-pipeline>
     <div class="flow" data-flow role="list">
       <div class="flow-step flow-step--edge" role="listitem" data-stage="source"><strong>Source</strong><span>Files, object storage, or a Postgres snapshot</span></div>
-      <div class="flow-step" role="listitem" data-stage="scan"><strong>Scan</strong><span>STORM profiles columns and suggests strategies</span></div>
+      <div class="flow-step" role="listitem" data-stage="scan"><strong>Scan</strong><span>Profiles columns and suggests strategies</span></div>
       <div class="flow-step" role="listitem" data-stage="subset"><strong>Subset</strong><span>Follow foreign keys to a small, intact slice</span></div>
       <div class="flow-step" role="listitem" data-stage="mask"><strong>Mask or generate</strong><span>Keyed, deterministic transforms per column</span></div>
       <div class="flow-step" role="listitem" data-stage="validate"><strong>Validate</strong><span>Residual PII, FK parity, distribution integrity</span></div>
@@ -31,7 +31,7 @@ motion: true
       <div class="card" data-stage="scan">
         <div class="icon-badge">{% icon "scan" %}</div>
         <h3>Scan</h3>
-        <p>STORM runs 25 value detectors over every column, tags findings by domain, and writes a draft pipeline with a review comment on each suggestion. It suggests; you decide.</p>
+        <p>The scan runs 25 value detectors over every column, tags findings by domain, and writes a draft pipeline with a review comment on each suggestion. It suggests; you decide.</p>
       </div>
       <div class="card" data-stage="subset">
         <div class="icon-badge">{% icon "link" %}</div>

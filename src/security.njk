@@ -91,7 +91,7 @@ bodyClass: page-security
       <div>
         <p class="eyebrow">Audit and evidence</p>
         <h2>Records a reviewer can verify</h2>
-        <p class="muted">Every CLI run can write an evidence manifest: pipeline hash, input and output fingerprints, row counts, and the seed-protocol version, with no raw values. <code>decoy evidence verify</code> checks it against the files later.</p>
+        <p class="muted">Every CLI run can write an evidence manifest: pipeline hash, input and output fingerprints, row counts, and the seed-protocol version, with no raw values. <code>decoy report verify</code> checks it against the files later.</p>
         <p class="muted">The Platform appends every action to a hash-chained audit log that Postgres enforces as append-only. An integrity verifier walks the chain, and the log exports to CSV or JSON. Retention defaults to seven years and nothing is purged automatically.</p>
       </div>
       <div class="card">
