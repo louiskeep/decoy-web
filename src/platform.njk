@@ -65,7 +65,7 @@ motion: true
     <div class="feature-row" id="audit">
       <div>
         <p class="eyebrow">Audit</p>
-        <h3>A log that proves it was not edited</h3>
+        <h3>A tamper-evident audit log</h3>
         <p>Every action is appended to a hash-chained audit log that Postgres will not let anyone update or delete. An integrity verifier walks the chain, and the whole log exports to CSV or JSON for a reviewer. Retention defaults to seven years and nothing is purged.</p>
         <ul>
           <li>Hash chain with append-only enforcement in Postgres</li>
@@ -88,7 +88,7 @@ motion: true
       <div>
         <p class="eyebrow">Access</p>
         <h3>Four roles, single sign-on, scoped keys</h3>
-        <p>Admin, release manager, developer, and user roles, with per-user permission revocation on top. Users see their own pipelines and jobs; admins see everything. Sign in with local accounts or OIDC (tested with Okta, Entra ID, Google Workspace, Keycloak, and Auth0). API keys are shown once, stored hashed, and inherit their owner's permissions.</p>
+        <p>Admin, release manager, developer, and user roles, with per-user permission revocation on top. Users see their own pipelines and jobs; admins see everything. Sign in with local accounts or OIDC (supported, documented for Okta, Entra ID, Google Workspace, Keycloak, and Auth0). API keys are shown once, stored hashed, and inherit their owner's permissions.</p>
         <p class="small faint">SAML-only identity providers are not supported.</p>
       </div>
       <div class="grid grid-2" data-reveal>
