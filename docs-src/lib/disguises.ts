@@ -50,7 +50,7 @@ export const DISGUISES: Disguise[] = [
     primaryBuyer: 'Healthcare data engineers',
     summary:
       'Starts from the HIPAA Safe Harbor identifier categories, with additional healthcare-oriented detector examples such as ICD-10, MRN, and NPI. ' +
-      'Pick this template when STORM detects those signals or a PHI-style co-occurrence such as date + ZIP + name.',
+      'Pick this template when a pre-scan detects those signals or a PHI-style co-occurrence such as date + ZIP + name.',
     triggerDescription:
       'SSN, MRN, NPI, or ICD-10 detected anywhere  --  or date + ZIP + name appearing together',
     metaDescription:
@@ -356,7 +356,7 @@ triggers:
     ],
     honesty: [
       "CCPA opt-out rights are not in scope. The regulation includes consumer rights (access, delete, opt-out of sale) that require application-level changes, not just data masking.",
-      "Commercial information is covered by name-hint rules only. Oddly-named columns (e.g. 'tx_amt_usd') may not be detected without a column remap in STORM.",
+      "Commercial information is covered by name-hint rules only. Oddly-named columns (e.g. 'tx_amt_usd') may not be detected without a column remap in the pre-scan.",
       'CPRA amendments (enforceable 2023) added sensitive personal information (SPI) categories including race/ethnicity, health, precise geolocation. These need additional custom rules beyond this base Disguise.',
     ],
   },
@@ -411,7 +411,7 @@ triggers:
     ],
     honesty: [
       'Directory information opt-outs are not in scope. FERPA allows institutions to publish directory information unless a student opts out; this is an application-level control.',
-      'Disciplinary records are covered only if column names are recognised. Non-standard column names may not be detected without a column remap in STORM.',
+      'Disciplinary records are covered only if column names are recognised. Non-standard column names may not be detected without a column remap in the pre-scan.',
       'FERPA applies to institutions that receive federal funding. Private companies processing student records as school officials may also be subject to FERPA; consult legal counsel.',
     ],
   },
@@ -529,7 +529,7 @@ triggers:
     ],
     honesty: [
       'No specific regulation is cited. The Default Disguise is a starting point, not a compliance artefact. If your data is subject to HIPAA, PCI, GDPR, or another regulation, use the matching Disguise instead.',
-      'Coverage depends on column naming. The Default Disguise relies on name-hint and pattern detectors. Oddly-named PII columns may not be detected without a column remap in STORM.',
+      'Coverage depends on column naming. The Default Disguise relies on name-hint and pattern detectors. Oddly-named PII columns may not be detected without a column remap in the pre-scan.',
       'Not a substitute for a privacy impact assessment. A Disguise tells you what to mask; a PIA tells you whether you should hold the data at all.',
     ],
   },

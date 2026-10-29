@@ -90,7 +90,7 @@ export function Hero() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              STORM profile + Disguise templates
+              Pre-scan profile + Disguise templates
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 const terminalLines = [
-  { type: "command", content: "$ decoy storm scan patients.csv --out scan.json" },
+  { type: "command", content: "$ decoy pre-scan patients.csv --output scan.json" },
   { type: "output", content: "OK scanned patients.csv" },
   { type: "output", content: "  rows: 1,247  fields: 11" },
   { type: "output", content: "  detected: ssn, email, us_date, us_phone, us_zip" },
@@ -33,7 +33,7 @@ export function TerminalDemo() {
               A CLI workflow you can inspect.
             </h2>
             <p className="text-muted-foreground text-lg">
-              Scan a file with STORM, pick a bundled Disguise template, validate the YAML, run the pipeline when the plan matches your data.
+              Pre-scan a file, pick a bundled Disguise template, validate the YAML, run the pipeline when the plan matches your data, then post-scan the output.
             </p>
           </div>
 

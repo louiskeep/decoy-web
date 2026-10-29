@@ -1,6 +1,6 @@
 ---
 title: "How Decoy Works: Where It Fits in Your Data Pipeline"
-description: "How Decoy scans, subsets, masks, generates, validates, and documents a dataset, where it sits in an existing pipeline, how the CLI and Platform share one engine, and what the measured performance looks like."
+description: "How Decoy pre-scans, subsets, masks, generates, validates, and documents a dataset, where it sits in an existing pipeline, how the CLI and Platform share one engine, and what the measured performance looks like."
 bodyClass: page-how
 motion: true
 ---
@@ -19,10 +19,10 @@ motion: true
     <div class="pipeline-stage" data-pipeline>
     <div class="flow" data-flow role="list">
       <div class="flow-step flow-step--edge" role="listitem" data-stage="source"><strong>Source</strong><span>Files, object storage, or a Postgres snapshot</span></div>
-      <div class="flow-step" role="listitem" data-stage="scan"><strong>Scan</strong><span>Profiles columns and suggests strategies</span></div>
+      <div class="flow-step" role="listitem" data-stage="scan"><strong>Pre-scan</strong><span>Profiles columns and suggests strategies</span></div>
       <div class="flow-step" role="listitem" data-stage="subset"><strong>Subset</strong><span>Follow foreign keys to a small, intact slice</span></div>
-      <div class="flow-step" role="listitem" data-stage="mask"><strong>Mask or generate</strong><span>Keyed, deterministic transforms per column</span></div>
-      <div class="flow-step" role="listitem" data-stage="validate"><strong>Validate</strong><span>Residual PII, FK parity, distribution integrity</span></div>
+      <div class="flow-step" role="listitem" data-stage="mask"><strong>Transform</strong><span>Mask or generate, keyed and deterministic per column</span></div>
+      <div class="flow-step" role="listitem" data-stage="validate"><strong>Post-scan</strong><span>Integrity and fidelity checks on the output</span></div>
       <div class="flow-step flow-step--safe" role="listitem" data-stage="evidence"><strong>Evidence</strong><span>Manifest, report, audit entry</span></div>
       <div class="flow-step flow-step--edge" role="listitem" data-stage="target"><strong>Target</strong><span>Local, S3, GCS, dev and test databases</span></div>
     </div>
@@ -57,13 +57,13 @@ motion: true
             <div class="icon-badge">{% icon "scan" %}</div>
             <div><span class="stage-number">02 / 07</span><h3>Find the columns that need a decision</h3></div>
           </div>
-          <p>The scan profiles every column, runs 25 value detectors, groups findings by domain, and proposes a draft strategy. It makes the first pass faster without silently deciding policy for you.</p>
+          <p>The pre-scan profiles every column, runs 25 value detectors, groups findings by domain, and proposes a draft strategy. Its findings are candidates, not a safety result. It makes the first pass faster without silently deciding policy for you.</p>
           <dl class="stage-details">
             <div><dt>What happens</dt><dd>Likely identity, contact, financial, health, and location data is surfaced for review.</dd></div>
             <div><dt>Best fit</dt><dd>Unknown datasets, inherited schemas, and a first masking policy that needs human review.</dd></div>
           </dl>
         </div>
-        <div class="stage-visual scan-result" aria-label="Example scan findings for a customer table">
+        <div class="stage-visual scan-result" aria-label="Example pre-scan findings for a customer table">
           <div class="mini-toolbar"><span>customers.csv</span><span class="status-quiet">25 detectors</span></div>
           <div class="scan-row scan-row--head"><span>column</span><span>finding</span><span>suggestion</span></div>
           <div class="scan-row"><code>email</code><span><i class="risk-dot"></i>contact</span><strong>faker</strong></div>
@@ -121,11 +121,11 @@ motion: true
         <div class="stage-copy">
           <div class="stage-heading">
             <div class="icon-badge">{% icon "shield" %}</div>
-            <div><span class="stage-number">05 / 07</span><h3>Fail before unsafe data moves on</h3></div>
+            <div><span class="stage-number">05 / 07</span><h3>Check the output before it moves on</h3></div>
           </div>
-          <p>Validation checks the pipeline before a run. The integrity report then looks for residual PII, foreign-key drift, and distribution changes in the output. Findings can stop CI with exit code 4.</p>
+          <p>Validation checks the pipeline before a run. The post-scan then checks the output. The integrity check looks for residual PII and foreign-key drift, and the fidelity check measures distribution change. Integrity findings can stop CI with exit code 4. Fidelity measures similarity and is not a privacy guarantee, and neither result is a release decision.</p>
           <dl class="stage-details">
-            <div><dt>What happens</dt><dd>Configuration, output safety, relational integrity, and fidelity are checked at explicit gates.</dd></div>
+            <div><dt>What happens</dt><dd>Configuration is validated before the run. Integrity and fidelity are checked on the output, as separate results.</dd></div>
             <div><dt>Best fit</dt><dd>Automated refresh jobs where unsafe or structurally broken output must never publish quietly.</dd></div>
           </dl>
         </div>
@@ -201,7 +201,7 @@ motion: true
       <li class="card"><h4>1. Validate and plan</h4><p>The YAML is checked against the schema without touching data. A plan is compiled and stamped with the seed-protocol version so the run is reproducible.</p></li>
       <li class="card"><h4>2. Derive keys</h4><p>The mask secret is loaded from an environment variable or file. Per-strategy keys derive from it with HKDF-SHA256; nothing is stored.</p></li>
       <li class="card"><h4>3. Transform</h4><p>Tables stream through pandas with a compiled Rust kernel for hashing and other hot strategies. Large foreign-key work takes an out-of-core route through DuckDB.</p></li>
-      <li class="card"><h4>4. Validate and write evidence</h4><p>Outputs are written, the integrity check runs, and the manifest and report are emitted. Exit codes tell CI exactly what happened.</p></li>
+      <li class="card"><h4>4. Write evidence</h4><p>Outputs are written and the manifest and report are emitted. The integrity check runs only if the pipeline enables <code>post_scan.integrity</code>; otherwise run <code>decoy post-scan integrity</code> yourself. Exit codes tell CI exactly what happened.</p></li>
     </ol>
   </div>
 </section>

@@ -12,14 +12,14 @@ const faqs = [
       "A Disguise is a bundled field-list template for a common masking context, such as HIPAA, PCI, GDPR, GLBA, CCPA, FERPA, SOX, or general PII. It is a starting point: your team still reviews field mappings, edits strategies, validates YAML, and owns the policy decision.",
   },
   {
-    question: "What is STORM?",
+    question: "What are the Pre-scan, Transform, and Post-scan phases?",
     answer:
-      "STORM is Decoy's dataset profiling flow. It scans a file, identifies supported detector patterns, records field statistics, and produces a profile you can explore directly to inform which Disguise template and per-column strategies to apply.",
+      "Decoy runs as three phases. Pre-scan profiles a file, flags candidate sensitive fields from supported detector patterns, and records field statistics so you can choose a Disguise template and per-column strategies. Transform applies the masking or generation you reviewed. Post-scan checks the output for supported properties: integrity findings and measured distribution fidelity. These are separate, report-only results; fidelity is not a privacy guarantee and none of them is a release decision.",
   },
   {
-    question: "How do I go from a STORM scan to a working pipeline?",
+    question: "How do I go from a pre-scan to a working pipeline?",
     answer:
-      "Pick a bundled Disguise template (HIPAA, PCI, GDPR, generate, minimal) as a starting point, adjust the per-column strategies based on what STORM surfaced for your data, validate the YAML with decoy validate, then run with decoy run. Engineers stay in the loop: Decoy provides templates and a profile, not an automatic compliance decision.",
+      "Pick a bundled Disguise template (HIPAA, PCI, GDPR, generate, minimal) as a starting point, adjust the per-column strategies based on what the pre-scan surfaced for your data, validate the YAML with decoy validate, then run with decoy run. Check the result afterward with decoy post-scan integrity and decoy post-scan fidelity. Engineers stay in the loop: Decoy provides templates and a profile, not an automatic compliance decision.",
   },
   {
     question: "Can I keep relationships intact after masking?",
@@ -34,7 +34,7 @@ const faqs = [
   {
     question: "Does my data leave my network?",
     answer:
-      "The CLI runs locally. The paid Web UI is self-hosted by the customer. STORM and masking both run where your data lives. Decoy V1 is not offered as a hosted SaaS product.",
+      "The CLI runs locally. The paid Web UI is self-hosted by the customer. Pre-scan and masking both run where your data lives. Decoy V1 is not offered as a hosted SaaS product.",
   },
   {
     question: "What data sources are supported today?",

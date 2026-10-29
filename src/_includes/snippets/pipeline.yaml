@@ -1,4 +1,4 @@
-version: 1
+version: 2
 global_settings:
   mask_secret_ref: env:DECOY_MASK_SECRET
 sources:

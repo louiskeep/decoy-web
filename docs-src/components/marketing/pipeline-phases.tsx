@@ -3,12 +3,12 @@ import { Radar, Sparkles, FileCheck, Lock, ArrowRight } from "lucide-react"
 
 const steps = [
   {
-    name: "STORM",
-    title: "Profile the file.",
+    name: "Pre-scan",
+    title: "Profile and detect candidates.",
     description:
-      "Reads a dataset, detects known field patterns, and records column-level statistics for review.",
+      "Reads a dataset, records column-level statistics, and flags candidate sensitive fields as suggestions for you to review. A pre-scan never shows that an output is safe.",
     detail: [
-      "PII / PHI / PCI detector signals",
+      "PII / PHI / PCI detector signals (candidates, not classifications)",
       "Format and pattern inference",
       "Column distributions and top values",
       "Quasi-identifier and re-id indicators",
@@ -16,10 +16,10 @@ const steps = [
     icon: Radar,
   },
   {
-    name: "Disguise",
-    title: "Pick a starting template.",
+    name: "Transform",
+    title: "Apply the reviewed rules.",
     description:
-      "Match the STORM profile to a bundled Disguise template, then edit per-column strategies to fit your data.",
+      "Applies the masking and generation rules in your reviewed YAML to produce the output. Start from a bundled Disguise template, then edit per-column strategies to fit your data.",
     detail: [
       "5 bundled templates (HIPAA, PCI, GDPR, generate, minimal)",
       "13 mask strategies + 5 generate column types",
@@ -29,24 +29,24 @@ const steps = [
     icon: Sparkles,
   },
   {
-    name: "Report",
-    title: "Record what ran.",
+    name: "Post-scan",
+    title: "Check what came out.",
     description:
-      "Captures the scan, recommendation, run metadata, and outputs as useful evidence for internal review.",
+      "Separate, report-only checks on the output: integrity (residual PII, foreign keys, policy) and measured distribution fidelity. Integrity runs in a pipeline only when you enable post_scan.integrity; fidelity is a separate check you request, such as decoy post-scan fidelity.",
     detail: [
-      "Run history in the platform",
-      "HTML report export",
-      "Manifest details where available",
-      "Useful input to audit reviews",
+      "Integrity findings: residual PII, FK parity, policy",
+      "Fidelity: a measurement of similarity, not a privacy guarantee",
+      "Each result is its own claim; none is a release decision",
+      "Run history and evidence in the platform",
     ],
     icon: FileCheck,
   },
 ]
 
-export function Storm() {
+export function PipelinePhases() {
   return (
     <section
-      id="storm"
+      id="pipeline-phases"
       className="py-20 md:py-28 border-t border-border scroll-mt-20"
     >
       <div className="container mx-auto max-w-6xl px-4">
@@ -54,13 +54,13 @@ export function Storm() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary mb-4">
             <Radar className="h-3 w-3" />
-            STORM + Disguises
+            Pre-scan, Transform, Post-scan
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Profile first. Pick a template. Review before running.
+            Pre-scan. Transform. Post-scan.
           </h2>
           <p className="text-muted-foreground text-lg">
-            Decoy's analysis loop turns an unfamiliar file into a concrete masking plan. Profile the data, pick the closest Disguise template, edit the YAML to fit. It is designed to reduce manual setup, not replace engineering or compliance review.
+            Decoy compiles reviewed data rules into a repeatable pipeline. Pre-scan profiles the input and surfaces candidate sensitive fields, Transform applies the masking or generation you reviewed, and Post-scan checks the output for supported properties. Each phase records its own scope and limits. Detection candidates, measured fidelity, integrity findings, and a release decision are different claims, and this is designed to reduce manual setup, not replace engineering or compliance review.
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export function Storm() {
             <div className="flex-1">
               <h3 className="text-base font-semibold mb-1">Data stays where it lives.</h3>
               <p className="text-sm text-muted-foreground">
-                STORM profiles run locally against your file; Disguise templates ship in the engine and pick by name; masking runs against the local data path your YAML declares. Nothing is uploaded to a Decoy-operated service.
+                Pre-scan profiles run locally against your file; Disguise templates ship in the engine and pick by name; masking runs against the local data path your YAML declares. Nothing is uploaded to a Decoy-operated service.
               </p>
             </div>
             <Link

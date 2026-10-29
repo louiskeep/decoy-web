@@ -29,9 +29,9 @@ const productItems = [
     icon: Database,
   },
   {
-    title: "STORM + Disguises",
-    href: "/#storm",
-    description: "Profile, pick a template, then review",
+    title: "Pre-scan, Transform, Post-scan",
+    href: "/#pipeline-phases",
+    description: "Profile, apply reviewed rules, check the output",
     icon: Radar,
   },
 ]

@@ -20,7 +20,7 @@ motion: true
       <div class="terminal-bar"><i></i><i></i><i></i><span>bash</span></div>
 <pre><span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy init customers.csv</span></span>
 <span class="t-line dim">wrote pipeline.yaml (7 columns, 5 REVIEW comments)</span>
-<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy scan customers.csv</span></span>
+<span class="t-line" data-cmd><span class="prompt">$ </span><span class="t-cmd">decoy pre-scan customers.csv</span></span>
 <span class="t-line"><span class="dim">email      CONTACT   </span><span class="raw">email_address</span><span class="dim">    0.99</span></span>
 <span class="t-line"><span class="dim">ssn        IDENTITY  </span><span class="raw">us_ssn</span><span class="dim">           0.98</span></span>
 <span class="t-line"><span class="dim">dob        IDENTITY  </span><span class="raw">date_of_birth</span><span class="dim">    0.97</span></span>
@@ -163,7 +163,7 @@ motion: true
       <p class="muted">No input data. A child column of <code>type: reference</code> draws its key from a generated parent, so every <code>orders.customer_id</code> is a real <code>customers.customer_id</code>. One document builds both tables, with the foreign key enforced.</p>
       <div class="terminal">
         <div class="terminal-bar"><i></i><i></i><i></i><span>generate.yaml</span></div>
-<pre><span class="t-line dim">version: 1</span>
+<pre><span class="t-line dim">version: 2</span>
 <span class="t-line dim">global_settings: {seed: 42}</span>
 <span class="t-line dim">sources: {}</span>
 <span class="t-line">&nbsp;</span>
@@ -204,7 +204,7 @@ motion: true
       <div class="card" id="detection">
         <p class="eyebrow">Detection</p>
         <h3>The scan finds it, you decide</h3>
-        <p><code>decoy scan</code> profiles every column with 25 value detectors and tags each finding with a domain: identity, financial, health, contact, location. After a run, <code>decoy report integrity</code> checks the output for residual PII and FK parity and returns exit code 4 on findings. An optional spaCy model adds person and location detection in free text.</p>
+        <p><code>decoy pre-scan</code> profiles every column with 25 value detectors and tags each finding with a domain: identity, financial, health, contact, location. After a run, <code>decoy post-scan integrity</code> checks the output for residual PII and FK parity and returns exit code 4 on findings. An optional spaCy model adds person and location detection in free text.</p>
       </div>
     </div>
   </div>
@@ -254,7 +254,7 @@ motion: true
           <tr><td><code>0</code></td><td>OK</td><td>Run completed, checks passed</td></tr>
           <tr><td><code>1</code></td><td>Usage</td><td>Bad flags or arguments</td></tr>
           <tr><td><code>3</code></td><td>Runtime</td><td>Unreadable input, strategy error, I/O failure</td></tr>
-          <tr><td><code>4</code></td><td>Findings</td><td>Residual PII, FK parity or policy violations from <code>report integrity</code></td></tr>
+          <tr><td><code>4</code></td><td>Findings</td><td>Residual PII, FK parity or policy violations from <code>post-scan integrity</code></td></tr>
           <tr><td><code>5</code></td><td>Capacity</td><td><code>preflight</code> estimates the job cannot fit on this host</td></tr>
         </tbody>
       </table>

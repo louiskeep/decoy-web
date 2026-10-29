@@ -13,7 +13,7 @@ const plans = [
       "5 bundled Disguise templates (HIPAA, PCI, GDPR, generate, minimal)",
       "13 mask strategies + 5 generate column types",
       "Local YAML validation and file runs",
-      "Local CSV STORM scans",
+      "Local CSV pre-scans",
       "Templates, demos, and JSON output for scripts",
       "Docs and community-style support",
     ],
@@ -28,7 +28,7 @@ const plans = [
     description: "Self-hosted platform for teams that need shared workflow + governance. Billed annually per instance. Coming soon: join the waitlist for early access.",
     features: [
       "Everything in CLI",
-      "Visual pipeline builder + STORM web UI",
+      "Visual pipeline builder",
       "Shared pipelines, versions, jobs, and outputs",
       "Runtime secrets, API keys, and admin controls",
       "Schedules, triggers, and review gates",
