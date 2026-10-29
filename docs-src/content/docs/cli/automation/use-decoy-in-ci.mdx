@@ -12,7 +12,7 @@ evidence manifest during the run:
   run: |
     decoy validate pipeline.yaml --json
     decoy run pipeline.yaml --json --evidence-out evidence.json
-    decoy report integrity masked.csv \
+    decoy post-scan integrity masked.csv \
       --source source.csv --config pipeline.yaml --output integrity.json
     decoy report verify evidence.json
 ```
@@ -20,7 +20,7 @@ evidence manifest during the run:
 Add a fidelity policy when utility must meet a threshold:
 
 ```bash
-decoy report fidelity source.csv masked.csv \
+decoy post-scan fidelity source.csv masked.csv \
   --config pipeline.yaml --mode fail --min-grade B \
   --report-out fidelity.json
 ```
@@ -33,7 +33,7 @@ command completed and found a data or policy issue. Usage and runtime errors use
 different codes.
 
 ```bash
-decoy report integrity masked.csv --source source.csv --config pipeline.yaml
+decoy post-scan integrity masked.csv --source source.csv --config pipeline.yaml
 case $? in
   0) echo "clean" ;;
   4) echo "findings"; exit 1 ;;

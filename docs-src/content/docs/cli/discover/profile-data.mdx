@@ -1,31 +1,31 @@
 ---
-title: Scan your data
-description: Inspect table shape, field statistics, and possible sensitive fields before you write a pipeline.
+title: Pre-scan your data
+description: Run a pre-scan to inspect table shape, field statistics, and possible sensitive fields before you write a pipeline.
 ---
 
-Scan a source file before you select masking strategies. A scan reports
+Pre-scan a source file before you select masking strategies. A pre-scan reports
 possible sensitive fields. It does not classify or change the data.
 
-## Scan one file
+## Pre-scan one file
 
 ```bash
-decoy scan customers.csv --show-fields
+decoy pre-scan customers.csv --show-fields
 ```
 
-By default, Decoy scans the first 10,000 rows. Use `--rows 0` to read the
+By default, Decoy pre-scans the first 10,000 rows. Use `--rows 0` to read the
 full file:
 
 ```bash
-decoy scan customers.csv --rows 0 --show-fields
+decoy pre-scan customers.csv --rows 0 --show-fields
 ```
 
 Use JSON output in automation:
 
 ```bash
-decoy scan customers.csv --show-fields --output scan.json
+decoy pre-scan customers.csv --show-fields --output scan.json
 ```
 
-The scan contains field names, data types, null rates, distinct counts, and
+The saved scan contains field names, data types, null rates, distinct counts, and
 possible sensitive-field flags. It does not contain raw cell values.
 
 ## Review the result
@@ -61,4 +61,4 @@ decoy validate preflight pipeline.yaml
 
 - [Mask a CSV](/docs/cli/masking/mask-a-csv)
 - [The CLI workflow](/docs/cli/workflow)
-- [Output integrity](/docs/reference/validation/output-integrity)
+- [Post-scan integrity](/docs/reference/validation/output-integrity)

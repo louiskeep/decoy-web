@@ -3,14 +3,14 @@ title: Configuration
 description: The shape of a Decoy pipeline YAML, top to bottom.
 ---
 
-A pipeline is one YAML file with `version: 1`. Every `decoy run` reads one. These
+A pipeline is one YAML file with `version: 2`. Every `decoy run` reads one. These
 are its top-level keys; follow the links for the detail of each.
 
 ## Keys
 
 | Key | Required | Description |
 | --- | --- | --- |
-| `version` | yes | Must be `1` |
+| `version` | yes | Must be `2` |
 | `global_settings` | yes | Run-wide settings, including the `seed`. See [Global settings](/docs/reference/configuration/global-settings) |
 | `tables` | yes | The tables to mask or generate, and their columns. See [Strategies](/docs/reference/strategies) and [Providers](/docs/reference/providers) |
 | `targets` | yes | Named outputs, keyed by table. See [Connectors and formats](/docs/reference/connectors) |
@@ -18,7 +18,7 @@ are its top-level keys; follow the links for the detail of each.
 | `relationships` | no | Foreign keys to preserve across tables. See [Relationships](/docs/reference/relationships) |
 | `subset` | no | A referentially intact slice of the inputs. See [Subset a dataset](/docs/cli/data/subset-a-dataset) |
 | `namespaces` | no | Declared namespaces for keyed strategies |
-| `run_storm` | no | Run the legacy-named output-integrity check (default `false`) |
+| `post_scan` | no | Post-scan settings. `post_scan.integrity: true` runs the report-only integrity checks after the run (default `false`) |
 | `validators` | no | Job-level validators run after masking |
 | `quarantine` | no | Hold back rows that fail a rule |
 

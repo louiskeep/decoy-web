@@ -20,7 +20,7 @@ C002,Alan Turing,alan@example.com,closed
 ## 2. Scan the data
 
 ```bash
-decoy scan customers.csv --show-fields
+decoy pre-scan customers.csv --show-fields
 ```
 
 Review the possible sensitive fields. A scan is a suggestion. You decide
@@ -87,7 +87,7 @@ addresses now contain masked values. The `status` values remain unchanged.
 Check for residual sensitive data, relationship failures, and policy findings:
 
 ```bash
-decoy report integrity output.csv \
+decoy post-scan integrity output.csv \
   --source customers.csv --config pipeline.yaml --output integrity.json
 ```
 
@@ -96,7 +96,7 @@ Replace `output.csv` with the target path from your pipeline.
 Measure how much the output distribution changed:
 
 ```bash
-decoy report fidelity customers.csv output.csv \
+decoy post-scan fidelity customers.csv output.csv \
   --config pipeline.yaml --mode warn --report-out distribution.json
 ```
 

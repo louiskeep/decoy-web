@@ -1,15 +1,18 @@
 ---
-title: Output integrity
+title: Post-scan integrity
 description: Check masked output for possible residual sensitive data, relationship failures, and policy findings.
 ---
 
-Output integrity checks masking results. It reports possible residual sensitive
+Post-scan integrity checks masking results. It reports possible residual sensitive
 data, foreign-key preservation, and policy findings.
 
-Use `decoy report integrity` after a masking run.
+Use `decoy post-scan integrity` after a masking run. To run the same checks as part
+of a pipeline run, set `post_scan.integrity: true` in the pipeline configuration;
+the default is `false`. The check is report-only either way: it records findings
+and does not repair the output.
 
 ```bash
-decoy report integrity masked.csv \
+decoy post-scan integrity masked.csv \
   --source source.csv \
   --config pipeline.yaml \
   --output integrity.json
@@ -18,7 +21,7 @@ decoy report integrity masked.csv \
 The command exits with `0` when it finds no blocking result. It exits with `4`
 when it reports findings that require review.
 
-## Use output integrity when
+## Use post-scan integrity when
 
 - A masking run must not leave detected sensitive patterns.
 - The dataset contains declared foreign-key relationships.

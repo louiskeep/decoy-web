@@ -20,7 +20,7 @@ anymore. This recipe masks both tables in one run and keeps the join intact.
 `pipeline.yaml`:
 
 ```yaml
-version: 1
+version: 2
 global_settings:
   seed: 7
 sources:
@@ -106,7 +106,7 @@ children = {row["customer_id"] for row in csv.DictReader(open("out/orders.csv"))
 assert children <= parents
 ```
 
-See [Output integrity](/docs/reference/validation/output-integrity) for the
+See [Post-scan integrity](/docs/reference/validation/output-integrity) for the
 post-run detector and relationship checks.
 
 ## Next

@@ -13,5 +13,3 @@
 /docs/how-to/subset-a-dataset    /docs/cli/data/subset-a-dataset    301
 /docs/how-to/use-parquet    /docs/cli/data/use-parquet    301
 /docs/how-to/use-decoy-in-ci    /docs/cli/automation/use-decoy-in-ci    301
-/docs/concepts/storm    /docs/concepts/profiling    301
-/docs/concepts/scan    /docs/concepts/profiling    301

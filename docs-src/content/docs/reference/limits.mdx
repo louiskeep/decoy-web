@@ -70,12 +70,12 @@ stakes warrant.
 Decoy validates a config against its schema and runs what the config says.
 It does not know which columns in your data are actually sensitive. If a
 config leaves a sensitive column on `passthrough`, or masks the wrong
-column, the run succeeds and the output leaks. Use data profiling to find
-possible sensitive fields. Then use output-integrity checks to find possible
+column, the run succeeds and the output leaks. Use a pre-scan to find
+possible sensitive fields. Then use post-scan integrity checks to find possible
 residual identifiers. You remain responsible for the final configuration.
-See [Data profiling](/docs/concepts/profiling) for this review model.
+See [Pre-scan](/docs/concepts/pre-scan) for this review model.
 
-## Data profiling does not de-identify anything
+## A pre-scan does not de-identify anything
 
 The profiler reports the semantic type that a column can contain. Examples
 include an SSN, an email address, or a diagnosis code. Profiling does not mask,

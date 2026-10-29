@@ -12,12 +12,12 @@ scan -> configure -> validate -> run -> report
 
 ## 1. Inspect the environment and data
 
-Run `decoy doctor` after installation. Run `decoy scan` when you have a
+Run `decoy doctor` after installation. Run `decoy pre-scan` when you have a
 source file.
 
 ```bash
 decoy doctor
-decoy scan customers.csv --show-fields
+decoy pre-scan customers.csv --show-fields
 ```
 
 The scan reports possible sensitive fields. It does not classify the data
@@ -71,7 +71,7 @@ Inspect the output before you share or automate it.
 Use distribution integrity when the output must preserve analytical shape:
 
 ```bash
-decoy report fidelity customers.csv customers.masked.csv \
+decoy post-scan fidelity customers.csv customers.masked.csv \
   --config pipeline.yaml --mode warn --report-out distribution.json
 ```
 

@@ -13,7 +13,7 @@ result.
 source or generation rules
           |
           v
-       profile
+       Pre-scan
           |
           v
 reviewed pipeline configuration
@@ -22,15 +22,26 @@ reviewed pipeline configuration
 validate and preflight
           |
           v
-     compile and run
+ compile, then Transform
           |
           v
- output, quality report, evidence
+       Post-scan
+          |
+          v
+ output, checks, evidence
 ```
 
-Each stage has a different purpose. Profiling provides information. The
-pipeline records the user's decisions. Validation rejects invalid work. The run
-creates the output. Post-run checks measure specific output properties.
+Each stage has a different purpose. A pre-scan provides information. The
+pipeline records the user's decisions. Validation rejects invalid work.
+Transform creates the output. Post-scan checks measure specific output
+properties.
+
+The three data phases make different claims. A pre-scan reports detection
+candidates and never shows that an output is safe. Transform applies your
+reviewed rules. Post-scan reports integrity findings and measured fidelity;
+neither is a release decision, and fidelity is not a privacy guarantee. A
+pipeline runs the integrity checks only when `post_scan.integrity` is set to
+`true`; otherwise you run them as separate commands.
 
 ## CLI and platform
 

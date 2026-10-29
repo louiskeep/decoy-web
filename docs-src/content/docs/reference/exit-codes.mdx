@@ -27,7 +27,7 @@ The distinction that matters most for CI is between three different kinds of
 - **The tool itself broke.** The engine raised an unexpected error, an
   output write failed. The fix is in the CLI or engine, not in what you
   asked for. This is exit 3.
-- **The tool ran fine, but the data has a problem.** `decoy report
+- **The tool ran fine, but the data has a problem.** `decoy post-scan
   integrity` completed its check and found residual PII, or a foreign-key
   preservation check failed. Nothing about the invocation was wrong; the
   data is what triggered the non-zero exit. This is exit 4.
@@ -66,7 +66,7 @@ With a stable, specific exit code, a CI step can do this without parsing any
 output:
 
 ```bash
-decoy report integrity masked.csv --source source.csv --config pipeline.yaml
+decoy post-scan integrity masked.csv --source source.csv --config pipeline.yaml
 case $? in
   0) echo "clean" ;;
   4) echo "findings: fail the build" ; exit 1 ;;

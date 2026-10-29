@@ -14,7 +14,8 @@ $ decoy schema > pipeline.schema.json
 ```
 
 Regenerate it any time; this page is a snapshot from `decoy` 0.1.0 /
-`decoy-engine` 0.4.0 and can drift from a newer install. `decoy schema` is
+`decoy-engine` 0.4.0 whose `version` and `post_scan` entries were updated by hand for
+the version 2 schema, so it can drift from a newer install. `decoy schema` is
 the source of truth, not this page.
 
 ## Top-level shape
@@ -23,14 +24,14 @@ A pipeline config (`PipelineConfig`) has these top-level keys:
 
 | Key | Required | Type | What it is |
 | --- | --- | --- | --- |
-| `version` | yes | `1` (const) | Schema version. Currently always `1`. |
+| `version` | yes | `2` (const) | Schema version. Currently always `2`. |
 | `global_settings` | yes | `GlobalSettings` | Seed, mask secret reference, and pipeline-wide policy knobs. |
 | `sources` | no | map of name to source | `type: file`, `s3`, or `gcs` (discriminated on `type`). See [connectors](/docs/reference/connectors). |
 | `tables` | yes | list of `TableConfig` | One entry per mask or generate table. At least one required. |
 | `relationships` | no | list of `RelationshipConfig` | Foreign-key edges between tables (parent, children, orphan policy). |
 | `targets` | yes | map of name to target | `type: file`, `s3`, or `gcs`. At least one required. |
 | `namespaces` | no | map of name to `NamespaceConfig` | Explicit namespace declarations, mostly informational; most namespaces are declared implicitly by column config. |
-| `run_storm` | no | boolean, default `false` | Run the legacy-named output-integrity check. |
+| `post_scan` | no | `PostScanConfig` | Post-scan settings. `integrity` (boolean, default `false`) runs the report-only integrity checks after the run. |
 | `validators` | no | list of `ValidatorEntry` | Post-run checks: `luhn`, `fk_intact`, `leak_check`, `regex_match`, and others. |
 | `quarantine` | no | `QuarantineConfig` or `null` | Route rows that fail a wired trigger to a side file instead of failing the run. |
 | `subset` | no | `SubsetConfig` or `null` | FK-aware referential subsetting (`decoy subset`). |
@@ -722,6 +723,18 @@ is a reference (`env:NAME` or `file:/path`), never the secret itself, see
       "title": "NamespaceConfig",
       "type": "object"
     },
+    "PostScanConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "integrity": {
+          "default": false,
+          "title": "Integrity",
+          "type": "boolean"
+        }
+      },
+      "title": "PostScanConfig",
+      "type": "object"
+    },
     "QuarantineConfig": {
       "additionalProperties": false,
       "description": "The ``quarantine:`` block in the pipeline config.\n\nWhen ``enabled`` is ``True`` and a configured ``trigger`` fires, the\noffending row is written to ``output_path`` instead of the main output.\nThe job continues and completes successfully.\n\nSupported triggers (all three accepted):\n  - ``validation_fail``: row failed a job-level validator.\n  - ``format_error``: a ``bucketize`` /\n    ``date_shift`` cell could not be coerced/parsed under its declared\n    strategy.\n  - ``mask_error``: a ``code_set``\n    ``chapter_preserve`` value could not be masked (input chapter absent\n    from the corpus, or a sole-member chapter bucket).\n\nAny trigger name outside the supported set is rejected at config\nvalidation (a silent no-op is refused up front).\n\nExample YAML::\n\n    quarantine:\n      enabled: true\n      output_path: /mnt/quarantine/run-2026-06-27.jsonl\n      triggers:\n        - validation_fail\n        - format_error\n        - mask_error",
@@ -1308,7 +1321,7 @@ is a reference (`env:NAME` or `file:/path`), never the secret itself, see
   "description": "Strict, validated pipeline configuration.\n\nCallers do:\n\n    cfg_dict = PipelineConfig.model_validate(parsed_yaml).model_dump()\n\nand hand `cfg_dict` to `profile_source` and `compile_plan`. The\nengine functions do not re-validate. Validation is a one-time event\nat the choke-point.",
   "properties": {
     "version": {
-      "const": 1,
+      "const": 2,
       "title": "Version",
       "type": "integer"
     },
@@ -1388,10 +1401,8 @@ is a reference (`env:NAME` or `file:/path`), never the secret itself, see
       "title": "Namespaces",
       "type": "object"
     },
-    "run_storm": {
-      "default": false,
-      "title": "Run Storm",
-      "type": "boolean"
+    "post_scan": {
+      "$ref": "#/$defs/PostScanConfig"
     },
     "validators": {
       "items": {

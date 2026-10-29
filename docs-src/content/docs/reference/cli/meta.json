@@ -2,19 +2,23 @@
   "title": "CLI reference",
   "pages": [
     "demo",
+    "detokenize",
     "doctor",
     "explain",
     "fit",
     "info",
     "init",
     "list",
+    "post-scan",
+    "pre-scan",
     "report",
     "run",
-    "scan",
     "schema",
     "show",
     "subset",
+    "tokenize",
     "unmask",
+    "upgrade",
     "validate"
   ]
 }

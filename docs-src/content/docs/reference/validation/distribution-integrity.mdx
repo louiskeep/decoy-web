@@ -3,7 +3,7 @@ title: Distribution integrity
 description: Decide when and how to compare the statistical shape of source and output data.
 ---
 
-Distribution integrity measures data utility. It compares a source dataset with
+Distribution integrity (`decoy post-scan fidelity`) measures data utility. It compares a source dataset with
 a masked or generated output. It does not search for residual sensitive data.
 
 ## Use distribution integrity when
@@ -22,7 +22,7 @@ match can still contain sensitive values.
 The default mode records a report and exits successfully:
 
 ```bash
-decoy report fidelity source.csv output.csv \
+decoy post-scan fidelity source.csv output.csv \
   --config pipeline.yaml \
   --report-out distribution.json
 ```
@@ -34,7 +34,7 @@ Use this mode while you establish a baseline.
 Set a minimum grade:
 
 ```bash
-decoy report fidelity source.csv output.csv \
+decoy post-scan fidelity source.csv output.csv \
   --config pipeline.yaml \
   --mode warn \
   --min-grade B \
@@ -47,7 +47,7 @@ Use `--fail-on-warning` when warnings must also block CI.
 Set a score instead of a grade when the policy requires an exact threshold:
 
 ```bash
-decoy report fidelity source.csv output.csv \
+decoy post-scan fidelity source.csv output.csv \
   --config pipeline.yaml \
   --mode fail \
   --min-score 0.85
@@ -59,7 +59,7 @@ Masking expects row-count parity by default. Add `--generate` when the output is
 synthetic and can contain a different number of rows:
 
 ```bash
-decoy report fidelity source.csv synthetic.csv \
+decoy post-scan fidelity source.csv synthetic.csv \
   --generate --mode warn --min-grade B
 ```
 
@@ -68,7 +68,7 @@ decoy report fidelity source.csv synthetic.csv \
 Add `--joint` for column pairs whose relationship matters:
 
 ```bash
-decoy report fidelity source.csv output.csv \
+decoy post-scan fidelity source.csv output.csv \
   --joint age,income \
   --joint state,plan_type
 ```

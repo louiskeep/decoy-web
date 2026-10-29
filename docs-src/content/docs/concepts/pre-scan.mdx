@@ -1,10 +1,19 @@
 ---
-title: Data profiling
-description: Learn what a Decoy profile reports and why a user must review its suggestions.
+title: Pre-scan
+description: Learn what a Decoy pre-scan reports, where it sits among the three phases, and why a user must review its suggestions.
 ---
 
-Data profiling examines a source before a pipeline runs. It reports table
-shape, field statistics, and possible sensitive fields.
+Decoy runs data work in three phases. Each phase answers a different question
+and makes a different claim.
+
+| Phase | What it does | What it does not establish |
+| --- | --- | --- |
+| Pre-scan | Profiles an input and flags candidate sensitive fields. | That any output is safe. |
+| Transform | Applies the masking or generation rules you reviewed. | That the rules were the right ones. |
+| Post-scan | Checks the output for supported properties: integrity findings and measured fidelity. | A release decision. |
+
+A pre-scan examines a source before a pipeline runs. It reports table shape,
+field statistics, and possible sensitive fields.
 
 ## Suggestions, not classifications
 
@@ -12,16 +21,18 @@ Detection uses field names, patterns, value shape, and statistical signals.
 These signals can be incomplete or ambiguous. A user decides which policy and
 strategy apply to each field.
 
-Profiling does not mask, redact, or generate data. It supplies information for
+A pre-scan does not mask, redact, or generate data. It supplies information for
 the pipeline review.
 
 ## Before and after a run
 
-Use `decoy scan` before a run. This command does not expose raw cell values
+Use `decoy pre-scan` before a run. This command does not expose raw cell values
 in its output.
 
-After a run, use output-integrity checks to detect possible residual sensitive
-data and relationship failures. Use distribution integrity to measure utility.
-These checks test different properties.
+After a run, use `decoy post-scan integrity` to detect possible residual
+sensitive data and relationship failures. Use `decoy post-scan fidelity` to
+measure how closely the output matches the source distribution. These checks
+test different properties, and fidelity is not a privacy guarantee. Each is
+report-only: a result records findings and does not repair the output.
 
-Read [Scan your data](/docs/cli/discover/profile-data) for the procedure.
+Read [Pre-scan your data](/docs/cli/discover/profile-data) for the procedure.
