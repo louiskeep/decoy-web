@@ -199,7 +199,7 @@ in decoy-web -> per-command MDX at build time.
 House copy rules apply to every page: no em-dashes, no "open source" for the CLI
 ("source-available under BUSL-1.1"), no links to private repos, no claims beyond
 `decoy-platform/docs/product/capabilities.md`, `decoy demo --ref` not advertised
-(deferred stub), FORECAST never mentioned, STORM described as suggestions the user
+(deferred stub), FORECAST never mentioned, the pre-scan described as suggestions the user
 confirms (disguises-as-presets stance; never auto-classification).
 
 ### 5.1 Get started (Diataxis: tutorial) - `content/docs/start/`
@@ -218,7 +218,7 @@ confirms (disguises-as-presets stance; never auto-classification).
 | `mask-a-csv.mdx` | Recipe: mask one CSV with keyed strategies | `decoy-engine/docs/recipes.md`, CLI templates |
 | `mask-a-folder-with-foreign-keys.mdx` | Recipe: multi-table folder, FK/RI preserved | `decoy-engine/docs/relationships.md`, `recipes.md`, platform `guides/relationships-reference.md` (adapted) |
 | `generate-synthetic-data.mdx` | Recipe: generate a synthetic table; `fit` for statistical generation | `recipes.md`, `decoy fit`/`templates/generate` |
-| `scan-for-pii.mdx` | Recipe: `storm analyze` -> review findings -> apply choices (note `storm scan` is deprecated, exit-code 2 shim) | platform `reference/storm.md` + `product/storm-detection-model.md` (adapted) |
+| `scan-for-pii.mdx` | Recipe: `decoy pre-scan` -> review findings -> apply choices | platform pre-scan reference + detection model (adapted) |
 | `use-decoy-in-ci.mdx` | Recipe: non-interactive runs, `preflight`/`validate`, exit-code handling (fail on 4), evidence artifacts | `guides/cli-yaml-workflows.md`, exit-code contract |
 
 Every recipe must be RUN before it ships (verification rule): commands executed against
@@ -229,7 +229,7 @@ the current CLI, outputs pasted from real runs, versions noted.
 | Page | Purpose | Adapt from |
 | --- | --- | --- |
 | `keys-and-vault.mdx` | Master secret, key derivation, vault tokens, unmask model | `decoy-engine/docs/security/key-derivation.md`, `security/token-vault.md`, `decoy explain keys` / `explain vault` (public-safe subset only) |
-| `storm.mdx` | What STORM is; suggestions-not-classification; how findings become choices | `decoy explain storm`, `product/storm-detection-model.md` (adapted) |
+| `pre-scan.mdx` | What a pre-scan is; suggestions-not-classification; how findings become choices | `decoy explain pre-scan`, platform detection model (adapted) |
 | `disguises.mdx` | Compliance presets (HIPAA/PCI/GDPR...): what a Disguise is and is not | platform `guides/disguises.md` + `reference/disguises.md` (adapted) |
 | `determinism.mdx` | Seed protocol, deterministic masking, reproducible runs | `decoy-engine/docs/determinism.md`, `decoy explain substrate` |
 | `exit-codes.mdx` | The exit-code contract as a design commitment (why 4=findings matters for CI) | CLI source + `guides/cli-ux.md`; table itself lives on `/docs/cli` |
@@ -280,7 +280,7 @@ Extend the existing system; create no parallel tracker.
 
 - **content-map.md** (decoy-platform): add a "Published at" column (or per-row note)
   mapping each shipped row to its `decoy-web/content/docs/...` path for the CLI-first
-  rows (quickstart, YAML authoring, STORM profiling, CLI reference, limits pages).
+  rows (quickstart, YAML authoring, pre-scan profiling, CLI reference, limits pages).
   Rows for unshipped surfaces stay as they are.
 - **gaps.md** (decoy-platform): close "Generated CLI command reference ... wired into
   the docs build" and the decoy-web follow-on bullet when P2/P1 land. The other

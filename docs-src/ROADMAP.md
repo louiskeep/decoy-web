@@ -13,7 +13,7 @@ Scope: the public web surface, which is two branches of one remote
 - **Docs app** `decoy-web-docs` (branch `feat/cli-docs-fumadocs`): Next.js 16 +
   Fumadocs, static export, served under `/docs`.
 
-Both deploy to `decoystorm.dev` through Cloudflare Pages. No backend, no runtime
+Both deploy to the production domain through Cloudflare Pages. No backend, no runtime
 API: everything ships as static files.
 
 House rules for this surface (from `decoy-web-docs/CLAUDE.md`): marketing claims
@@ -33,7 +33,7 @@ consolidated. What changed, and what is now authoritative for the deploy model:
   marketing site at the root and the docs under `/docs` in a single `dist/`.
   The "two branches of one remote" and "build a separate Cloudflare project for
   the docs" framing below is superseded.
-- **Domain is `trydecoy.com`** (registered at Squarespace), not decoystorm.dev.
+- **Domain is `trydecoy.com`** (registered at Squarespace). Earlier plans named a different domain; that is superseded.
   Every site URL, canonical, sitemap, and llms.txt entry uses it.
 - **Deploy is GitHub Pages**, not Cloudflare Pages. A merge to `main` triggers
   `.github/workflows/deploy.yml` (which runs `npm run check` then publishes).
@@ -41,7 +41,7 @@ consolidated. What changed, and what is now authoritative for the deploy model:
   Actions) and point DNS at Squarespace (A records to GitHub Pages IPs, `www`
   CNAME to the Pages host). So merge is the publish trigger; it is still Cam's.
 - **Launch work lives on `feat/web-launch`.** The consolidation (Track 1), the
-  STORM-to-scan rename, the docs-currency pass, and the differential-privacy
+  scan-vocabulary rename, the docs-currency pass, and the differential-privacy
   doc rewrite are done there (GO from the cross-model gate; build green; held
   for Cam's merge and DP sanity-check). This supersedes the "done / merge-ready"
   snapshot below for those tracks.
@@ -168,7 +168,7 @@ desktop; on mobile the same nodes reflow into an ordered vertical path. Zero
 client JS, no graph library. A JSON manifest is the only topology source and is
 lint-gated so node links cannot rot.
 
-Workflow steps: select representative source data, analyze with STORM, review
+Workflow steps: select representative source data, pre-scan, review
 and confirm findings, choose strategies, author the YAML pipeline, validate and
 explain and preflight, run, verify output, automate in CI. Branches shown
 explicitly: subset (preparation), generate (alternative mode), unmask

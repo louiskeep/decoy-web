@@ -13,57 +13,36 @@ end so the gaps are explicit.
 - 23 mask strategies -> capability-matrix.md "Mask strategies (23)".
 - 12 generation types -> capability-matrix.md "Generation strategies (12)".
 - 34 synthetic providers -> capability-matrix.md "Synthetic providers (34)".
-- 25 value detectors -> capability-matrix.md "STORM detectors (25)". The count
-  is correct; only the name is a problem (see F1).
+- 25 value detectors -> capability-matrix.md "Pre-scan detectors (25)". The count
+  is correct; the section was renamed with the three-phase wave (see F1).
 - HKDF-SHA256 key derivation -> `decoy/.../context.py` `_hkdf_sha256`.
 - Exit code 4 on findings -> `decoy/.../cli/exit_codes.py` `EXIT_FINDINGS=4`,
-  raised by `run` and `report integrity`.
+  raised by `run` and `post-scan integrity`.
 
 ## Findings
 
-### F1 (high) - "STORM" naming is stale across the whole site
+### F1 (high) - retired concept name and command drift (resolved 2026-10-29)
 
-The CLI was renamed. `storm.py` became `scan.py` (command group `name="scan"`;
-the code says "Moved from storm.py with `scan`"), and the integrity check moved
-into `report` (`report_app.command(name="integrity")`, folding "the `storm`
-integrity check into this one noun"). "storm" is no longer a runnable command.
-It survives only as a `decoy explain storm` topic and the engine pipeline config
-key `run_storm:`, so it is not being removed everywhere; the user-facing CLI and
-marketing use "scan".
+The site used a retired product name for the profiling step and an old command
+surface. The product is now described as three phases: Pre-scan (profile and
+detect candidates), Transform (mask or generate), and Post-scan (integrity and
+fidelity checks on the output). Decisions recorded:
 
-Decision (Cam, 2026-10-24): use "scan" on the site and describe what it is and
-does; do not coin a new brand name.
-
-The drift spans four layers, not just copy:
-
-1. Copy (concept noun) in `index.njk`, `how-it-works.njk`, `cli.njk`,
-   `platform.njk`, `pricing.njk`, `llms.txt`.
-2. Broken command examples: `decoy storm analyze` -> `decoy scan`;
-   `decoy storm integrity pipeline.yaml out/` -> `decoy report integrity
-   <masked.csv> --source <source.csv> --config pipeline.yaml` (name AND argument
-   shape were wrong). In `cli.njk` and `src/_includes/snippets/ci.yml`.
-3. Vendored CLI reference docs (`docs/reference/cli/`) still ship a `storm/`
-   page and have no `scan/` page.
-4. The snippet checker (`scripts/check-snippets.mjs`) validates commands against
-   those stale docs plus a hardcoded subcommand map where `storm` is valid and
-   `report` does not list `integrity`.
-
-Why this is not a quick copy edit: changing copy to `scan`/`report integrity`
-fails `npm run check` because the site verifies against the stale vendored docs.
-A clean fix regenerates the vendored CLI reference from the current CLI and
-updates the checker, which is W9 work and depends on the open W1 docs-source
-decision.
-
-Fix plan (one coordinated W2+W9 slice, after W1 is decided):
-- Regenerate the vendored CLI reference from the current CLI so `scan` exists
-  and `storm` is gone.
-- Update `check-snippets.mjs`: drop `storm`, add `scan`, add `integrity` to
-  `report`'s subcommands.
-- Replace the concept noun with scan-anchored language and fix the command
-  examples and the CI snippet.
-- Fix docs links on the site that point at `/docs/reference/cli/storm` and
-  `/docs/concepts/storm`.
-- Run `npm run check` (snippets, links, claims) green.
+- The CLI commands are `decoy pre-scan` and `decoy post-scan integrity|fidelity`.
+  `decoy report verify` stays for artifact fingerprint verification and is not a
+  privacy check.
+- The pipeline schema is `version: 2`; the opt-in integrity run is
+  `post_scan.integrity` (default `false`, report-only).
+- No redirect or alias from the retired concept URL is kept (pre-GA hard rename).
+- Copy keeps detection candidates, measured fidelity, integrity findings, and a
+  release decision as separate claims. Fidelity is not a privacy guarantee. A
+  renamed surface is not described as running a capability that is disabled.
+- The vendored CLI reference is regenerated with `pnpm sync:cli-ref`; the
+  snippet checker reads its command surface from that file, so a stale vendored
+  copy fails `npm run check`.
+- `schema.mdx` has no generator in this repo. Its `version` and `post_scan`
+  entries were updated by hand from the engine's `PipelineConfig` JSON Schema;
+  the rest of that snapshot is unchanged and can lag a newer install.
 
 ## W2 completion: Platform, pricing, and security claims (2026-10-24)
 
@@ -171,4 +150,4 @@ Verified against the actual LICENSE files. All confirmed:
 
 ## Still not audited
 
-- Home-page copy beyond the STORM references, the stat tiles, and the license line.
+- Home-page copy beyond the pre-scan references, the stat tiles, and the license line.

@@ -232,7 +232,7 @@ For every operation and scale:
 - One Parquet table with a fixed mix of positive and negative values across the built-in detectors.
 - Exclude optional spaCy NER from the primary row. It requires a separate named workload if measured.
 - Correctness guard: stable finding counts and detector identifiers.
-- Required path: default `decoy scan` production route.
+- Required path: default `decoy pre-scan` production route.
 
 #### DP fit
 

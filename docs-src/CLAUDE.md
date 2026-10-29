@@ -16,7 +16,7 @@ The marketing site has no backend, no auth, no customer data. The rules that mat
 
 ## Content drift to watch for
 
-- Pages or components that name retired features (FORECAST was retired under storm-reframe-C; do not reintroduce as a current capability).
+- Pages or components that name retired features (FORECAST was retired earlier; do not reintroduce it as a current capability).
 - CLI commands or flags that no longer exist or are deferred (`decoy demo --ref` is currently a deferred-stub; do not advertise as a working invocation).
 - Cross-repo links to private platform docs that would 404 for a public reader (only relevant if + when this site goes public-facing).
 

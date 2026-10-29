@@ -2,7 +2,7 @@
 
 Status: active plan. Last updated 2026-10-22.
 
-The documentation plan for decoystorm.dev/docs. Covers the CLI/engine docs
+The documentation plan for the /docs site. Covers the CLI/engine docs
 (publishable at the Apache flip) and the Decoy Studio platform docs (held until
 platform launch). Built from a three-part capability audit (engine, current
 docs, platform) run 2026-10-22.
@@ -67,9 +67,8 @@ variants. A guide shows one or two representative examples, then links to the
 relevant lookup page. Generated CLI pages stay under Reference. Technical
 internals stay in the final family.
 
-The name STORM is deprecated in public guidance. Use scan, data profiling, or
-output integrity. Preserve `run_storm` only when the current schema identifier
-must remain exact.
+Public guidance uses the three phase names: Pre-scan, Transform, and Post-scan.
+The integrity opt-in is the `post_scan.integrity` schema key.
 
 ## Sources of truth
 
@@ -178,7 +177,7 @@ troubleshooting/FAQ.
 3. Restyle `yaml-schema.mdx` and `reference/capabilities.mdx` to the template.
 4. DONE: `llms.txt` generated from frontmatter by scripts/build-llms-txt.mjs
    (prebuild), serves at the docs deploy root. Deploy detail: in the unified
-   /docs model it lands at decoystorm.dev/llms.txt listing the /docs pages.
+   /docs model it lands at /llms.txt on the site root listing the /docs pages.
 5. Templates-contents page (BLOCKED on CLI) and version-provenance refresh
    (BLOCKED on CLI).
 6. Build the Studio section as held drafts, shipped surfaces only, from the
@@ -274,4 +273,4 @@ Captured from Cam 2026-10-22, not for this pass:
 - Whether an in-app license renewal reminder UI is expected (audit found expiry
   and staleness state, no dedicated reminder surface).
 - Production serve mechanism for the unified site (merge the two static builds
-  into one Cloudflare Pages deploy at decoystorm.dev, docs owning /docs).
+  into one deploy at the production domain, docs owning /docs).
