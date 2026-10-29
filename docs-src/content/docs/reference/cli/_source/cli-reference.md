@@ -2,7 +2,7 @@
   GENERATED FILE. Do not hand-edit -- this is a vendored copy.
   Produced by scripts/sync-cli-reference.mjs from a decoy checkout.
   Source repo: decoy
-  Source commit: 574aa1e9ec2b95f9ba8af5eb8112c1a3c0fcf434
+  Source commit: 2cb164f7ae457ae83cb9d8aea6fef1a30a367b2f
 -->
 
 # `decoy`
