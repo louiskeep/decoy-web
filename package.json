@@ -7,7 +7,8 @@
     "build:docs": "bash scripts/build-docs.sh",
     "build:all": "npm run clean && eleventy && npm run build:docs",
     "dev": "eleventy --serve --port 8099",
-    "check": "node scripts/check-snippets.mjs && npm run build:all && node scripts/check-links.mjs dist && node scripts/check-claims.mjs dist",
+    "check:residual": "node scripts/check-residual.mjs --self-test && node scripts/check-residual.mjs",
+    "check": "node scripts/check-snippets.mjs && node scripts/check-residual.mjs --self-test && npm run build:all && node scripts/check-links.mjs dist && node scripts/check-claims.mjs dist && node scripts/check-residual.mjs",
     "clean": "rm -rf dist"
   },
   "repository": {
